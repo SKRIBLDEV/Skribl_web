@@ -1,7 +1,9 @@
+![logo](/http://www.gfycat.com/AridImaginativeAntarcticfurseal)
+
 Skribl_web
 ==========
 
-> SKRIBLE is something new. Its something that will deal with academical writins, be it papers, journals, or anything remotely related. Furthermore it will be some kind of professional social network. We think. 
+> SKRIBLE is something new. Its something that will deal with academical writings, be it papers, journals, or anything remotely related. Furthermore it will be some kind of professional social network. We think. 
 
 > But hey, we just started, cut us some slack! Lets see how far we can push this thing.
 
