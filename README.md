@@ -1,4 +1,4 @@
-![logo](/http://www.gfycat.com/AridImaginativeAntarcticfurseal)
+![logo](/https://github.com/SKRIBLDEV/Skribl_web/blob/master/imgs/logo.gif)
 
 Skribl_web
 ==========
