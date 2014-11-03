@@ -19,19 +19,3 @@ Skribl_web
 Don't know, don't wanna know. At this point you can probably just run the index.html
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-the head repository of the Skribl Web app
