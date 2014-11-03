@@ -9,8 +9,8 @@ Skribl_web
 
 ## Install
 
-### Unix
-- Fire up terminal.app
+### MacOSX / Unix
+- Fire up terminal
 - Navigate to the directory of Skribl_web (make sure you can see "index.html" when pressing | ls; |) 
 - type | python -m SimpleHTTPServer; |
 - open up your favorite browser and navigate to "http://localhost:8000/"
