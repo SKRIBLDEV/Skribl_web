@@ -1,4 +1,4 @@
-![logo](/https://github.com/SKRIBLDEV/Skribl_web/blob/master/imgs/logo.gif)
+![alt tag](https://dl.dropboxusercontent.com/u/7276586/logo.gif)
 
 Skribl_web
 ==========
