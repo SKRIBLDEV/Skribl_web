@@ -7,6 +7,10 @@ Skribl_web
 
 > But hey, we just started, cut us some slack! Lets see how far we can push this thing.
 
+### Code Quality
+
+> Current Score by CodeClimate:  [![CodeClimate](https://codeclimate.com/github/SKRIBLDEV/Skribl_web/badges/gpa.svg)](https://codeclimate.com/github/SKRIBLDEV/Skribl_web)
+
 ## Install
 
 ### MacOSX / Unix
