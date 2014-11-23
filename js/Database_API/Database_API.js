@@ -9,20 +9,19 @@ var hasOwnProperty = Object.prototype.hasOwnProperty;
 function isEmpty(obj) {
 
     // null and undefined are "empty"
-    if (obj == null) return true;
+    if (obj === null){return true;}
 
     // Assume if it has a length property with a non-zero value
     // that that property is correct.
-    if (obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
+    if (obj.length > 0){return false;}
+    if (obj.length === 0){return true;}
 
     // Otherwise, does it have any properties of its own?
     // Note that this doesn't handle
     // toString and valueOf enumeration bugs in IE < 9
     for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
+        if (hasOwnProperty.call(obj, key)){return false;}
     }
-
     return true;
 }
  
@@ -35,7 +34,7 @@ function isEmpty(obj) {
  *@param {string} username - username of database
  *@param {string} password - password of database
  */
-function newDatabase(ip, port, dbname, username, password){
+var newDatabase=function(ip, port, dbname, username, password){
 	var Oriento = require('oriento');
 	
 	/** instantiates the database server instance*/
@@ -47,7 +46,7 @@ function newDatabase(ip, port, dbname, username, password){
 	});
 
 	server.list().then(function (dbs) {
-		console.log('There are ' + dbs.length + ' databases on the server.')
+		console.log('There are ' + dbs.length + ' databases on the server.');
 	})
 	/** instantiates the database instance*/
 	var db = server.use({
@@ -56,7 +55,7 @@ function newDatabase(ip, port, dbname, username, password){
 		password: password
 	});
 	
-	console.log('Using database: ' + db.name)
+	console.log('Using database: ' + db.name);
 	
 	/**
 	*Will check if a user with given username exists in the database.
@@ -71,10 +70,10 @@ function newDatabase(ip, port, dbname, username, password){
 		.all()
 		.then(function (users) {
 			if (isEmpty(users)){
-			callbackFalse()
+			callbackFalse();
 			}
 			else{
-			callbackTrue()
+			callbackTrue();
 			}
 		})
 	}
@@ -92,10 +91,10 @@ function newDatabase(ip, port, dbname, username, password){
 		.all()
 		.then(function (users) {
 			if (isEmpty(users)){
-			callbackFalse()
+			callbackFalse();
 			}
 			else{
-			callbackTrue()
+			callbackTrue();
 			}
 		})
 	}
@@ -115,10 +114,10 @@ function newDatabase(ip, port, dbname, username, password){
 		.all()
 		.then(function (users) {
 			if (isEmpty(users)){
-			callbackFalse()
+			callbackFalse();
 			}
 			else{
-			callbackTrue()
+			callbackTrue();
 			}
 		})
 	
@@ -141,8 +140,8 @@ function newDatabase(ip, port, dbname, username, password){
 														email: email,
 														language: language})
 														.then(function (vertex) {
-															console.log('Created vertex: ', vertex)
-															callback(true)
+															console.log('Created vertex: ', vertex);
+															callback(true);
 															})
 										}	
 									)
@@ -156,8 +155,8 @@ function newDatabase(ip, port, dbname, username, password){
 	this.deleteUser=function (username, callback){
 		db.delete().from('User').where({username: username}).limit(1).scalar()
 		.then(function (total) {
-		console.log('deleted', total, 'users')
-		callback(true)
+		console.log('deleted', total, 'users');
+		callback(true);
 		})
 	}
 	
@@ -188,19 +187,20 @@ function newDatabase(ip, port, dbname, username, password){
 								.from('User')
 								.where({username: username})
 								.all()
-								.then(function (user) {
-									var user=user[0]
-									clbExists(user.firstName, user.lastName, user.username, user.email, user.language)
+								.then(function (users) {
+									var user=users[0]
+									clbExists(user.firstName, user.lastName, user.username, user.email, user.language);
 								})
 							},
 							function(){clbNotExist()})
 	}
 }
 
+exports.newDatabase=newDatabase;
 
+//var database= new newDatabase('localhost', 2424, 'skribl_database', 'skribl', 'skribl');
 
-var database= new newDatabase('localhost', 2424, 'skribl_database', 'skribl', 'skribl');
-
+/*
 function stop(){
 process.exit(code=0)
 }
@@ -237,11 +237,11 @@ function printUser(firstName, lastName, username, email, language){
 	console.log(language)
 	stop()
 }
-
+*/
 
 //database.getUser('colossus616', printUser, clbNotExist)
 //database.checkCredentials('colossus616', 'colossus66', clbSuccess, clbWrongPwd, clbNotExist)
-database.deleteUser('colossus161', callBack)
+//database.deleteUser('colossus161', callBack)
 //database.createUser('Helene', 'Vervlimmeren', 'colossus161', 'colossus616', 'helene@vub.ac.be', 'english', callBack)
 //process.exit(code=0)
 //var tst=require('./Database_API.js');
