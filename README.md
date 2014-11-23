@@ -3,7 +3,7 @@
 Skribl_web
 ==========
 
-> SKRIBLE is something new. Its something that will deal with academical writings, be it papers, journals, or anything remotely related. Furthermore it will be some kind of professional social network. We think.
+> SKRIBL is something new. Its something that will deal with academical writings, be it papers, journals, or anything remotely related. Furthermore it will be some kind of professional social network. We think.
 
 > But hey, we just started, cut us some slack! Lets see how far we can push this thing.
 
