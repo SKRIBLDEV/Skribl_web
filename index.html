@@ -1,16 +1,38 @@
-<!DOCTYPE html>
-<html>
+<html ng-app="skriblApp">
+
 <head>
 
+	<title>SKRIBL Home</title>
 
-<!-- Load the Paper.js library -->
-<img id='logo' src='imgs/logo1.png'>
-<script type="text/javascript" src="js/paper-full.min.js"></script>
-<!-- Load external PaperScript and associate it with myCanvas -->
-<script type="text/paperscript" src="js/myScript.js" canvas="myCanvas">
-</script>
+	<!-- include AngularJS -->
+	<link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<!-- include AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+	<!-- inlcude AngularJS routing for SPA -->
+	<!-- allows switching to different views/routes on the same page -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-route.min.js"> </script>
+    <!-- main application/configuration logic -->
+	<script src="js/main.js"> </script>
+
 </head>
+
 <body>
-	<canvas id="myCanvas" resize="true"></canvas>
+	<!-- sample header, not stricly necessary but just for demonstration purposes -->
+	<!-- this part is (at least in this example) the same for every view/route -->
+	<header>
+		<center>
+			<a href="http://www.skribl.tk"> <img src="img/skribl.png"/> </a>
+			<hr /> <br />
+		</center>
+	</header>
+
+	<!-- this part of the HTML-page is 'dynamic' and will change depending upon the 'route' taken -->
+	<!-- initially empty, contents will be configured using ngRoute -->
+	<div ng-view> </div>
+
+	<!-- optionally, include a footer or other (static/dynamic) element (like a console) -->
+	<!-- <div ng-include = footer.html /> -->
+
 </body>
+
 </html>
