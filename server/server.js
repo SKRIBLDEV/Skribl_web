@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var basicAuth = require('basic-auth');
 var https = require('https');
 var fs = require('fs');
 
@@ -9,7 +10,7 @@ var fs = require('fs');
   * @param {string} key - file path to SSL Key
   *	@param {string} cert - file path to SSL Certificate
   */
-function HTTPSServer(key, cert) {
+function HTTPSServer(key, cert, modules) {
 
 	var app = express();
 	var auth = undefined;
@@ -25,9 +26,17 @@ function HTTPSServer(key, cert) {
 		credentials.key = fs.readFileSync(key);
 		credentials.cert = fs.readFileSync(cert);
 
-		// setup some useful services
-		app.use(bodyParser.json());
-		app.use(cookieParser());
+		// configure modules
+		for(var i = 0; i < modules.length; ++i) {
+			app.use(modules[i]);
+		}
+
+		/** @debug
+		 */
+		app.use(function(req, res, next) {
+			console.log(req);
+			next();
+		});
 	}
 
 	/** make resource available to request handlers
@@ -45,11 +54,10 @@ function HTTPSServer(key, cert) {
 	this.serveStatic = function(route, path) {
 		app.use(route, express.static(__dirname + path));
 	}
-
 	/** add authentication procedure to server
 	  * @param {function} authProc - function to user for authentication
 	  */
-	this.addAuthentication = function(authProc) {
+	this.useAuthentication = function(authProc) {
 		auth = authProc;
 	}
 
@@ -69,23 +77,23 @@ function HTTPSServer(key, cert) {
 	  * @param {function} handler - handler to be setted
 	  * @private
 	  */
-	function install(setter, handler) {
+	function install(route, method, handler) {
 
 		if(handler && handler.auth && auth) {
 
-			setter(function(req, res, next) {
-				auth(req, res, context, function(res) {
-					if(handler.auth(res)) { 
+			route[method](function(req, res, next) {
+				auth(req, context, function(usr) {
+					if(handler.auth(usr, req, context)) { 
 						next(); 
 					} else {
-						res.send(401); // HTTP 401 Unauthorised
+						res.sendStatus(401); // HTTP 401 Unauthorised
 					}
 				});
 			});
 		}
 
 		if (handler) { 
-			setter(includeContext(handler)) 
+			route[method](includeContext(handler)); 
 		}
 	}
 
@@ -95,10 +103,10 @@ function HTTPSServer(key, cert) {
 	this.installRoute = function(module) {
 
 		var route = app.route(module.path);
-		install(route.get, module.get);
-		install(route.post, module.post);
-		install(route.put, module.put);
-		install(route.delete, module.delete);
+		install(route, 'get', module.get);
+		install(route, 'post', module.post);
+		install(route, 'put', module.put);
+		install(route, 'delete', module.delete);
 	}
 
 	/** start server on a certain port
