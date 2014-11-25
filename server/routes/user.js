@@ -10,14 +10,13 @@ function serverError(res, reason) {
 function getUserInfo(req, res, context) {
 
 	var username = req.param('username');
-	UM.loadUser(username, context.db, function(err, data) {
+	var database = context.db;
+
+	database.loadUser(username, function(err, data) {
 
 		if (err) {
-
 			serverError(res, err.toString());
-
 		} else {
-
 			res.json({
 				username: data.getUserName(),
 				firstName: data.getFirstName(),
@@ -26,55 +25,54 @@ function getUserInfo(req, res, context) {
 				language: data.getLanguage()
 			});
 		}
-	}
+	});
 }
 
 function deleteUserInfo(req, res, context) {
 
 	var username = req.param('username');
-	UM.deleteUser(username, context.db, function(err, data) {
+	var database = context.db;
+
+	database.deleteUser(username, function(err, data) {
 
 		if (err) {
-
 			serverError(res, err.toString());
-
 		} else {
-
-			//deleted
+			//HTTP 204 deleted
 			res.status(204); 
 			res.end();
 		}
-	} 
+	});
 }
 
-/** check if user is allowed to be deleted */
+/** Checks if authenticated user is the user to be deleted
+  * @param {object} auth - result of authentication
+  * @param {object} req - provides context for authentication
+  * @return boolean to accept/refuse request
+  */
 deleteUserInfo.auth = function(auth, req) {
 
-	return (req.param('username') == auth);
+	var requiredUsername = req.param('username');
+	return (auth ? (auth.getUsername() == requiredUsername) : false);
 }
 
 function createUser(req, res) {
 
-	UM.createUser( //createUser does the validation + password encryption + ...
-		req.body.firstName,
-		req.body.lastName,
-		req.body.language,
-		req.body.email,
-		req.param('username'),
-		req.body.password
-		function(err, usr) {
-			if(err) {
-				serverError(res, err.toString());
-			} else {
-				usr.save(context.db, function(err, data) {
-					if(err === null) {
-						res.status(201).end();
-					} else {
-						serverError(res, err.toString());
-					}
-				});
-			}
-		});
+	req.body.username = req.param('username');
+	UM.createUser(req.body, function(err, usr) {
+		if(err) {
+			serverError(res, err.toString());
+		} else {
+			var database = context.db;
+			database.createUser(usr, function(err, data) {
+				if(err === null) {
+					res.status(201).end();
+				} else {
+					serverError(res, err.toString());
+				}
+			});
+		}
+	});
 }
 
 /* ---- EXPORT ROUTE ---- */

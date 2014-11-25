@@ -61,15 +61,15 @@ function Database(serverConfig, dbConfig) {
 
 	// [N] added this function, might need it later on...
 	// also, add .error for callback(err, data) ?
-	this.userExists = function(usrname, callback) {
+	this.userExists = function(data, callback) {
 
-		db.select().from('User').where({username: usrname}).all()
+		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
 			}
 			// @ Ivo, if you want, add e-mail check here too...
-			// however, i don't think its necessary...
-			// I copy pasted that logic down here, so you wouldn't lose it ;)
+			// however, i don't think its necessary right now...
+			// I copy pasted the code down here, so you wouldn't lose it ;)
 			/* 
 					db.select().from('User').where({email: newData.email}).all()
 						.then(function (resultEmail) {
@@ -87,7 +87,7 @@ function Database(serverConfig, dbConfig) {
 
 	this.createUser = function(newData, callback) {
 
-		db.userExists(newData.getUsername(), function(err, exists) {
+		db.userExists(newData, function(err, exists) {
 
 			// TODO: err should have seperate if-clause
 			if (err || exists) {
@@ -102,7 +102,7 @@ function Database(serverConfig, dbConfig) {
 	*Deletes user with given username from database, will not notice if user existed before deletion
 	*/
 	//is there a better way to get record id?
-	this.deleteUser = function (username, callback){
+	this.deleteUser = function (username, callback) {
 		db.select().from('User').where({username: username}).column('@rid').all()
 		.then(function (rid) {
 			if(rid.length === 1){
@@ -116,6 +116,7 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+/* ..NOT IN USE RIGHT NOW..
 	this.getPassword = function(username, callback) {
 
 		db.select().from('User').where({username: username}).column('password').all()
@@ -127,9 +128,10 @@ function Database(serverConfig, dbConfig) {
 			}
 		});
 	}
+*/
 	
 	/**
-	...NOT IN USE -- DEAD CODE HERE...
+	...NOT IN USE RIGHT NOW... SORRY IVO!
 	*Will check if a username/password combination exists and call callback with corresponding argument
 	*@param {string} username - username.
 	*@param {string} password - password.
@@ -161,19 +163,12 @@ function Database(serverConfig, dbConfig) {
 	*@param {string} username - called if combination exists.
 	*@param {function} callback - called with user object if success or with 'user-not-found' if fail
 	*/
-	this.getUser = function(username, callback) {
+	this.loadUser = function(username, callback) {
 		db.select().from('User').where({username: username}).all()
 		.then(function(users) {
 			if(users.length) {
-				var dbRec =users[0];
-				callback(null, new UM.UserRecord(
-									dbRec.firstname,
-									dbRec.lastName,
-									dbRec.language,
-									dbRec.email,
-									dbRec.username,
-									dbRec.password
-								));  //returns parsed json object
+				var dbRec = users[0];
+				callback(null, new UM.UserRecord(dbRec));
 			} else {
 			   callback(new Error('user not found'));
 			}

@@ -1,15 +1,8 @@
-var UM = require('././modules/user.js');
-
-/* for testing:
-var UM = {
-
-	checkCredentials: function(usr, pas, context, clb) {
-
-		clb(null, usr == 'noah' && pas == 'test');
-	}
-}
-*/
-
+/** Authenticate - authenticates user based on request+context
+  * @param {object} request - original user request
+  * @param {object} context - context to authenticate in
+  * @returns an object that represents an authenticated user or false
+  */
 function authenticate(req, context, clb) {
 
 	if (req.basicAuth) {
@@ -19,22 +12,33 @@ function authenticate(req, context, clb) {
 
 		if (username && password) {
 
-			UM.checkCredentials(username, password, context.db, function(err, res) {
-				
-				if (!err && res) {
-						clb(username);
-				   	} else {
-						clb(false); 
-					}
+			context.db.loadUser(username, function(err, usr) {
+
+				if(!err && usr) {
+
+					usr.checkCredentials(password, function(err, ok) {
+						
+						if (!err && ok) {
+							clb(usr);
+						} else {
+							//incorrect password (or hash error)
+							clb(false);
+						}
+					});
+
+				} else {
+					//could not load user
+					clb(false);
+				}
 			});
 
 		} else {
-
+			//invalid input
 			clb(false);
 		}
 	
 	} else {
-
+		//invalid input
 		clb(false);
 	}
 }

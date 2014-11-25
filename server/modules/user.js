@@ -5,30 +5,38 @@
  * @exports deleteUser
  */
 
+ /* TODO:
+   - test
+   - document
+   - fix validation
+   - ...
+  */
+
 var VAL = require("./validation.js");
-var DB = require("./database.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
 
-exports.UserRecord(firstName, lastName, language, email, username, password) {
+exports.UserRecord = function(info) {
 
-	this.getFirstName = function() {return this.firstName;};
-	this.getLastName = function() {return this.lastName;};
+	this.getFirstName = function() { return info.firstName; }
+	this.getLastName = function() { return info.lastName; }
 	//TODO::
-	//function getResearchGroup(){return this.researchGroup;}
+	//function getResearchGroup(){return -->THIS?!<-- this.researchGroup;}
 	//function getDepartment(){return this.department;};
 	//function getFaculty(){return this.faculty;};
 	//function getInstitution(){return this.institution;};
-	this.getLanguage = function() {return this.language;};
-	this.getEmail = function() {return this.email;};
-	this.getUsername = function() {return this.username;};
+	this.getLanguage = function() { return info.language; }
+	this.getEmail = function() { return info.email; }
+	this.getUsername = function() { return info.username; }
 
-	this.save = function(db, clb) {
-		db.createUser(this, callback);
+	this.checkCredentials = function(pwd, callback) {
+		bcrypt.compare(pwd, info.password, callback);
 	}
 }
 
-exports.createUser = function(firstName, lastName, language, email, username, password, clb) {
+exports.createUser = function(info, clb) {
+
+	// TODO: FIX THIS => should validate everything inside info object
 
 	function validate(clb) {
 
@@ -55,15 +63,15 @@ exports.createUser = function(firstName, lastName, language, email, username, pa
 					e.push('input ' + key + ' contains leading or trailing whitespaces');
 			}
 
-			if (! VAL.isGeneralName(this.firstName))
+			if (!VAL.isGeneralName(info.firstName))
 				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(this.lastName))
+			if (!VAL.isGeneralName(info.lastName))
 				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isEmailAdress(this.email))
+			if (!VAL.isEmailAdress(info.email))
 				e.push('input ' + key + ' is not a valid email');
-			if (! VAL.isUsername(this.username))
+			if (!VAL.isUsername(info.username))
 				e.push('input ' + key + ' is not a valid username');
-			if (! VAL.isPassword(this.password))   //already encrypted????
+			if (!VAL.isPassword(info.password))   //already encrypted????
 				e.push('input ' + key + ' is not a valid password');
 
 			/*if (! VAL.isResearchField(this.field))
@@ -91,31 +99,14 @@ exports.createUser = function(firstName, lastName, language, email, username, pa
 		if (err) {
 			clb(err, data);
 		} else {
-			bcrypt.hash(password, strength, function(err, pwd) {
+			bcrypt.hash(info.password, strength, function(err, hash) {
 				if(err) {
 					clb(err, null);
 				} else {
-					clb(null, new UserRecord(firstName, lastName, language, email, username, pwd));
+					info.password = hash;
+					clb(null, new UserRecord(info));
 				}
 			});
-		}
-	});
-}
-
-exports.loadUser = function(username, db, clb) {
-	db.getUser(username, clb);
-}
-
-exports.deleteUser = function(username, db, clb) {
-	db.deleteUser(username, clb);
-}
-
-exports.checkCredentials = function(username, password, db, clb) {
-	db.getPassword(username, function(err, pwd) {
-		if (err) {
-			clb(err, null);
-		} else {
-			bcrypt.compare(password, pwd, clb)
 		}
 	});
 }
