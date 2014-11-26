@@ -13,10 +13,10 @@ Skribl_web
 
 ### Code organisation
 
-> /public contains the index.html file
-> files in /static are directly accesible by url (images, client-side js, css, ...)
-> main.js is the main executable for the server
-> /server has all the other code for the server, including its routes/modules, ...
+- /public contains the index.html file
+- files in /static are directly accesible by url (images, client-side js, css, ...)
+- main.js is the main executable for the server
+- /server has all the other code for the server, including its routes/modules, ...
 
 > TODO: add package.json for dependencies, metadata, ...
 
