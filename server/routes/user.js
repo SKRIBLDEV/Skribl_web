@@ -60,7 +60,7 @@ function createUser(req, res) {
 
 	req.body.username = req.param('username');
 	UM.createUser(req.body, function(err, usr) {
-		if(err) {
+		if(err) { // [H] here the error is a 'server-side-validation-error', and specific error information is stored in the array 'usr' (the value of the callback). Maybe for debugging reasons we could display this? 
 			serverError(res, err.toString());
 		} else {
 			var database = context.db;
