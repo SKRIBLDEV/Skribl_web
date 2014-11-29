@@ -100,6 +100,7 @@ function Database(serverConfig, dbConfig) {
 					
 	/**
 	*Deletes user with given username from database, will not notice if user existed before deletion
+	*[H] ?it does notice if non-existing and throws error?
 	*/
 	//is there a better way to get record id?
 	this.deleteUser = function (username, callback) {
