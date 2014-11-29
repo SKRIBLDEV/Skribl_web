@@ -1,68 +1,99 @@
 /**
- * @exports User
- * @exports loadUser
- * @exports createUser
- * @exports deleteUser
- */
+* Module for application logic concerning 'users', between server and database. 
+* @module user
+* 
+*/
+
 
  /* TODO:
    - test
-   - document
-   - fix validation
    - ...
   */
+
+
 
 var VAL = require("./validation.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
 
+
+
+/** 
+* Constructor for creating UserRecords, with public getters for account information (except password), and a method to check credentials. UserRecords are returned from the database.
+* @see database module #loadUser
+* @constructor UserRecord
+* @param info (private)  : object containing validated user account info. 
+*/
 exports.UserRecord = function(info) {
+
+	/** 
+	* @method get*property* (public) : getter for user property, e.g., myUser.getFirstName()
+	*/
 
 	this.getFirstName = function() { return info.firstName; }
 	this.getLastName = function() { return info.lastName; }
 	//TODO::
-	//function getResearchGroup(){return -->THIS?!<-- this.researchGroup;}
-	//function getDepartment(){return this.department;};
-	//function getFaculty(){return this.faculty;};
-	//function getInstitution(){return this.institution;};
+	//function getResearchGroup(){return -->THIS?!<-- info.researchGroup;}
+	//function getDepartment(){return info.department;};
+	//function getFaculty(){return info.faculty;};
+	//function getInstitution(){return info.institution;};
 	this.getLanguage = function() { return info.language; }
 	this.getEmail = function() { return info.email; }
 	this.getUsername = function() { return info.username; }
 
+	/**
+	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord
+	* @param password
+	* @callback callback passed to bcrypt.compare  
+	*/
 	this.checkCredentials = function(pwd, callback) {
 		bcrypt.compare(pwd, info.password, callback);
 	}
 }
 
+
+
+/** 
+* createUser validates the given account information, encrypts the password and creates a new UserRecord object, to be passed to the database.
+* @see route user.js #createUser
+* @param info : object containing account information, not yet validated on the server side
+* @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
+*/
+
+
 exports.createUser = function(info, clb) {
 
-	// TODO: FIX THIS => should validate everything inside info object
-
-	function validate(clb) {
+	function validate(info, clb) {
 
 		var validation_error = new Error('server-side-validation-error');
 		var e = []; //array for specific error information
 
-		//check if all properties are defined
-		for (var key in this) { //loops over all object *prototype* keys
-			if (!this.hasOwnProperty(key)) { //property not defined, e.g, no firstName key and value pair 
-				e.push('property ' + key + 'undefined');
-			}
+		var neededProperties = ['firstName', 'lastName', 'email', 'username', 'password']; //NOT COMPLETE
+
+		//check if all needed properties are defined
+		for (var i = O; i < neededProperties.length(); i++){
+			if(info.neededProperties[i] === 'undefined') //property itself undefined or, if property found, value undefined
+				e.push('property ' + neededProperties[i] + 'undefined');
 		}
 
-		if(e.length) { // some properties are undefined
+
+		if(e.length) {  // some properties are undefined
 			clb(validation_error, e); //quit validation and pass array of errors, !here as value of the callback
+		}
 
-		} else { //continue validation
+		//continue validation
+		else { 
 
-			for (var key in this){
-				if(!VAL.nonEmpty(this.key)) { // value only contains whitespaces (includes 'tab' etc.)
+			//check whitespace characters 
+			for (var i = O; i < neededProperties.length(); i++){
+				if(!VAL.nonEmpty(info.neededProperties[i])) { // value only contains whitespaces (includes 'tab' etc.)
 					e.push('input ' + key + ' consists solely of whitespace characters');
 				}
-				else if(!VAL.noLeadingWhitespace(this.key) || !VAL.noTrailingWhitespace(this.key) )
+				else if(!VAL.noLeadingWhitespace(info.neededProperties[i]) || !VAL.noTrailingWhitespace(info.neededProperties[i]) )
 					e.push('input ' + key + ' contains leading or trailing whitespaces');
 			}
 
+			//check general 'form'
 			if (!VAL.isGeneralName(info.firstName))
 				e.push('input ' + key + ' is not a valid name');
 			if (!VAL.isGeneralName(info.lastName))
@@ -74,34 +105,35 @@ exports.createUser = function(info, clb) {
 			if (!VAL.isPassword(info.password))   //already encrypted????
 				e.push('input ' + key + ' is not a valid password');
 
-			/*if (! VAL.isResearchField(this.field))
+			/*if (! VAL.isResearchField(info.field))
 				e.push('input ' + key + ' is not recognized by the system');
-			if (! VAL.isGeneralName(this.researchGroup))
+			if (! VAL.isGeneralName(info.researchGroup))
 				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(this.department))
+			if (! VAL.isGeneralName(info.department))
 				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(this.faculty))
+			if (! VAL.isGeneralName(info.faculty))
 				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(this.institution))
+			if (! VAL.isGeneralName(info.institution))
 				e.push('input ' + key + ' is not a valid name');*/
 
 			// preferred language validation needed 
 
-			if(e.length)
-				clb(validation_error, e); //do not add user to database, pass errors !array of specific error information passed as result!
+			if(e.length) //errors during validation
+				clb(validation_error, e); // pass error, !array with specific error information passed as result!
 			else 
-				clb(null, true); //clb without errors
+				clb(null, true); //succes, clb without errors
 		}
 	}
 
-	validate(function(err, data) {
-
+	
+	validate(info, function(err, data) {
 		if (err) {
-			clb(err, data);
+			clb(err, data); // err = 'server-side-validation-error' -> 'data' = an array consisting of specific error information
 		} else {
-			bcrypt.hash(info.password, strength, function(err, hash) {
-				if(err) {
-					clb(err, null);
+			//encrypt password
+			bcrypt.hash(info.password, strength, function(encryptErr, hash) {
+				if(encryptErr) {
+					clb(encryptErr, null); 
 				} else {
 					info.password = hash;
 					clb(null, new UserRecord(info));
