@@ -2,12 +2,13 @@
 	make a new app with the name 'skribApp'
 	dependencies currently used: ngRoute
 	this app can be referenced in HTML with < ... ng-app='skriblApp'> ... </...>
-*/
+ */
 
 var webapp = angular.module('skriblApp', ['ngRoute']);
 /*
 	configure the different view/routes depending on current URL
 	for example:
+
 		- /index.html#home
 		- /index.html#login
 		- /index.html#register
@@ -19,7 +20,7 @@ var webapp = angular.module('skriblApp', ['ngRoute']);
 		- route name, obviously
 		- template URL, link to HTML-content to be inserted into ng-view (for this particalar view)
 		- controller, which controller to use for application logic (see later)
-*/
+ */
 
 webapp.config(['$routeProvider', function($routeProvider) {
 
@@ -48,15 +49,15 @@ webapp.config(['$routeProvider', function($routeProvider) {
 		$location := allows to switch between routes/views
 		$appData := custom service (cf. sidenote)
 
-	* SIDENOTE:
+ * SIDENOTE:
 	first, we'll add our own custom service $appData that will allow
 	controllers to simply share data with each other
 	(since they don't share the same $scope-object)
 	We do this by naming the service, then providing a constructor.
 	(AngularJS will make a singleton (!) using this constructor...)
-*/
+ */
 
-// appdata = empty object => empty constuctor
+//appdata = empty object => empty constuctor
 webapp.service('$appData', function() {});
 
 webapp.controller('homeController', function($scope, $location, $appData) {
@@ -78,6 +79,10 @@ webapp.controller('registerController', function($scope, $http, $location, $appD
 	// optional: load credentials from cookie or other persistent storage?
 	// $scope.userinput.username = 'alice';
 	// $scope.userinput.password = 'wonderland';
+	
+	$scope.goToHome = function() {
+		$location.path('/home');
+	};
 
 	$scope.submitted = false;
 
@@ -89,28 +94,28 @@ webapp.controller('registerController', function($scope, $http, $location, $appD
 
 	// stub function for testing (login always succeeds)
 	$appData.currentUser = {
-		username: $scope.userinput.username,
-		passkey: $scope.userinput.password,
-		name: $scope.userinput.name,
-		firstname: $scope.userinput.firstname,
-		email: $scope.userinput.email,
-		language: $scope.userinput.language
+			username: $scope.userinput.username,
+			passkey: $scope.userinput.password,
+			name: $scope.userinput.name,
+			firstname: $scope.userinput.firstname,
+			email: $scope.userinput.email,
+			language: $scope.userinput.language
 	}
 
 	$scope.register = function() {
- // write register function here
-	if ($scope.signup_form.$valid){
-		
-		// submit
-		// change route to #/dashboard
-		$location.path('/dashboard');
-	} else {
+		// write register function here
+		if ($scope.signup_form.$valid){
 
-		$scope.signup_form.submitted = true;
+			// submit
+			// change route to #/dashboard
+			$location.path('/dashboard');
+		} else {
+
+			$scope.signup_form.submitted = true;
+		}
+
+
 	}
-
-
-}
 });
 
 webapp.controller('loginController', function($scope, $http, $location, $appData) {
@@ -119,46 +124,37 @@ webapp.controller('loginController', function($scope, $http, $location, $appData
 	// $scope.userinput.username = 'alice';
 	// $scope.userinput.password = 'wonderland';
 
+	$scope.goToHome = function() {
+		$location.path('/home');
+	};
+	
 	// init other data
 	$scope.userinput = {};
 
 	$scope.login = function() {
-
-		/* define controller for logging in, given that:
-			=> $scope.userinput.username := current username input by user
-			=> $scope.userinput.password := current password input by user
-
-		 	~ TODO:
-		 	=======
-				- validate username/password (minimum 6 chars, capital, ...) to avoid useless login-attempt
-				- send AJAX-query (using $http) to server with POST /login and username:password in JSON
-				- on positive (correct) result:
-
-					// configure $appData
-					$appData.currentUser = {
-						username: $scope.userinput.username,
-						passkey: <can be found in server response>
-					}
-
-					// load dashboard view
-					$location.path('/dashboard');
-
-				- on incorrect credentials:
-
-					// return some error stuff...
-
-				- ...
-
-			*/
-
-			// stub function for testing (login always succeeds)
-			$appData.currentUser = {
-				username: $scope.userinput.username,
-				passkey: $scope.userinput.password
-			}
-
+//TODO loading "page"
+		var JSONToSend = {
+				username : $scope.userinput.username,
+				password : $scope.userinput.password};
+		var loginRequest = $http.post('.../login',JSONToSend);
+		loginRequest.success(function(data, status, headers, config) {
+			var pad = '.../user/'.concat($scope.userinput.username);
+			var loadUserInfoRequest = $http.get(pad);
+			loadUserInfoRequest.success(function(data, status, headers, config) {
+				$appData.currentUser = data;
+			});
+			loadUserInfoRequest.error(function(data, status, headers, config) {
+				//TODO melding dat er een fout is met ONZE database.
+			});
+			
+			//TODO STOP loading "page"
 			// change route to #/dashboard
 			$location.path('/dashboard');
+		});
+		loginRequest.error(function(data, status, headers, config) {
+			//TODO stop loading page
+			//TODO error door ongeldige login en password combinatie
+		});
 	}
 });
 
