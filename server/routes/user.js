@@ -53,7 +53,7 @@ function deleteUserInfo(req, res, context) {
 deleteUserInfo.auth = function(auth, req) {
 
 	var requiredUsername = req.param('username');
-	return (auth ? (auth.getUsername() == requiredUsername) : false);
+	return (auth ? (auth.getUsername() === requiredUsername) : false);
 }
 
 function createUser(req, res) {
