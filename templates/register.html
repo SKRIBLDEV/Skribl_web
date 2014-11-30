@@ -12,6 +12,7 @@
         <!-- Declare Legen here :: empty -->
         <legend></legend>
 
+        
         <!-- NAME ENTRY-->
         <div class="row">
           <div class="large-12 columns">
@@ -87,6 +88,7 @@
           </div>
         </div>
 
+        
         <!-- EMAIL ENTRY-->
         <div class="row">
           <div class="large-12 columns">
@@ -117,6 +119,7 @@
           </div>
         </div>
 
+       
         <!-- LANGUAGE ENTRY -->
         <div class="row">
           <div class="large-12 columns">
@@ -133,9 +136,20 @@
             value = "EN"
             required /> EN
 
+            <div class="error-container"
+            ng-show="signup_form.username.$dirty && signup_form.username.$invalid && signup_form.submitted">
+
+            <!-- required error -->
+              <small class="error"
+              ng-show="signup_form.language.$error.required">
+                Please select a language
+              </small>
+            </div>
+
           </div>
         </div>
 
+        
         <!-- USERNAME ENTRY-->
         <div class="row">
           <div class="large-12 columns">
@@ -210,6 +224,7 @@
       </div>
     </div>
 
+       
         <!-- SUBMIT -->
         <button type="submit" class="button radius">Submit</button>
       </fieldset>

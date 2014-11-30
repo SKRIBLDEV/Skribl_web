@@ -1,36 +1,38 @@
-/*
-	make a new app with the name 'skribApp'
-	dependencies currently used: ngRoute
-	this app can be referenced in HTML with < ... ng-app='skriblApp'> ... </...>
- */
+ /**
+  * Initialisation of a new angular app with the name 'skribApp',
+  * currently using ngRouge as a dependency. This app can be referenced in HTML
+  * using < ... ng-app='skriblApp'> ... </...>
+  * @type {angular module}
+  */
 
 var webapp = angular.module('skriblApp', ['ngRoute']);
-/*
-	configure the different view/routes depending on current URL
-	for example:
 
-		- /index.html#home
-		- /index.html#login
-		- /index.html#register
-		- ...
-	home, login and register are all routes here that will display
-	a different view, but on the same page (= no browser reload ~ SPA)
 
-	for each route, we configure:
-		- route name, obviously
-		- template URL, link to HTML-content to be inserted into ng-view (for this particalar view)
-		- controller, which controller to use for application logic (see later)
+/**
+ * Configuration of the angular webapp global.
+ * We configure the different views/routes depending on the current URl
+ * EX:
+ * 		/index.html#home
+ * 		/index.html#login
+ * 		...
+ * 	[home, login, …] are all routes that will display a different (aspect of a) view, yet the page will be fixed (~>SPA)
+ *
+ * for each route we configure:
+ * 		- route name
+ * 		- template URL | link to HTML-content to be inserted into ng-view
+ * 		- controller
+ * @param  {routeProvider} $routeProvider the ng-route provider associated with the app
  */
-
 webapp.config(['$routeProvider', function($routeProvider) {
 
-	$routeProvider.when('/login', 		{ templateUrl: 'templates/login.html', 			controller: 'loginController' });
-	$routeProvider.when('/dashboard', { templateUrl: 'templates/dashboard.html', 	controller: 'dashController'});
+	$routeProvider.when('/login', 			{ templateUrl: 'templates/login.html', 			controller: 'loginController' });
+	$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});
 	$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });
-	$routeProvider.when('/register', 	{ templateUrl: 'templates/register.html',		controller: 'registerController' });
+	$routeProvider.when('/register', 		{ templateUrl: 'templates/register.html',		controller: 'registerController' });
 	$routeProvider.otherwise({redirectTo: '/home'});
 
 }]);
+
 
 /*
 	now we will define the different controllers for the webapp,
@@ -57,80 +59,146 @@ webapp.config(['$routeProvider', function($routeProvider) {
 	(AngularJS will make a singleton (!) using this constructor...)
  */
 
-//appdata = empty object => empty constuctor
+
+/**
+ * Initialisation of the appdata with the empty object
+ */
 webapp.service('$appData', function() {});
 
+
+/**
+ * Initialisation of the homeController (an angular controller),
+ * has an symbiotic relationship with home.html
+ * 
+ * @param  {object} $scope    the scope object of the controller
+ * @param  {object} $location for switching between routes/views
+ * @param  {object} $appData  our custom service for shared data
+
+ */
 webapp.controller('homeController', function($scope, $location, $appData) {
 
-	/* controller for dashboard */
-
+	/**
+	 * login routing function
+	 */
 	$scope.login = function() {
 		$location.path('/login');
 	};
 
+	/**
+	 * register routing function
+	 */
 	$scope.register = function() {
 		$location.path('/register');
 	};
-
 });
 
+
+/**
+ * Initialisation of the registerController (an angular controller),
+ * has an symbiotic relationship with register.html
+ * 
+ * @param  {object} $scope    	the scope object of the controller
+ * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
+ * @param  {object} $location 	for switching between routes/views
+ * @param  {object} $appData  	our custom service for shared data
+
+ */
 webapp.controller('registerController', function($scope, $http, $location, $appData) {
 
 	// optional: load credentials from cookie or other persistent storage?
-	// $scope.userinput.username = 'alice';
-	// $scope.userinput.password = 'wonderland';
 	
+	/**
+	 * home routing function
+	 */
 	$scope.goToHome = function() {
 		$location.path('/home');
 	};
 
+	/**
+	 * To be used by the html wether the user has submitted the registration
+	 * @type {Boolean}
+	 */
 	$scope.submitted = false;
 
-	// init other data
+	/**
+	 * Collection of the input values upon registratoin
+	 * @type {Object}
+	 */
 	$scope.userinput = {};
 
+	/**
+	 * Collection of available languages
+	 * @type {Array}
+	 */
 	$scope.languages = [ 'FR', 'DU', 'EN'];
 
 
-	// stub function for testing (login always succeeds)
-	$appData.currentUser = {
-			username: $scope.userinput.username,
-			passkey: $scope.userinput.password,
-			name: $scope.userinput.name,
-			firstname: $scope.userinput.firstname,
-			email: $scope.userinput.email,
-			language: $scope.userinput.language
-	}
+	// ! move this so this only happens when the regisration is succesful!
+			/**
+			 * Add the current user to the app data
+			 * @type {Object}
+			 */
+			$appData.currentUser = {
+					username: $scope.userinput.username,
+					passkey: $scope.userinput.password,
+					name: $scope.userinput.name,
+					firstname: $scope.userinput.firstname,
+					email: $scope.userinput.email,
+					language: $scope.userinput.language
+			}
 
+
+	/**
+	 * The actual register function
+	 */
 	$scope.register = function() {
 		// write register function here
 		if ($scope.signup_form.$valid){
-
 			// submit
 			// change route to #/dashboard
+		
+			console.log($appdata.currentUser.username);
+
 			$location.path('/dashboard');
 		} else {
-
 			$scope.signup_form.submitted = true;
 		}
-
-
 	}
 });
 
+
+/**
+ * Initialisation of the loginController (an angular controller),
+ * has an symbiotic relationship with login.html
+ * 
+ * @param  {object} $scope    	the scope object of the controller
+ * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
+ * @param  {object} $location 	for switching between routes/views
+ * @param  {object} $appData  	our custom service for shared data
+
+ */
 webapp.controller('loginController', function($scope, $http, $location, $appData) {
 
 	// optional: load credentials from cookie or other persistent storage?
 	// $scope.userinput.username = 'alice';
 	// $scope.userinput.password = 'wonderland';
 
+	/**
+	 * home routing function
+	 */
 	$scope.goToHome = function() {
 		$location.path('/home');
 	};
 	
-	// init other data
+	/**
+	 * Collection of the input values upon login
+	 * @type {Object}
+	 */
 	$scope.userinput = {};
 
+	/**
+	 * The actual login function
+	 */
 	$scope.login = function() {
 //TODO loading "page"
 		var JSONToSend = {
@@ -158,14 +226,34 @@ webapp.controller('loginController', function($scope, $http, $location, $appData
 	}
 });
 
+
+/**
+ * Initialisation of the dashController (an angular controller),
+ * has an symbiotic relationship with dashboard.html
+ * 
+ * @param  {object} $scope    	the scope object of the controller
+ * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
+ * @param  {object} $location 	for switching between routes/views
+ * @param  {object} $appData  	our custom service for shared data
+
+ */
 webapp.controller('dashController', function($scope, $location, $appData) {
 
 	/* controller for dashboard */
 
+	console.log($appData.currentUser.username);
+	/**
+	 * duplication of the username to be used in Dashboard.html
+	 * @type {String}
+	 */
 	$scope.username = $appData.currentUser.username;
 
+	/**
+	 * The actual logout function
+	 */
 	$scope.logout = function() {
-
 		$location.path('/home');
+		//$appData.currentUser = {};
+		// remove cookie
 	}
 });
