@@ -1,16 +1,16 @@
 exports.nonEmpty = function(input) {
-	re = /([^\S]+)/; //RE for one or more (+) non-whitespace characters (\S), matching beginning of input (^)
-	return re.test(input);
+	re = /.\S+./; // RE for any number of characters (.), followed by at least one non-whitespace character (\S)
+	return (re.test(input));
 };
 
 exports.noLeadingWhitespace = function(input) {
-	re = /(^\s+[\S\s]*)/; //RE for one or more (+) whitespace characters (\s) before any other character ([\S\s]*)
-	return not(re.test(input));
+	re = /(\s+[\S\s]*)/; //RE for one or more (+) whitespace characters (\s) before any other character ([\S\s]*)
+	return !(re.test(input));
 };
 
 exports.noTrailingWhitespace = function(input) {
-	re = /(^[\S\s]*\s+)/; //RE for one or more (+) whitespace characters (\s) after any other character ([\S\s]*)
-	return not(re.test(input));
+	re = /([\S\s]*\s+)/; //RE for one or more (+) whitespace characters (\s) after any other character ([\S\s]*)
+	return !(re.test(input));
 };
 
 
@@ -37,15 +37,6 @@ exports.isUsername = function(input) {
 exports.isGeneralName = function(input){
 	//one or more words in all languages, with apostrophes and hyphens 
 	//excludes numbers and all the special (non-letter) characters commonly found on keyboards
-	// test names : 
-	/*
-	Elkj¾rd
-	AndrŽ
-	la Cour
-	Anne-Marie 
-	Kungliga Tekniska hšgskolan
-	Institut d'Alembert
-	 */
 	var re = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]*/;
 	return re.test(input);
 };
