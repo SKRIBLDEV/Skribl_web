@@ -121,6 +121,16 @@ webapp.controller('registerController', function($scope, $http, $location, $appD
 	$scope.submitted = false;
 
 	/**
+	 * Returns the language that a user has entered, or "invalid" if nothing was
+	 * selected. It will be used as a boolean value in order to determine wether
+	 * a user has entered a value at all in the radio (see register.html)
+	 * @return {String} The language a user has given into the form
+	 */
+	$scope.hasLanguage = function(){
+		return $scope.userinput.language
+	}
+
+	/**
 	 * Collection of the input values upon registratoin
 	 * @type {Object}
 	 */
@@ -134,30 +144,26 @@ webapp.controller('registerController', function($scope, $http, $location, $appD
 
 
 	// ! move this so this only happens when the regisration is succesful!
-			/**
-			 * Add the current user to the app data
-			 * @type {Object}
-			 */
-			$appData.currentUser = {
-					username: $scope.userinput.username,
-					passkey: $scope.userinput.password,
-					name: $scope.userinput.name,
-					firstname: $scope.userinput.firstname,
-					email: $scope.userinput.email,
-					language: $scope.userinput.language
-			}
-
-
 	/**
-	 * The actual register function
+	 * Add the current user to the app data
+	 * @type {Object}
+	 */
+	
+	/**
+	 * The actual register function, registers the "currentUser" in appData and handles the routing
 	 */
 	$scope.register = function() {
 		// write register function here
 		if ($scope.signup_form.$valid){
-			// submit
-			// change route to #/dashboard
-		
-			console.log($appdata.currentUser.username);
+					
+			$appData.currentUser = {
+				username: $scope.userinput.username,
+				passkey: $scope.userinput.password,
+				name: $scope.userinput.name,
+				firstname: $scope.userinput.firstname,
+				email: $scope.userinput.email,
+				language: $scope.userinput.language
+			};
 
 			$location.path('/dashboard');
 		} else {
@@ -241,7 +247,7 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 
 	/* controller for dashboard */
 
-	console.log($appData.currentUser.username);
+	console.log($appData);
 	/**
 	 * duplication of the username to be used in Dashboard.html
 	 * @type {String}
@@ -253,7 +259,7 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 	 */
 	$scope.logout = function() {
 		$location.path('/home');
-		//$appData.currentUser = {};
+		$appData.currentUser = {};
 		// remove cookie
 	}
 });
