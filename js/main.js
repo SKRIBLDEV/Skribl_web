@@ -77,6 +77,7 @@ webapp.service('$appData', function() {});
  */
 webapp.controller('homeController', function($scope, $location, $appData) {
 
+	$appData.currentUser = "noUser";
 	/**
 	 * login routing function
 	 */
@@ -212,10 +213,12 @@ webapp.controller('loginController', function($scope, $http, $location, $appData
 				password : $scope.userinput.password};
 		var loginRequest = $http.post('.../login',JSONToSend);
 		loginRequest.success(function(data, status, headers, config) {
+			var Authorization = data.Authorization;
 			var pad = '.../user/'.concat($scope.userinput.username);
 			var loadUserInfoRequest = $http.get(pad);
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				$appData.currentUser = data;
+				$appData.currentUser.Authorization = $scope.Authorization;
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 				//TODO melding dat er een fout is met ONZE database.
@@ -228,6 +231,19 @@ webapp.controller('loginController', function($scope, $http, $location, $appData
 		loginRequest.error(function(data, status, headers, config) {
 			//TODO stop loading page
 			//TODO error door ongeldige login en password combinatie
+
+			//TESTING --> EVERYONE CAN LOGIN
+			$appData.currentUser = {
+				username: "TestUsername",
+				passkey: "TestPasskey",
+				name: "TestName",
+				firstname: "TestFirstName",
+				email: "Test@email.com",
+				language: "DU"
+			}
+			$location.path('/dashboard');
+			//TESTING END
+
 		});
 	}
 });
@@ -247,6 +263,12 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 
 	/* controller for dashboard */
 
+	if($appData.currentUser == "noUser")
+{
+		$location.path('/home');
+		return;
+}
+
 	console.log($appData);
 	/**
 	 * duplication of the username to be used in Dashboard.html
@@ -261,5 +283,14 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 		$location.path('/home');
 		$appData.currentUser = {};
 		// remove cookie
+	};
+	$scope.deleteUser = function(){
+		var str = ".../user/";
+		str = str.concat($appData.currentUser.name);
+		var config = {headers:  {
+		        'Authorization': $appData.currentUser.Authorization
+		    }
+		};
+		$http.delete(str);
 	}
 });
