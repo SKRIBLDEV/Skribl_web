@@ -69,11 +69,12 @@ exports.createUser = function(info, clb) {
 		var e = []; //array for specific error information
 
 		var neededProperties = ['firstName', 'lastName', 'email', 'username', 'password']; //NOT COMPLETE
+     
 
 		//check if all needed properties are defined
-		for (var i = O; i < neededProperties.length(); i++){
-			if(info.neededProperties[i] === 'undefined') //property itself undefined or, if property found, value undefined
-				e.push('property ' + neededProperties[i] + 'undefined');
+		for (var i = 0; i < neededProperties.length; i++){
+			if( ! (neededProperties[i] in info) || ! info[neededProperties[i]] )  //property itself undefined or, if property found, value undefined
+				e.push('property ' + neededProperties[i] + ' undefined');
 		}
 
 
@@ -85,25 +86,25 @@ exports.createUser = function(info, clb) {
 		else { 
 
 			//check whitespace characters 
-			for (var i = O; i < neededProperties.length(); i++){
-				if(!VAL.nonEmpty(info.neededProperties[i])) { // value only contains whitespaces (includes 'tab' etc.)
-					e.push('input ' + key + ' consists solely of whitespace characters');
+			for (var i = 0; i < neededProperties.length; i++){
+				if(!VAL.nonEmpty(info[neededProperties[i]])) { // value only contains whitespaces (includes 'tab' etc.)
+					e.push('input ' + neededProperties[i] + ' consists solely of whitespace characters');
 				}
-				else if(!VAL.noLeadingWhitespace(info.neededProperties[i]) || !VAL.noTrailingWhitespace(info.neededProperties[i]) )
-					e.push('input ' + key + ' contains leading or trailing whitespaces');
+				else if(!VAL.noLeadingWhitespace(info[neededProperties[i]]) || !VAL.noTrailingWhitespace(info[neededProperties[i]]) )
+					e.push('input ' + neededProperties[i] + ' contains leading or trailing whitespaces');
 			}
 
 			//check general 'form'
 			if (!VAL.isGeneralName(info.firstName))
-				e.push('input ' + key + ' is not a valid name');
+				e.push('input ' + 'firstName' + ' is not a valid name');
 			if (!VAL.isGeneralName(info.lastName))
-				e.push('input ' + key + ' is not a valid name');
+				e.push('input ' + 'lastName' + ' is not a valid name');
 			if (!VAL.isEmailAdress(info.email))
-				e.push('input ' + key + ' is not a valid email');
+				e.push('input ' + 'email' + ' is not a valid email');
 			if (!VAL.isUsername(info.username))
-				e.push('input ' + key + ' is not a valid username');
+				e.push('input ' + 'username' + ' is not a valid username');
 			if (!VAL.isPassword(info.password))   //already encrypted????
-				e.push('input ' + key + ' is not a valid password');
+				e.push('input ' + 'password' + ' is not a valid password');
 
 			/*if (! VAL.isResearchField(info.field))
 				e.push('input ' + key + ' is not recognized by the system');
