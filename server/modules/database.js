@@ -6,8 +6,9 @@
 *with methods to interact this database */
 
 /* ---- TODO -------- *
+* add support for affilliation and researchdomain
 * complete documentation
-* write tests for jasmine
+* rewrite tests for jasmine
 * test with jasmine
 * ----- END TODO ---- */
 
@@ -39,12 +40,132 @@ function Database(serverConfig, dbConfig) {
 		username: dbConfig.username || 'admin',
 		password: dbConfig.password || 'admin'
 	});
+
+	function getRid(data) {
+		var rid = data['@rid'];
+		var cluster = rid.cluster;
+		var position = rid.position;
+		var result = '#' + cluster + ':' + position;
+		return result;
+	}
+
+/*
+	function addResearchGroup(newdata, departmentRid, callback) {
+		db.vertex.create({
+		'@class': 'ResearchGroup',
+		Name: newData.getResearchGroup(), 
+		Department: departmentRid})
+		.then(function(ResearchGroup) {
+			var rid = getRid(ResearchGroup);
+			callback(null, true);
+		});
+	}
+
+	function addDepartment(newdata, facultyRid, callback) {
+		db.vertex.create({
+		'@class': 'Department',
+		Name: newData.getDepartment(), 
+		Faculty: facultyRid})
+		.then(function(department) {
+			var rid = getRid(department);
+			addResearchGroup(newdata, rid, callback);
+		});
+	}
+
+	function addFaculty(newdata, instituteRid, callback) {
+		db.select().from('Faculty').where({Name: newData.getFaculty(), Institution: instituteRid}).all()
+		.then(function (faculty) {
+				if(result.length === 1) {
+					var rid = getRid(faculty);
+					addDepartment(newdata, rid, function(departmentRid) {
+						db.exec('update Faculty add Departments=:newDep where @rid=:facRid', {
+  							params: {
+    							newDep: departmentRid
+    							instRid: facRid}})
+						.then(function(response) {
+							callback(rid);
+						})
+					});
+				}
+				else if(result.length === 0) {
+					db.vertex.create({
+					'@class': 'Faculty',
+					Name: newData.getFaculty()})
+					.then(function(faculty) {
+						var rid = getRid(faculty);
+						addDepartment(newdata, rid, function(departmentRid) {
+							db.exec('update Faculty add Departments=:newDep where @rid=:facRid', {
+  								params: {
+    								newDep: departmentRid
+    								instRid: facRid}})
+							.then(function(response) {
+								callback(rid);
+							})
+						});
+					})
+				}
+				else {
+					callback(new error('there are ' + faculty.length + ' duplicate faculties in database'));
+				}
+
+		db.vertex.create({
+		'@class': 'Faculty',
+		Name: newData.getFaculty(),
+		Institution: instituteRid})
+		.then(function(faculty) {
+			var rid = getRid(faculty);
+			addDepartment(newdata, rid, callback);
+		});
+	}
+
+	function addInstitution(newdata, callback) {
+		db.select().from('Institution').where({Name: newData.getInstitution()}).all()
+		.then(function (institution) {
+				if(institution.length === 1){
+					var rid = getRid(institution);
+					addFaculty(newdata, rid, function(facultyRid) {
+						db.exec('update Institution add Faculties=:newFac where @rid=:instRid', {
+  							params: {
+    							newFac: facultyRid
+    							instRid: rid}})
+						.then(function(response) {
+							callback(null, true);
+						})
+					});
+				}
+				else if(institution.length === 0) {
+					db.vertex.create({
+					'@class': 'Institution',
+					Name: newData.getInstitution()})
+					.then(function(institution) {
+						var rid = getRid(institution);
+						addFaculty(newdata, rid, function(facultyRid) {
+							db.exec('update Institution add Faculties=:newFac where @rid=:instRid', {
+  								params: {
+    								newFac: facultyRid
+    								instRid: rid}})
+							.then(function(response) {
+								callback(null, true);
+							})
+						});
+					})
+				}
+				else{
+					callback(new error('there are ' + institution.length + ' universities with the same name in database'));
+				}
+	}
 	
+	function addAffiliation(newData, callback) {
+		addInstitution(newdata, callback)
+	}
+	*/
+
+
 	/** adds user with given data to database 
 	  * @private
+	  * TODO
+	  * create links to researchdomain&affiliation
 	  */
-	// [I] should this function return a user object if successful?
-	// [N] add .error or something? (callback arguments are quite useless right now)
 	function addUser(newData, callback){
 		db.vertex.create({
 			'@class': 'User',
@@ -55,7 +176,7 @@ function Database(serverConfig, dbConfig) {
 			password: newData.getPassword(),
 			language: newData.getLanguage()})
 			.then(function (user) {
-				callback(null, undefined);
+				callback(null, true);
 			});
 	}
 
@@ -70,6 +191,7 @@ function Database(serverConfig, dbConfig) {
 			// @ Ivo, if you want, add e-mail check here too...
 			// however, i don't think its necessary right now...
 			// I copy pasted the code down here, so you wouldn't lose it ;)
+			// @ Noah, do we allow multiple users with the same e-mail adress? or does the check take place somewhere else? otherwise I think we need this.
 			/* 
 					db.select().from('User').where({email: newData.email}).all()
 						.then(function (resultEmail) {
@@ -175,11 +297,28 @@ function Database(serverConfig, dbConfig) {
 			}
 		});
 	}
+
+	this.getResearchDomains = function(callback) {
+		db.select().from('Domain').all()
+		.then(function(domains) {
+			callback(null, domains);
+		});
+	}
+
+	this.addResearchDomain = function(domain, callback) {
+		db.vertex.create({
+			'@class': 'DomainName',
+			Name: domain
+			})
+			.then(function (user) {
+				callback(null, true);
+	}
+
 }
 
 exports.Database = Database;
 
-/* TODO
+/* TESTCODE
 var database= new newDatabase('localhost', 2424, 'skribl_database', 'skribl', 'skribl');
 function stop(){
 process.exit(code=0)
