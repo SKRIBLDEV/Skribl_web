@@ -77,7 +77,7 @@ webapp.service('$appData', function() {});
  */
 webapp.controller('homeController', function($scope, $location, $appData) {
 
-	$appData.currentUser = "noUser";
+	$appData.currentUser = null;
 	/**
 	 * login routing function
 	 */
@@ -263,7 +263,7 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 
 	/* controller for dashboard */
 
-	if($appData.currentUser == "noUser")
+	if($appData.currentUser)
 {
 		$location.path('/home');
 		return;
