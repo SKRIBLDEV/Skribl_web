@@ -21,8 +21,9 @@
  *@param {object} dbConfig - includes configuration for database
  */
 
-var Oriento = require('oriento');
+var Oriento = require('C:/Program Files/nodejs/node_modules/oriento');
 var UM = require('./user.js');
+
 
 function Database(serverConfig, dbConfig) {
 	
@@ -41,124 +42,142 @@ function Database(serverConfig, dbConfig) {
 		password: dbConfig.password || 'admin'
 	});
 
-	function getRid(data) {
-		var rid = data['@rid'];
-		var cluster = rid.cluster;
-		var position = rid.position;
-		var result = '#' + cluster + ':' + position;
-		return result;
-	}
 
-/*
-	function addResearchGroup(newdata, departmentRid, callback) {
+
+	function addResearchGroup(newData, departmentRid, callback) {
 		db.vertex.create({
-		'@class': 'ResearchGroup',
-		Name: newData.getResearchGroup(), 
-		Department: departmentRid})
+			'@class': 'ResearchGroup',
+			Name: newData.getResearchGroup(), 
+			Department: departmentRid})
 		.then(function(ResearchGroup) {
-			var rid = getRid(ResearchGroup);
-			callback(null, true);
+			var ResearchGroupRid = getRid(ResearchGroup);
+			callback(researchGroupRid);
 		});
 	}
 
-	function addDepartment(newdata, facultyRid, callback) {
+	function addDepartment(newData, facultyRid, callback) {
 		db.vertex.create({
-		'@class': 'Department',
-		Name: newData.getDepartment(), 
-		Faculty: facultyRid})
+			'@class': 'Department',
+			Name: newData.getDepartment(), 
+			Faculty: facultyRid})
 		.then(function(department) {
-			var rid = getRid(department);
-			addResearchGroup(newdata, rid, callback);
+			var departmentRid = getRid(department);
+			addResearchGroup(newData, departmentRid, function(researchGroupRid) {
+				db.exec('update Department add ResearchGroups = ' + ResearchGroupRid + ' where @rid = ' + departmentRid)
+				.then(function(response) {
+					callback(departmentRid, researchGroupRid);
+				})
+			});
 		});
 	}
 
-	function addFaculty(newdata, instituteRid, callback) {
-		db.select().from('Faculty').where({Name: newData.getFaculty(), Institution: instituteRid}).all()
-		.then(function (faculty) {
-				if(result.length === 1) {
-					var rid = getRid(faculty);
-					addDepartment(newdata, rid, function(departmentRid) {
-						db.exec('update Faculty add Departments=:newDep where @rid=:facRid', {
-  							params: {
-    							newDep: departmentRid
-    							instRid: facRid}})
-						.then(function(response) {
-							callback(rid);
-						})
-					});
-				}
-				else if(result.length === 0) {
-					db.vertex.create({
-					'@class': 'Faculty',
-					Name: newData.getFaculty()})
-					.then(function(faculty) {
-						var rid = getRid(faculty);
-						addDepartment(newdata, rid, function(departmentRid) {
-							db.exec('update Faculty add Departments=:newDep where @rid=:facRid', {
-  								params: {
-    								newDep: departmentRid
-    								instRid: facRid}})
-							.then(function(response) {
-								callback(rid);
-							})
-						});
-					})
-				}
-				else {
-					callback(new error('there are ' + faculty.length + ' duplicate faculties in database'));
-				}
-
+	function addFaculty(newData, instituteRid, callback) {
 		db.vertex.create({
-		'@class': 'Faculty',
-		Name: newData.getFaculty(),
-		Institution: instituteRid})
+			'@class': 'Faculty',
+			Name: newData.getFaculty(), 
+			Institution: instituteRid})
 		.then(function(faculty) {
-			var rid = getRid(faculty);
-			addDepartment(newdata, rid, callback);
+			var facultyRid = getRid(faculty);
+			addDepartment(newData, facultyRid, function(departmentRid, researchGroupRid) {
+				db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
+				.then(function(response) {
+					callback(facultyRid, researchGroupRid);
+				})
+			});
 		});
 	}
 
-	function addInstitution(newdata, callback) {
-		db.select().from('Institution').where({Name: newData.getInstitution()}).all()
-		.then(function (institution) {
-				if(institution.length === 1){
-					var rid = getRid(institution);
-					addFaculty(newdata, rid, function(facultyRid) {
-						db.exec('update Institution add Faculties=:newFac where @rid=:instRid', {
-  							params: {
-    							newFac: facultyRid
-    							instRid: rid}})
-						.then(function(response) {
-							callback(null, true);
-						})
-					});
-				}
-				else if(institution.length === 0) {
-					db.vertex.create({
-					'@class': 'Institution',
-					Name: newData.getInstitution()})
-					.then(function(institution) {
-						var rid = getRid(institution);
-						addFaculty(newdata, rid, function(facultyRid) {
-							db.exec('update Institution add Faculties=:newFac where @rid=:instRid', {
-  								params: {
-    								newFac: facultyRid
-    								instRid: rid}})
-							.then(function(response) {
-								callback(null, true);
-							})
-						});
-					})
-				}
-				else{
-					callback(new error('there are ' + institution.length + ' universities with the same name in database'));
-				}
+	function addInstitution(newData, callback) {
+		db.vertex.create({
+			'@class': 'Institution',
+			Name: newData.getInstitution()})
+		.then(function(inst) {
+			var institutionRid = getRid(inst);
+			addFaculty(newData, institutionRid, function(facultyRid, researchGroupRid) {
+				db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
+				.then(function(response) {
+					callback(null, researchGroupRid);
+				})
+			});
+		});
 	}
 	
 	function addAffiliation(newData, callback) {
-		addInstitution(newdata, callback)
+
+		function checkInstitution() {
+			db.select().from('Institution').where({Name: newData.getInstitution()}).all()
+			.then(function (institutions) {
+				if(institutions.length === 0){
+					addInstitution(newData, callback);
+				}
+				else{
+					var institution = institutions[0];
+					institutionRid = getRid(institution);
+					checkFaculty(institutionRid);
+				}
+			});
+		}
+
+		function checkFaculty(institutionRid) {
+			db.select().from('Faculty').where({Name: newData.getFaculty(), Institution: institutionRid}).all()
+			.then(function (faculties) {
+				if(faculties.length === 0) {
+					addFaculty(newData, institutionRid, function(facultyRid, ResearchGroupRid) {
+						db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
+							.then(function(response) {
+								callback(null, ResearchGroupRid);
+							})
+					})
+				}
+				else{
+					var faculty = faculties[0];
+					facultyRid = getRid(faculty);
+					checkDepartment(facultyRid);
+				}
+			})
+		}
+
+		function checkDepartment(facultyRid) {
+			db.select().from('Department').where({Name: newData.getDepartment(), Faculty: facultyRid}).all()
+			.then(function (departments) {
+				if(departments.length === 0) {
+					addDepartment(newData, facultyRid, function(departmentRid, ResearchGroupRid) {
+						db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
+							.then(function(response) {
+								callback(null, ResearchGroupRid);
+							})
+					})
+				}
+				else{
+					var department = departments[0];
+					departmentRid = getRid(department);
+					checkResearchGroup(departmentRid);
+				}
+			})
+		}
+
+		function checkResearchGroup(departmentRid) {
+			db.select().from('ResearchGroup').where({Name: newData.getResearchGroup(), Department: departmentRid}).all()
+			.then(function (researchGroups) {
+				if(researchGroups.length === 0) {
+					addResearchGroup(newData, departmentRid, function(ResearchGroupRid) {
+						db.exec('update Department add ResearchGroups = ' + ResearchGroupRid + ' where @rid = ' + departmentRid)
+							.then(function(response) {
+								callback(null, ResearchGroupRid);
+							})
+					})
+				}
+				else{
+					var ResearchGroup = researchGroups[0];
+					ResearchGroupRid = getRid(ResearchGroup);
+					callback(null, ResearchGroupRid);
+				}
+			})
+		}
+
+		checkInstitution();
 	}
-	*/
+	
 
 
 	/** adds user with given data to database 
@@ -176,7 +195,13 @@ function Database(serverConfig, dbConfig) {
 			password: newData.getPassword(),
 			language: newData.getLanguage()})
 			.then(function (user) {
-				callback(null, true);
+				var userRid = getRid(user);
+				addAffiliation(newData, function(error, ResearchGroupRid) {
+					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
+					.then(function(edge) {
+						callback(null, true);
+					});
+				});	
 			});
 	}
 
@@ -187,7 +212,7 @@ function Database(serverConfig, dbConfig) {
 		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
-			}
+			});
 			// @ Ivo, if you want, add e-mail check here too...
 			// however, i don't think its necessary right now...
 			// I copy pasted the code down here, so you wouldn't lose it ;)
@@ -209,7 +234,7 @@ function Database(serverConfig, dbConfig) {
 
 	this.createUser = function(newData, callback) {
 
-		db.userExists(newData, function(err, exists) {
+		this.userExists(newData, function(err, exists) {
 
 			// TODO: err should have seperate if-clause
 			if (err || exists) {
@@ -231,55 +256,13 @@ function Database(serverConfig, dbConfig) {
 			if(rid.length === 1){
 				db.vertex.delete(rid[0])  //check if this works
 				.then(function(){
-					callback(null, undefined);
+					callback(null, true);
 				})
 			} else {
 				callback(new Error("user doesn't exist!"));
 			}
 		});
 	}
-
-/* ..NOT IN USE RIGHT NOW..
-	this.getPassword = function(username, callback) {
-
-		db.select().from('User').where({username: username}).column('password').all()
-		.then(function (pwd) {
-			if(pwd.length){
-				clb(null, pwd[0]);
-			} else {
-				callback(new Error("user doesn't exist!"));
-			}
-		});
-	}
-*/
-	
-	/**
-	...NOT IN USE RIGHT NOW... SORRY IVO!
-	*Will check if a username/password combination exists and call callback with corresponding argument
-	*@param {string} username - username.
-	*@param {string} password - password.
-	*@param {function} callback - called with 'wrong-password', 'wrong-username' or nothing if combination exists
-	
-	this.checkCredentials=function (username, password, callback){
-		db.select().from('User').where({username: username}).all()
-		.then(function (resultUsers){
-				if (resultUsers.length!==0){  
-					db.select().from('User').where({username: username, password: password}).all()  //possible to search array instead of making a new query?
-					.then(function(user){
-						if(user.length!==0){
-						callback(null, user[0]);
-						}
-						else{
-						callback('wrong-password');
-						}
-					})
-				}
-				else{
-					callback('wrong-username');
-				}
-			})
-	}
-	*/
 	
 	/**
 	*will return user object by callback
@@ -312,41 +295,65 @@ function Database(serverConfig, dbConfig) {
 			})
 			.then(function (user) {
 				callback(null, true);
+		});
+	}
+
+	function getRid(data) {
+		var rid = data['@rid'];
+		var cluster = rid.cluster;
+		var position = rid.position;
+		var result = '#' + cluster + ':' + position;
+		return result;
+	}
+
+	this.test = function(name, callback) {
+		db.select().from('User').where({username: name}).all()
+		.then(function(users) {
+			user = users[0];
+			var rid = getRid(user);
+			callback(null, rid);
+		})
 	}
 
 }
 
 exports.Database = Database;
 
-/* TESTCODE
-var database= new newDatabase('localhost', 2424, 'skribl_database', 'skribl', 'skribl');
+/* TESTCODE */
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
+var database= new Database(serverConfig, dbConfig);
+
 function stop(){
 process.exit(code=0)
 }
-function callBack(result){
-	if (result !== undefined){
-	console.log(result);
+function callBack(error, result){
+	if (error){
+	console.log(error)
 	}
 	else{
-	console.log('callback successful')
+	console.log(result);
+	//printUser(result);
 	}
 	stop()
 }
-function printUser(firstName, lastName, username, email, language){
-	console.log(firstName)
-	console.log(lastName)
-	console.log(username)
-	console.log(email)
-	console.log(language)
-	stop()
+function printUser(user){
+	console.log(user.getFirstName());
+	console.log(user.getLastName());
+	console.log(user.getUsername());
+	console.log(user.getEmail());
+	console.log(user.getLanguage());
+	stop();
 }
 var dummy={firstName:'Helene', lastName:'Vervlimmeren', username:'asdf', password:'asdf', email:'helene@vub.ac.be', language:'english'};
 var dummy2={firstName:'Ivo', lastName:'Vervlimmeren', username:'qwerty', password:'qwerty', email:'ivo@vub.ac.be', language:'english'};
-*/
+var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'jshep', email:'jshep@vub.ac.be', language:'english', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits'}
 
-//database.getUser('asdf', callBack);
-//database.checkCredentials('asdf', 'asdf', callBack);
-//database.deleteUser('asdf', callBack);
-//database.createUser(dummy, callBack);
-//process.exit(code=0)
-//var tst=require('./Database_API.js');
+
+var dummy4 = new UM.UserRecord(dummy3);
+
+//database.loadUser('qwerty', callBack);
+//database.deleteUser('qwerty', callBack);
+//database.createUser(dummy4, callBack);
+
+

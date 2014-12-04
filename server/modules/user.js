@@ -41,6 +41,13 @@ exports.UserRecord = function(info) {
 	this.getEmail = function() { return info.email; }
 	this.getUsername = function() { return info.username; }
 
+	//[I] tijdelijk toegevoegd om database te testen
+	this.getPassword = function() { return info.password; }
+	this.getResearchGroup = function() {return info.researchgroup;}
+	this.getDepartment = function() {return info.department;}
+	this.getFaculty = function() {return info.faculty;}
+	this.getInstitution = function() {return info.institution;}
+
 	/**
 	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord
 	* @param password
