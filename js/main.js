@@ -4,9 +4,7 @@
   * using < ... ng-app='skriblApp'> ... </...>
   * @type {angular module}
   */
-
 var webapp = angular.module('skriblApp', ['ngRoute']);
-
 
 /**
  * Configuration of the angular webapp global.
@@ -64,35 +62,6 @@ webapp.config(['$routeProvider', function($routeProvider) {
  * Initialisation of the appdata with the empty object
  */
 webapp.service('$appData', function() {});
-
-
-/**
- * Initialisation of the homeController (an angular controller),
- * has an symbiotic relationship with home.html
- * 
- * @param  {object} $scope    the scope object of the controller
- * @param  {object} $location for switching between routes/views
- * @param  {object} $appData  our custom service for shared data
-
- */
-webapp.controller('homeController', function($scope, $location, $appData) {
-
-	$appData.currentUser = null;
-	/**
-	 * login routing function
-	 */
-	$scope.login = function() {
-		$location.path('/login');
-	};
-
-	/**
-	 * register routing function
-	 */
-	$scope.register = function() {
-		$location.path('/register');
-	};
-});
-
 
 /**
  * Initialisation of the registerController (an angular controller),
