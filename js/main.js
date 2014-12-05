@@ -263,7 +263,7 @@ webapp.controller('dashController', function($scope, $location, $appData) {
 
 	/* controller for dashboard */
 
-	if($appData.currentUser)
+	if(!($appData.currentUser))
 {
 		$location.path('/home');
 		return;
