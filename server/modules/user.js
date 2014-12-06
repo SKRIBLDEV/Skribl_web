@@ -13,10 +13,12 @@
 
 
 var VAL = require("./validation.js");
+var db = require("./database.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
 
-
+//[I] changed because otherwise error at line 149
+exports.UserRecord = UserRecord;
 
 /** 
 * Constructor for creating UserRecords, with public getters for account information (except password), and a method to check credentials. UserRecords are returned from the database.
@@ -24,7 +26,7 @@ var strength = 10; //hash strength
 * @constructor UserRecord
 * @param info (private)  : object containing validated user account info. 
 */
-exports.UserRecord = function(info) {
+function UserRecord(info) {
 
 	/** 
 	* @method get*property* (public) : getter for user property, e.g., myUser.getFirstName()
@@ -150,3 +152,4 @@ exports.createUser = function(info, clb) {
 		}
 	});
 }
+
