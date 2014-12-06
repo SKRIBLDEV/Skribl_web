@@ -16,6 +16,7 @@ function HTTPSServer(key, cert, modules) {
 	var auth = undefined;
 	var credentials = {};
 	var context = {};
+	var server;
 
 	/** initialise function for HTTPSServer-object
 	  * @private
@@ -74,7 +75,7 @@ function HTTPSServer(key, cert, modules) {
 
 	/** install handler at a certain route
 	  * @param {function} setter - used to set handler at this route
-	  * @param {function} handler - handler to be setted
+	  * @param {function} handler - handler to be assigned at route
 	  * @private
 	  */
 	function install(route, method, handler) {
@@ -114,11 +115,14 @@ function HTTPSServer(key, cert, modules) {
 	  */
 	this.listen = function(port) {
 
-		var server = https.createServer(credentials, app);
+		if (!server) {
+			server = https.createServer(credentials, app);
+		}
+
 		server.listen(port);
 	}
 
 	init();
 }
 
-exports.make = HTTPSServer;
+exports.HTTPSServer = HTTPSServer;

@@ -21,7 +21,7 @@
  *@param {object} dbConfig - includes configuration for database
  */
 
-var Oriento = require('C:/Program Files/nodejs/node_modules/oriento');
+var Oriento = require('oriento');
 var UM = require('./user.js');
 
 
@@ -319,14 +319,15 @@ function Database(serverConfig, dbConfig) {
 
 exports.Database = Database;
 
-/* TESTCODE */
+/* TESTCODE 
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database= new Database(serverConfig, dbConfig);
 
 function stop(){
-process.exit(code=0)
+	process.exit(code=0)
 }
+
 function callBack(error, result){
 	if (error){
 	console.log(error)
@@ -356,4 +357,4 @@ var dummy4 = new UM.UserRecord(dummy3);
 //database.deleteUser('qwerty', callBack);
 //database.createUser(dummy4, callBack);
 
-
+*/

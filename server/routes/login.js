@@ -15,10 +15,7 @@ function validateCredentials(req, res, context) {
 
 						var txt = username + ':' + password;
 						var enc = new Buffer(txt).toString('base64');
-
-						res.json({
-							Authorization: "Basic " + enc
-						});
+						res.json({ Authorization: "Basic " + enc });
 
 					} else {
 
