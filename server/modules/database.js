@@ -6,8 +6,6 @@
 *with methods to interact this database */
 
 /* ---- TODO -------- *
-* add support for affilliation and researchdomain
-* complete documentation
 * rewrite tests for jasmine
 * test with jasmine
 * ----- END TODO ---- */
@@ -52,6 +50,13 @@ function Database(serverConfig, dbConfig) {
 
 	var self = this;
 
+	/**
+	 * adds a new researchgroup
+	 * @private
+	 * @param {Object}   newData
+	 * @param {String}   departmentRid
+	 * @param {callBack} callback
+	 */
 	function addResearchGroup(newData, departmentRid, callback) {
 		db.vertex.create({
 			'@class': 'ResearchGroup',
@@ -63,6 +68,13 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+	/**
+	 * adds a new department
+	 * @private
+	 * @param {Object}   newData
+	 * @param {[String]}   facultyRid
+	 * @param {callBack} callback
+	 */
 	function addDepartment(newData, facultyRid, callback) {
 		db.vertex.create({
 			'@class': 'Department',
@@ -79,6 +91,13 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+	/**
+	 * adds a new faculty
+	 * @private
+	 * @param {Object}   newData
+	 * @param {String}   instituteRid
+	 * @param {callBack} callback
+	 */
 	function addFaculty(newData, instituteRid, callback) {
 		db.vertex.create({
 			'@class': 'Faculty',
@@ -95,6 +114,12 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+	/**
+	 * adds a new institution
+	 * @private
+	 * @param {Object}   newData
+	 * @param {callBack} callback
+	 */
 	function addInstitution(newData, callback) {
 		db.vertex.create({
 			'@class': 'Institution',
@@ -110,8 +135,20 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 	
+	/**
+	 * will make sure that a certain affiliation (string of institute-faculty-department-researchgroup) exists, if it doesn't it will be added.
+	 * will execute checkInstitution().
+	 * @private
+	 * @param {Object}   newData
+	 * @param {callBack} callback
+	 * @return {String}	returns rid of researchgroup
+	 */
 	function addAffiliation(newData, callback) {
 
+		/**
+		 * checks if an institute with certain name exists, if it does it jumps to checkFaculty(), if it doesn't it jumps to addInstitution()		
+		 * @return {String}	returns rid of researchgroup
+		 */
 		function checkInstitution() {
 			db.select().from('Institution').where({Name: newData.getInstitution()}).all()
 			.then(function (institutions) {
@@ -126,6 +163,9 @@ function Database(serverConfig, dbConfig) {
 			});
 		}
 
+		/**
+		 * checks if an faculty with certain name exists, if it does it jumps to checkDepartment(), if it doesn't it jumps to addFaculty()		
+		 */
 		function checkFaculty(institutionRid) {
 			db.select().from('Faculty').where({Name: newData.getFaculty(), Institution: institutionRid}).all()
 			.then(function (faculties) {
@@ -145,6 +185,9 @@ function Database(serverConfig, dbConfig) {
 			})
 		}
 
+		/**
+		 * checks if an department with certain name exists, if it does it jumps to checkResearchGroup(), if it doesn't it jumps to addDepartment()		
+		 */
 		function checkDepartment(facultyRid) {
 			db.select().from('Department').where({Name: newData.getDepartment(), Faculty: facultyRid}).all()
 			.then(function (departments) {
@@ -164,6 +207,9 @@ function Database(serverConfig, dbConfig) {
 			})
 		}
 
+		/**
+		 * checks if an researchgroup with certain name exists, if it does it calls the callback with the rid, if it doesn't it jumps to addResearchGroup()		
+		 */
 		function checkResearchGroup(departmentRid) {
 			db.select().from('ResearchGroup').where({Name: newData.getResearchGroup(), Department: departmentRid}).all()
 			.then(function (researchGroups) {
@@ -186,6 +232,13 @@ function Database(serverConfig, dbConfig) {
 		checkInstitution();
 	}
 
+		/**
+		 * will get the researchgroup of a user and then collect the whole affiliation chain.
+		 * @private
+		 * @param  {Object}   user
+		 * @param  {callBack} callback
+		 * @return {[Object]}
+		 */
 	   function getAffiliation(user, callback) {
 	  	var cUser = user
 	  	var results;
@@ -303,6 +356,12 @@ function Database(serverConfig, dbConfig) {
 		}
 	}
 	
+	/**
+	 * adds a researchdomain with given name
+	 * @private
+	 * @param {String}   domain
+	 * @param {callBack} callback
+	 */
 	function addResearchDomain(domain, callback) {
 		var domName = domain;
 		db.select().from('ResearchDomain').where({Name: domName}).all()
@@ -325,11 +384,12 @@ function Database(serverConfig, dbConfig) {
 	}
 
 
-	/** adds user with given data to database 
-	  * @private
-	  * TODO
-	  * create links to researchdomain&affiliation
-	  */
+	/**
+	 * adds user with given data to database
+	 * @private
+	 * @param {Object}   newData
+	 * @param {callBack} callback
+	 */
 	function addUser(newData, callback){
 		var userRid;
 		db.vertex.create({
@@ -361,8 +421,13 @@ function Database(serverConfig, dbConfig) {
 			});
 	}
 
-	// [N] added this function, might need it later on...
-	// also, add .error for callback(err, data) ?
+	/**
+	 * will check if a user exists
+	 * @private
+	 * @param  {[type]}   data
+	 * @param  {Function} callback
+	 * @return {[type]}
+	 */
 	this.userExists = function(data, callback) {
 
 		db.select().from('User').where({username: data.getUsername()}).all()
@@ -384,10 +449,10 @@ function Database(serverConfig, dbConfig) {
 	
 	/**
 	*will check if user already exists before calling addUser() to add user to the database.
+	*@private
 	*@param {object} newData - object which contains userinfo
-	*@param {function} callback - will be called when done with function, with 'username-taken', 'email-taken' or passed to addUser()
+	*@param {callBack} callback - will be called when done with function, with 'username-taken', 'email-taken' or passed to addUser()
 	*/
-
 	this.createUser = function(newData, callback) {
 
 		this.userExists(newData, function(err, exists) {
@@ -402,15 +467,15 @@ function Database(serverConfig, dbConfig) {
 	}
 					
 	/**
-	*Deletes user with given username from database, will not notice if user existed before deletion
-	*[H] ?it does notice if non-existing and throws error?
-	*/
-	//is there a better way to get record id?
+	 * Deletes user with given username from database, throws error if user doesn't exist.
+	 * @param  {string}   username
+	 * @param  {callback} callback
+	 */
 	this.deleteUser = function (username, callback) {
 		db.select().from('User').where({username: username}).column('@rid').all()
 		.then(function (rid) {
 			if(rid.length === 1){
-				db.vertex.delete(rid[0])  //check if this works
+				db.vertex.delete(rid[0]) 
 				.then(function(){
 					callback(null, true);
 				})
@@ -443,6 +508,12 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+	/**
+	 * if given a username: will return all researchdomains of user in an Array, otherwise will return all researchdomains.
+	 * @param  {String}   username
+	 * @param  {callBack} callback
+	 * @return {Array<String>}	array of researchdomain names.
+	 */
 	this.getResearchDomains = function(username, callback) {
 		if(typeof username === 'string') {
 			db.query('select * from (traverse * from (select * from User where username = \'' + username + '\') while $depth < 2) where @class = \'ResearchDomain\'')
@@ -467,6 +538,12 @@ function Database(serverConfig, dbConfig) {
 	}
 
 
+	/**
+	 * returns the record id of an object as a string.
+	 * @private
+	 * @param  {Object} object
+	 * @return {String}
+	 */
 	function getRid(object) {
 		var rid = object['@rid'];
 		var cluster = rid.cluster;
@@ -475,6 +552,12 @@ function Database(serverConfig, dbConfig) {
 		return result;
 	}
 
+	/**
+	 * gets rid in object form and transforms it into stringform
+	 * @private
+	 * @param  {Object} data
+	 * @return {String}
+	 */
 	function transformRid(data) {
 		var cluster = data.cluster;
 		var position = data.position;
