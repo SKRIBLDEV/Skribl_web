@@ -31,22 +31,17 @@ function UserRecord(info) {
 
 	this.getFirstName = function() { return info.firstName; }
 	this.getLastName = function() { return info.lastName; }
-	//TODO::
-	//function getResearchGroup(){return -->THIS?!<-- info.researchGroup;}
-	//function getDepartment(){return info.department;};
-	//function getFaculty(){return info.faculty;};
-	//function getInstitution(){return info.institution;};
 	this.getLanguage = function() { return info.language; }
 	this.getEmail = function() { return info.email; }
 	this.getUsername = function() { return info.username; }
+	this.getPassword = function() { return info.password; }
 
 	//[I] tijdelijk toegevoegd om database te testen
-	this.getPassword = function() { return info.password; }
-	this.getResearchGroup = function() {return info.researchgroup;}
-	this.getDepartment = function() {return info.department;}
-	this.getFaculty = function() {return info.faculty;}
-	this.getInstitution = function() {return info.institution;}
-	this.getResearchDomains = function() {return info.researchdomains;}
+	this.getResearchGroup = function() { return info.researchgroup; }
+	this.getDepartment = function() { return info.department; }
+	this.getFaculty = function() { return info.faculty; }
+	this.getInstitution = function() { return info.institution; }
+	this.getResearchDomain = function() { return info.researchdomains; }
 
 	/**
 	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord
@@ -58,16 +53,12 @@ function UserRecord(info) {
 	}
 }
 
-
-
 /** 
 * createUser validates the given account information, encrypts the password and creates a new UserRecord object, to be passed to the database.
 * @see route user.js #createUser
 * @param info : object containing account information, not yet validated on the server side
 * @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
 */
-
-
 exports.createUser = function(info, clb) {
 
 	function validate(info, clb) {
@@ -151,5 +142,4 @@ exports.createUser = function(info, clb) {
 	});
 }
 
-//[I] changed because otherwise error at line 149
 exports.UserRecord = UserRecord;

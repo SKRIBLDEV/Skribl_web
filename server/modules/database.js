@@ -27,7 +27,7 @@
  *@param {object} dbConfig - includes configuration for database
  */
 
-var Oriento = require('C:/Program Files/nodejs/node_modules/oriento');
+var Oriento = require('oriento');
 var UM = require('./user.js');
 
 
@@ -239,7 +239,7 @@ function Database(serverConfig, dbConfig) {
 		 * @param  {callBack} callback
 		 * @return {[Object]}
 		 */
-	   function getAffiliation(user, callback) {
+	function getAffiliation(user, callback) {
 	  	var cUser = user
 	  	var results;
 		var content;
@@ -251,7 +251,7 @@ function Database(serverConfig, dbConfig) {
 		.then(function(information) {
 			results = information.results[0];
 			content = results.content[0];
-			researchgroup = content.value
+			researchgroup = content.value;
 			cUser['researchgroup'] = researchgroup.Name;
 		})
 		.then(function(e) {
@@ -297,7 +297,7 @@ function Database(serverConfig, dbConfig) {
 			var divisionRid = getRid(division);
 			db.query('select Name from ' + classSubDivisions + ' where ' + className +' = ' + divisionRid)
 			.then(function(results) {
-				var resArray = [];
+				var resArray = []; //TODO replace by new Array(results.length)??
 				for(var i = 0; i < results.length; i++) {
 					resArray.push(results[i].Name);
 				}
@@ -307,45 +307,39 @@ function Database(serverConfig, dbConfig) {
 
 		if(institution === undefined) {
 			callback(new Error('No path to subdivisions, give at least Institution.'));
-		}
-		else {
+		} else {
 			db.query('select from Institution where Name = \'' + institution +'\'')
 			.then(function(institutions) {
 				if(institutions.length) {
 					division = institutions[0];
-				}
-				else {
+				} else {
 					callback(new Error('Institution with name: \'' + institution + '\' does not exist'));
 				}
 			})
 			.then(function(e) {
 				if(faculty === undefined) {
 					compileResult('Faculties', 'Faculty');
-				}
-				else {
+				} else {
 					var institutionRid = getRid(division)
 					db.query('select from Faculty where Name = \'' + faculty + '\' and Institution = ' + institutionRid)
 					.then(function(faculties) {
 						if(faculties.length) {
 							division = faculties[0];
-						}
-						else {
+						} else {
 							callback(new Error('Faculty with name: ' + faculty + ' does not exist'));
 						}
 					})
 					.then(function(e) {
 						if(department === undefined) {
 							compileResult('Departments', 'Department');
-						}
-						else {
+						} else {
 							var facultiesRid = getRid(division)
 							db.query('select from Department where Name = \'' + department + '\' and Faculty = ' + facultiesRid)
 							.then(function(departments) {
 								if(departments.length) {
 									division = departments[0];
 									compileResult('ResearchGroups', 'ResearchGroup');
-								}
-								else {
+								} else {
 									callback(new Error('Department with name: ' + department + ' does not exist'));
 								}
 							})
@@ -474,11 +468,11 @@ function Database(serverConfig, dbConfig) {
 	this.deleteUser = function (username, callback) {
 		db.select().from('User').where({username: username}).column('@rid').all()
 		.then(function (rid) {
-			if(rid.length === 1){
+			if(rid.length === 1) {
 				db.vertex.delete(rid[0]) 
 				.then(function(){
 					callback(null, true);
-				})
+				});
 			} else {
 				callback(new Error("user doesn't exist!"));
 			}
@@ -611,7 +605,7 @@ var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'js
 //database.createUser(dummy4, callBack);
 <<<<<<< HEAD
 =======
-*/
+/*
 //database.getAffiliation(dummy4, callBack);
 //database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
 <<<<<<< Updated upstream

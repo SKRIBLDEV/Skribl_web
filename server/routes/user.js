@@ -22,7 +22,12 @@ function getUserInfo(req, res, context) {
 				firstName: data.getFirstName(),
 				lastName: data.getLastName(),
 				email: data.getEmail(),
-				language: data.getLanguage()
+				language: data.getLanguage(),
+				researchGroup: data.getResearchGroup(),
+				department: data.getDepartment(),
+				faculty: data.getFaculty(),
+				institution: data.getInstitution(),
+				researchDomain: data.getResearchDomain()
 			});
 		}
 	});
