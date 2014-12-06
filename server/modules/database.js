@@ -12,6 +12,14 @@
 * test with jasmine
 * ----- END TODO ---- */
 
+/**
+ * This callback is displayed as a global member.
+ * @callback callBack
+ * @param {object} error - null or error object
+ * @param {mixed} returnvalue - any value that needs to be returned
+ */
+
+
  /** 
    *Create a new database object.
    *@class
@@ -177,6 +185,123 @@ function Database(serverConfig, dbConfig) {
 
 		checkInstitution();
 	}
+
+	   function getAffiliation(user, callback) {
+	  	var cUser = user
+	  	var results;
+		var content;
+		var researchgroup;
+		var department;
+		var faculty;
+		var institution;
+		db.exec('select * from (traverse * from (select * from User where username = \'' + cUser.username + '\') while $depth < 2) where @class = \'ResearchGroup\'')
+		.then(function(information) {
+			results = information.results[0];
+			content = results.content[0];
+			researchgroup = content.value
+			cUser['researchgroup'] = researchgroup.Name;
+		})
+		.then(function(e) {
+			var departmentRid = transformRid(researchgroup.Department);
+			db.query('select from Department where @rid = ' + departmentRid)
+			.then(function(departments) {
+				department = departments[0];
+				cUser['department'] = department.Name;
+			})
+			.then(function(e) {
+				var facultyRid = transformRid(department.Faculty);
+				db.query('select from Faculty where @rid = ' + facultyRid)
+				.then(function(faculties) {
+					faculty = faculties[0];
+					cUser['faculty'] = faculty.Name;
+				})
+				.then(function(e) {
+					var institutionRid = transformRid(faculty.Institution);
+					db.query('select from Institution where @rid = ' + institutionRid)
+					.then(function(institutions) {
+						institution = institutions[0];
+						cUser['institution'] = institution.Name;
+						callback(null, cUser);
+					})
+
+				})
+			})
+		})
+	}
+
+	/**
+	*Will give the subdivisions of a given division.
+	*@param {callBack} callback - handles response
+	*@param {String} institution - name of institution
+	*@param {String} [faculty] - name of faculty
+	*@param {String} [department] - name of department
+	*@return {Array<String>} array of names of subdivisions
+	*/
+	this.getSubdivisions = function(callback, institution, faculty, department) {
+		var division;
+		function compileResult(nameSubdivisions, classSubDivisions) {
+			var className = division['@class'];
+			var divisionRid = getRid(division);
+			db.query('select Name from ' + classSubDivisions + ' where ' + className +' = ' + divisionRid)
+			.then(function(results) {
+				var resArray = [];
+				for(var i = 0; i < results.length; i++) {
+					resArray.push(results[i].Name);
+				}
+				callback(null, resArray);
+			})
+		}
+
+		if(institution === undefined) {
+			callback(new Error('No path to subdivisions, give at least Institution.'));
+		}
+		else {
+			db.query('select from Institution where Name = \'' + institution +'\'')
+			.then(function(institutions) {
+				if(institutions.length) {
+					division = institutions[0];
+				}
+				else {
+					callback(new Error('Institution with name: \'' + institution + '\' does not exist'));
+				}
+			})
+			.then(function(e) {
+				if(faculty === undefined) {
+					compileResult('Faculties', 'Faculty');
+				}
+				else {
+					var institutionRid = getRid(division)
+					db.query('select from Faculty where Name = \'' + faculty + '\' and Institution = ' + institutionRid)
+					.then(function(faculties) {
+						if(faculties.length) {
+							division = faculties[0];
+						}
+						else {
+							callback(new Error('Faculty with name: ' + faculty + ' does not exist'));
+						}
+					})
+					.then(function(e) {
+						if(department === undefined) {
+							compileResult('Departments', 'Department');
+						}
+						else {
+							var facultiesRid = getRid(division)
+							db.query('select from Department where Name = \'' + department + '\' and Faculty = ' + facultiesRid)
+							.then(function(departments) {
+								if(departments.length) {
+									division = departments[0];
+									compileResult('ResearchGroups', 'ResearchGroup');
+								}
+								else {
+									callback(new Error('Department with name: ' + department + ' does not exist'));
+								}
+							})
+						}
+					})
+				}
+			})
+		}
+	}
 	
 
 
@@ -274,8 +399,11 @@ function Database(serverConfig, dbConfig) {
 		.then(function(users) {
 			if(users.length) {
 				var dbRec = users[0];
-				callback(null, new UM.UserRecord(dbRec));
-			} else {
+				getAffiliation(dbRec, function(error, user) {
+					callback(error, new UM.UserRecord(user));
+				});
+			} 
+			else {
 			   callback(new Error('user not found'));
 			}
 		});
@@ -298,10 +426,17 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
-	function getRid(data) {
-		var rid = data['@rid'];
+	function getRid(object) {
+		var rid = object['@rid'];
 		var cluster = rid.cluster;
 		var position = rid.position;
+		var result = '#' + cluster + ':' + position;
+		return result;
+	}
+
+	function transformRid(data) {
+		var cluster = data.cluster;
+		var position = data.position;
 		var result = '#' + cluster + ':' + position;
 		return result;
 	}
@@ -343,6 +478,7 @@ function printUser(user){
 	console.log(user.getUsername());
 	console.log(user.getEmail());
 	console.log(user.getLanguage());
+	console.log(user.getInstitution());
 	stop();
 }
 var dummy={firstName:'Helene', lastName:'Vervlimmeren', username:'asdf', password:'asdf', email:'helene@vub.ac.be', language:'english'};
@@ -352,8 +488,11 @@ var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'js
 
 var dummy4 = new UM.UserRecord(dummy3);
 
-//database.loadUser('qwerty', callBack);
+//database.loadUser('jshep', callBack);
 //database.deleteUser('qwerty', callBack);
 //database.createUser(dummy4, callBack);
+//database.getAffiliation(dummy4, callBack);
+//database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
+
 
 
