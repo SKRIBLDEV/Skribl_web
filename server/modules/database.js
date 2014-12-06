@@ -497,13 +497,10 @@ var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'js
 //database.createUser(dummy4, callBack);
 //database.getAffiliation(dummy4, callBack);
 //database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
-var nUser = {firstName:'Miranda', lastName:'Lawson', username:'mlaw', password:'Algoon123', email:'mlaw@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits'};
+/*
+var nUser = {firstName:'Mordin', lastName:'Solus', username:'msolus', password:'Algoon7', email:'msolus@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels'}
 UM.createUser(nUser, function(error, user) {
 	database.createUser(user, callBack);
 });
-
-/*
-TestData:
-{firstName:'John', lastName:'Shepard', username:'jshep', password:'jshep', email:'jshep@vub.ac.be', language:'english', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits'}
 
 */
