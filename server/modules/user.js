@@ -49,6 +49,7 @@ function UserRecord(info) {
 	this.getDepartment = function() {return info.department;}
 	this.getFaculty = function() {return info.faculty;}
 	this.getInstitution = function() {return info.institution;}
+	this.getResearchDomains = function() {return info.researchdomains;}
 
 	/**
 	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord

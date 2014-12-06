@@ -50,7 +50,7 @@ function Database(serverConfig, dbConfig) {
 		password: dbConfig.password || 'admin'
 	});
 
-
+	var self = this;
 
 	function addResearchGroup(newData, departmentRid, callback) {
 		db.vertex.create({
@@ -303,6 +303,26 @@ function Database(serverConfig, dbConfig) {
 		}
 	}
 	
+	function addResearchDomain(domain, callback) {
+		var domName = domain;
+		db.select().from('ResearchDomain').where({Name: domName}).all()
+		.then(function(domains) {
+			if(domains.length) {
+				var domain = domains[0];
+				var domainRid = getRid(domain);
+				callback(null, domainRid);
+			}
+			else {
+				db.vertex.create({
+				'@class': 'ResearchDomain',
+				Name: domName})
+				.then(function (ResearchDomain) {
+					var domainRid = getRid(ResearchDomain);
+					callback(null, domainRid);
+				});
+			}
+		});
+	}
 
 
 	/** adds user with given data to database 
@@ -311,6 +331,7 @@ function Database(serverConfig, dbConfig) {
 	  * create links to researchdomain&affiliation
 	  */
 	function addUser(newData, callback){
+		var userRid;
 		db.vertex.create({
 			'@class': 'User',
 			firstName: newData.getFirstName(),
@@ -320,11 +341,21 @@ function Database(serverConfig, dbConfig) {
 			password: newData.getPassword(),
 			language: newData.getLanguage()})
 			.then(function (user) {
-				var userRid = getRid(user);
+				userRid = getRid(user);
 				addAffiliation(newData, function(error, ResearchGroupRid) {
 					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
 					.then(function(edge) {
-						callback(null, true);
+						addResearchDomain(newData.getResearchDomain(), function(error, domainRid) {
+							if(error) {
+								callback(error);
+							}
+							else {
+								db.edge.from(userRid).to(domainRid).create('HasResearchDomain')
+								.then(function(edge) {
+									callback(null, true);
+								});
+							}
+						});
 					});
 				});	
 			});
@@ -400,7 +431,10 @@ function Database(serverConfig, dbConfig) {
 			if(users.length) {
 				var dbRec = users[0];
 				getAffiliation(dbRec, function(error, user) {
-					callback(error, new UM.UserRecord(user));
+					self.getResearchDomains(user.username, function(error, resdomains) {
+						user['researchdomains'] = resdomains;
+						callback(error, new UM.UserRecord(user));
+					});
 				});
 			} 
 			else {
@@ -409,26 +443,29 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
-	this.getResearchDomains = function(callback) {
-		db.select().from('ResearchDomain').all()
-		.then(function(domains) {
-			var resArray = [];
-			for (var i = 0; i < domains.length; i++) {
-				resArray.push(domains[i].Name);
-			};
-			callback(null, resArray);
-		});
+	this.getResearchDomains = function(username, callback) {
+		if(typeof username === 'string') {
+			db.query('select * from (traverse * from (select * from User where username = \'' + username + '\') while $depth < 2) where @class = \'ResearchDomain\'')
+			.then(function(researchdomains) {
+				var resArray = [];
+				for (var i = 0; i < researchdomains.length; i++) {
+					resArray.push(researchdomains[i].Name);
+				};
+				callback(null, resArray);
+			});
+		}
+		else {
+			db.select().from('ResearchDomain').all()
+			.then(function(domains) {
+				var resArray = [];
+				for (var i = 0; i < domains.length; i++) {
+					resArray.push(domains[i].Name);
+				};
+				callback(null, resArray);
+			});
+		}
 	}
 
-	this.addResearchDomain = function(domain, callback) {
-		db.vertex.create({
-			'@class': 'ResearchDomain',
-			Name: domain
-			})
-			.then(function (ResearchDomain) {
-				callback(null, true);
-		});
-	}
 
 	function getRid(object) {
 		var rid = object['@rid'];
@@ -443,15 +480,6 @@ function Database(serverConfig, dbConfig) {
 		var position = data.position;
 		var result = '#' + cluster + ':' + position;
 		return result;
-	}
-
-	this.test = function(name, callback) {
-		db.select().from('User').where({username: name}).all()
-		.then(function(users) {
-			user = users[0];
-			var rid = getRid(user);
-			callback(null, rid);
-		})
 	}
 
 }
@@ -472,7 +500,7 @@ function callBack(error, result){
 	}
 	else{
 	console.log(result);
-	//printUser(result);
+	printUser(result);
 	}
 	stop()
 }
@@ -483,24 +511,26 @@ function printUser(user){
 	console.log(user.getEmail());
 	console.log(user.getLanguage());
 	console.log(user.getInstitution());
+	console.log(user.getResearchDomains());
 	stop();
 }
 var dummy={firstName:'Helene', lastName:'Vervlimmeren', username:'asdf', password:'asdf', email:'helene@vub.ac.be', language:'english'};
 var dummy2={firstName:'Ivo', lastName:'Vervlimmeren', username:'qwerty', password:'qwerty', email:'ivo@vub.ac.be', language:'english'};
-var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'jshep', email:'jshep@vub.ac.be', language:'english', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits'}
+var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'jshep', email:'jshep@vub.ac.be', language:'english', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits', researchdomain: ''}
 
 
 //var dummy4 = new UM.UserRecord(dummy3);
 
-//database.loadUser('jshep', callBack);
-//database.deleteUser('qwerty', callBack);
+//database.loadUser('gurdnot', callBack);
+//database.deleteUser('gurdnot', callBack);
 //database.createUser(dummy4, callBack);
 //database.getAffiliation(dummy4, callBack);
 //database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
+//database.getResearchDomains('gurdnot', callBack)
 /*
-var nUser = {firstName:'Mordin', lastName:'Solus', username:'msolus', password:'Algoon7', email:'msolus@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels'}
+var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Ammo']}
+
 UM.createUser(nUser, function(error, user) {
 	database.createUser(user, callBack);
 });
-
 */
