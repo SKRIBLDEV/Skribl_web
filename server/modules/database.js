@@ -58,7 +58,7 @@ function Database(serverConfig, dbConfig) {
 			Name: newData.getResearchGroup(), 
 			Department: departmentRid})
 		.then(function(ResearchGroup) {
-			var ResearchGroupRid = getRid(ResearchGroup);
+			var researchGroupRid = getRid(ResearchGroup);
 			callback(researchGroupRid);
 		});
 	}
@@ -71,7 +71,7 @@ function Database(serverConfig, dbConfig) {
 		.then(function(department) {
 			var departmentRid = getRid(department);
 			addResearchGroup(newData, departmentRid, function(researchGroupRid) {
-				db.exec('update Department add ResearchGroups = ' + ResearchGroupRid + ' where @rid = ' + departmentRid)
+				db.exec('update Department add ResearchGroups = ' + researchGroupRid + ' where @rid = ' + departmentRid)
 				.then(function(response) {
 					callback(departmentRid, researchGroupRid);
 				})
