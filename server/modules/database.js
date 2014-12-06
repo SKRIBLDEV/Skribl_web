@@ -486,14 +486,15 @@ function Database(serverConfig, dbConfig) {
 
 exports.Database = Database;
 
-/* TESTCODE */
+/* TESTCODE 
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database= new Database(serverConfig, dbConfig);
 
 function stop(){
-process.exit(code=0)
+	process.exit(code=0)
 }
+
 function callBack(error, result){
 	if (error){
 	console.log(error)
@@ -524,6 +525,8 @@ var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'js
 //database.loadUser('gurdnot', callBack);
 //database.deleteUser('gurdnot', callBack);
 //database.createUser(dummy4, callBack);
+<<<<<<< HEAD
+=======
 //database.getAffiliation(dummy4, callBack);
 //database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
 //database.getResearchDomains('gurdnot', callBack)
@@ -533,4 +536,9 @@ var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot', password:
 UM.createUser(nUser, function(error, user) {
 	database.createUser(user, callBack);
 });
+<<<<<<< HEAD
+=======
+>>>>>>> FETCH_HEAD
+
+>>>>>>> fc23f93aaf4fe1614bcc84fe2f86cdd70be52e7f
 */
