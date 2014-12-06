@@ -17,9 +17,6 @@ var db = require("./database.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
 
-//[I] changed because otherwise error at line 149
-exports.UserRecord = UserRecord;
-
 /** 
 * Constructor for creating UserRecords, with public getters for account information (except password), and a method to check credentials. UserRecords are returned from the database.
 * @see database module #loadUser
@@ -154,3 +151,5 @@ exports.createUser = function(info, clb) {
 	});
 }
 
+//[I] changed because otherwise error at line 149
+exports.UserRecord = UserRecord;

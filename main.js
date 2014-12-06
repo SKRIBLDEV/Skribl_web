@@ -9,7 +9,7 @@ const basicAuth = require('basic-auth');
 /* ---- DATABASE INITIALISATION ---- */
 
 const serverConfig = {
-	ip:'localhost',
+	ip:'wilma.vub.ac.be',
 	port:2424, 
 	username:'root', 
 	password:'root'
@@ -29,6 +29,11 @@ const modules = [ bodyParser.json(),
 				function(req, res, next) {
 					req.basicAuth = basicAuth(req);
 					next();
+				},
+				/** @debug -- log requests */
+				function(req, res, next) {
+					console.log(req.body);
+					next();
 				}];
 
 const SKRIBLServer = new HTTPSServer('./server/ssl/skribl.key', 
@@ -46,7 +51,7 @@ SKRIBLServer.useAuthentication(authentication);
 /* ---- CONFIGURE ROUTES ---- */
 
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
-//SKRIBLServer.installRoute(require('./server/routes/user.js'));
+SKRIBLServer.installRoute(require('./server/routes/user.js'));
 
 /* ---- SERVE STATIC FILES ---- */
 
@@ -56,5 +61,3 @@ SKRIBLServer.serveStatic('/', '/public');
 /* ---- START SERVER ---- */
 
 SKRIBLServer.listen(8443);
-
-// curl -X POST -i -H "Content-type: application/json" -k https://localhost:8443/login -d '{"username":"noah", "password":"test"}'

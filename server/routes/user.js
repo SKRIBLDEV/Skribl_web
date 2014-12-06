@@ -1,4 +1,4 @@
-var UM = require('././modules/user.js');
+var UM = require('../modules/user.js');
 
 function serverError(res, reason) {
 
@@ -18,7 +18,7 @@ function getUserInfo(req, res, context) {
 			serverError(res, err.toString());
 		} else {
 			res.json({
-				username: data.getUserName(),
+				username: data.getUsername(),
 				firstName: data.getFirstName(),
 				lastName: data.getLastName(),
 				email: data.getEmail(),
@@ -56,16 +56,16 @@ deleteUserInfo.auth = function(auth, req) {
 	return (auth ? (auth.getUsername() === requiredUsername) : false);
 }
 
-function createUser(req, res) {
+function createUser(req, res, context) {
 
 	req.body.username = req.param('username');
-	UM.createUser(req.body, function(err, usr) {
-		if(err) { // [H] here the error is a 'server-side-validation-error', and specific error information is stored in the array 'usr' (the value of the callback). Maybe for debugging reasons we could display this? 
-			serverError(res, err.toString());
+	UM.createUser(req.body, function(err, data) {
+		if(err) {  
+			serverError(res, data[0]);
 		} else {
 			var database = context.db;
-			database.createUser(usr, function(err, data) {
-				if(err === null) {
+			database.createUser(data, function(err, data) {
+				if(!err) {
 					res.status(201).end();
 				} else {
 					serverError(res, err.toString());

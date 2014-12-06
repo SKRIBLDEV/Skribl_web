@@ -31,13 +31,6 @@ function HTTPSServer(key, cert, modules) {
 		for(var i = 0; i < modules.length; ++i) {
 			app.use(modules[i]);
 		}
-
-		/** @debug
-		 */
-		app.use(function(req, res, next) {
-			console.log(req);
-			next();
-		});
 	}
 
 	/** make resource available to request handlers
@@ -66,10 +59,15 @@ function HTTPSServer(key, cert, modules) {
 	  * @param {function} fun - procedure to be lifted
 	  * @private
 	  */
-	function includeContext(fun) {
+	function liftHandler(fun) {
 		
 		return function(req, res, next) {
-			fun(req, res, context, next);
+			try {
+				fun(req, res, context, next);
+			} catch(exception) {
+				res.status(501);
+				res.end(exception);
+			}
 		}
 	}
 
@@ -94,7 +92,7 @@ function HTTPSServer(key, cert, modules) {
 		}
 
 		if (handler) { 
-			route[method](includeContext(handler)); 
+			route[method](liftHandler(handler)); 
 		}
 	}
 
@@ -116,7 +114,9 @@ function HTTPSServer(key, cert, modules) {
 	this.listen = function(port) {
 
 		if (!server) {
-			server = https.createServer(credentials, app);
+			//server = https.createServer(credentials, app);
+			/*--- [uncomment if you have problems with HTTPS/SSL] ---*/
+			server = require('http').createServer(app);
 		}
 
 		server.listen(port);
