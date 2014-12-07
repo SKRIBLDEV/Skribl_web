@@ -4,19 +4,22 @@
 * 
 */
 
+/*
+* TO DO
+* - validation of research field
+* - validation of language preference
+*/
 
- /* TODO:
-   - test
-   - ...
-  */
 
 var VAL = require("./validation.js");
-var db = require("./database.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
 
+//array with properties for which the values should conform to generalName-RegEx
+var generalNames = ['firstName', 'lastName', 'researchGroup', 'department', 'faculty', 'institution'];
+
 /** 
-* Constructor for creating UserRecords, with public getters for account information (except password), and a method to check credentials. UserRecords are returned from the database.
+* Constructor for creating UserRecords, with public getters for account information, and a method to check credentials. UserRecords are returned from the database.
 * @see database module #loadUser
 * @constructor UserRecord
 * @param info (private)  : object containing validated user account info. 
@@ -33,13 +36,11 @@ function UserRecord(info) {
 	this.getEmail = function() { return info.email; }
 	this.getUsername = function() { return info.username; }
 	this.getPassword = function() { return info.password; }
-
-	//[I] tijdelijk toegevoegd om database te testen
-	this.getResearchGroup = function() { return info.researchgroup; }
+	this.getResearchGroup = function() { return info.researchGroup; }
 	this.getDepartment = function() { return info.department; }
 	this.getFaculty = function() { return info.faculty; }
 	this.getInstitution = function() { return info.institution; }
-	this.getResearchDomains = function() { return info.researchdomains; }
+	this.getResearchDomains = function() { return info.researchDomains; }
 
 	/**
 	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord
@@ -51,14 +52,6 @@ function UserRecord(info) {
 	}
 }
 
-/*** @HANNAH *** 
-	There are some issues with this code, besides the fact that it's ugly...
-	   	>> Validation for lastName, for example "Van Es" (which, last time I checked my ID, was still a valid lastName!)
-	 	>> neededProperties array is initialised with every call of validate?
-		>> same for validation_error (better to initialise only when needed, i.e. when error happens)...
-		>> still don't understand why checking all properties first is necessary (just check !== undefined)
-		>> see validation file for alternative suggestion...
-/*** --- END --- ***/ 
 
 /**
 * createUser validates the given account information, encrypts the password and creates a new UserRecord object, to be passed to the database.
@@ -66,71 +59,45 @@ function UserRecord(info) {
 * @param info : object containing account information, not yet validated on the server side
 * @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
 */
+
 exports.createUser = function(info, clb) {
 
 	function validate(info, clb) {
 
-		var validation_error = new Error('server-side-validation-error');
-		var e = []; //array for specific error information
+		/* the validation functions defined in the validation.js module check:
+		* - input defined?
+		* - input not solely whitespace, and no leading or trailing whitespaces? (included in RegEx)
+		* - form against specific RegEx
+		*/
 
-		var neededProperties = ['firstName', 'lastName', 'email', 'username', 'password']; //NOT COMPLETE
-     
+		var e = []; //array for specific error information, passed as the result to the clb if validation does not succeed
 
-		//check if all needed properties are defined
-		for (var i = 0; i < neededProperties.length; i++){
-			if( ! (neededProperties[i] in info) || ! info[neededProperties[i]] )  //property itself undefined or, if property found, value undefined
-				e.push('property ' + neededProperties[i] + ' undefined');
+		//check all 'general names'
+		for (var i = 0; i < generalNames.length; i++) {
+			if (! VAL.isGeneralName( info[generalNames[i]] ))
+				e.push('input ' + generalNames[i] + ' is not a valid name');
 		}
 
+		//check specific properties
+		if (!VAL.isEmailAdress(info.email))
+			e.push('input ' + 'email' + ' is not a valid email');
+		if (!VAL.isUsername(info.username))
+			e.push('input ' + 'username' + ' is not a valid username');
+		if (!VAL.isPassword(info.password))  
+			e.push('input ' + 'password' + ' is not a valid password');
 
-		if(e.length) {  // some properties are undefined
-			clb(validation_error, e); //quit validation and pass array of errors, !here as value of the callback
-		}
+		/*if (! VAL.isResearchField(info.researchfield))
+				e.push('input ' + 'ResearchField' + ' is not recognized');
+		*/
 
-		//continue validation
-		else { 
+		// preferred language validation needed 
 
-			//check whitespace characters 
-			for (var i = 0; i < neededProperties.length; i++){
-				if(!VAL.nonEmpty(info[neededProperties[i]])) { // value only contains whitespaces (includes 'tab' etc.)
-					e.push('input ' + neededProperties[i] + ' consists solely of whitespace characters');
-				}
-				else if(!VAL.noLeadingWhitespace(info[neededProperties[i]]) || !VAL.noTrailingWhitespace(info[neededProperties[i]]) )
-					e.push('input ' + neededProperties[i] + ' contains leading or trailing whitespaces');
-			}
-
-			//check general 'form'
-			if (!VAL.isGeneralName(info.firstName))
-				e.push('input ' + 'firstName' + ' is not a valid name');
-			if (!VAL.isGeneralName(info.lastName))
-				e.push('input ' + 'lastName' + ' is not a valid name');
-			if (!VAL.isEmailAdress(info.email))
-				e.push('input ' + 'email' + ' is not a valid email');
-			if (!VAL.isUsername(info.username))
-				e.push('input ' + 'username' + ' is not a valid username');
-			if (!VAL.isPassword(info.password))   //already encrypted????
-				e.push('input ' + 'password' + ' is not a valid password');
-
-			/*if (! VAL.isResearchField(info.field))
-				e.push('input ' + key + ' is not recognized by the system');
-			if (! VAL.isGeneralName(info.researchGroup))
-				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(info.department))
-				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(info.faculty))
-				e.push('input ' + key + ' is not a valid name');
-			if (! VAL.isGeneralName(info.institution))
-				e.push('input ' + key + ' is not a valid name');*/
-
-			// preferred language validation needed 
-
-			if(e.length) //errors during validation
-				clb(validation_error, e); // pass error, !array with specific error information passed as result!
-			else 
-				clb(null, true); //succes, clb without errors
-		}
+		if(e.length) //errors during validation
+				clb(new Error('server-side-validation-error'), e); // pass error, !array with specific error information passed as result!
+		else 
+				clb(null, true); //succes, clb without error		
+		
 	}
-
 	
 	validate(info, function(err, data) {
 		if (err) {
