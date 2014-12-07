@@ -1,34 +1,6 @@
 
-
+var RID = require('./rid.js');
 function Affiliation(db) {
-
-		/**
-	 * returns the record id of an object as a string.
-	 * @private
-	 * @param  {Object} object
-	 * @return {String}
-	 */
-	function getRid(object) {
-		var rid = object['@rid'];
-		var cluster = rid.cluster;
-		var position = rid.position;
-		var result = '#' + cluster + ':' + position;
-		return result;
-	}
-
-	/**
-	 * gets rid in object form and transforms it into stringform
-	 * @private
-	 * @param  {Object} data
-	 * @return {String}
-	 */
-	function transformRid(data) {
-		var cluster = data.cluster;
-		var position = data.position;
-		var result = '#' + cluster + ':' + position;
-		return result;
-	}
-
 	/**
 	 * adds a new researchgroup
 	 * @private
@@ -42,7 +14,7 @@ function Affiliation(db) {
 			Name: newData.getResearchGroup(), 
 			Department: departmentRid})
 		.then(function(ResearchGroup) {
-			var researchGroupRid = getRid(ResearchGroup);
+			var researchGroupRid = RID.getRid(ResearchGroup);
 			callback(researchGroupRid);
 		});
 	}
@@ -60,7 +32,7 @@ function Affiliation(db) {
 			Name: newData.getDepartment(), 
 			Faculty: facultyRid})
 		.then(function(department) {
-			var departmentRid = getRid(department);
+			var departmentRid = RID.getRid(department);
 			addResearchGroup(newData, departmentRid, function(researchGroupRid) {
 				db.exec('update Department add ResearchGroups = ' + researchGroupRid + ' where @rid = ' + departmentRid)
 				.then(function() {
@@ -83,7 +55,7 @@ function Affiliation(db) {
 			Name: newData.getFaculty(), 
 			Institution: instituteRid})
 		.then(function(faculty) {
-			var facultyRid = getRid(faculty);
+			var facultyRid = RID.getRid(faculty);
 			addDepartment(newData, facultyRid, function(departmentRid, researchGroupRid) {
 				db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
 				.then(function() {
@@ -104,7 +76,7 @@ function Affiliation(db) {
 			'@class': 'Institution',
 			Name: newData.getInstitution()})
 		.then(function(inst) {
-			var institutionRid = getRid(inst);
+			var institutionRid = RID.getRid(inst);
 			addFaculty(newData, institutionRid, function(facultyRid, researchGroupRid) {
 				db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
 				.then(function() {
@@ -136,7 +108,7 @@ function Affiliation(db) {
 				}
 				else{
 					var institution = institutions[0];
-					var institutionRid = getRid(institution);
+					var institutionRid = RID.getRid(institution);
 					checkFaculty(institutionRid);
 				}
 			});
@@ -158,7 +130,7 @@ function Affiliation(db) {
 				}
 				else{
 					var faculty = faculties[0];
-					var facultyRid = getRid(faculty);
+					var facultyRid = RID.getRid(faculty);
 					checkDepartment(facultyRid);
 				}
 			});
@@ -180,7 +152,7 @@ function Affiliation(db) {
 				}
 				else{
 					var department = departments[0];
-					var departmentRid = getRid(department);
+					var departmentRid = RID.getRid(department);
 					checkResearchGroup(departmentRid);
 				}
 			});
@@ -202,14 +174,14 @@ function Affiliation(db) {
 				}
 				else{
 					var ResearchGroup = researchGroups[0];
-					var ResearchGroupRid = getRid(ResearchGroup);
+					var ResearchGroupRid = RID.getRid(ResearchGroup);
 					callback(null, ResearchGroupRid);
 				}
 			});
 		}
 
 		checkInstitution();
-	}
+	};
 
 
 		/**
@@ -235,21 +207,21 @@ function Affiliation(db) {
 			cUser.researchgroup = researchgroup.Name;
 		})
 		.then(function() {
-			var departmentRid = transformRid(researchgroup.Department);
+			var departmentRid = RID.transformRid(researchgroup.Department);
 			db.query('select from Department where @rid = ' + departmentRid)
 			.then(function(departments) {
 				department = departments[0];
 				cUser.department = department.Name;
 			})
 			.then(function() {
-				var facultyRid = transformRid(department.Faculty);
+				var facultyRid = RID.transformRid(department.Faculty);
 				db.query('select from Faculty where @rid = ' + facultyRid)
 				.then(function(faculties) {
 					faculty = faculties[0];
 					cUser.faculty = faculty.Name;
 				})
 				.then(function() {
-					var institutionRid = transformRid(faculty.Institution);
+					var institutionRid = RID.transformRid(faculty.Institution);
 					db.query('select from Institution where @rid = ' + institutionRid)
 					.then(function(institutions) {
 						institution = institutions[0];
@@ -260,7 +232,7 @@ function Affiliation(db) {
 				});
 			});
 		});
-	}
+	};
 }
 
 exports.Affiliation = Affiliation;

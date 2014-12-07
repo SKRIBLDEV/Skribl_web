@@ -40,7 +40,8 @@
 var Oriento = require('oriento');
 var UM = require('./user.js');
 var Affil = require('./affiliation.js');
-var RDomain = require('./researchdomain');
+var RDomain = require('./researchdomain.js');
+var RID = require('./rid.js');
 
 function Database(serverConfig, dbConfig) {
 	
@@ -76,7 +77,7 @@ function Database(serverConfig, dbConfig) {
 		var division;
 		function compileResult(nameSubdivisions, classSubDivisions) {
 			var className = division['@class'];
-			var divisionRid = getRid(division);
+			var divisionRid = RID.getRid(division);
 			db.query('select Name from ' + classSubDivisions + ' where ' + className +' = ' + divisionRid)
 			.then(function(results) {
 				var resArray = []; //TODO replace by new Array(results.length)??
@@ -102,7 +103,7 @@ function Database(serverConfig, dbConfig) {
 				if(faculty === undefined) {
 					compileResult('Faculties', 'Faculty');
 				} else {
-					var institutionRid = getRid(division);
+					var institutionRid = RID.getRid(division);
 					db.query('select from Faculty where Name = \'' + faculty + '\' and Institution = ' + institutionRid)
 					.then(function(faculties) {
 						if(faculties.length) {
@@ -115,7 +116,7 @@ function Database(serverConfig, dbConfig) {
 						if(department === undefined) {
 							compileResult('Departments', 'Department');
 						} else {
-							var facultiesRid = getRid(division);
+							var facultiesRid = RID.getRid(division);
 							db.query('select from Department where Name = \'' + department + '\' and Faculty = ' + facultiesRid)
 							.then(function(departments) {
 								if(departments.length) {
@@ -136,7 +137,7 @@ function Database(serverConfig, dbConfig) {
 	this.deleteResearchDomain = function(name, callback) {
 		db.select().from('ResearchDomain').where({Name: name}).all()
 		.then(function(domain) {
-			var domainRid = getRid(domain[0]);
+			var domainRid = RID.getRid(domain[0]);
 			db.vertex.delete(domainRid) 
 			.then(function(){
 				callback(null, true);
@@ -283,7 +284,7 @@ function Database(serverConfig, dbConfig) {
 			password: newData.getPassword(),
 			language: newData.getLanguage()})
 			.then(function (user) {
-				userRid = getRid(user);
+				userRid = RID.getRid(user);
 				aff.addAffiliation(newData, function(error, ResearchGroupRid) {
 					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
 					.then(function() {
@@ -294,41 +295,37 @@ function Database(serverConfig, dbConfig) {
 	}
 
 
-	/**
-	 * returns the record id of an object as a string.
-	 * @private
-	 * @param  {Object} object
-	 * @return {String}
-	 */
-	function getRid(object) {
-		var rid = object['@rid'];
-		var cluster = rid.cluster;
-		var position = rid.position;
-		var result = '#' + cluster + ':' + position;
-		return result;
-	}
-
-	/**
-	 * gets rid in object form and transforms it into stringform
-	 * @private
-	 * @param  {Object} data
-	 * @return {String}
-	 */
-	function transformRid(data) {
-		var cluster = data.cluster;
-		var position = data.position;
-		var result = '#' + cluster + ':' + position;
-		return result;
-	}
 
 }
 
 exports.Database = Database;
 
-/*
+
 // TESTCODE 
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
 
-*/
+function stop(){
+	process.exit(code=0);
+}
+
+function callBack(error, result){
+	if (error){
+	console.log(error);
+	}
+	else{
+	console.log(result);
+	//printUser(result);
+	}
+	stop();
+}
+
+//database.deleteUser('msolus', callBack);
+
+var nUser = {firstName:'Mordin', lastName:'Solus', username:'msolus', password:'Algoon7', email:'msolus@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Seashells']}
+
+UM.createUser(nUser, function(error, user) {
+	database.createUser(user, callBack);
+});
