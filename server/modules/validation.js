@@ -1,3 +1,39 @@
+
+/*** @HANNAH *** 
+	Todo's in this code:
+	   	>> Use of global variable re (the JS-trap!)
+	   	>> Lots of code duplication, basically always the same pattern
+	   	>> Cleaner example:
+
+	// higher order function to generate check functions
+
+	function check(regex) {
+		return function(inp) {
+			return regex.test(inp);
+		}
+	}
+
+	// followed by these definitions
+
+	var nonEmpty = check(/.\$+./);
+	var isPassword = check(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/);
+	var isUsername = check(/^\w+$/);
+	var isEmailAdress = ...
+	...
+
+	// OR YOU CAN EVEN DEFINE CHECK LIKE THIS ...
+	// ... TO ELIMINATE NEEDED_PROPERTIES-CHECK IN USER.JS
+
+	function check(regex) {
+		return function(inp) {
+			return inp && regex.test(inp);
+		}
+	}
+
+	// ... MAYBE ALSO ADD !isEmpty etc. to check?
+
+/*** --- END --- ***/ 
+
 exports.nonEmpty = function(input) {
 	re = /.\S+./; // RE for any number of characters (.), followed by at least one non-whitespace character (\S)
 	return (re.test(input));

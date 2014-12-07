@@ -10,8 +10,6 @@
    - ...
   */
 
-
-
 var VAL = require("./validation.js");
 var db = require("./database.js");
 var bcrypt = require('bcrypt');
@@ -53,7 +51,16 @@ function UserRecord(info) {
 	}
 }
 
-/** 
+/*** @HANNAH *** 
+	There are some issues with this code, besides the fact that it's ugly...
+	   	>> Validation for lastName, for example "Van Es" (which, last time I checked my ID, was still a valid lastName!)
+	 	>> neededProperties array is initialised with every call of validate?
+		>> same for validation_error (better to initialise only when needed, i.e. when error happens)...
+		>> still don't understand why checking all properties first is necessary (just check !== undefined)
+		>> see validation file for alternative suggestion...
+/*** --- END --- ***/ 
+
+/**
 * createUser validates the given account information, encrypts the password and creates a new UserRecord object, to be passed to the database.
 * @see route user.js #createUser
 * @param info : object containing account information, not yet validated on the server side
