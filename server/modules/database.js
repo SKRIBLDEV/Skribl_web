@@ -93,7 +93,7 @@ function Database(serverConfig, dbConfig) {
 				db.exec('update Department add ResearchGroups = ' + researchGroupRid + ' where @rid = ' + departmentRid)
 				.then(function(response) {
 					callback(departmentRid, researchGroupRid);
-				})
+				});
 			});
 		});
 	}
@@ -116,7 +116,7 @@ function Database(serverConfig, dbConfig) {
 				db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
 				.then(function(response) {
 					callback(facultyRid, researchGroupRid);
-				})
+				});
 			});
 		});
 	}
@@ -137,7 +137,7 @@ function Database(serverConfig, dbConfig) {
 				db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
 				.then(function(response) {
 					callback(null, researchGroupRid);
-				})
+				});
 			});
 		});
 	}
@@ -164,7 +164,7 @@ function Database(serverConfig, dbConfig) {
 				}
 				else{
 					var institution = institutions[0];
-					institutionRid = getRid(institution);
+					var institutionRid = getRid(institution);
 					checkFaculty(institutionRid);
 				}
 			});
@@ -181,15 +181,15 @@ function Database(serverConfig, dbConfig) {
 						db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
 							.then(function(response) {
 								callback(null, ResearchGroupRid);
-							})
-					})
+							});
+					});
 				}
 				else{
 					var faculty = faculties[0];
-					facultyRid = getRid(faculty);
+					var facultyRid = getRid(faculty);
 					checkDepartment(facultyRid);
 				}
-			})
+			});
 		}
 
 		/**
@@ -203,15 +203,15 @@ function Database(serverConfig, dbConfig) {
 						db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
 							.then(function(response) {
 								callback(null, ResearchGroupRid);
-							})
-					})
+							});
+					});
 				}
 				else{
 					var department = departments[0];
-					departmentRid = getRid(department);
+					var departmentRid = getRid(department);
 					checkResearchGroup(departmentRid);
 				}
-			})
+			});
 		}
 
 		/**
@@ -225,15 +225,15 @@ function Database(serverConfig, dbConfig) {
 						db.exec('update Department add ResearchGroups = ' + ResearchGroupRid + ' where @rid = ' + departmentRid)
 							.then(function(response) {
 								callback(null, ResearchGroupRid);
-							})
-					})
+							});
+					});
 				}
 				else{
 					var ResearchGroup = researchGroups[0];
-					ResearchGroupRid = getRid(ResearchGroup);
+					var ResearchGroupRid = getRid(ResearchGroup);
 					callback(null, ResearchGroupRid);
 				}
-			})
+			});
 		}
 
 		checkInstitution();
@@ -247,7 +247,7 @@ function Database(serverConfig, dbConfig) {
 		 * @return {[Object]}
 		 */
 	function getAffiliation(user, callback) {
-	  	var cUser = user
+	  	var cUser = user;
 	  	var results;
 		var content;
 		var researchgroup;
@@ -282,11 +282,11 @@ function Database(serverConfig, dbConfig) {
 						institution = institutions[0];
 						cUser['institution'] = institution.Name;
 						callback(null, cUser);
-					})
+					});
 
-				})
-			})
-		})
+				});
+			});
+		});
 	}
 
 	/**
@@ -309,7 +309,7 @@ function Database(serverConfig, dbConfig) {
 					resArray.push(results[i].Name);
 				}
 				callback(null, resArray);
-			})
+			});
 		}
 
 		if(institution === undefined) {
@@ -327,7 +327,7 @@ function Database(serverConfig, dbConfig) {
 				if(faculty === undefined) {
 					compileResult('Faculties', 'Faculty');
 				} else {
-					var institutionRid = getRid(division)
+					var institutionRid = getRid(division);
 					db.query('select from Faculty where Name = \'' + faculty + '\' and Institution = ' + institutionRid)
 					.then(function(faculties) {
 						if(faculties.length) {
@@ -340,7 +340,7 @@ function Database(serverConfig, dbConfig) {
 						if(department === undefined) {
 							compileResult('Departments', 'Department');
 						} else {
-							var facultiesRid = getRid(division)
+							var facultiesRid = getRid(division);
 							db.query('select from Department where Name = \'' + department + '\' and Faculty = ' + facultiesRid)
 							.then(function(departments) {
 								if(departments.length) {
@@ -349,13 +349,13 @@ function Database(serverConfig, dbConfig) {
 								} else {
 									callback(new Error('Department with name: ' + department + ' does not exist'));
 								}
-							})
+							});
 						}
-					})
+					});
 				}
-			})
+			});
 		}
-	}
+	};
 	
 	/**
 	 * adds a researchdomain with given name
@@ -384,6 +384,19 @@ function Database(serverConfig, dbConfig) {
 		});
 	}
 
+	function addResearchDomains(domains, userRid, callback) {
+		for (var i = 0; i < domains.length; i++) {
+			addResearchDomain(domains[i], function(error, domainRid) {
+				if(error) {
+					callback(error);
+				} else {
+					db.edge.from(userRid).to(domainRid).create('HasResearchDomain')
+					.then(function(edge) {});
+				}
+			});
+		}
+		callback(null, true);
+	};
 
 	/**
 	 * adds user with given data to database
@@ -406,17 +419,7 @@ function Database(serverConfig, dbConfig) {
 				addAffiliation(newData, function(error, ResearchGroupRid) {
 					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
 					.then(function(edge) {
-						addResearchDomain(newData.getResearchDomain(), function(error, domainRid) {
-							if(error) {
-								callback(error);
-							}
-							else {
-								db.edge.from(userRid).to(domainRid).create('HasResearchDomain')
-								.then(function(edge) {
-									callback(null, true);
-								});
-							}
-						});
+						addResearchDomains(newData.getResearchDomains(), userRid, callback);
 					});
 				});	
 			});
@@ -446,7 +449,7 @@ function Database(serverConfig, dbConfig) {
 									callback('email-taken');
 								}
 			*/
-	}
+	};
 	
 	/**
 	*will check if user already exists before calling addUser() to add user to the database.
@@ -465,7 +468,7 @@ function Database(serverConfig, dbConfig) {
 				addUser(newData, callback);
 			}
 		});
-	}
+	};
 					
 	/**
 	 * Deletes user with given username from database, throws error if user doesn't exist.
@@ -484,7 +487,7 @@ function Database(serverConfig, dbConfig) {
 				callback(new Error("user doesn't exist!"));
 			}
 		});
-	}
+	};
 	
 	/**
 	*will return user object by callback
@@ -507,7 +510,7 @@ function Database(serverConfig, dbConfig) {
 			   callback(new Error('user not found'));
 			}
 		});
-	}
+	};
 
 	/**
 	 * if given a username: will return all researchdomains of user in an Array, otherwise will return all researchdomains.
@@ -522,7 +525,7 @@ function Database(serverConfig, dbConfig) {
 				var resArray = [];
 				for (var i = 0; i < researchdomains.length; i++) {
 					resArray.push(researchdomains[i].Name);
-				};
+				}
 				callback(null, resArray);
 			});
 		}
@@ -532,11 +535,11 @@ function Database(serverConfig, dbConfig) {
 				var resArray = [];
 				for (var i = 0; i < domains.length; i++) {
 					resArray.push(domains[i].Name);
-				};
+				}
 				callback(null, resArray);
 			});
 		}
-	}
+	};
 
 
 	/**
@@ -571,24 +574,24 @@ function Database(serverConfig, dbConfig) {
 exports.Database = Database;
 
 // TESTCODE 
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
 
 
 function stop(){
-	process.exit(code=0)
+	process.exit(code=0);
 }
 
 function callBack(error, result){
 	if (error){
-	console.log(error)
+	console.log(error);
 	}
 	else{
 	console.log(result);
-	printUser(result);
+	//printUser(result);
 	}
-	stop()
+	stop();
 }
 function printUser(user){
 	console.log(user.getFirstName());
@@ -608,7 +611,7 @@ var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'js
 //var dummy4 = new UM.UserRecord(dummy3);
 
 //database.loadUser('gurdnot', callBack);
-database.deleteUser('gurdnot', callBack);
+//database.deleteUser('gurdnot', callBack);
 //database.createUser(dummy4, callBack);
 //<<<<<<< HEAD
 //=======
@@ -618,11 +621,13 @@ database.deleteUser('gurdnot', callBack);
 //<<<<<<< Updated upstream
 //database.getResearchDomains('gurdnot', callBack)
 
-var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Ammo']}
+
+var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Ammo', 'Thresher Maws']}
 
 UM.createUser(nUser, function(error, user) {
 	database.createUser(user, callBack);
 });
+
 /*
 <<<<<<< HEAD
 =======
