@@ -300,32 +300,10 @@ function Database(serverConfig, dbConfig) {
 
 exports.Database = Database;
 
-
+/*
 // TESTCODE 
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
-
-function stop(){
-	process.exit(code=0);
-}
-
-function callBack(error, result){
-	if (error){
-	console.log(error);
-	}
-	else{
-	console.log(result);
-	//printUser(result);
-	}
-	stop();
-}
-
-//database.deleteUser('msolus', callBack);
-
-var nUser = {firstName:'Mordin', lastName:'Solus', username:'msolus', password:'Algoon7', email:'msolus@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Seashells']}
-
-UM.createUser(nUser, function(error, user) {
-	database.createUser(user, callBack);
-});
+*/
