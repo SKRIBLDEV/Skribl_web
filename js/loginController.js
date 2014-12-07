@@ -35,12 +35,17 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 //TODO loading "page"
 		var JSONToSend = {
 				username : $scope.userinput.username,
-				password : $scope.userinput.password};
-		var loginRequest = $http.post('.../login',JSONToSend);
+				password : $scope.userinput.password
+			};
+		var config = {headers:  {
+		        'Content-type' : 'application/json'
+		    }};
+		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
+		
 		loginRequest.success(function(data, status, headers, config) {
 			var Authorization = data.Authorization;
-			var pad = '.../user/'.concat($scope.userinput.username);
-			var loadUserInfoRequest = $http.get(pad);
+			var pad = serverApi.concat('/user/').concat($scope.userinput.username);
+			var loadUserInfoRequest = $http.get(pad,config);
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				$appData.currentUser = data;
 				$appData.currentUser.Authorization = $scope.Authorization;
@@ -53,22 +58,11 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 			// change route to #/dashboard
 			$location.path('/dashboard');
 		});
+		
 		loginRequest.error(function(data, status, headers, config) {
 			//TODO stop loading page
-			//TODO error door ongeldige login en password combinatie
-
-			//TESTING --> EVERYONE CAN LOGIN
-			$appData.currentUser = {
-				username: "TestUsername",
-				passkey: "TestPasskey",
-				name: "TestName",
-				firstname: "TestFirstName",
-				email: "Test@email.com",
-				language: "DU"
-			}
-			$location.path('/dashboard');
-			//TESTING END
-
+			//TODO error door ongeldige login en password combination
+			$location.path('/error');
 		});
 	}
 });

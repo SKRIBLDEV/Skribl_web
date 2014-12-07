@@ -41,6 +41,6 @@ angular.module('skriblApp').controller('dashController', function($scope, $locat
 		        'Authorization': $appData.currentUser.Authorization
 		    }
 		};
-		$http.delete(str);
+		$http.delete(str,config);
 	}
 });

@@ -6,6 +6,7 @@
   */
 var webapp = angular.module('skriblApp', ['ngRoute']);
 
+var serverApi = 'http://wilma.vub.ac.be:8443';
 /**
  * Configuration of the angular webapp global.
  * We configure the different views/routes depending on the current URl
@@ -30,33 +31,6 @@ webapp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.otherwise({redirectTo: '/home'});
 
 }]);
-
-
-/*
-	now we will define the different controllers for the webapp,
-	these will determine the application behaviour etc..
-
-	syntax: <module>.controller(<name>, <implementation>);
-	implementation is a function that is able to use AngularJS'
-	so called 'services' by adding them as parameters <implementation>,
-	which is a function.
-
-	for instance:
-		$scope := every controller has a certain $scope-object that can
-			hold variables, functions, ... that can be used within
-			the HTML of that controller! (see HTML-code for example)
-		$http := abstraction useful for AJAX-calls etc...
-		$location := allows to switch between routes/views
-		$appData := custom service (cf. sidenote)
-
- * SIDENOTE:
-	first, we'll add our own custom service $appData that will allow
-	controllers to simply share data with each other
-	(since they don't share the same $scope-object)
-	We do this by naming the service, then providing a constructor.
-	(AngularJS will make a singleton (!) using this constructor...)
- */
-
 
 /**
  * Initialisation of the appdata with the empty object
