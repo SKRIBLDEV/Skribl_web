@@ -1,3 +1,8 @@
+/* source: http://sandbox.vidric.com/mendeley/index.php?title=Academic_discipline_list
+*  converted to javascript format with a simple C++ program (I confess)
+*/
+
+
 module.exports = [
 {
 major:	 {ID: "1", name: "Arts and Literature"},
