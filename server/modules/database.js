@@ -575,72 +575,7 @@ exports.Database = Database;
 
 /*
 // TESTCODE 
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
-
-
-function stop(){
-	process.exit(code=0);
-}
-
-function callBack(error, result){
-	if (error){
-	console.log(error);
-	}
-	else{
-	console.log(result);
-	//printUser(result);
-	}
-	stop();
-}
-function printUser(user){
-	console.log(user.getFirstName());
-	console.log(user.getLastName());
-	console.log(user.getUsername());
-	console.log(user.getEmail());
-	console.log(user.getLanguage());
-	console.log(user.getInstitution());
-	console.log(user.getResearchDomains());
-	stop();
-}
-var dummy={firstName:'Helene', lastName:'Vervlimmeren', username:'asdf', password:'asdf', email:'helene@vub.ac.be', language:'english'};
-var dummy2={firstName:'Ivo', lastName:'Vervlimmeren', username:'qwerty', password:'qwerty', email:'ivo@vub.ac.be', language:'english'};
-var dummy3={firstName:'John', lastName:'Shepard', username:'jshep', password:'jshep', email:'jshep@vub.ac.be', language:'english', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'duits', researchdomain: ''}
-
-
-//var dummy4 = new UM.UserRecord(dummy3);
-
-//database.loadUser('gurdnot', callBack);
-//database.deleteUser('gurdnot', callBack);
-//database.createUser(dummy4, callBack);
-//<<<<<<< HEAD
-//=======
-
-//database.getAffiliation(dummy4, callBack);
-//database.getSubdivisions(callBack, 'KU Leuven', 'letteren en wijsbegeerte', 'taal en letterkunde')
-//<<<<<<< Updated upstream
-//database.getResearchDomains('gurdnot', callBack)
-
-
-var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels', researchdomains: ['Ammo', 'Thresher Maws']}
-
-UM.createUser(nUser, function(error, user) {
-	database.createUser(user, callBack);
-});
-
-/*
-<<<<<<< HEAD
-=======
->>>>>>> FETCH_HEAD
-
->>>>>>> fc23f93aaf4fe1614bcc84fe2f86cdd70be52e7f
-=======
-//var nUser = {firstName:'Mordin', lastName:'Solus', username:'msolus', password:'Algoon7', email:'msolus@vub.ac.be', language:'english', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchgroup: 'engels'}
-//UM.createUser(nUser, function(error, user) {
-//	database.createUser(user, function() {});
-//});
-/*
->>>>>>> FETCH_HEAD
->>>>>>> Stashed changes
 */
