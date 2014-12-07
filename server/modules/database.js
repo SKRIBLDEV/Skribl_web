@@ -260,28 +260,28 @@ function Database(serverConfig, dbConfig) {
 			results = information.results[0];
 			content = results.content[0];
 			researchgroup = content.value;
-			cUser['researchgroup'] = researchgroup.Name;
+			cUser.researchgroup = researchgroup.Name;
 		})
 		.then(function() {
 			var departmentRid = transformRid(researchgroup.Department);
 			db.query('select from Department where @rid = ' + departmentRid)
 			.then(function(departments) {
 				department = departments[0];
-				cUser['department'] = department.Name;
+				cUser.department = department.Name;
 			})
 			.then(function() {
 				var facultyRid = transformRid(department.Faculty);
 				db.query('select from Faculty where @rid = ' + facultyRid)
 				.then(function(faculties) {
 					faculty = faculties[0];
-					cUser['faculty'] = faculty.Name;
+					cUser.faculty = faculty.Name;
 				})
 				.then(function() {
 					var institutionRid = transformRid(faculty.Institution);
 					db.query('select from Institution where @rid = ' + institutionRid)
 					.then(function(institutions) {
 						institution = institutions[0];
-						cUser['institution'] = institution.Name;
+						cUser.institution = institution.Name;
 						callback(null, cUser);
 					});
 
@@ -512,7 +512,7 @@ function Database(serverConfig, dbConfig) {
 				var dbRec = users[0];
 				getAffiliation(dbRec, function(error, user) {
 					self.getResearchDomains(user.username, function(error, resdomains) {
-						user['researchdomains'] = resdomains;
+						user.researchdomains = resdomains;
 						callback(error, new UM.UserRecord(user));
 					});
 				});
