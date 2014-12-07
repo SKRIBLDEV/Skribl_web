@@ -6,7 +6,6 @@
 *with methods to interact this database */
 
 /* ---- TODO -------- *
-* rewrite tests for jasmine
 * test with jasmine
 * write function to add connection researchgroup-->researchdomain
 * write function to delete affiliatins (low priority)
@@ -133,20 +132,6 @@ function Database(serverConfig, dbConfig) {
 		}
 	};
 	
-
-	this.deleteResearchDomain = function(name, callback) {
-		db.select().from('ResearchDomain').where({Name: name}).all()
-		.then(function(domain) {
-			var domainRid = RID.getRid(domain[0]);
-			db.vertex.delete(domainRid) 
-			.then(function(){
-				callback(null, true);
-			});
-		});
-	}
-
-
-
 	/**
 	 * will check if a user exists
 	 * @private
@@ -203,10 +188,10 @@ function Database(serverConfig, dbConfig) {
 	this.getResearchDomains = function(username, callback) {
 		if(typeof username === 'string') {
 			db.query('select * from (traverse * from (select * from User where username = \'' + username + '\') while $depth < 2) where @class = \'ResearchDomain\'')
-			.then(function(researchdomains) {
+			.then(function(researchDomains) {
 				var resArray = [];
-				for (var i = 0; i < researchdomains.length; i++) {
-					resArray.push(researchdomains[i].Name);
+				for (var i = 0; i < researchDomains.length; i++) {
+					resArray.push(researchDomains[i].Name);
 				}
 				callback(null, resArray);
 			});
@@ -254,7 +239,7 @@ function Database(serverConfig, dbConfig) {
 				var dbRec = users[0];
 				aff.getAffiliation(dbRec, function(error, user) {
 					self.getResearchDomains(user.username, function(error, resdomains) {
-						user.researchdomains = resdomains;
+						user.researchDomains = resdomains;
 						callback(error, new UM.UserRecord(user));
 					});
 				});
@@ -294,7 +279,21 @@ function Database(serverConfig, dbConfig) {
 			});
 	}
 
-
+	/**
+	 * currently only in use for testing purposes, deletes a researchdomain.
+	 * @param  {String}   name     name of domain
+	 * @param  {callBack} callback 
+	 */
+	this.deleteResearchDomain = function(name, callback) {
+		db.select().from('ResearchDomain').where({Name: name}).all()
+		.then(function(domain) {
+			var domainRid = RID.getRid(domain[0]);
+			db.vertex.delete(domainRid) 
+			.then(function(){
+				callback(null, true);
+			});
+		});
+	};
 
 }
 
