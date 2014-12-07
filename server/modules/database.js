@@ -8,6 +8,7 @@
 /* ---- TODO -------- *
 * rewrite tests for jasmine
 * test with jasmine
+* write function to add connection researchgroup-->researchdomain
 * ----- END TODO ---- */
 
 /**
@@ -91,7 +92,7 @@ function Database(serverConfig, dbConfig) {
 			var departmentRid = getRid(department);
 			addResearchGroup(newData, departmentRid, function(researchGroupRid) {
 				db.exec('update Department add ResearchGroups = ' + researchGroupRid + ' where @rid = ' + departmentRid)
-				.then(function(response) {
+				.then(function() {
 					callback(departmentRid, researchGroupRid);
 				});
 			});
@@ -114,7 +115,7 @@ function Database(serverConfig, dbConfig) {
 			var facultyRid = getRid(faculty);
 			addDepartment(newData, facultyRid, function(departmentRid, researchGroupRid) {
 				db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
-				.then(function(response) {
+				.then(function() {
 					callback(facultyRid, researchGroupRid);
 				});
 			});
@@ -135,7 +136,7 @@ function Database(serverConfig, dbConfig) {
 			var institutionRid = getRid(inst);
 			addFaculty(newData, institutionRid, function(facultyRid, researchGroupRid) {
 				db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
-				.then(function(response) {
+				.then(function() {
 					callback(null, researchGroupRid);
 				});
 			});
@@ -179,7 +180,7 @@ function Database(serverConfig, dbConfig) {
 				if(faculties.length === 0) {
 					addFaculty(newData, institutionRid, function(facultyRid, ResearchGroupRid) {
 						db.exec('update Institution add Faculties = '+ facultyRid + ' where @rid = ' + institutionRid)
-							.then(function(response) {
+							.then(function() {
 								callback(null, ResearchGroupRid);
 							});
 					});
@@ -201,7 +202,7 @@ function Database(serverConfig, dbConfig) {
 				if(departments.length === 0) {
 					addDepartment(newData, facultyRid, function(departmentRid, ResearchGroupRid) {
 						db.exec('update Faculty add Departments = ' + departmentRid + ' where @rid = ' + facultyRid)
-							.then(function(response) {
+							.then(function() {
 								callback(null, ResearchGroupRid);
 							});
 					});
@@ -223,7 +224,7 @@ function Database(serverConfig, dbConfig) {
 				if(researchGroups.length === 0) {
 					addResearchGroup(newData, departmentRid, function(ResearchGroupRid) {
 						db.exec('update Department add ResearchGroups = ' + ResearchGroupRid + ' where @rid = ' + departmentRid)
-							.then(function(response) {
+							.then(function() {
 								callback(null, ResearchGroupRid);
 							});
 					});
@@ -261,21 +262,21 @@ function Database(serverConfig, dbConfig) {
 			researchgroup = content.value;
 			cUser['researchgroup'] = researchgroup.Name;
 		})
-		.then(function(e) {
+		.then(function() {
 			var departmentRid = transformRid(researchgroup.Department);
 			db.query('select from Department where @rid = ' + departmentRid)
 			.then(function(departments) {
 				department = departments[0];
 				cUser['department'] = department.Name;
 			})
-			.then(function(e) {
+			.then(function() {
 				var facultyRid = transformRid(department.Faculty);
 				db.query('select from Faculty where @rid = ' + facultyRid)
 				.then(function(faculties) {
 					faculty = faculties[0];
 					cUser['faculty'] = faculty.Name;
 				})
-				.then(function(e) {
+				.then(function() {
 					var institutionRid = transformRid(faculty.Institution);
 					db.query('select from Institution where @rid = ' + institutionRid)
 					.then(function(institutions) {
@@ -323,7 +324,7 @@ function Database(serverConfig, dbConfig) {
 					callback(new Error('Institution with name: \'' + institution + '\' does not exist'));
 				}
 			})
-			.then(function(e) {
+			.then(function() {
 				if(faculty === undefined) {
 					compileResult('Faculties', 'Faculty');
 				} else {
@@ -336,7 +337,7 @@ function Database(serverConfig, dbConfig) {
 							callback(new Error('Faculty with name: ' + faculty + ' does not exist'));
 						}
 					})
-					.then(function(e) {
+					.then(function() {
 						if(department === undefined) {
 							compileResult('Departments', 'Department');
 						} else {
@@ -385,18 +386,28 @@ function Database(serverConfig, dbConfig) {
 	}
 
 	function addResearchDomains(domains, userRid, callback) {
-		for (var i = 0; i < domains.length; i++) {
-			addResearchDomain(domains[i], function(error, domainRid) {
+		var counter = domains.length;
+		counter--;
+		function forClb(error, domainRid) {
 				if(error) {
 					callback(error);
 				} else {
 					db.edge.from(userRid).to(domainRid).create('HasResearchDomain')
-					.then(function(edge) {});
+					.then(function() {
+						if(counter) {
+							counter--;
+						}
+						else {
+							callback(null, true);
+						}
+					});
 				}
-			});
+			}
+
+		for (var i = 0; i < domains.length; i++) {
+			addResearchDomain(domains[i], forClb);
 		}
-		callback(null, true);
-	};
+	}
 
 	/**
 	 * adds user with given data to database
@@ -418,7 +429,7 @@ function Database(serverConfig, dbConfig) {
 				userRid = getRid(user);
 				addAffiliation(newData, function(error, ResearchGroupRid) {
 					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
-					.then(function(edge) {
+					.then(function() {
 						addResearchDomains(newData.getResearchDomains(), userRid, callback);
 					});
 				});	
