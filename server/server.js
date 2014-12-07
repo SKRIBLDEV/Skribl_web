@@ -24,7 +24,15 @@ function HTTPSServer(key, cert, modules) {
 		credentials.key = fs.readFileSync(key);
 		credentials.cert = fs.readFileSync(cert);
 
-		// configure modules
+		// enable middleware for CORS
+		app.use(function(req, res, next) {
+    			res.header('Access-Control-Allow-Origin', '*');
+		 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	 		res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	 		next();
+		});
+		
+		// configure extra modules
 		for(var i = 0; i < modules.length; ++i) {
 			app.use(modules[i]);
 		}
@@ -52,7 +60,7 @@ function HTTPSServer(key, cert, modules) {
 	this.useAuthentication = function(authProc) {
 		auth = authProc;
 	}
-
+	
 	/** lift procedure to include context item
 	  * @param {function} fun - procedure to be lifted
 	  * @private
