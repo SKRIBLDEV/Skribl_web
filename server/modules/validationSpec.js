@@ -8,21 +8,6 @@ var VAL = require("./validation.js");
 
 describe('Form Validation Test: ',function(){
 
-	describe("whitespace input", function() {
-		var whiteSpaceInput = "   ";
-		var tabInput =	"\t";
-		var accepted = "  accepted ";
-
-		it(", some whitespaces", function() {
-			expect(VAL.nonEmpty(whiteSpaceInput)).toEqual(false);
-		});
-		it(", a tab", function() {
-			expect(VAL.nonEmpty(tabInput)).toEqual(false);
-		});
-		it(", an accepted input", function() {
-			expect(VAL.nonEmpty(accepted)).toEqual(true);
-		});
-	});
 
 	describe("email input", function(){
 		var correctEmail = "hvbian@vub.ac.be";
@@ -38,13 +23,13 @@ describe('Form Validation Test: ',function(){
 		it(", with non allowed characters ", function() {
 			expect(VAL.isEmailAdress(notCorrect2)).toEqual(false);
 		});
-	})
+	});
 
 	describe("password input", function(){
-		var correct = "9Ghh17ac";
+		var correct = "9Ghh17!ac";
 		var notCorrect1 = "9Ghh1"; // too short
 		var notCorrect2 = "hdhHohaa"; //no number
-		var notCorrect3 = "hd9999aa"; //no uppercase
+		var notCorrect3 = "hd999°aa"; //° not allowed
 
 		it(", correct password", function() {
 			expect(VAL.isPassword(correct)).toEqual(true);
@@ -55,7 +40,7 @@ describe('Form Validation Test: ',function(){
 		it(", without number", function() {
 			expect(VAL.isPassword(notCorrect2)).toEqual(false);
 		});
-		it(", without upercase char", function() {
+		it(", ° is not allowed", function() {
 			expect(VAL.isPassword(notCorrect3)).toEqual(false);
 		});
 	})
@@ -73,14 +58,14 @@ describe('Form Validation Test: ',function(){
 	})
 
 	describe("general name input", function(){ // only letters, numbers and underscores
-		var correct1 =	"Viktor Elkjùrd";
-		var correct2 = "André la Cour"; 
+		var correct1 =	"Van Es";
+		var correct2 = "André la çour"; 
 		var correct3 =  "Kungliga Tekniska högskolan";
 		var notCorrect1 = "@nna";
 		var notCorrect2 = "999";
 
 		
-		it(", correct Scandinavian name", function() {
+		it(", correct Belgian name", function() {
 			expect(VAL.isGeneralName(correct1)).toEqual(true);
 		});
 		it(", correct French name", function() {
@@ -95,7 +80,7 @@ describe('Form Validation Test: ',function(){
 		it(", with numbers", function() {
 			expect(VAL.isGeneralName(notCorrect2)).toEqual(false);
 		});
-	})
+	});
 
 });
 
