@@ -43,8 +43,9 @@ function HTTPSServer(key, cert, modules) {
 	  * @param {string} path - local directory of static files
 	  */
 	this.serveStatic = function(route, path) {
-		app.use(route, express.static(__dirname + path));
+		app.use(route, express.static(path));
 	}
+
 	/** add authentication procedure to server
 	  * @param {function} authProc - function to user for authentication
 	  */
@@ -56,15 +57,10 @@ function HTTPSServer(key, cert, modules) {
 	  * @param {function} fun - procedure to be lifted
 	  * @private
 	  */
-	function liftHandler(fun) {
+	function includeContext(fun) {
 		
 		return function(req, res, next) {
-			try {
-				fun(req, res, context, next);
-			} catch(exception) {
-				res.status(501);
-				res.end(exception);
-			}
+			fun(req, res, context, next);
 		}
 	}
 
@@ -89,7 +85,7 @@ function HTTPSServer(key, cert, modules) {
 		}
 
 		if (handler) { 
-			route[method](liftHandler(handler)); 
+			route[method](includeContext(handler)); 
 		}
 	}
 
@@ -111,9 +107,9 @@ function HTTPSServer(key, cert, modules) {
 	this.listen = function(port) {
 
 		if (!server) {
-			//server = https.createServer(credentials, app);
+			server = https.createServer(credentials, app);
 			/*--- [uncomment if you have problems with HTTPS/SSL] ---*/
-			server = require('http').createServer(app);
+			//server = require('http').createServer(app);
 		}
 
 		server.listen(port);

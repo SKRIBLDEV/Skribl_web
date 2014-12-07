@@ -27,9 +27,16 @@
  *@param {object} dbConfig - includes configuration for database
  */
 
+/*** @IVO *** 
+	Remarks:
+	   	>> I still need to check it, sorry...
+	   	>> Try to fix the researchdomains-array thing we talked about
+	   	>> Try to fix F to at least a B on CodeClimate (and preferably an A)
+	   	>> I might add stuff once I review this, but for now, good work! ;)
+/*** --- END --- ***/ 
+
 var Oriento = require('oriento');
 var UM = require('./user.js');
-
 
 function Database(serverConfig, dbConfig) {
 	
