@@ -573,6 +573,7 @@ function Database(serverConfig, dbConfig) {
 
 exports.Database = Database;
 
+/*
 // TESTCODE 
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
