@@ -17,10 +17,11 @@ exports.getMajors = function(){
 exports.getMinors = function(majorName){
 	var minors = [];
 	RDL.forEach(function(entry){
-		if (entry.major.name === majorName)
+		if (entry.major.name === majorName){
 			entry.minor.forEach(function(minorEntry){
 				minors.push(minorEntry.name);
 			});
+		};
 	});
 	return minors;
 };
@@ -37,7 +38,7 @@ exports.majorPresent = function(majorName){
 
 //check if certain minor is part of minors for some major
 exports.minorPresent = function(minor,major){
-	return getMinors(major).indexOf(minor) != -1; //small lists
-}
+	return getMinors(major).indexOf(minor) !== -1; //small lists
+};
 
 

@@ -4,13 +4,6 @@
 * 
 */
 
-/*
-* TO DO
-* - validation of research field
-* - validation of language preference
-*/
-
-
 var VAL = require("./validation.js");
 var bcrypt = require('bcrypt');
 var strength = 10; //hash strength
@@ -85,14 +78,17 @@ exports.createUser = function(info, clb) {
 			e.push('input ' + 'username' + ' is not a valid username');
 		if (!VAL.isPassword(info.password))  
 			e.push('input ' + 'password' + ' is not a valid password');
+		if(!VAL.isLanguage(info.language))
+			e.push('input ' + 'language' + ' is not a valid language option');
 
-		/*if (! VAL.isResearchField(info.researchfield))
-				e.push('input ' + 'ResearchField' + ' is not recognized');
-		*/
+		//check array of researchDomains
+		for (var i = 0; i < info.researchDomains.length; i++){
+			if (! Val.isResearchDomain( info.researchDomains[i] ))
+				e.push('input ' + 'research domain' + ' is not recognized');
+		}
 
-		// preferred language validation needed 
-
-		if(e.length) //errors during validation
+		//check for errors during validation
+		if(e.length) 
 				clb(new Error('server-side-validation-error'), e); // pass error, !array with specific error information passed as result!
 		else 
 				clb(null, true); //succes, clb without error		

@@ -5,14 +5,10 @@
 */
 
 
-/*
-* TO DO
-* - validation of research domain (check against predefined list of possible domains)
-* - validation of language preference
-*/
+var RD = require("./researchDomain-module.js");
 
 
-//**** definition of regular expressions, exported for use with AngularJS (client-side validation)
+//********* definition of regular expressions, exported for use with AngularJS (client-side validation)
 
 
 //all regex imply that the matched string should not be empty (=solely whitespace characters) and should not contain leading or trailing whitespaces
@@ -38,19 +34,27 @@ exports.RegEx_generalName = RegEx_generalName;
 
 
 
-//**** functions used for server-side validation 
+//********** functions used for server-side validation 
 
-// includes testing if input is defined
+// includes testing of input 'undefined'
 
 function check(regex) {
 		return function(input) {
 			return input && regex.test(input); 
 		}
-}
+};
 
 exports.isEmailAdress = check(RegEx_EmailAdress);
 exports.isPassword = check(RegEx_Password); 
 exports.isUsername = check(RegEx_username); 
 exports.isGeneralName = check(RegEx_GeneralName);
+
+exports.isResearchDomain = function(input) {
+	return RD.majorPresent(input); //checks input is in the list of major ("general") research domains
+ };
+
+ exports.isLanguage = function(input) {
+ 	return (input === "NL") || (input === "ENG");
+ }
 
 
