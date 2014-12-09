@@ -27,7 +27,7 @@ function getUserInfo(req, res, context) {
 				department: data.getDepartment(),
 				faculty: data.getFaculty(),
 				institution: data.getInstitution(),
-				researchDomain: data.getResearchDomain()
+				researchDomain: data.getResearchDomains()
 			});
 		}
 	});
