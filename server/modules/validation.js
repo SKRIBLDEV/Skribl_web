@@ -44,10 +44,10 @@ function check(regex) {
 		}
 };
 
-exports.isEmailAdress = check(RegEx_EmailAdress);
-exports.isPassword = check(RegEx_Password); 
+exports.isEmailAdress = check(RegEx_emailAdress);
+exports.isPassword = check(RegEx_password); 
 exports.isUsername = check(RegEx_username); 
-exports.isGeneralName = check(RegEx_GeneralName);
+exports.isGeneralName = check(RegEx_generalName);
 
 exports.isResearchDomain = function(input) {
 	return RD.majorPresent(input); //checks input is in the list of major ("general") research domains
