@@ -82,9 +82,13 @@ exports.createUser = function(info, clb) {
 			e.push('input ' + 'language' + ' is not a valid language option');
 
 		//check array of researchDomains
-		for (var i = 0; i < info.researchDomains.length; i++){
-			if (! Val.isResearchDomain( info.researchDomains[i] ))
-				e.push('input ' + 'research domain' + ' is not recognized');
+		if (!info) {
+			e.push('researchDomains are not defined!');
+		} else {
+			for (var i = 0; i < info.researchDomains.length; i++){
+				if (!VAL.isResearchDomain( info.researchDomains[i] ))
+					e.push('input ' + 'research domain' + ' is not recognized');
+			}
 		}
 
 		//check for errors during validation
