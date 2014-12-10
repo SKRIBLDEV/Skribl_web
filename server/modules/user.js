@@ -83,9 +83,13 @@ createUser = function(info, clb) {
 
 
 		//check array of researchDomains
-		for (var i = 0; i < info.researchDomains.length; i++){
-			if (! VAL.isResearchDomain( info.researchDomains[i] ))
-				e.push('input ' + 'research domain' + ' is not recognized');
+		if ( !info.researchDomains || !info.researchDomains.constructor === Array)
+			e.push('input ' + 'research domain' + ' is not defined or is not an array');
+		else{
+			for (var i = 0; i < info.researchDomains.length; i++){
+				if (! VAL.isResearchDomain( info.researchDomains[i] ))
+					e.push('input ' + 'research domain' + ' is not recognized');
+			}
 		}
 
 		//check for errors during validation
