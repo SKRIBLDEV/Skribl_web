@@ -34,20 +34,21 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 	$scope.login = function() {
 //TODO loading "page"
 		var JSONToSend = {
-				username : $scope.userinput.username,
-				password : $scope.userinput.password
+				"username" : $scope.userinput.username,
+				"password" : $scope.userinput.password
 			};
 		var config = {headers:  {
-		        'Content-type' : 'application/json'
+		        "Content-type" : "application/json"
 		    }};
 		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
 		
 		loginRequest.success(function(data, status, headers, config) {
 			var Authorization = data.Authorization;
-			var pad = serverApi.concat('/user/').concat($scope.userinput.username);
+			var pad = serverApi.concat('/users/').concat($scope.userinput.username);
 			var loadUserInfoRequest = $http.get(pad,config);
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				$appData.currentUser = data;
+				console.log(data);
 				$appData.currentUser.Authorization = $scope.Authorization;
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {

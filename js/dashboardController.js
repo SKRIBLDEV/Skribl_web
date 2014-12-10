@@ -34,6 +34,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $locat
 		$appData.currentUser = {};
 		// remove cookie
 	};
+	// TODO DELETE USER 	
 	$scope.deleteUser = function(){
 		var str = ".../user/";
 		str = str.concat($appData.currentUser.name);
