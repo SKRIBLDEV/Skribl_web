@@ -41,4 +41,3 @@ exports.minorPresent = function(minor,major){
 	return getMinors(major).indexOf(minor) !== -1; //small lists
 };
 
-

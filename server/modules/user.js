@@ -53,7 +53,7 @@ function UserRecord(info) {
 * @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
 */
 
-exports.createUser = function(info, clb) {
+createUser = function(info, clb) {
 
 	function validate(info, clb) {
 
@@ -81,9 +81,10 @@ exports.createUser = function(info, clb) {
 		if(!VAL.isLanguage(info.language))
 			e.push('input ' + 'language' + ' is not a valid language option');
 
+
 		//check array of researchDomains
 		for (var i = 0; i < info.researchDomains.length; i++){
-			if (! Val.isResearchDomain( info.researchDomains[i] ))
+			if (! VAL.isResearchDomain( info.researchDomains[i] ))
 				e.push('input ' + 'research domain' + ' is not recognized');
 		}
 
@@ -110,6 +111,10 @@ exports.createUser = function(info, clb) {
 			});
 		}
 	});
+
 }
 
+
+
 exports.UserRecord = UserRecord;
+exports.createUser = createUser;

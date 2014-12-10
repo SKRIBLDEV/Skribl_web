@@ -11,17 +11,19 @@ describe('userInfo Module Tests: ',function(){
     	var account;
 
 		beforeEach(function(done) { // reset before testing (account properties set to incorrect values inside test function body)
-    		account = {
-				firstName: 'Hannah',
-				lastName: 'Pinson',
-				email:  'hpinson@vub.ac.be',
-				username: 'hpinson_94',
-				password: 'iajenGG34',
-                researchGroup: 'WISE',
-                department: 'Computer Science',
+    	   account = {
+                firstName: 'Hannah',
+                lastName: 'Pinson',
+                email:  'hpinson@vub.ac.be',
+                username: 'hpinson_94',
+                password: 'iajenGG34',
+                language: 'NL',
+                researchGroup: 'TONA',
+                department: 'Physics',
                 faculty: 'Sciences and Bio-engineering', 
-                institution: 'Vrije Universiteit Brussel'
-			}
+                institution: 'Vrije Universiteit Brussel',
+                researchDomains : ['Physics', 'Computer and Information Science']
+            };
             done();
   		});
 
@@ -60,6 +62,25 @@ describe('userInfo Module Tests: ',function(){
         	done(); // test waits untill done() is called asynchronously, default timeout of 5 seconds 
     		});
     	});
+
+        it('incorrect language preference', function(done) {
+            account.language = 'FR'; //incorrect value
+            UM.createUser(account, function(error, result) {
+            expect(error).toEqual(validation_error);
+            expect(result[0]).toEqual('input ' + 'language' + ' is not a valid language option'); //result should be an array containing a string with specific error informartion
+            done(); // test waits untill done() is called asynchronously, default timeout of 5 seconds 
+            });
+        });
+
+        it('incorrect researchDomains', function(done) {
+            account.researchDomains = ['something', 'somethingElse']; //incorrect value
+            UM.createUser(account, function(error, result) {
+            expect(error).toEqual(validation_error);
+            expect(result[0]).toEqual('input ' + 'research domain' + ' is not recognized');
+            expect(result[1]).toEqual('input ' + 'research domain' + ' is not recognized'); //result should be an array containing a string with specific error informartion
+            done(); // test waits untill done() is called asynchronously, default timeout of 5 seconds 
+            });
+        });
 
 
     	it('correct account', function(done) {

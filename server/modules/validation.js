@@ -44,17 +44,22 @@ function check(regex) {
 		}
 };
 
+isResearchDomain = function(input) {
+	return RD.majorPresent(input); //checks input is in the list of major ("general") research domains
+ };
+
+ isLanguage = function(input) {
+ 	return (input === "NL") || (input === "ENG");
+ }
+
 exports.isEmailAdress = check(RegEx_emailAdress);
 exports.isPassword = check(RegEx_password); 
 exports.isUsername = check(RegEx_username); 
 exports.isGeneralName = check(RegEx_generalName);
+exports.isResearchDomain = isResearchDomain;
+exports.isLanguage = isLanguage;
 
-exports.isResearchDomain = function(input) {
-	return RD.majorPresent(input); //checks input is in the list of major ("general") research domains
- };
 
- exports.isLanguage = function(input) {
- 	return (input === "NL") || (input === "ENG");
- }
+
 
 
