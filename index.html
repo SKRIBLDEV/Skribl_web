@@ -1,42 +1,40 @@
-<html ng-app="skriblApp">
+<!-- 
+   Copyright (c) 2014 Tommy Siu. Code licensed under the MIT License (MIT).
+-->
 
+<!DOCTYPE html>
+<html ng-app="angularPaper">
 <head>
-
-	<title>SKRIBL Home</title>
-
-	<!-- include AngularJS -->
-	<link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<!-- include AngularJS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
-	<!-- inlcude AngularJS routing for SPA -->
-	<!-- allows switching to different views/routes on the same page -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-route.min.js"> </script>
-    <!-- main application/configuration logic -->
-	<script src="js/main.js"> </script>
-	<script src="js/homeController.js"> </script>
-	<script src="js/loginController.js"> </script>
-	<script src="js/registerController.js"> </script>
-	<script src="js/dashboardController.js"> </script>
-
+<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet"></link>
+<link href="css/stdtheme.css" type="text/css" rel="stylesheet"></link>
+<script src="js/angular.min.js"></script>
+<script src="js/ui-bootstrap-tpls-0.11.0.min.js"></script>
+<script src="js/paper.js"></script>
+<script src="js/goserver.js"></script>
+<script src="js/app.js"></script>
 </head>
-
 <body>
-	<!-- sample header, not stricly necessary but just for demonstration purposes -->
-	<!-- this part is (at least in this example) the same for every view/route -->
-	<header>
-		<center>
-			<a href="http://www.skribl.tk"> <img src="img/skribl.png"/> </a>
-			<hr /> <br />
-		</center>
+<div role="main">
+	<header id="overview" class="bs-header text-center">
+        <div class="container">
+            <h1>Angular + PaperJS</h1>
+            <p>
+                <a class="btn btn-outline-inverse btn-lg" href="https://github.com/tommysiu/angular-paperjs"><i class="icon-github"></i>Code on Github</a>
+            </p>
+        </div>
 	</header>
 
-	<!-- this part of the HTML-page is 'dynamic' and will change depending upon the 'route' taken -->
-	<!-- initially empty, contents will be configured using ngRoute -->
-	<div ng-view> </div>
-
-	<!-- optionally, include a footer or other (static/dynamic) element (like a console) -->
-	<!-- <div ng-include = footer.html /> -->
-
+	<div class="container" ng-controller="BoardCtrl">
+		<h4>Board size</h4>
+		<div class="btn-group">
+			<label class="btn btn-primary" ng-model="boardSize" btn-radio='19'>19</label> 
+			<label class="btn btn-primary" ng-model="boardSize" btn-radio='13'>13</label>
+			<label class="btn btn-primary" ng-model="boardSize" btn-radio='9'>9</label>
+		</div>
+        <button type="button" class="btn btn-outline-inverse" ng-click="graphControl.reset()">Reset the Board</button>
+		<br/>
+		<canvas class="board-frame" board height="500" width="500" ></canvas>
+	</div>
+</div>
 </body>
-
 </html>
