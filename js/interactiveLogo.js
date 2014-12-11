@@ -5,6 +5,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
     scope: true,
     link: function(scope, element) {
 
+
       var canvas = document.querySelector('canvas');
       fitToContainer(canvas);
 
@@ -51,6 +52,17 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         var nodes           = []
         var connectionGrid  = []
         var path            = {}
+
+        
+        
+        // Create a raster item using the image tag with id='mona'
+        
+
+        //var circle = new paper.Circle();
+        //circle.position = raster.position;
+
+
+
         // access controller data
         // var controllerdata = parseInt(scope.controllerdata);
 
@@ -108,6 +120,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             return mapff(Math.random(), 0, 1, -1, 1)
           }
 
+
         var init = function(){          
           // clear all drawing items on active layer
           paper.project.activeLayer.removeChildren();  
@@ -140,6 +153,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           }
         }
 
+        
+        
 
         var setHandlers = function(){
           // on resize blocks mouse interaction
@@ -149,6 +164,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
           paper.view.onFrame = function(event){
             path.clear()
+
+            var raster = new paper.Raster('mona');
+          raster.position = paper.view.center
+
             
             var drawLine = function(pos1, pos2){
                   path.add(pos1)

@@ -1,5 +1,5 @@
 <!-- The Home (landing) html configuration -->
-<div class = "home-upper">
+<div class = "block1">
   <center>
   		<canvas class="board-frame" interactivelogo></canvas>
   
@@ -8,11 +8,18 @@
   </center>
 </div>
 
-<div class = "home-lower">
+<div class = "block2">
+	<img src="img/skribl_general_text.png" 		class ="centerSecond"	alt="skribllog" ng-click="login()">
+	<!-- actually here we want the screen to "scroll down" -->
+	<img src="img/arrow_down.png" 	class ="lowerSecond" 	alt="skribllog" ng-click="login()">
+</div>
+
+<div class = "block3">
 	<center>
 	  <button ng-click="login()">LOG IN</button>
 	    <br>
 	    <button ng-click="register()">REGISTER</button>
 	</center>
+	<img src="img/diamondDown.png" class ="img-bottom" alt="skribllog" ng-click="login()">
 </div>
 
