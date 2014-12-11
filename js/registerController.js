@@ -63,23 +63,19 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 					
 			//$appData.currentUser =
 			var JSONToSend = {
-				"username": $scope.userinput.username,
-				"firstName": $scope.userinput.firstname,
-				"lastName": $scope.userinput.name,
+				"firstName": $scope.userinput.firstName,
+				"lastName": $scope.userinput.lastName,
 				"language": $scope.userinput.language,
 				"password": $scope.userinput.password,
 				"email": $scope.userinput.email,
-				"institution": "none",
-				"faculty": "none", 
-				"department": "none", 
-				"researchDomains": ["none"],
-				"researchGroup": "none" };
+				"institution": $scope.userinput.institution,
+				"faculty": $scope.userinput.faculty, 
+				"department": $scope.userinput.department, 
+				"researchDomains": $scope.userinput.researchDomains,
+				"researchGroup": $scope.userinput.researchGroup };
 
-			var config = {headers:  {x
-		        "Content-type" : "application/json"	
-		    }};
 
-		    var to = serverApi.concat('/users');
+		    var to = serverApi.concat('/users').concat($scope.userinput.username);
 		    var registerRequest = $http.put(to,JSONToSend,config);
 
 		    registerRequest.success(function(data, status, headers, config) {
@@ -87,7 +83,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 			});
 
 			loadUserInfoRequest.error(function(data, status, headers, config) {
-				//TODO melding dat er een fout is met ONZE database.
+				//TODO melding dat er een fout is met ONZE  database.
 			});
 				
 			$location.path('/dashboard');

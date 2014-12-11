@@ -37,9 +37,6 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 				"username" : $scope.userinput.username,
 				"password" : $scope.userinput.password
 			};
-		var config = {headers:  {
-		        "Content-type" : "application/json"
-		    }};
 		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
 		
 		loginRequest.success(function(data, status, headers, config) {
