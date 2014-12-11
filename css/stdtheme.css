@@ -34,22 +34,22 @@ body {
 .header-block {
 	height: 65px;
 	width: 100%;
-	background-color: white;
 }
 
 .block0 {
-
+  height: 100%;
+  width: 100%;
 }
 
 .block1, .block2, .block3 {
 	height: 50%
 }
 
-.block1 {
+.block1, .header-block {
 	background-color: white;	
 }
 
-.block2, .block3 {
+.block2, .block3, .block0 {
 	background-color: #4A60B6;	/* Skrible_default_blue*/
 }
 
@@ -63,13 +63,15 @@ body {
 	transform: translate(-50%, -50%);
 }
 
- .centerSecond,.lowerSecond {
+ .centerSecond,.lowerSecond,.card{
 	padding: 1em;
 	position: absolute;
 	left: 50%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
  }
+
+ 
 
  .centerSecond {
 	top: 75%;
@@ -84,8 +86,8 @@ body {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
-  width: 250px;
-  height: 210px;
+  width: 350px;
+  height: 350px;
   padding: 20px;
   overflow: hidden;
   border: none;
@@ -98,6 +100,7 @@ body {
   -webkit-box-shadow: 0 9px 12px 0 rgba(19,33,86,0.96) ;
   box-shadow: 0 9px 12px 0 rgba(19,33,86,0.96) ;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+  top: 50%;
 }
 
 

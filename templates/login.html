@@ -3,23 +3,21 @@
 <img src="img/logo_defaultcolor.png" style='height:100%;' alt="skribllog" ng-click="login()">
 </div>
 
-<div class="card">
 
- <center>
+<div class="block0">
+
+<center>
+
+<div class="card">
 
 	<h1> LOG IN </h1>
 
 	Username: <input type="text" ng-model=userinput.username> <br>
 	Password: <input type="password" ng-model=userinput.password> <br>
 	<p id="error"></p>
-
-	<button ng-click="login()">LOG IN</button>
-	
+	<button class = "defaultButton" ng-click="login()">GO</button>
 	<br>
-	<br>
-
-	<button ng-click="goToHome()">GO BACK</button>
-
- </center>
-
+	<button class = "defaultButton" ng-click="goToHome()">GO BACK</button>
+</div>
+</center>
 </div>
