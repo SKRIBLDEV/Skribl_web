@@ -1,24 +1,19 @@
  /**
   * Initialisation of a new angular app with the name 'skribApp',
-  * currently using ngRouge as a dependency. This app can be referenced in HTML
-  * using < ... ng-app='skriblApp'> ... </...>
+  * Uses ng-route to start the a controller dependent on the url.
   * @type {angular module}
   */
 var webapp = angular.module('skriblApp', ['ngRoute']);
 
+//Adres of server API to send http requests (used in multiple controllers).
 var serverApi = 'http://wilma.vub.ac.be:8443';
+
+//Configures an header for all the 'normal' requests to the server. (not 'normal' request = specific request that needs special authorization)
 var config = {headers:  {
 		        "Content-type" : "application/json"
 		    }};
+
 /**
- * Configuration of the angular webapp global.
- * We configure the different views/routes depending on the current URl
- * EX:
- * 		/index.html#home
- * 		/index.html#login
- * 		...
- * 	[home, login, …] are all routes that will display a different (aspect of a) view, yet the page will be fixed (~>SPA)
- *
  * for each route we configure:
  * 		- route name
  * 		- template URL | link to HTML-content to be inserted into ng-view

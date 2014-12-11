@@ -32,7 +32,7 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 	 * The actual login function
 	 */
 	$scope.login = function() {
-//TODO loading "page"
+
 		var JSONToSend = {
 				"username" : $scope.userinput.username,
 				"password" : $scope.userinput.password
@@ -49,18 +49,15 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 				$appData.currentUser.Authorization = $scope.Authorization; //TODO
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
-				//TODO melding dat er een fout is met ONZE database.
+			document.getElementById("error").innerHTML = "Database error, please try again later.";
 			});
 			
-			//TODO STOP loading "page"
 			// change route to #/dashboard
 			$location.path('/dashboard');
 		});
 		
 		loginRequest.error(function(data, status, headers, config) {
-			//TODO stop loading page
-			//TODO error door ongeldige login en password combination
-			$location.path('/error');
+			document.getElementById("error").innerHTML = "User or password is wrong, please try again";
 		});
 	}
 });
