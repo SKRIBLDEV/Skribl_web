@@ -45,7 +45,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	 * Collection of available languages
 	 * @type {Array}
 	 */
-	$scope.languages = [ 'FR', 'DU', 'EN'];
+	$scope.languages = [ 'FR', 'NL', 'EN'];
 
 
 	// ! move this so this only happens when the regisration is succesful!
@@ -61,15 +61,35 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 		// write register function here
 		if ($scope.signup_form.$valid){
 					
-			$appData.currentUser = {
-				username: $scope.userinput.username,
-				passkey: $scope.userinput.password,
-				name: $scope.userinput.name,
-				firstname: $scope.userinput.firstname,
-				email: $scope.userinput.email,
-				language: $scope.userinput.language
-			};
+			//$appData.currentUser =
+			var JSONToSend = {
+				"username": $scope.userinput.username,
+				"firstName": $scope.userinput.firstname,
+				"lastName": $scope.userinput.name,
+				"language": $scope.userinput.language,
+				"password": $scope.userinput.password,
+				"email": $scope.userinput.email,
+				"institution": "none",
+				"faculty": "none", 
+				"department": "none", 
+				"researchDomains": ["none"],
+				"researchGroup": "none" };
 
+			var config = {headers:  {x
+		        "Content-type" : "application/json"	
+		    }};
+
+		    var to = serverApi.concat('/users');
+		    var registerRequest = $http.put(to,JSONToSend,config);
+
+		    registerRequest.success(function(data, status, headers, config) {
+				$scope.currentUser = JSONToSend;
+			});
+
+			loadUserInfoRequest.error(function(data, status, headers, config) {
+				//TODO melding dat er een fout is met ONZE database.
+			});
+				
 			$location.path('/dashboard');
 		} else {
 			$scope.signup_form.submitted = true;
