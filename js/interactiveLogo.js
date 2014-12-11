@@ -53,16 +53,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         var connectionGrid  = []
         var path            = {}
 
-        
-        
-        // Create a raster item using the image tag with id='mona'
-        
-
-        //var circle = new paper.Circle();
-        //circle.position = raster.position;
-
-
-
         // access controller data
         // var controllerdata = parseInt(scope.controllerdata);
 
@@ -152,9 +142,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             }
           }
         }
-
-        
-        
 
         var setHandlers = function(){
           // on resize blocks mouse interaction
