@@ -183,8 +183,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
                 var connected = connectionGrid[y*nodes.length+x]
 
                 if (dis == 0){
-                  nodes[y].position.x = radius - ranMin()
-                  nodes[y].position.y = radius - ranMin()
+                  nodes[y].position.x = radius - ranMin()*30
+                  nodes[y].position.y = radius - ranMin()*30
                 } else if (dis < MINDIST ){
                   nodes[y].updatePosition(nodes[x].position, 1.001)
                 } else if (connected){
