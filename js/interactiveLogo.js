@@ -13,6 +13,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         canvas.style.height='100%';
         canvas.style.width = '100%';
 
+        // select minimum value
         var minv = (canvas.offsetWidth < canvas.offsetHeight) ? canvas.offsetWidth : canvas.offsetHeight;
 
         // ...then set the internal size to match
@@ -20,7 +21,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         canvas.style.height = minv;
         canvas.width  = minv;
         canvas.height = minv;
-        
       }
 
       /*
@@ -142,9 +142,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
 
         var setHandlers = function(){
-          paper.view.onResize = function(event){
-            fitToContainer(canvas);
-          }
+          // on resize blocks mouse interaction
+          // paper.view.onResize = function(event){
+          //   fitToContainer(canvas);
+          // }
 
           paper.view.onFrame = function(event){
             path.clear()
@@ -184,9 +185,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             }
           }
 
-          tool.onMouseDown = function(event){
-            
-          }
+          // placeholder for mouse interaction
+          // tool.onMouseDown = function(event){}
 
           tool.onMouseMove = function(event){
             for (var i = 0; i < nodes.length; i++) {
