@@ -9,6 +9,7 @@
  */
 angular.module('skriblApp').controller('homeController', function($scope, $location, $appData) {
 
+	//Used to control if user has already logged-in.
 	$appData.currentUser = null;
 
 	/**

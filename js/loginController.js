@@ -40,15 +40,18 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 		
 		
 		loginRequest.success(function(data, status, headers, config) {
-			var Authorization = data.Authorization;
+
+			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinput.username);
+			
+			//Get userInformation request
 			var loadUserInfoRequest = $http.get(pad,config);
 			loadUserInfoRequest.success(function(data, status, headers, config) {
+				//save userInformation in appData.
 				$appData.currentUser = data;
-				console.log(data);
-				$appData.currentUser.Authorization = $scope.Authorization; //TODO
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
+			//Error when getting user info --> database error
 			document.getElementById("error").innerHTML = "Database error, please try again later.";
 			});
 			
@@ -57,7 +60,8 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 		});
 		
 		loginRequest.error(function(data, status, headers, config) {
-			document.getElementById("error").innerHTML = "User or password is wrong, please try again";
+			//Error user has given bad username or passwore
+			document.getElementById("error").innerHTML = "Username or password is invalid, please try again";
 		});
 	}
 });

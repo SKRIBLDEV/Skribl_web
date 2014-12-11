@@ -10,8 +10,6 @@
  */
 angular.module('skriblApp').controller('registerController', function($scope, $http, $location, $appData) {
 
-	// optional: load credentials from cookie or other persistent storage?
-	
 	/**
 	 * home routing function
 	 */
@@ -47,21 +45,14 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	 */
 	$scope.languages = [ 'FR', 'NL', 'EN'];
 
-
-	// ! move this so this only happens when the regisration is succesful!
-	/**
-	 * Add the current user to the app data
-	 * @type {Object}
-	 */
-	
 	/**
 	 * The actual register function, registers the "currentUser" in appData and handles the routing
 	 */
 	$scope.register = function() {
-		// write register function here
+
 		if ($scope.signup_form.$valid){
 					
-			//$appData.currentUser =
+			//JSON file to send when registering.
 			var JSONToSend = {
 				"firstName": $scope.userinput.firstName,
 				"lastName": $scope.userinput.lastName,
@@ -74,16 +65,21 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				"researchDomains": $scope.userinput.researchDomains,
 				"researchGroup": $scope.userinput.researchGroup };
 
-
+			//Prepare url to add user.
 		    var to = serverApi.concat('/users').concat($scope.userinput.username);
+		    
+		    //Register http request.
 		    var registerRequest = $http.put(to,JSONToSend,config);
 
 		    registerRequest.success(function(data, status, headers, config) {
+				
+				//When register worked, sava the users information for later use.
 				$scope.currentUser = JSONToSend;
 			});
 
 			loadUserInfoRequest.error(function(data, status, headers, config) {
-				//TODO melding dat er een fout is met ONZE  database.
+			//Error when trying to register --> database error
+			document.getElementById("error").innerHTML = "Database error, please try again later.";
 			});
 				
 			$location.path('/dashboard');
