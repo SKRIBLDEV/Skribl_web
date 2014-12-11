@@ -60,7 +60,6 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	$scope.register = function() {
 		// write register function here
 		if ($scope.signup_form.$valid){
-					
 			$appData.currentUser = {
 				username: $scope.userinput.username,
 				passkey: $scope.userinput.password,

@@ -46,9 +46,12 @@ body {
 }
 
 .img-bottom {
-	position: : absolute;
-	left: 0;
-	bottom: 0;
+	padding: 1em;
+	position: absolute;
+	left: 50%;
+	top: 134%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
 }
 
 
@@ -67,6 +70,34 @@ body {
  .lowerSecond {
 	top: 95%;
  }
+
+/* disable chrome's blue border */
+ button:focus {outline:0;}
+
+ .defaultButton {
+  width: 220px;
+  margin: 16px;
+  padding: 20px 20px 10px;
+  border: 1px solid #018dc4;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  font: normal 38px/normal "Roboto", Helvetica, sans-serif;
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  word-spacing: 4px;
+  background: rgba(66,109,204,1);
+  -webkit-box-shadow: 0 4px 2px 0 rgba(28,63,137,1) ;
+  box-shadow: 0 4px 2px 0 rgba(28,63,137,1) ;
+}
+
+.defaultButton:hover {
+ -webkit-box-shadow: 0 0px 0px 0 rgba(28,63,137,1) ;
+}
+
+.defaultButton:active {
+ -webkit-box-shadow: 0 -4px 2px 0 rgba(28,63,137,1) ;
+}
+
 
 
 
