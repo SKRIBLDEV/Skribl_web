@@ -214,14 +214,16 @@ function Database(serverConfig, dbConfig) {
 	 * @param  {callback} callback
 	 */
 	this.deleteUser = function (username, callback) {
-		db.select().from('User').where({username: username}).column('@rid').all()
-		.then(function (rid) {
-			if(rid.length === 1) {
-				db.vertex.delete(rid[0]) 
+		db.select().from('User').where({username: username}).all()
+		.then(function(users) {
+			if(users.length){
+				UserRid = RID.getRid(users[0]);
+				db.query('delete vertex ' + UserRid)
 				.then(function(){
 					callback(null, true);
 				});
-			} else {
+			}
+			else {
 				callback(new Error("user doesn't exist!"));
 			}
 		});
@@ -301,8 +303,9 @@ exports.Database = Database;
 
 /*
 // TESTCODE 
-//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
+
 */
