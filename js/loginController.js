@@ -11,10 +11,6 @@
  */
 angular.module('skriblApp').controller('loginController', function($scope, $http, $location, $appData) {
 
-	// optional: load credentials from cookie or other persistent storage?
-	// $scope.userinput.username = 'alice';
-	// $scope.userinput.password = 'wonderland';
-
 	/**
 	 * home routing function
 	 */
@@ -33,11 +29,15 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 	 */
 	$scope.login = function() {
 
+		//Create JSON to send in a HTTPrequest.
 		var JSONToSend = {
 				"username" : $scope.userinput.username,
 				"password" : $scope.userinput.password
 			};
+
+		//Initialise HTTP request
 		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
+		
 		
 		loginRequest.success(function(data, status, headers, config) {
 			var Authorization = data.Authorization;

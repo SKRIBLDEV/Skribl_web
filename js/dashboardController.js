@@ -11,30 +11,27 @@
  */
 angular.module('skriblApp').controller('dashController', function($scope, $location, $appData) {
 
-	/* controller for dashboard */
-
+	//Control if user has already loged in, or if he tries to go the dashboard without login in.
 	if(!($appData.currentUser))
-{
+	{
 		$location.path('/home');
 		return;
-}
+	}
 
-	console.log($appData);
 	/**
 	 * duplication of the username to be used in Dashboard.html
 	 * @type {String}
 	 */
 	$scope.username = $appData.currentUser.username;
 
-	/**
-	 * The actual logout function
-	 */
+	 // The logout function
 	$scope.logout = function() {
 		$location.path('/home');
-		$appData.currentUser = {};
-		// remove cookie
+		$appData.currentUser = null;
 	};
-	// TODO DELETE USER 	
+
+	// TODO DELETE USER WEKRT NIET OP SERVER
+	//The delete function
 	$scope.deleteUser = function(){
 		var str = ".../user/";
 		str = str.concat($appData.currentUser.name);
@@ -44,4 +41,5 @@ angular.module('skriblApp').controller('dashController', function($scope, $locat
 		};
 		$http.delete(str,config);
 	}
+
 });

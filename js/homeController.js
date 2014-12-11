@@ -10,6 +10,7 @@
 angular.module('skriblApp').controller('homeController', function($scope, $location, $appData) {
 
 	$appData.currentUser = null;
+
 	/**
 	 * login routing function
 	 */
@@ -23,8 +24,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	$scope.register = function() {
 		$location.path('/register');
 	};
-
-	$scope.graphControl = {};
+	
 });
 
 
