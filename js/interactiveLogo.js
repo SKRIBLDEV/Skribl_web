@@ -81,7 +81,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           keepInCircle: function(radius){
             var center = new paper.Point(radius, radius)
 
-            if (center.getDistance(this.position) > radius){
+            if (center.getDistance(this.position) > (radius - 13)){
               var diff = this.position.subtract(center)
               diff = diff.normalize(radius)
               diff = diff.add(center)

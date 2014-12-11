@@ -29,6 +29,14 @@ body {
     width: 1px;
 }
 
+/* this should be made "general" for all navigational pages f */
+
+.header-block {
+	height: 65px;
+	width: 100%;
+	background-color: white;
+}
+
 .block0 {
 
 }
@@ -70,6 +78,27 @@ body {
  .lowerSecond {
 	top: 95%;
  }
+
+
+ .card {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 250px;
+  height: 210px;
+  padding: 20px;
+  overflow: hidden;
+  border: none;
+  font: normal 16px/1 "Times New Roman", Times, serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  background: #3149A1;
+  -webkit-box-shadow: 0 9px 12px 0 rgba(19,33,86,0.96) ;
+  box-shadow: 0 9px 12px 0 rgba(19,33,86,0.96) ;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+}
 
 
 /* disable link default coloration */
