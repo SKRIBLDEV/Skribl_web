@@ -37,9 +37,6 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 				"username" : $scope.userinput.username,
 				"password" : $scope.userinput.password
 			};
-		var config = {headers:  {
-		        "Content-type" : "application/json"
-		    }};
 		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
 		
 		loginRequest.success(function(data, status, headers, config) {
@@ -49,7 +46,7 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				$appData.currentUser = data;
 				console.log(data);
-				$appData.currentUser.Authorization = $scope.Authorization;
+				$appData.currentUser.Authorization = $scope.Authorization; //TODO
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 				//TODO melding dat er een fout is met ONZE database.

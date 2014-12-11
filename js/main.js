@@ -7,6 +7,9 @@
 var webapp = angular.module('skriblApp', ['ngRoute']);
 
 var serverApi = 'http://wilma.vub.ac.be:8443';
+var config = {headers:  {
+		        "Content-type" : "application/json"
+		    }};
 /**
  * Configuration of the angular webapp global.
  * We configure the different views/routes depending on the current URl
