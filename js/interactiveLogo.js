@@ -5,6 +5,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
     scope: true,
     link: function(scope, element) {
 
+
       var canvas = document.querySelector('canvas');
       fitToContainer(canvas);
 
@@ -51,6 +52,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         var nodes           = []
         var connectionGrid  = []
         var path            = {}
+
         // access controller data
         // var controllerdata = parseInt(scope.controllerdata);
 
@@ -108,6 +110,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             return mapff(Math.random(), 0, 1, -1, 1)
           }
 
+
         var init = function(){          
           // clear all drawing items on active layer
           paper.project.activeLayer.removeChildren();  
@@ -140,7 +143,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           }
         }
 
-
         var setHandlers = function(){
           // on resize blocks mouse interaction
           // paper.view.onResize = function(event){
@@ -149,6 +151,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
           paper.view.onFrame = function(event){
             path.clear()
+
+            var raster = new paper.Raster('mona');
+          raster.position = paper.view.center
+
             
             var drawLine = function(pos1, pos2){
                   path.add(pos1)
@@ -164,8 +170,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
                 var connected = connectionGrid[y*nodes.length+x]
 
                 if (dis == 0){
-                  nodes[y].position.x = radius - ranMin()
-                  nodes[y].position.y = radius - ranMin()
+                  nodes[y].position.x = radius - ranMin()*30
+                  nodes[y].position.y = radius - ranMin()*30
                 } else if (dis < MINDIST ){
                   nodes[y].updatePosition(nodes[x].position, 1.001)
                 } else if (connected){
