@@ -1,0 +1,30 @@
+body {
+    background-color: yellow;
+}
+
+
+/* HOME */
+
+/*additonal styling for the home canvas can be made here*/
+.board-frame {
+	width: 500;
+	height: 500;
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
+	
+}
+
+.nav,.pagination,.carousel,.panel-title a {
+	cursor: pointer;
+}
+
+.home-upper {
+	background-color: white;	
+	height: 50%
+}
+
+.home-lower {
+	background-color: #4A60B6;	/* Skrible_default_blue*/
+	height: 50%;
+}

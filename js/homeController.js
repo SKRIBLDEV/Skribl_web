@@ -23,4 +23,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	$scope.register = function() {
 		$location.path('/register');
 	};
+
+	$scope.graphControl = {};
 });
+
+
