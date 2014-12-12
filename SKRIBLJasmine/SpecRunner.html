@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>SKRIBL Spec Runner(Jasmine v2.0.3)</title>
+
+  <link rel="stylesheet" type="text/css" href="lib/jasmine-2.0.3/jasmine.css">
+
+  <script type="text/javascript" src="lib/jasmine-2.0.3/jasmine.js"></script>
+  <script type="text/javascript" src="lib/jasmine-2.0.3/jasmine-html.js"></script>
+  <script type="text/javascript" src="lib/jasmine-2.0.3/boot.js"></script>
+
+  <!--
+	!!Jasmine heeft twee mappen(: src en spec) en er is een naming 
+	convention (Spec files eindigen met het woord Spec).
+	Indien deze regels niet gevolgd worden zullen de tests niet werken !!
+
+	Scr file is een gewone js file waar tests op moeten uitgevoerd worden.
+    Hieronder source file toevoegen als volgt:
+	<script type="text/javascript" scr="scr/naamVanUScrFileInDeScrDirectory.js"></script>
+	Hier een voorbeeld met Test.js
+ 	-->
+	<script type="text/javascript" src="src/Test.js"></script>
+  <!-- 
+	Spec file is een file dat tests implementeert voor een bepaalde scr file.
+	Hieronder spec file toevoegen als volgt:
+  <script type="text/javascript" src="spec/naamVanUSpecFileInDeSpecDirectory.js"></script>	
+	 -->
+  	<script type="text/javascript" src="spec/dashboardControllerSpec.js"></script>
+    <script type="text/javascript" src="spec/loginControllerSpec.js"></script>
+    <script type="text/javascript" src="spec/registerControllerSpec.js"></script>
+
+
+</head>
+
+<body>
+</body>
+</html>
