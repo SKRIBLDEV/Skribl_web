@@ -1,26 +1,33 @@
 
-<div class="header-block" id="wrapper">
-	<div class="header-content"> 
-		<i class="fa fa-home fa-3x"  ng-click="goToHome()">&nbsp;&nbsp;</i>
-		<img src="img/logo_defaultcolor.png" style='height:60%;' alt="skribllog" ng-click="goToHome()">
-	</div>
+<div class="header-block">
+	<img src="img/logo_defaultcolor.png" 
+		class = "header-content" 
+		style='height:83%;' 
+		alt="skribllog" 
+		ng-click="goToHome()">
 </div>
 
 
 <div class="block0">
 
 <center>
+	
 
 <div class="card">
-
-	<h1> LOG IN </h1>
-
-	Username: <input type="text" ng-model=userinput.username> <br>
-	Password: <input type="password" ng-model=userinput.password> <br>
-	<p id="error"></p>
-	<button class = "defaultButton" ng-click="login()">GO</button>
-	<br>
-	<button class = "defaultButton" ng-click="goToHome()">GO BACK</button>
+	<div class="card-inner">
+		<div class="card-content">
+			<h1> LOG IN </h1><br>
+			<input placeholder="username" class="text-field" type="text" ng-model=userinput.username> <br><br>
+			<input placeholder="password" class="text-field" type="password" ng-model=userinput.password> <br>
+			<h3><p id="error"></p></h3>
+		</div>
 </div>
+	<div class="card-bottom-right">
+		<div class="round-button">
+			<i class="fa fa-angle-right" ng-click="login()" style="color:white"></i>
+		</div>
+	</div>
+</div>
+
 </center>
 </div>
