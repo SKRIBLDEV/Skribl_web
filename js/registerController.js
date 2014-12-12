@@ -62,7 +62,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				"institution": $scope.userinput.institution,
 				"faculty": $scope.userinput.faculty, 
 				"department": $scope.userinput.department, 
-				"researchDomains": $scope.userinput.researchDomains,
+				"researchDomains": [$scope.userinput.researchDomains],
 				"researchGroup": $scope.userinput.researchGroup };
 
 				console.log(JSONToSend);
