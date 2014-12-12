@@ -62,9 +62,14 @@ h3 {
   width: 100%;
 }
 
-.block1, .block2, .block3 {
+.block1, .block2 {
 	height: 50%
 }
+
+ .block3 {
+  height: 75%
+ }
+
 
 .block1, .header-block {
 	background-color: white;	
@@ -79,7 +84,7 @@ h3 {
 	position: absolute;
 	width :110%;
 	left: 50%;
-	top: 136.8%;
+	top: 160.8%;
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
 }
