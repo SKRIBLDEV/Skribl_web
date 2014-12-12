@@ -49,14 +49,14 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				//save userInformation in appData.
 				$appData.currentUser = data;
+
+				// change route to #/dashboard
+				$location.path('/dashboard');
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 			//Error when getting user info --> database error
 			document.getElementById("error").innerHTML = "Database error, please try again later.";
 			});
-			
-			// change route to #/dashboard
-			$location.path('/dashboard');
 		});
 		
 		loginRequest.error(function(data, status, headers, config) {

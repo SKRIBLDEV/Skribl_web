@@ -50,13 +50,13 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	 */
 	$scope.register = function() {
 
-		if ($scope.signup_form.$valid){
+		//if ($scope.signup_form.$valid){
 					
 			//JSON file to send when registering.
 			var JSONToSend = {
 				"firstName": $scope.userinput.firstName,
 				"lastName": $scope.userinput.lastName,
-				"language": $scope.userinput.language,
+				"language": "NL",
 				"password": $scope.userinput.password,
 				"email": $scope.userinput.email,
 				"institution": $scope.userinput.institution,
@@ -65,8 +65,10 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				"researchDomains": $scope.userinput.researchDomains,
 				"researchGroup": $scope.userinput.researchGroup };
 
+				console.log(JSONToSend);
+
 			//Prepare url to add user.
-		    var to = serverApi.concat('/users').concat($scope.userinput.username);
+		    var to = serverApi.concat('/users/').concat($scope.userinput.username);
 		    
 		    //Register http request.
 		    var registerRequest = $http.put(to,JSONToSend,config);
@@ -83,8 +85,8 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 			});
 				
 			$location.path('/dashboard');
-		} else {
+		/*} else {
 			$scope.signup_form.submitted = true;
-		}
+		}*/
 	}
 });
