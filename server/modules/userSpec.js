@@ -63,7 +63,7 @@ describe('userInfo Module Tests: ',function(){
     		});
     	});
 
-        it('incorrect language preference', function(done) {
+        /*it('incorrect language preference', function(done) {
             account.language = 'FR'; //incorrect value
             UM.createUser(account, function(error, result) {
             expect(error).toEqual(validation_error);
@@ -80,7 +80,7 @@ describe('userInfo Module Tests: ',function(){
             expect(result[1]).toEqual('input ' + 'research domain' + ' is not recognized'); //result should be an array containing a string with specific error informartion
             done(); // test waits untill done() is called asynchronously, default timeout of 5 seconds 
             });
-        });
+        });*/
 
 
     	it('correct account', function(done) {
