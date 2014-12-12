@@ -105,12 +105,12 @@ h3 {
 	top: 95%;
  }
 
- .card {
+ .card  {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   width: 350px;
-  height: 350px;
+  height: auto;
   padding: 30px;
   overflow: hidden;
   border: none;
@@ -121,7 +121,7 @@ h3 {
   font: normal 18px/1 "Roboto", Helvetica, sans-serif;
   color: rgba(255,255,255,1);
   width: 350px;
-  height: 300px;
+  height: auto;
   text-align: center;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
