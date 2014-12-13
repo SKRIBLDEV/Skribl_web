@@ -9,7 +9,7 @@
  * @param  {object} $appData  	our custom service for shared data
 
  */
-angular.module('skriblApp').controller('dashController', function($scope, $location, $appData) {
+angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData) {
 
 	//Control if user has already loged in, or if he tries to go the dashboard without login in.
 	if(!($appData.currentUser))
@@ -33,12 +33,21 @@ angular.module('skriblApp').controller('dashController', function($scope, $locat
 	// TODO DELETE USER WEKRT NIET OP SERVER
 	//The delete function
 	$scope.deleteUser = function(){
-		var str = serverApi.concat('/users/').concat(appData.currentUser.username);
+		var path = serverApi.concat('/users/').concat($scope.username);
 		var config = {headers:  {
 		        'Authorization': $appData.Authorization
 		    }
 		};
-		$http.delete(str,config);
+		var deleteRequest = $http.delete(path,config);
+
+		deleteRequest.success(function(data, status, headers, config) {
+			$scope.logout();
+
+		});
+		/*deleteRequest.error(function(data, status, headers, config) {
+			//Error while deleting user
+			document.getElementById("error").innerHTML = "Database error, please try again later.";
+			});*/
 	}
 
 });
