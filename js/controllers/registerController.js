@@ -46,7 +46,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	$scope.languages = [ 'FR', 'NL', 'EN'];
 
 	/**
-	 * The actual register function, registers the "currentUser" in appData and handles the routing
+	 * Used to add an user.
 	 */
 	$scope.register = function() {
 
@@ -73,24 +73,11 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 
 		    registerRequest.success(function(data, status, headers, config) {
 				
-				//When register worked, het the users information for later use.
-				
-				//Prepare url to get userInformation for later use.
-				var pad = serverApi.concat('/users/').concat($scope.userinput.username);
-			
-				//Get userInformation request
-				var loadUserInfoRequest = $http.get(pad,config);
-				loadUserInfoRequest.success(function(data, status, headers, config) {
-				//save userInformation in appData.
-				$appData.currentUser = data;
+				//Used in login to show message
+				$appData.currentUser = 1;
 
-				// change route to #/dashboard
-				$location.path('/dashboard');
-				});
-				loadUserInfoRequest.error(function(data, status, headers, config) {
-				//Error when getting user info --> database error
-				document.getElementById("error").innerHTML = "Database error, please try again later.";
-				});
+				//When register worked,change route to #/login.
+				$location.path('/login');
 
 			});
 
