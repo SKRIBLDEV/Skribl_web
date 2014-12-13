@@ -60,8 +60,17 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 		});
 		
 		loginRequest.error(function(data, status, headers, config) {
+			
+			if(status == 0)
+			{
+			//Server is not on
+			document.getElementById("error").innerHTML = "SKRIBL is currently unavailable";
+			}
+			else{
 			//Error user has given bad username or passwore
 			document.getElementById("error").innerHTML = "Username or password is invalid, please try again";
+			}
+			
 		});
 	}
 });
