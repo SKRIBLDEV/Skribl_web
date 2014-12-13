@@ -65,8 +65,6 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				"researchDomains": [$scope.userinput.researchDomains],
 				"researchGroup": $scope.userinput.researchGroup };
 
-				console.log(JSONToSend);
-
 			//Prepare url to add user.
 		    var to = serverApi.concat('/users/').concat($scope.userinput.username);
 		    
@@ -75,11 +73,28 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 
 		    registerRequest.success(function(data, status, headers, config) {
 				
-				//When register worked, sava the users information for later use.
-				$scope.currentUser = JSONToSend;
+				//When register worked, het the users information for later use.
+				
+				//Prepare url to get userInformation for later use.
+				var pad = serverApi.concat('/users/').concat($scope.userinput.username);
+			
+				//Get userInformation request
+				var loadUserInfoRequest = $http.get(pad,config);
+				loadUserInfoRequest.success(function(data, status, headers, config) {
+				//save userInformation in appData.
+				$appData.currentUser = data;
+
+				// change route to #/dashboard
+				$location.path('/dashboard');
+				});
+				loadUserInfoRequest.error(function(data, status, headers, config) {
+				//Error when getting user info --> database error
+				document.getElementById("error").innerHTML = "Database error, please try again later.";
+				});
+
 			});
 
-			loadUserInfoRequest.error(function(data, status, headers, config) {
+			registerRequest.error(function(data, status, headers, config) {
 
 				if((status == 501) && (data == "Error: username taken!"))
 				{
@@ -90,8 +105,6 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				else{	document.getElementById("error").innerHTML = "Database error, please try again later.";
 			}
 			});
-				
-			$location.path('/dashboard');
 		/*} else {
 			$scope.signup_form.submitted = true;
 		}*/
