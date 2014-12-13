@@ -41,6 +41,9 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 		
 		loginRequest.success(function(data, status, headers, config) {
 
+			//Save Authorization when login to do important tasks.
+			$appData.Authorization = data.Authorization;
+			
 			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinput.username);
 			
@@ -72,5 +75,10 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 			}
 			
 		});
+	}
+	
+	if($appData.currentUser == 1){
+		//just registered
+		document.getElementById("error").innerHTML = "You have successfully registered ! Please log in";
 	}
 });

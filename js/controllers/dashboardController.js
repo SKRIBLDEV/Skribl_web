@@ -33,10 +33,9 @@ angular.module('skriblApp').controller('dashController', function($scope, $locat
 	// TODO DELETE USER WEKRT NIET OP SERVER
 	//The delete function
 	$scope.deleteUser = function(){
-		var str = ".../user/";
-		str = str.concat($appData.currentUser.name);
+		var str = serverApi.concat('/users/').concat(appData.currentUser.username);
 		var config = {headers:  {
-		        'Authorization': $appData.currentUser.Authorization
+		        'Authorization': $appData.Authorization
 		    }
 		};
 		$http.delete(str,config);

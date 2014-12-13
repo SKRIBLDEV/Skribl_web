@@ -58,7 +58,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	$scope.languages = [ 'FR', 'NL', 'EN'];
 
 	/**
-	 * The actual register function, registers the "currentUser" in appData and handles the routing
+	 * Used to add an user.
 	 */
 	$scope.register = function() {
 
@@ -77,8 +77,6 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				"researchDomains": [$scope.userinput.researchDomains],
 				"researchGroup": $scope.userinput.researchGroup };
 
-				console.log(JSONToSend);
-
 			//Prepare url to add user.
 		    var to = serverApi.concat('/users/').concat($scope.userinput.username);
 		    
@@ -87,16 +85,25 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 
 		    registerRequest.success(function(data, status, headers, config) {
 				
-				//When register worked, sava the users information for later use.
-				$scope.currentUser = JSONToSend;
+				//Used in login to show message
+				$appData.currentUser = 1;
+
+				//When register worked,change route to #/login.
+				$location.path('/login');
+
 			});
 
-			loadUserInfoRequest.error(function(data, status, headers, config) {
-			//Error when trying to register --> database error
-			document.getElementById("error").innerHTML = "Database error, please try again later.";
+			registerRequest.error(function(data, status, headers, config) {
+
+				if((status == 501) && (data == "Error: username taken!"))
+				{
+					//Error when trying to register with a username that is already token.
+					document.getElementById("error").innerHTML = "Username is already used please try an other.";
+				}
+					//Error when trying to register --> database error
+				else{	document.getElementById("error").innerHTML = "Database error, please try again later.";
+			}
 			});
-				
-			$location.path('/dashboard');
 		/*} else {
 			$scope.signup_form.submitted = true;
 		}*/
