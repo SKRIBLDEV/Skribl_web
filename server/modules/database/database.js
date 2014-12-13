@@ -37,10 +37,13 @@
 /*** --- END --- ***/ 
 
 var Oriento = require('oriento');
-var UM = require('./user.js');
+var UM = require('../user.js');
 var Affil = require('./affiliation.js');
 var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
+var Publication = require('./publication.js');
+var path = require('path');
+var fs = require('fs');
 
 function Database(serverConfig, dbConfig) {
 	
@@ -62,8 +65,10 @@ function Database(serverConfig, dbConfig) {
 	var self = this;
 	var aff = new Affil.Affiliation(db);
 	var RD = new RDomain.ResearchDomain(db);
+	var PUB = new Publication.Publication(db);
 
 
+	this.addPublication = PUB.addPublication;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -253,7 +258,7 @@ function Database(serverConfig, dbConfig) {
 	};
 
 
-
+	//find a way to make a transaction out of this, at the moment eventual causes for errors are caught in user.js validation.
 	/**
 	 * adds user with given data to database
 	 * @private
@@ -296,16 +301,66 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 	};
-
+/*
+	db.record.get('#21:7')
+	.then(function(res) {
+		console.log(res);
+		fs.writeFile('result2.pdf', res.Data, function (err) {
+  			if (err) {
+  				callBack(err);
+  			}
+  			else {
+  				callBack(null, 'finished');
+  			}
+			});
+	})
+*/
 }
 
 exports.Database = Database;
 
 /*
 // TESTCODE 
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
 
+
+function stop(){
+	process.exit(code=0);
+}
+
+function callBack(error, result){
+	if (error){
+	console.log(error);
+	}
+	else{
+	console.log(result);
+	//printUser(result);
+	}
+	stop();
+}
 */
+//var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot2', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'NL', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']}
+//var usr = new UM.UserRecord(nUser);
+
+//database.createUser(usr, callBack);
+/*
+UM.createUser(nUser, function(error, user) {
+	database.createUser(user, callBack);
+});
+*/
+
+//database.loadUser('mlaw', callBack);
+/*
+var p = path.join(__dirname, '/testfile2.pdf');
+var pRec = {getUploader	: function() {return 'jshep';},
+			getTitle	: function() {return 'test 11'},
+			getAuthors	: function() {return ['Jan', 'Piet', 'Joris']},
+			loadPath	: function(clb) { clb(p)}
+}
+*/
+//database.addPublication(pRec, callBack);
+//database.loadUser('jshep', callBack);
+
