@@ -7,7 +7,7 @@
  * @param  {object} $appData  our custom service for shared data
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $location, $appData) {
+angular.module('skriblApp').controller('homeController', function($scope, $location, $appData, anchorSmoothScroll) {
 
 	//Used to control if user has already logged-in.
 	$appData.currentUser = null;
@@ -25,7 +25,15 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	$scope.register = function() {
 		$location.path('/register');
 	};
-	
+
+	$scope.gotoElement = function (eID){
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+      $location.hash('middle');
+ 
+      // call $anchorScroll()
+      anchorSmoothScroll.scrollTo(eID);
+    };	
 });
 
 
