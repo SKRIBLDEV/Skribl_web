@@ -37,6 +37,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
        */
       function drawGraph(element) {
 
+
+
         // setup the paper scope on canvas
         if (!scope.paper) {
           scope.paper = new paper.PaperScope();
@@ -52,6 +54,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         var nodes           = []
         var connectionGrid  = []
         var path            = {}
+
+
 
         // access controller data
         // var controllerdata = parseInt(scope.controllerdata);
@@ -80,10 +84,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
           keepInCircle: function(radius){
             var center = new paper.Point(radius, radius)
-
-            if (center.getDistance(this.position) > (radius - 13)){
+            var outer = radius - this.circle.size.width
+            if (center.getDistance(this.position) > outer){
               var diff = this.position.subtract(center)
-              diff = diff.normalize(radius)
+              diff = diff.normalize(outer)
               diff = diff.add(center)
               this.position = diff  
               this.udraw()
@@ -141,6 +145,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
               connectionGrid[y*AMNT+x] = value
             }
           }
+
+          var svg = paper.project.importSVG(document.getElementById('svg-slogo'));
+          svg.scale(0.75)
+          svg.position = paper.view.center
         }
 
         var setHandlers = function(){
@@ -152,9 +160,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           paper.view.onFrame = function(event){
             path.clear()
 
-            var raster = new paper.Raster('mona');
-          raster.position = paper.view.center
-
+          //   var raster = new paper.Raster('mona');
+          // raster.position = paper.view.center
+          // paper.project.clear()
+          
             
             var drawLine = function(pos1, pos2){
                   path.add(pos1)

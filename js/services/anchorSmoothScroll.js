@@ -44,8 +44,6 @@ webapp.service('anchorSmoothScroll', function(){
                 y += node.offsetTop;
             } return y;
         }
-
     };
-    
 });
 
