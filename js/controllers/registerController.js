@@ -80,8 +80,15 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 			});
 
 			loadUserInfoRequest.error(function(data, status, headers, config) {
-			//Error when trying to register --> database error
-			document.getElementById("error").innerHTML = "Database error, please try again later.";
+
+				if((status == 501) && (data == "Error: username taken!"))
+				{
+					//Error when trying to register with a username that is already token.
+					document.getElementById("error").innerHTML = "Username is already used please try an other.";
+				}
+					//Error when trying to register --> database error
+				else{	document.getElementById("error").innerHTML = "Database error, please try again later.";
+			}
 			});
 				
 			$location.path('/dashboard');
