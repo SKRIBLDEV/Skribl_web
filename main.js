@@ -54,9 +54,8 @@ SKRIBLServer.installRoute(require('./server/routes/login.js'));
 SKRIBLServer.installRoute(require('./server/routes/user.js'));
 
 /* ---- SERVE STATIC FILES ---- */
-
-SKRIBLServer.serveStatic('/static', __dirname + '/static');
-SKRIBLServer.serveStatic('/', __dirname + '/public');
+//SKRIBLServer.serveStatic('/static', __dirname + '/static');
+//SKRIBLServer.serveStatic('/', __dirname + '/public');
 
 /* ---- START SERVER ---- */
 
