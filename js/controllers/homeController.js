@@ -5,12 +5,19 @@
  * @param  {object} $scope    the scope object of the controller
  * @param  {object} $location for switching between routes/views
  * @param  {object} $appData  our custom service for shared data
+ * @param  {object} $anchorSmoothScrool  custom service for smooth scrolling functionality
 
  */
 angular.module('skriblApp').controller('homeController', function($scope, $location, $appData, anchorSmoothScroll) {
 
 	//Used to control if user has already logged-in.
 	$appData.currentUser = null;
+
+	/**
+	 * The copy text for the home page, might be dynamic in futre iterations
+	 * @type {String}
+	 */
+	$scope.copy = "LET YOUR PUBLICATIONS DO THE NETWORKING"
 
 	/**
 	 * login routing function

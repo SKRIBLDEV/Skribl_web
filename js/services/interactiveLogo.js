@@ -1,3 +1,8 @@
+
+/*
+initialisation of the interactiveLogo directive which uses paperJS for interactive vector imagery,
+this directive is used to display the interactive logo, at this moment used at the home-screen.
+ */
 webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
   return {
@@ -17,7 +22,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         // select minimum value
         var minv = (canvas.offsetWidth < canvas.offsetHeight) ? canvas.offsetWidth : canvas.offsetHeight;
 
-        // ...then set the internal size to match
+        // set the internal size to match the minimum value of width/height
         canvas.style.width  = minv;
         canvas.style.height = minv;
         canvas.width  = minv;
@@ -37,8 +42,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
        */
       function drawGraph(element) {
 
-
-
         // setup the paper scope on canvas
         if (!scope.paper) {
           scope.paper = new paper.PaperScope();
@@ -54,8 +57,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         var nodes           = []
         var connectionGrid  = []
         var path            = {}
-
-
 
         // access controller data
         // var controllerdata = parseInt(scope.controllerdata);
@@ -74,6 +75,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             this.createItem()
             this.udraw()
           },
+
+          /**
+           * creates the drawable item, sets the size, color and ellipse
+           */
           createItem: function(){
             this.circle = new paper.Shape.Ellipse({
               center: [0, 0],
@@ -82,6 +87,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
               });
             },
 
+          /**
+           * keeps a node in a center
+           * @param  {[type]} radius the radius to maintain a node within
+           */
           keepInCircle: function(radius){
             var center = new paper.Point(radius, radius)
             var outer = radius - this.circle.size.width
@@ -93,6 +102,12 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
               this.udraw()
               }
           },
+
+          /**
+           * Updates the position of the node by use of vector operations
+           * @param  {[function]} referencePoint the reference point towards a node should move to
+           * @param  {[Number]} scalar         the "speed" a node should move towards the refence node
+           */
           updatePosition: function(referencePoint, scalar){
               var diff = this.position.subtract(referencePoint)
               var length = diff.length
@@ -101,20 +116,39 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
               this.position = diff
               this.keepInCircle(paper.view.bounds.width/2)
           },
+          
+          /**
+           * Updates the node by setting the positon of the drawable objects to the nodes own position
+           */
             udraw: function(){
               this.circle.position = this.position
             }
           })
-
+          
+          /**
+           * Auwiliary function that maps a value
+           * @param  {Number} value the value to be mapped
+           * @param  {Number} imin  the original minimum value
+           * @param  {Number} imax  the orignal maximum value
+           * @param  {Number} omin  the desired minimum value
+           * @param  {Number} omax  the desired maximum value
+           * @return {Number}       the mapped value
+           */
           var mapff = function(value, imin, imax, omin, omax){
             return ((value - imin) / (imax - imin) * (omax - omin) + omin)
           }
           
+          /**
+           * Returns a random value between [-1, 1]
+           * @return {Number} the random value
+           */
           var ranMin = function(){
             return mapff(Math.random(), 0, 1, -1, 1)
           }
 
-
+        /**
+         * Initializes the interactive logo
+         */
         var init = function(){          
           // clear all drawing items on active layer
           paper.project.activeLayer.removeChildren();  
@@ -151,20 +185,25 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           svg.position = paper.view.center
         }
 
-        var setHandlers = function(){
-          // on resize blocks mouse interaction
-          // paper.view.onResize = function(event){
-          //   fitToContainer(canvas);
-          // }
 
+        /**
+         * Sets the handlers, in this cae is only "on Frame" set, a function that gets called every time a frame is drawn to the screen
+         * Also sets the tool functionality, in this case "onMouseMove"
+         */
+        var setHandlers = function(){
+
+          /**
+           * sets the onFrame handler of paperJS in order to draw/update the nodes and lines
+           * @param  {[type]} event the draw event
+           */
           paper.view.onFrame = function(event){
             path.clear()
 
-          //   var raster = new paper.Raster('mona');
-          // raster.position = paper.view.center
-          // paper.project.clear()
-          
-            
+            /**
+             * Draws a simple line by adding them to the path variable
+             * @param  {function} pos1 position of the starting point
+             * @param  {function} pos2 position of the ending point
+             */
             var drawLine = function(pos1, pos2){
                   path.add(pos1)
                   path.add(pos2)
@@ -200,9 +239,10 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             }
           }
 
-          // placeholder for mouse interaction
-          // tool.onMouseDown = function(event){}
-
+          /**
+           * Sets the functionality that should happen whenever a user moves its mouse in the canvas
+           * @param  {function} event  the event object
+           */
           tool.onMouseMove = function(event){
             for (var i = 0; i < nodes.length; i++) {
               var MOUSE_DIST = 50;
@@ -223,5 +263,4 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
       timer(drawGraph(element[0]), 0);
     }
   };
-
 }]);

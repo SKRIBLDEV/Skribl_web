@@ -9,6 +9,7 @@ body {
 }
 
 h1 {
+  text-color: 'white'
   font: normal 40px/1 "Roboto", Helvetica, sans-serif;
 }
 
@@ -84,9 +85,9 @@ h3 {
 	position: absolute;
 	width :110%;
 	left: 50%;
-	top: 160.8%;
+	
 	margin-right: -50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, 0%);
 }
 
  .centerSecond,.lowerSecond,.card{

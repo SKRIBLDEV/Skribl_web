@@ -1,6 +1,17 @@
+
+
+
+
+/*
+Custom service that allows smooth scrolling on a page.
 // adapted from http://jsfiddle.net/brettdewoody/y65G5/
+ */
 webapp.service('anchorSmoothScroll', function(){
     
+    /**
+     * The raison d'etre of this service: scrools the viewport to the elment residing in the eID
+     * @param  {function} eID the ID of the relement to which the viewport should scroll to
+     */
     this.scrollTo = function(eID) {
         var startY = currentYPosition();
         var stopY = elmYPosition(eID);
@@ -24,6 +35,10 @@ webapp.service('anchorSmoothScroll', function(){
             leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
         }
         
+        /**
+         * Retuns the current position in the viewframe
+         * @return {Number} the current position in the viewFrame
+         */
         function currentYPosition() {
             // Firefox, Chrome, Opera, Safari
             if (self.pageYOffset) return self.pageYOffset;
@@ -35,6 +50,11 @@ webapp.service('anchorSmoothScroll', function(){
             return 0;
         }
         
+        /**
+         * Returns hte position of the element (eID) in the viewframe
+         * @param  {[type]} eID the element which we'll require the position of
+         * @return {[type]}     the position of eID in the viewFrame
+         */
         function elmYPosition(eID) {
             var elm = document.getElementById(eID);
             var y = elm.offsetTop;
