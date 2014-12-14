@@ -42,8 +42,8 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	 * @return {String} The language a user has given into the form
 	 */
 	$scope.hasLanguage = function(){
-		return $scope.userinput.language
-	}
+		return $scope.userinput.language;
+	};
 
 	/**
 	 * Collection of the input values upon registratoin
@@ -95,7 +95,7 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 
 			registerRequest.error(function(data, status, headers, config) {
 
-				if((status == 501) && (data == "Error: username taken!"))
+				if((status === 501) && (data === "Error: username taken!"))
 				{
 					//Error when trying to register with a username that is already token.
 					document.getElementById("error").innerHTML = "Username is already used please try an other.";
@@ -107,5 +107,5 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 		/*} else {
 			$scope.signup_form.submitted = true;
 		}*/
-	}
+	};
 });

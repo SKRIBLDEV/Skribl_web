@@ -48,6 +48,6 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
 			//Error while deleting user
 			document.getElementById("error").innerHTML = "Database error, please try again later.";
 			});*/
-	}
+	};
 
 });

@@ -64,7 +64,7 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 		
 		loginRequest.error(function(data, status, headers, config) {
 			
-			if(status == 0)
+			if(status === 0)
 			{
 			//Server is not on
 			document.getElementById("error").innerHTML = "SKRIBL is currently unavailable";
@@ -75,9 +75,9 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 			}
 			
 		});
-	}
+	};
 	
-	if($appData.currentUser == 1){
+	if($appData.currentUser === 1){
 		//just registered
 		document.getElementById("error").innerHTML = "You have successfully registered ! Please log in";
 	}
