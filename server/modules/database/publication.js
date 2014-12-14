@@ -2,105 +2,123 @@
 
 var RID = require('./rid.js');
 var fs = require('fs');
-var path = require('path');
+var Path = require('path');
+var Author = require('./author.js');
 
+ /** 
+   *Create a new Publication object, provides functionality to database Object.
+   *@class
+   *@classdesc Represents a domain-specific publication instance
+   *@constructor 
+ *@param {Object} db - database link
+ */
 function Publication(db) {
 
+	var AUT = new Author.Author(db);
 
-
-	function binEncode(data, callback) {
-
-	//array holds the initial set of un-padded binary results
-	var binArray = []
-
-	//the string to hold the padded results
-	var datEncode = "";
-
-	//encode each character in data to it's binary equiv and push it into an array
-	for (i=0; i < data.length; i++) {
-	binArray.push(data[i].charCodeAt(0).toString(2));
-
-	}
-
-	//loop through binArray to pad each binary entry.
-	for (j=0; j < binArray.length; j++) {
-	//pad the binary result with zeros to the left to ensure proper 8 bit binary
-	var pad = padding_left(binArray[j], '0', 8);
-
-	//append each result into a string
-	datEncode += pad + ' ';
-
-	}
-
-	//function to check if each set is encoded to 8 bits, padd the left with zeros if not.
-
-	function padding_left(s, c, n) {
-	if (! s || ! c || s.length >= n) {
-	return s;
-	}
-
-	var max = (n - s.length)/c.length;
-	for (var i = 0; i < max; i++) {
-	s = c + s;
-	}
-
-	return s;
-	}
-	//string of padded results in console
-	console.log(datEncode);
-	}
-
-
+	/**
+	 * Will add a publication and link it with the proper uploader and author.
+	 * @param {Object}   pubRecord object which contains information about the publication.
+	 * @param {callBack} callback 
+	 * @return {String}	 callback called with publicationRid
+	 */
 	this.addPublication = function(pubRecord, callback) {
-		var self = this;
-		function getFile(path, callback) {
-			var file;
-			fs.readFile(path, 'base64', function(error, data) {
-				if(error) {
-					callback(error);
-				}
-				else {
-					callback(null, data);
-				}
-			});
-		}
-
 		var publicationRid;
 		var path;
 		pubRecord.loadPath(function(p) {
 			path = p;
 		});
 
-		getFile(path, function(error, data) {
-			db.query('create vertex Publication set Title = \'' + pubRecord.getTitle() + '\', Data = \'' + data + '\'')
-			.then(function(publication) {
-				console.log(publication);
-				publicationRid = RID.getRid(publication[0]);
-				db.select().from('User').where({username: pubRecord.getUploader()}).all()
-				.then(function(users) {
-					if(users) {
+		/**
+		 * deletes file at path
+		 */
+		function deleteFile() {
+			fs.unlink(path, function (err) {
+  				if (err) {
+  					callback(new Error(err));
+				}
+				else {
+					callback(null, publicationRid);
+				}
+			});
+		}
+
+		/**
+		 * will load a file into a buffer as base64 encoded.
+		 * @param  {String}   path     path to file
+		 * @param  {callBack} callback 
+		 * @return {Object}   calls callback with resulting data
+		 */
+		function getFile(path, clb) {
+			var file;
+			fs.readFile(path, 'base64', function(error, data) {
+				if(error) {
+					callback(error);
+				}
+				else {
+					clb(null, data);
+				}
+			});
+		}
+
+		/**
+		 * Will add vertices and links to database.
+		 * @param  {Object} error dummy var, will never catch Error.
+		 * @param  {Object} data  data loaded by getFile	
+		 */
+		function createPub(error, data) {
+			db.select().from('User').where({username: pubRecord.getUploader()}).all()
+			.then(function(users) {
+				if(users.length) {
+					db.query('create vertex Publication set Title = \'' + pubRecord.getTitle() + '\', Data = \'' + data + '\'')
+					.then(function(publication) {
+						publicationRid = RID.getRid(publication[0]);		
 						var userRid = RID.getRid(users[0]);
 						db.edge.from(userRid).to(publicationRid).create({
 							'@class': 'Uploaded'
+						});
+
+						AUT.addAuthor(pubRecord.getFirstName(), pubRecord.getLastName(), function(error, authorRid) {
+
+							db.edge.from(authorRid).to(publicationRid).create({
+								'@class': 'Published'
+							})
+							.then(function(edge) {
+
+								deleteFile();
 							});
-				
-						callback(null, publicationRid);
-					}
-					else {
-						callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist'));
-					}
-				})	
-			});		
+						});							
+					});	
+				}
+				else {
+					callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist.'));
+				}
+			})	
+		}
+		getFile(path, createPub);
+	};
+
+	/**
+	 * constructs a function that takes a path and a callback, to load a file from database to a given location.
+	 * @param  {String}   id       record id of publication
+	 * @param  {callBack} callback
+	 * @return {Object}   a function is returned.
+	 */
+	this.loadPublication = function(id, callback) {
+		callback(null, function(path, callback) { 
+			db.record.get(id)
+			.then(function(res) {
+				//console.log(res);
+				fs.writeFile(path, res.Data, function (err) {
+  					if (err) {
+  						callBack(err);
+  					}
+  					else {
+  						callBack(null, true);
+  					}
+				});
+			});
 		});
 	}
 }
 exports.Publication = Publication;
-
-/*
-var fs = require('fs');
-var path = require('path');
-
-
-var path = path.join(__dirname, '/testfile.txt');
-var t = fs.readFile(path, 'base64', callBack);
-*/

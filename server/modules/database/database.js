@@ -19,22 +19,7 @@
  */
 
 
- /** 
-   *Create a new database object.
-   *@class
-   *@classdesc Represents a domain-specific database instances
-   *@constructor 
- *@param {object} serverConfig - includes configuration for server
- *@param {object} dbConfig - includes configuration for database
- */
 
-/*** @IVO *** 
-	Remarks:
-	   	>> I still need to check it, sorry...
-	   	>> Try to fix the researchdomains-array thing we talked about
-	   	>> Try to fix F to at least a B on CodeClimate (and preferably an A)
-	   	>> I might add stuff once I review this, but for now, good work! ;)
-/*** --- END --- ***/ 
 
 var Oriento = require('oriento');
 var UM = require('../user.js');
@@ -45,6 +30,14 @@ var Publication = require('./publication.js');
 var path = require('path');
 var fs = require('fs');
 
+ /** 
+   *Create a new database object.
+   *@class
+   *@classdesc Represents a domain-specific database instances
+   *@constructor 
+ *@param {object} serverConfig - includes configuration for server
+ *@param {object} dbConfig - includes configuration for database
+ */
 function Database(serverConfig, dbConfig) {
 	
 	/* instantiates the database server instance */
@@ -140,9 +133,9 @@ function Database(serverConfig, dbConfig) {
 	/**
 	 * will check if a user exists
 	 * @private
-	 * @param  {[type]}   data
-	 * @param  {Function} callback
-	 * @return {[type]}
+	 * @param  {Object}   	contains user info
+	 * @param  {callback} 	callback
+	 * @return {Boolean}	by callback
 	 */
 	this.userExists = function(data, callback) {
 
@@ -301,66 +294,7 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 	};
-/*
-	db.record.get('#21:7')
-	.then(function(res) {
-		console.log(res);
-		fs.writeFile('result2.pdf', res.Data, function (err) {
-  			if (err) {
-  				callBack(err);
-  			}
-  			else {
-  				callBack(null, 'finished');
-  			}
-			});
-	})
-*/
 }
 
 exports.Database = Database;
-
-/*
-// TESTCODE 
-//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
-var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
-var database = new Database(serverConfig, dbConfig);
-
-
-function stop(){
-	process.exit(code=0);
-}
-
-function callBack(error, result){
-	if (error){
-	console.log(error);
-	}
-	else{
-	console.log(result);
-	//printUser(result);
-	}
-	stop();
-}
-*/
-//var nUser = {firstName:'Grunt', lastName:'Urdnot', username:'gurdnot2', password:'Algoon5', email:'gurdnot@vub.ac.be', language:'NL', institution: 'Vrije Universiteit Brussel', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']}
-//var usr = new UM.UserRecord(nUser);
-
-//database.createUser(usr, callBack);
-/*
-UM.createUser(nUser, function(error, user) {
-	database.createUser(user, callBack);
-});
-*/
-
-//database.loadUser('mlaw', callBack);
-/*
-var p = path.join(__dirname, '/testfile2.pdf');
-var pRec = {getUploader	: function() {return 'jshep';},
-			getTitle	: function() {return 'test 11'},
-			getAuthors	: function() {return ['Jan', 'Piet', 'Joris']},
-			loadPath	: function(clb) { clb(p)}
-}
-*/
-//database.addPublication(pRec, callBack);
-//database.loadUser('jshep', callBack);
 

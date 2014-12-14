@@ -30,6 +30,12 @@ function ResearchDomain(db){
 		});
 	}
 
+	/**
+	 * will iterate over given domains and call addResearchDomains
+	 * @param {Array<String>}   domains  ResearchDomains
+	 * @param {String}   userRid  
+	 * @param {callBack} callback
+	 */
 	this.addResearchDomains = function(domains, userRid, callback) {
 		var counter = domains.length;
 		counter--;
