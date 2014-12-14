@@ -5,7 +5,7 @@
  * @param  {object} $scope    the scope object of the controller
  * @param  {object} $location for switching between routes/views
  * @param  {object} $appData  our custom service for shared data
- * @param  {object} $anchorSmoothScrool  custom service for smooth scrolling functionality
+ * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
 angular.module('skriblApp').controller('homeController', function($scope, $location, $appData, anchorSmoothScroll) {
@@ -33,6 +33,10 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 		$location.path('/register');
 	};
 
+	/**
+	 * go to element (scrolling) function uses anchorSmoothScroll
+	 * @param  {[type]} eID the tag where we want the viewport to scroll to
+	 */
 	$scope.gotoElement = function (eID){
       // set the location.hash to the id of
       // the element you wish to scroll to.
