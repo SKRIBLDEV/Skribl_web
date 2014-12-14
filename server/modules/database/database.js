@@ -62,6 +62,7 @@ function Database(serverConfig, dbConfig) {
 
 
 	this.addPublication = PUB.addPublication;
+	this.loadPublication = PUB.loadPublication;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -138,7 +139,6 @@ function Database(serverConfig, dbConfig) {
 	 * @return {Boolean}	by callback
 	 */
 	this.userExists = function(data, callback) {
-
 		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
@@ -297,4 +297,5 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
+
 

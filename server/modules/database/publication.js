@@ -104,21 +104,35 @@ function Publication(db) {
 	 * @param  {callBack} callback
 	 * @return {Object}   a function is returned.
 	 */
-	this.loadPublication = function(id, callback) {
-		callback(null, function(path, callback) { 
-			db.record.get(id)
-			.then(function(res) {
-				//console.log(res);
-				fs.writeFile(path, res.Data, function (err) {
-  					if (err) {
-  						callBack(err);
-  					}
-  					else {
-  						callBack(null, true);
-  					}
-				});
+	this.loadPublication = function(id, path, callback) {
+		db.record.get(id)
+		.then(function(res) {
+			//console.log(res);
+			fs.writeFile(path, res.Data, function (err) {
+  				if (err) {
+  					callBack(new Error(err));
+  				}
+  				else {
+  					callBack(null, true);
+  				}
 			});
 		});
+		
 	}
+
+	this.deletePublication = function(id, callback) {
+		db.query('select from Publication where @rid = ' + id)
+		.then(function(publications) {
+			if(publications.length) {
+				db.vertex.delete(id)
+				.then(function(nr) {
+					callback(null, true);
+				});
+			}
+			else {
+				callback(null, true);
+			}
+		});
+	};
 }
 exports.Publication = Publication;
