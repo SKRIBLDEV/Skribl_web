@@ -115,9 +115,9 @@ function HTTPSServer(key, cert, modules) {
 	this.listen = function(port) {
 
 		if (!server) {
-			server = https.createServer(credentials, app);
+			//server = https.createServer(credentials, app);
 			/*--- [uncomment if you have problems with HTTPS/SSL] ---*/
-			//server = require('http').createServer(app);
+			server = require('http').createServer(app);
 		}
 
 		server.listen(port);
