@@ -1,6 +1,6 @@
-/** Authenticate - authenticates user based on request+context
-  * @param {object} request - original user request
-  * @param {object} context - context to authenticate in
+/** Authenticate - authenticates user based upon request+context
+  * @param {Object} request - original user HTTP request
+  * @param {Object} context - context to authenticate in
   * @returns an object that represents an authenticated user or false
   */
 function authenticate(req, context, clb) {

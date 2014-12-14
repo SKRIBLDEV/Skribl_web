@@ -8,7 +8,7 @@
 var RD = require("./researchDomain-module.js");
 
 
-//********* definition of regular expressions, exported for use with AngularJS (client-side validation)
+//********* definition of regular expressions
 
 
 //all regex imply that the matched string should not be empty (=solely whitespace characters) and should not contain leading or trailing whitespaces
@@ -27,12 +27,6 @@ var RegEx_password = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/;
 var RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
 
 
-exports.RegEx_username = RegEx_username;
-exports.RegEx_emailAdress = RegEx_emailAdress;
-exports.RegEx_password = RegEx_password;
-exports.RegEx_generalName = RegEx_generalName;
-
-
 
 //********** functions used for server-side validation 
 
@@ -49,7 +43,7 @@ isResearchDomain = function(input) {
  };
 
  isLanguage = function(input) {
- 	return (input === "NL") || (input === "ENG");
+ 	return (input === "NL") || (input === "EN");
  }
 
 exports.isEmailAdress = check(RegEx_emailAdress);

@@ -23,17 +23,17 @@ function UserRecord(info) {
 	* @method get*property* (public) : getter for user property, e.g., myUser.getFirstName()
 	*/
 
-	this.getFirstName = function() { return info.firstName; }
-	this.getLastName = function() { return info.lastName; }
-	this.getLanguage = function() { return info.language; }
-	this.getEmail = function() { return info.email; }
-	this.getUsername = function() { return info.username; }
-	this.getPassword = function() { return info.password; }
-	this.getResearchGroup = function() { return info.researchGroup; }
-	this.getDepartment = function() { return info.department; }
-	this.getFaculty = function() { return info.faculty; }
-	this.getInstitution = function() { return info.institution; }
-	this.getResearchDomains = function() { return info.researchDomains; }
+	this.getFirstName = function() { return info.firstName; };
+	this.getLastName = function() { return info.lastName; };
+	this.getLanguage = function() { return info.language; };
+	this.getEmail = function() { return info.email; };
+	this.getUsername = function() { return info.username; };
+	this.getPassword = function() { return info.password; };
+	this.getResearchGroup = function() { return info.researchGroup; };
+	this.getDepartment = function() { return info.department; };
+	this.getFaculty = function() { return info.faculty; };
+	this.getInstitution = function() { return info.institution; };
+	this.getResearchDomains = function() { return info.researchDomains; };
 
 	/**
 	* @method checkCredentials: checks a given password against (encrypted) password stored in UserRecord
@@ -78,7 +78,7 @@ createUser = function(info, clb) {
 			e.push('input ' + 'username' + ' is not a valid username');
 		if (!VAL.isPassword(info.password))  
 			e.push('input ' + 'password' + ' is not a valid password');
-		if(!VAL.isLanguage(info.language))
+		if(!VAL.isGeneralName(info.language)) // future implementation using isLanguage
 			e.push('input ' + 'language' + ' is not a valid language option');
 
 
@@ -87,7 +87,7 @@ createUser = function(info, clb) {
 			e.push('input ' + 'research domain' + ' is not defined or is not an array');
 		else{
 			for (var i = 0; i < info.researchDomains.length; i++){
-				if (! VAL.isResearchDomain( info.researchDomains[i] ))
+				if (! VAL.isGeneralName( info.researchDomains[i] )) // future implementation using isResearchDomain
 					e.push('input ' + 'research domain' + ' is not recognized');
 			}
 		}
