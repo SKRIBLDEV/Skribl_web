@@ -1,3 +1,11 @@
+/* --- VALIDATE --- */
+
+/** 
+  * Used to check user credentials for logging in
+  * @param {Object} req - HTTP request that contains the credentials
+  * @param {Object} res - HTTP response to output authorization or error
+  * @param {Object} context - access to other configurations in server 
+ */
 function validateCredentials(req, res, context) {
 
 	var username = req.body.username;
@@ -39,6 +47,8 @@ function validateCredentials(req, res, context) {
 	}
 
 }
+
+/* --- EXPORTS --- */
 
 exports.post = validateCredentials;
 exports.path = '/login';
