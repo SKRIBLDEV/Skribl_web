@@ -48,12 +48,12 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         // set up variables
         // assign the global paper object
         paper = scope.paper;
-        var defaultSkriblleColor = '#4A60B6' /* Skrible_default_blue*/
+        var defaultSkriblleColor = '#4A60B6'; /* Skrible_default_blue*/
         var tool;
         var radius;
-        var nodes           = []
-        var connectionGrid  = []
-        var path            = {}
+        var nodes           = [];
+        var connectionGrid  = [];
+        var path            = {};
 
 
 
@@ -70,9 +70,9 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
          */
          var Node = paper.Base.extend({
           initialize: function(position){
-            this.position = position
-            this.createItem()
-            this.udraw()
+            this.position = position;
+            this.createItem();
+            this.udraw();
           },
           createItem: function(){
             this.circle = new paper.Shape.Ellipse({
@@ -83,73 +83,73 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
             },
 
           keepInCircle: function(radius){
-            var center = new paper.Point(radius, radius)
-            var outer = radius - this.circle.size.width
+            var center = new paper.Point(radius, radius);
+            var outer = radius - this.circle.size.width;
             if (center.getDistance(this.position) > outer){
-              var diff = this.position.subtract(center)
-              diff = diff.normalize(outer)
-              diff = diff.add(center)
-              this.position = diff  
-              this.udraw()
+              var diff = this.position.subtract(center);
+              diff = diff.normalize(outer);
+              diff = diff.add(center);
+              this.position = diff;
+              this.udraw();
               }
           },
           updatePosition: function(referencePoint, scalar){
-              var diff = this.position.subtract(referencePoint)
-              var length = diff.length
-              diff = diff.normalize(length * scalar)
-              diff = diff.add(referencePoint)
-              this.position = diff
-              this.keepInCircle(paper.view.bounds.width/2)
+              var diff = this.position.subtract(referencePoint);
+              var length = diff.length;
+              diff = diff.normalize(length * scalar);
+              diff = diff.add(referencePoint);
+              this.position = diff;
+              this.keepInCircle(paper.view.bounds.width/2);
           },
             udraw: function(){
-              this.circle.position = this.position
+              this.circle.position = this.position;
             }
-          })
+          });
 
           var mapff = function(value, imin, imax, omin, omax){
-            return ((value - imin) / (imax - imin) * (omax - omin) + omin)
-          }
+            return ((value - imin) / (imax - imin) * (omax - omin) + omin);
+          };
           
           var ranMin = function(){
-            return mapff(Math.random(), 0, 1, -1, 1)
-          }
+            return mapff(Math.random(), 0, 1, -1, 1);
+          };
 
 
         var init = function(){          
           // clear all drawing items on active layer
           paper.project.activeLayer.removeChildren();  
 
-          tool = new paper.Tool()
-          radius = paper.view.bounds.width/2
-          path = new paper.Path
-          path.strokeColor = defaultSkriblleColor
+          tool = new paper.Tool();
+          radius = paper.view.bounds.width/2;
+          path = new paper.Path();
+          path.strokeColor = defaultSkriblleColor();
 
           // simulator
-          var AMNT    = 30
-          var C_RATIO = 0.09
+          var AMNT    = 30;
+          var C_RATIO = 0.09;
 
           for (var i = 0; i < AMNT; i++) {
-            var np = new Node(new paper.Point(radius, radius)) 
-            np.keepInCircle(radius)
-            nodes.push(np)
+            var np = new Node(new paper.Point(radius, radius)) ;
+            np.keepInCircle(radius);
+            nodes.push(np);
           };
 
           for (var y = 0; y < AMNT; y++){
             for (var x = 0; x < AMNT; x++){
-              var value
-              if (x == y){
-                value = true
+              var value;
+              if (x === y){
+                value = true;
               } else {
-                value = (Math.random()<C_RATIO)
+                value = (Math.random()<C_RATIO);
               }
-              connectionGrid[y*AMNT+x] = value
+              connectionGrid[y*AMNT+x] = value;
             }
           }
 
           var svg = paper.project.importSVG(document.getElementById('svg-slogo'));
-          svg.scale(0.75)
-          svg.position = paper.view.center
-        }
+          svg.scale(0.75);
+          svg.position = paper.view.center;
+        };
 
         var setHandlers = function(){
           // on resize blocks mouse interaction
@@ -158,7 +158,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           // }
 
           paper.view.onFrame = function(event){
-            path.clear()
+            path.clear();
 
           //   var raster = new paper.Raster('mona');
           // raster.position = paper.view.center
@@ -166,9 +166,9 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
           
             
             var drawLine = function(pos1, pos2){
-                  path.add(pos1)
-                  path.add(pos2)
-            }
+                  path.add(pos1);
+                  path.add(pos2);
+            };
 
             var MINDIST = 50
             var REPULSE_DIST = MINDIST * 2
