@@ -1,6 +1,6 @@
 /* --- IMPORTS --- */
 
-const PUB = require('../modules/publications.js');
+const PUB = require('../modules/pdfParsing/publication.js');
 
 /* --- ERRORS --- */
 
@@ -57,7 +57,7 @@ function createPublication(req, res, context) {
 		} else {
 			var database = context.db;
 			database.addPublication(publication, function(err, pubId) {
-				if(!err) 
+				if(!err) {
 					res.status(201);
 					res.json({id: pubId});
 				} else {
