@@ -13,6 +13,9 @@ Skribl_web
 
 ## Install
 
+Simply visit the website @ wilma.vub.ac.be/~se4_1415/home
+or install it yourself... (instructions below)
+
 ### MacOSX / Unix
 - Fire up terminal
 - Navigate to the directory of Skribl_web (make sure you can see "index.html" when pressing | ls; |)
