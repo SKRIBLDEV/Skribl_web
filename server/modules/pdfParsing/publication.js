@@ -57,6 +57,7 @@ function createPublication(info, clb){
 
 };
 
+exports.createPublication = createPublication;
 
 /* test code:
 

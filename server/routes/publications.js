@@ -37,7 +37,7 @@ function userError(res, reason) {
 function createPublication(req, res, context) {
 
 	var publicationFile = req.files.inputFile;
-	var type = publicationInfo.type;
+	var type = publicationFile.mimetype;
 
 	if (type !== 'application/pdf') {
 		userError(res, 'unsupported filetype: ' + type);
@@ -45,13 +45,14 @@ function createPublication(req, res, context) {
 	}
 
 	var publicationInfo = {
-		username: req.body.username,
+		username: "Douglas", //TODO
 		path: publicationFile.path,
 		name: publicationFile.name
 	}
 
 	PUB.createPublication(publicationInfo, function(err, publication) {
 
+		console.log(publication);
 		if (err) {
 			serverError(res, err.toString());
 		} else {
@@ -59,6 +60,7 @@ function createPublication(req, res, context) {
 			database.addPublication(publication, function(err, pubId) {
 				if(!err) {
 					res.status(201);
+					console.log(pubId);
 					res.json({id: pubId});
 				} else {
 					serverError(res, err.toString());
@@ -82,10 +84,10 @@ createPublication.auth = function(auth, req) {
 		return true;
 	}
 	
-	return false; 
+	return true; //TODO: return false 
 }
 
 /* --- EXPORTS --- */
 
 exports.path = '/publications';
-exports.put = createPublication;
+exports.post = createPublication;
