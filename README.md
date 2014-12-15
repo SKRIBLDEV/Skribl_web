@@ -13,7 +13,7 @@ Skribl_web
 
 ## Install
 
-Simply visit the website @ (http://wilma.vub.ac.be/~se4_1415/home)
+Simply visit the website @ http://wilma.vub.ac.be/~se4_1415/home
 or install it yourself... (instructions below)
 
 ### MacOSX / Unix
