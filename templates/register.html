@@ -20,11 +20,11 @@
           <input placeholder="name"             class="text-field" type="text" ng-model=userinput.lastName    ng-pattern="RegEx_generalName"  required name="lastName"> <br><br>
           <input placeholder="username"         class="text-field" type="text" ng-model=userinput.username    ng-pattern="RegEx_username"     required name="username"> <br><br>
           <input placeholder="email"            class="text-field" type="text" ng-model=userinput.email       ng-pattern="RegEx_emailAdress"  required name="email"> <br><br>
-          <input placeholder="institution"      class="text-field" type="text" ng-model=userinput.institution                                 required name="institution"> <br><br>
-          <input placeholder="faculty"          class="text-field" type="text" ng-model=userinput.faculty                                     required name="faculty"> <br><br>
-          <input placeholder="department"       class="text-field" type="text" ng-model=userinput.department                                  required name="department"> <br><br>
-          <input placeholder="research domains" class="text-field" type="text" ng-model=userinput.researchDomains                             required name="researchDomains"> <br><br>
-          <input placeholder="research group"   class="text-field" type="text" ng-model=userinput.researchGroup                               required name="researchGroup"> <br><br>
+          <input placeholder="institution"      class="text-field" type="text" ng-model=userinput.institution ng-pattern="RegEx_generalName"     required name="institution"> <br><br>
+          <input placeholder="faculty"          class="text-field" type="text" ng-model=userinput.faculty     ng-pattern="RegEx_generalName"     required name="faculty"> <br><br>
+          <input placeholder="department"       class="text-field" type="text" ng-model=userinput.department  ng-pattern="RegEx_generalName"     required name="department"> <br><br>
+          <input placeholder="research domains" class="text-field" type="text" ng-model=userinput.researchDomains  ng-pattern="RegEx_generalName" required name="researchDomains"> <br><br>
+          <input placeholder="research group"   class="text-field" type="text" ng-model=userinput.researchGroup  ng-pattern="RegEx_generalName"  required name="researchGroup"> <br><br>
           <br>
           <input placeholder="password" class="text-field" type="password" ng-model=userinput.password        ng-pattern="RegEx_password"     required name="password"> <br><br>
           </form>
