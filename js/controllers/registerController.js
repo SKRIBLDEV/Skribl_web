@@ -60,9 +60,65 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	/**
 	 * Used to add an user.
 	 */
+
+	$scope.signup_form = function(){
+		if(registerForm.firstName.$error){
+			//Error when trying to register with a "bad" first name.
+			document.getElementById("error").innerHTML = "First name not valid.";
+			return false;
+		}
+		if(registerForm.lastName.$error){
+			//Error when trying to register with a "bad" last name.
+			document.getElementById("error").innerHTML = "Name not valid.";
+			return false;
+		}
+		if(registerForm.username.$error){
+			//Error when trying to register with a "bad" username.
+			document.getElementById("error").innerHTML = "Username not valid.";
+			return false;
+		}
+		if(registerForm.email.$error){
+			//Error when trying to register with a "bad" email.
+			document.getElementById("error").innerHTML = "Email is not valid.";
+			return false;
+		}
+		if(registerForm.institution.$error){
+			//Error when trying to register with a "bad" institution.
+			document.getElementById("error").innerHTML = "Institution is not valid.";
+			return false;
+		}
+		if(registerForm.faculty.$error){
+			//Error when trying to register with a "bad" faculty.
+			document.getElementById("error").innerHTML = "Faculty is not valid.";
+			return false;
+		}
+		if(registerForm.department.$error){
+			//Error when trying to register with a "bad" department.
+			document.getElementById("error").innerHTML = "Department is not valid.";
+			return false;
+		}
+		if(registerForm.researchDomains.$error){
+			//Error when trying to register with "bad" research domains.
+			document.getElementById("error").innerHTML = "Research domains are not valid.";
+			return false;
+		}
+		if(registerForm.researchGroup.$error){
+			//Error when trying to register with a "bad" research group.
+			document.getElementById("error").innerHTML = "Research group is not valid.";
+			return false;
+		}
+		if(registerForm.password.$error){
+			//Error when trying to register with a "bad" password.
+			document.getElementById("error").innerHTML = "Password is not valid.";
+			return false;
+		}
+
+		return true;
+	};
+
 	$scope.register = function() {
 
-		//if ($scope.signup_form.$valid){
+		if ($scope.signup_form){
 					
 			//JSON file to send when registering.
 			var JSONToSend = {
@@ -104,8 +160,5 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 				else{	document.getElementById("error").innerHTML = "Database error, please try again later.";
 			}
 			});
-		/*} else {
-			$scope.signup_form.submitted = true;
-		}*/
 	};
 });
