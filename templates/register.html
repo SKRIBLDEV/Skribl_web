@@ -15,18 +15,18 @@
       <div class="card-inner">
         <div class="card-content">
           <h1> REGISTER </h1><br>
-           <form name="registerForm">
-          <input placeholder="first name"       class="text-field" type="text" ng-model=userinput.firstName   ng-pattern="RegEx_generalName"  required name="firstName"> <br><br>
-          <input placeholder="name"             class="text-field" type="text" ng-model=userinput.lastName    ng-pattern="RegEx_generalName"  required name="lastName"> <br><br>
-          <input placeholder="username"         class="text-field" type="text" ng-model=userinput.username    ng-pattern="RegEx_username"     required name="username"> <br><br>
-          <input placeholder="email"            class="text-field" type="text" ng-model=userinput.email       ng-pattern="RegEx_emailAdress"  required name="email"> <br><br>
-          <input placeholder="institution"      class="text-field" type="text" ng-model=userinput.institution ng-pattern="RegEx_generalName"     required name="institution"> <br><br>
-          <input placeholder="faculty"          class="text-field" type="text" ng-model=userinput.faculty     ng-pattern="RegEx_generalName"     required name="faculty"> <br><br>
-          <input placeholder="department"       class="text-field" type="text" ng-model=userinput.department  ng-pattern="RegEx_generalName"     required name="department"> <br><br>
-          <input placeholder="research domains" class="text-field" type="text" ng-model=userinput.researchDomains  ng-pattern="RegEx_generalName" required name="researchDomains"> <br><br>
-          <input placeholder="research group"   class="text-field" type="text" ng-model=userinput.researchGroup  ng-pattern="RegEx_generalName"  required name="researchGroup"> <br><br>
+           <form id="registerform" name="registerForm">
+          <input placeholder="first name"       class="text-field" type="text" ng-model=userinput.firstName required> <br><br>
+          <input placeholder="name"             class="text-field" type="text" ng-model=userinput.lastName required> <br><br>
+          <input placeholder="username"         class="text-field" type="text" ng-model=userinput.username required> <br><br>
+          <input placeholder="email"            class="text-field" type="text" ng-model=userinput.email required> <br><br>
+          <input placeholder="institution"      class="text-field" type="text" ng-model=userinput.institution required> <br><br>
+          <input placeholder="faculty"          class="text-field" type="text" ng-model=userinput.faculty required> <br><br>
+          <input placeholder="department"       class="text-field" type="text" ng-model=userinput.department  required> <br><br>
+          <input placeholder="research domains" class="text-field" type="text" ng-model=userinput.researchDomains required> <br><br>
+          <input placeholder="research group"   class="text-field" type="text" ng-model=userinput.researchGroup required> <br><br>
           <br>
-          <input placeholder="password" class="text-field" type="password" ng-model=userinput.password        ng-pattern="RegEx_password"     required name="password"> <br><br>
+          <input placeholder="password" class="text-field" type="password" ng-model=userinput.password required> <br><br>
           </form>
           <!-- error handling -->
           <h3><p id="error"></p></h3>
@@ -39,5 +39,3 @@
     </div>
   </center>
 </div>
-
-
