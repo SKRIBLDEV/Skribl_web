@@ -17,7 +17,7 @@ function PublicationRecord(uploader, pdfData){
   this.getRights = function() { return pdfData.rights; };  
   this.getUrl = function() { return pdfData.url; }; 
 
-  this.loadPath= function(clb) {return clb(null, pdfData[path]);};
+  this.loadPath= function(clb) {return clb(null, pdfData.path);};
 }
 
 
