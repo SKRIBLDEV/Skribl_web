@@ -62,54 +62,53 @@ angular.module('skriblApp').controller('registerController', function($scope, $h
 	 */
 
 	$scope.regexControl = function(){
-		
-		if(!($scope.RegEx_generalName.test($scope.userinput.firstName))){
+
+		if((!($scope.RegEx_generalName.test($scope.userinput.firstName))) || ($scope.userinput.firstName == undefined)){
 			//Error when trying to register with a "bad" first name.
 			document.getElementById("error").innerHTML = "First name not valid.";
-			console.log("done");
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.lastName))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.lastName))) || ($scope.userinput.lastName == undefined)){
 			//Error when trying to register with a "bad" last name.
 			document.getElementById("error").innerHTML = "Name not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_username.test($scope.userinput.username))){
+		if((!($scope.RegEx_username.test($scope.userinput.username))) || ($scope.userinput.username == undefined)){
 			//Error when trying to register with a "bad" username.
 			document.getElementById("error").innerHTML = "Username not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_emailAdress.test($scope.userinput.email))){
+		if((!($scope.RegEx_emailAdress.test($scope.userinput.email))) || ($scope.userinput.email == undefined)){
 			//Error when trying to register with a "bad" email.
 			document.getElementById("error").innerHTML = "Email is not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.institution))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.institution))) || ($scope.userinput.institution == undefined)){
 			//Error when trying to register with a "bad" institution.
 			document.getElementById("error").innerHTML = "Institution is not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.faculty))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.faculty))) || ($scope.userinput.faculty == undefined)){
 			//Error when trying to register with a "bad" faculty.
 			document.getElementById("error").innerHTML = "Faculty is not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.department))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.department))) || ($scope.userinput.department == undefined)){
 			//Error when trying to register with a "bad" department.
 			document.getElementById("error").innerHTML = "Department is not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.researchDomains))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
 			//Error when trying to register with "bad" research domains.
 			document.getElementById("error").innerHTML = "Research domains are not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_generalName.test($scope.userinput.researchGroup))){
+		if((!($scope.RegEx_generalName.test($scope.userinput.researchGroup))) || ($scope.userinput.researchGroup == undefined)){
 			//Error when trying to register with a "bad" research group.
 			document.getElementById("error").innerHTML = "Research group is not valid.";
 			return false;
 		}
-		if(!($scope.RegEx_password.test($scope.userinput.password))){
+		if((!($scope.RegEx_password.test($scope.userinput.password))) || ($scope.userinput.password == undefined)){
 			//Error when trying to register with a "bad" password.
 			document.getElementById("error").innerHTML = "Password is not valid.";
 			return false;
