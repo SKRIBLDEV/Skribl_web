@@ -45,7 +45,7 @@ function createPublication(req, res, context) {
 	}
 
 	var publicationInfo = {
-		uploader: "Douglas", //TODO
+		uploader: "moto", //TODO
 		path: publicationFile.path,
 		name: publicationFile.name
 	}
@@ -57,6 +57,8 @@ function createPublication(req, res, context) {
 		} else {
 			var database = context.db;
 			database.addPublication(publication, function(err, pubId) {
+				console.log(err);
+				console.log(pubId);
 				if(!err) {
 					res.status(201);
 					res.json({id: pubId});
