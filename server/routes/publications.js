@@ -1,6 +1,6 @@
 /* --- IMPORTS --- */
 
-const PUB = require('../modules/publications.js');
+const PUB = require('../modules/pdfParsing/publication.js');
 
 /* --- ERRORS --- */
 
@@ -37,7 +37,7 @@ function userError(res, reason) {
 function createPublication(req, res, context) {
 
 	var publicationFile = req.files.inputFile;
-	var type = publicationInfo.type;
+	var type = publicationFile.mimetype;
 
 	if (type !== 'application/pdf') {
 		userError(res, 'unsupported filetype: ' + type);
@@ -45,7 +45,7 @@ function createPublication(req, res, context) {
 	}
 
 	var publicationInfo = {
-		username: req.body.username,
+		uploader: "moto", //TODO
 		path: publicationFile.path,
 		name: publicationFile.name
 	}
@@ -57,7 +57,9 @@ function createPublication(req, res, context) {
 		} else {
 			var database = context.db;
 			database.addPublication(publication, function(err, pubId) {
-				if(!err) 
+				console.log(err);
+				console.log(pubId);
+				if(!err) {
 					res.status(201);
 					res.json({id: pubId});
 				} else {
@@ -82,10 +84,10 @@ createPublication.auth = function(auth, req) {
 		return true;
 	}
 	
-	return false; 
+	return true; //TODO: return false 
 }
 
 /* --- EXPORTS --- */
 
 exports.path = '/publications';
-exports.put = createPublication;
+exports.post = createPublication;

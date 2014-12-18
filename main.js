@@ -1,10 +1,12 @@
 /* ---- IMPORTS ---- */
 
 const HTTPSServer = require('./server/server.js').HTTPSServer;
-const Database = require('./server/modules/database.js').Database;
+const Database = 
+require('./server/modules/database/database.js').Database;
 const authentication = require('./server/authentication').auth;
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth');
+const multer = require('multer');
 
 /* ---- DATABASE INITIALISATION ---- */
 
@@ -26,6 +28,7 @@ const SKRIBLDatabase = new Database(serverConfig, dbConfig);
 /* ---- SERVER INITIALISATION ---- */
 
 const modules = [ bodyParser.json(),
+                  multer({dest: "./uploads/"}),
 				function(req, res, next) {
 					req.basicAuth = basicAuth(req);
 					next();
@@ -52,12 +55,13 @@ SKRIBLServer.useAuthentication(authentication);
 
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
 SKRIBLServer.installRoute(require('./server/routes/user.js'));
+SKRIBLServer.installRoute(require('./server/routes/publications.js'));
 
 /* ---- SERVE STATIC FILES ---- */
-
-SKRIBLServer.serveStatic('/static', __dirname + '/static');
-SKRIBLServer.serveStatic('/', __dirname + '/public');
+//SKRIBLServer.serveStatic('/static', __dirname + '/static');
+//SKRIBLServer.serveStatic('/', __dirname + '/public');
 
 /* ---- START SERVER ---- */
 
+console.log("Setting up server @ port 8443");
 SKRIBLServer.listen(8443);

@@ -3,6 +3,7 @@ var parser = new PDFParser();
 
 
 // [H]: a somewhat confusing name to me, since this isn't the result of a database query (= a record)? 
+// [N]: pdfData should include uploader. Keep in mind, Ivo uses this constructor as well...
 function PublicationRecord(uploader, pdfData){
 
   // pdfData is always defined, but not all metadata properties might be present
@@ -17,7 +18,7 @@ function PublicationRecord(uploader, pdfData){
   this.getRights = function() { return pdfData.rights; };  
   this.getUrl = function() { return pdfData.url; }; 
 
-  this.loadPath= function(clb) {return clb(null, pdfData[path]);};
+  this.loadPath= function(clb) {return clb(null, pdfData.path);};
 }
 
 
@@ -57,6 +58,7 @@ function createPublication(info, clb){
 
 };
 
+exports.createPublication = createPublication;
 
 /* test code:
 
