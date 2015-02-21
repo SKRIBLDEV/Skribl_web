@@ -27,6 +27,7 @@ var Affil = require('./affiliation.js');
 var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
+var PubRecord = require('../pdfParsing/publication.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -297,5 +298,45 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
+
+/*TESTCODE
+
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
+var database = new Database(serverConfig, dbConfig);
+
+
+var filename = "testfile2";
+var path = "./" + filename + ".pdf";
+
+var info = {
+  uploader: "Goom1981",
+  path: path
+};
+
+PubRecord.createPublication(info, function(err, res){
+  var pubRec = res;
+  database.addPublication(pubRec, callBack);
+});
+
+
+function callBack(error, result){
+	if (error){
+	console.log(error);
+	}
+	else{
+	console.log(result);
+	//printUser(result);
+	}
+	stop();
+}
+
+
+function stop(){
+	process.exit(code=0);
+}
+
+*/
 
 

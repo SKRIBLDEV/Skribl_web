@@ -11,6 +11,7 @@ function PublicationRecord(uploader, pdfData){
 
   this.getUploader = function() { return uploader; }; //username of uploader
   this.getTitle = function() { return pdfData.title; }; 
+  //[I] the database now expects that getAuthors returns an array of objects that support getFirstName() and getLastName
   this.getAuthors = function() {return pdfData.authors;};
   this.getSubject = function() { return pdfData.subject; }; 
   this.getDescription = function() { return pdfData.description; }; 

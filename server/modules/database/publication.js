@@ -25,11 +25,18 @@ function Publication(db) {
 	this.addPublication = function(pubRecord, callback) {
 		var publicationRid;
 		var path;
-		pubRecord.loadPath(function(p) {
+
+		pubRecord.loadPath(function(error, p) {
+			if (error) {
+				callback(error);
+			}
+			else {
 			path = p;
+			}
 		});
 
-		/**
+
+		/**s
 		 * deletes file at path
 		 */
 		function deleteFile() {
@@ -60,8 +67,8 @@ function Publication(db) {
 				}
 			});
 		}
-
-		/**
+	
+	/**
 		 * Will add vertices and links to database.
 		 * @param  {Object} error dummy var, will never catch Error.
 		 * @param  {Object} data  data loaded by getFile	
@@ -78,22 +85,29 @@ function Publication(db) {
 							'@class': 'Uploaded'
 						});
 
-						AUT.addAuthor(pubRecord.getFirstName(), pubRecord.getLastName(), function(error, authorRid) {
+						var counter = 0;
+						var authors = pubRecord.getAuthors();
+						for (var i = 0; i < authors.length; i++) {
+							AUT.addAuthor(authors[i].getFirstName(), authors[i].getLastName(), function(error, authorRid) {
 
-							db.edge.from(authorRid).to(publicationRid).create({
-								'@class': 'Published'
-							})
-							.then(function(edge) {
-
-								deleteFile();
-							});
-						});							
-					});	
+								db.edge.from(authorRid).to(publicationRid).create({
+									'@class': 'Published'
+								})
+								.then(function(edge) {
+									counter++;
+									if(counter == authors.length) {
+										deleteFile();
+									}
+								
+								});							
+							});	
+						}
+					});
 				}
 				else {
 					callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist.'));
 				}
-			})	
+			});	
 		}
 		getFile(path, createPub);
 	};
