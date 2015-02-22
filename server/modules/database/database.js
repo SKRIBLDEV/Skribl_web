@@ -299,8 +299,8 @@ function Database(serverConfig, dbConfig) {
 
 exports.Database = Database;
 
-/*TESTCODE
-
+//TESTCODE
+/*
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
@@ -315,10 +315,14 @@ var info = {
   path: path
 };
 
+
 PubRecord.createPublication(info, function(err, res){
   var pubRec = res;
   database.addPublication(pubRec, callBack);
 });
+
+
+database.loadPublication('#21:35', info.path, callBack);
 
 
 function callBack(error, result){

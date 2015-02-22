@@ -67,13 +67,14 @@ function createPublication(info, clb){
   var data = {}; 
   authors = [new Author("someFirstName", "someLastName")]; // [H] @I: for database testing 
   data.authors = authors;
+  data.path = info.path;    //[I] @H: path is needed too
   clb(null, new PublicationRecord(info.uploader, data)); 
 
 };
 
 exports.createPublication = createPublication;
 
-// test code:
+/* test code:
 
 var filename = "test_a";
 var path = "./" + filename + ".pdf";
@@ -98,4 +99,4 @@ createPublication(info, function(err, res){
     console.log(err);
 });
 
-
+*/

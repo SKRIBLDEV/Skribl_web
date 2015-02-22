@@ -58,6 +58,7 @@ function Publication(db) {
 		 */
 		function getFile(path, clb) {
 			var file;
+
 			fs.readFile(path, 'base64', function(error, data) {
 				if(error) {
 					callback(error);
@@ -118,16 +119,15 @@ function Publication(db) {
 	 * @param  {callBack} callback
 	 * @return {Object}   a function is returned.
 	 */
-	this.loadPublication = function(id, path, callback) {
+	this.loadPublication = function(id, path, clb) {
 		db.record.get(id)
 		.then(function(res) {
-			//console.log(res);
 			fs.writeFile(path, res.Data, function (err) {
   				if (err) {
-  					callBack(new Error(err));
+  					clb(new Error(err));
   				}
   				else {
-  					callBack(null, true);
+  					clb(null, true);
   				}
 			});
 		});
