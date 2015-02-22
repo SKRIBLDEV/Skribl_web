@@ -1,5 +1,7 @@
 /* DISABLE DEFAULTS */
 
+/* This will be replaced with materialize.css */
+
 /* disable chrome's blue border */
  button:focus {outline:0;}
 
