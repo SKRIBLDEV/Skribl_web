@@ -22,33 +22,9 @@ function Publication(db) {
 	 * @param {callBack} callback 
 	 * @return {String}	 callback called with publicationRid
 	 */
-	this.addPublication = function(pubRecord, callback) {
+	
+	 this.addPublication = function(path, pub, uploader, library, callback) {
 		var publicationRid;
-		var path;
-
-		pubRecord.loadPath(function(error, p) {
-			if (error) {
-				callback(error);
-			}
-			else {
-			path = p;
-			}
-		});
-
-
-		/**s
-		 * deletes file at path
-		 */
-		function deleteFile() {
-			fs.unlink(path, function (err) {
-  				if (err) {
-  					callback(new Error(err));
-				}
-				else {
-					callback(null, publicationRid);
-				}
-			});
-		}
 
 		/**
 		 * will load a file into a buffer as base64 encoded.
@@ -75,10 +51,10 @@ function Publication(db) {
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('User').where({username: pubRecord.getUploader()}).all()
+			db.select().from('User').where({username: uploader}).all()
 			.then(function(users) {
 				if(users.length) {
-					db.query('create vertex Publication set Title = \'' + pubRecord.getTitle() + '\', Data = \'' + data + '\'')
+					db.query('create vertex Publication set Title = \'' + pub.getTitle() + '\', Data = \'' + data + '\'')
 					.then(function(publication) {
 						publicationRid = RID.getRid(publication[0]);		
 						var userRid = RID.getRid(users[0]);
@@ -86,8 +62,9 @@ function Publication(db) {
 							'@class': 'Uploaded'
 						});
 
-						var counter = 0;
-						var authors = pubRecord.getAuthors();
+						var exitCounter = 0;
+						var forCounter = 0;
+						var authors = pub.getAuthors();
 						for (var i = 0; i < authors.length; i++) {
 							AUT.addAuthor(authors[i].getFirstName(), authors[i].getLastName(), function(error, authorRid) {
 
@@ -95,14 +72,31 @@ function Publication(db) {
 									'@class': 'Published'
 								})
 								.then(function(edge) {
-									counter++;
-									if(counter == authors.length) {
-										deleteFile();
+									forCounter++;
+									if(forCounter == authors.length) {
+										exitCounter++;
+										if(exitCounter == 2) {
+											callback(null, publicationRid);
+										}
 									}
 								
 								});							
 							});	
 						}
+
+						db.addToLibrary(uploader, library, publication, function(error, result) {
+							if(error) {
+								callback(error);
+							}
+							else {
+								exitCounter++;
+								if(exitCounter == 2) {
+											callback(null, publicationRid);
+										}
+							}
+
+						});
+
 					});
 				}
 				else {
@@ -113,6 +107,7 @@ function Publication(db) {
 		getFile(path, createPub);
 	};
 
+
 	/**
 	 * constructs a function that takes a path and a callback, to load a file from database to a given location.
 	 * @param  {String}   id       record id of publication
@@ -120,9 +115,10 @@ function Publication(db) {
 	 * @return {Object}   a function is returned.
 	 */
 	this.loadPublication = function(id, path, clb) {
+		var newPath = path + '/' id + '.pdf'
 		db.record.get(id)
 		.then(function(res) {
-			fs.writeFile(path, res.Data, function (err) {
+			fs.writeFile(newPath, res.Data, function (err) {
   				if (err) {
   					clb(new Error(err));
   				}
@@ -131,10 +127,25 @@ function Publication(db) {
   				}
 			});
 		});
+	}
+
+	//incomplete, returned object will support .Title only (+database info)
+	this.getPublication = function(id, clb) {
+		db.record.get(id)
+		.then(function(res) {
+			if(res.length) {
+				var metObject = res[0];
+				delete metObject.Data
+				clb(null, metObject);
+			}
+			else {
+				clb(new Error('Publication not found'));
+			}
+		});
 		
 	}
 
-	this.deletePublication = function(id, callback) {
+	this.removePublication = function(id, callback) {
 		db.query('select from Publication where @rid = ' + id)
 		.then(function(publications) {
 			if(publications.length) {
