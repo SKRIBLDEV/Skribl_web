@@ -1,7 +1,7 @@
  /**
   * Initialisation of a new angular app with the name 'skribApp',
   * Uses ng-route to start the a controller dependent on the url.
-  * @type {angular module}
+  * @type {angular module} *
   */
 var webapp = angular.module('skriblApp', ['ngRoute']);
 
