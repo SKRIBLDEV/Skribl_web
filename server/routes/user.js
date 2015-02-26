@@ -1,5 +1,15 @@
+/* --- IMPORTS --- */
+
 var UM = require('../modules/user.js');
 
+/* --- ERRORS --- */
+
+/**
+  * Auto-generates error that indicates a server error
+  * @param {Object} res - HTTP response to output error to
+  * @param {String} reason - description of the error
+  * @private
+ */
 function serverError(res, reason) {
 
 	// report server error
@@ -7,6 +17,14 @@ function serverError(res, reason) {
 	res.end(reason);
 }
 
+/* --- LOAD USERINFO --- */
+
+/**
+  * Loads requested user information
+  * @param {Object} req - HTTP request sent to server
+  * @param {Object} res - HTTP response object
+  * @param {Object} context - application context
+ */
 function getUserInfo(req, res, context) {
 
 	var username = req.param('username');
@@ -33,6 +51,14 @@ function getUserInfo(req, res, context) {
 	});
 }
 
+/* --- REMOVE USER --- */
+
+/**
+  * Remove a certain user from the system
+  * @param {Object} req - HTTP request sent to server
+  * @param {Object} res - HTTP response object
+  * @param {Object} context - application context
+ */
 function deleteUserInfo(req, res, context) {
 
 	var username = req.param('username');
@@ -53,7 +79,7 @@ function deleteUserInfo(req, res, context) {
 /** Checks if authenticated user is the user to be deleted
   * @param {object} auth - result of authentication
   * @param {object} req - provides context for authentication
-  * @return boolean to accept/refuse request
+  * @return boolean to accept/refuse permission for this request
   */
 deleteUserInfo.auth = function(auth, req) {
 
@@ -61,6 +87,14 @@ deleteUserInfo.auth = function(auth, req) {
 	return (auth ? (auth.getUsername() === requiredUsername) : false);
 }
 
+/* --- CREATE NEW USER --- */
+
+/**
+  * Create a new user in the system
+  * @param {Object} req - HTTP request sent to server
+  * @param {Object} res - HTTP response object
+  * @param {Object} context - application context
+ */
 function createUser(req, res, context) {
 
 	req.body.username = req.param('username');

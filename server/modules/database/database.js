@@ -19,6 +19,19 @@
  */
 
 
+
+
+var Oriento = require('oriento');
+var UM = require('../user.js');
+var Affil = require('./affiliation.js');
+var RDomain = require('./researchdomain.js');
+var RID = require('./rid.js');
+var Publication = require('./publication.js');
+var PubRecord = require('../pdfParsing/publication.js');
+val library = require('./library.js');
+var path = require('path');
+var fs = require('fs');
+
  /** 
    *Create a new database object.
    *@class
@@ -27,21 +40,6 @@
  *@param {object} serverConfig - includes configuration for server
  *@param {object} dbConfig - includes configuration for database
  */
-
-/*** @IVO *** 
-	Remarks:
-	   	>> I still need to check it, sorry...
-	   	>> Try to fix the researchdomains-array thing we talked about
-	   	>> Try to fix F to at least a B on CodeClimate (and preferably an A)
-	   	>> I might add stuff once I review this, but for now, good work! ;)
-/*** --- END --- ***/ 
-
-var Oriento = require('oriento');
-var UM = require('./user.js');
-var Affil = require('./affiliation.js');
-var RDomain = require('./researchdomain.js');
-var RID = require('./rid.js');
-
 function Database(serverConfig, dbConfig) {
 	
 	/* instantiates the database server instance */
@@ -62,8 +60,13 @@ function Database(serverConfig, dbConfig) {
 	var self = this;
 	var aff = new Affil.Affiliation(db);
 	var RD = new RDomain.ResearchDomain(db);
+	var PUB = new Publication.Publication(db);
+	var Lib = new library.Library(db);
 
 
+	this.addPublication = PUB.addPublication;
+	this.loadPublication = PUB.loadPublication;
+	this.loadLibrary = Lib.loadLibrary;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -135,12 +138,11 @@ function Database(serverConfig, dbConfig) {
 	/**
 	 * will check if a user exists
 	 * @private
-	 * @param  {[type]}   data
-	 * @param  {Function} callback
-	 * @return {[type]}
+	 * @param  {Object}   	contains user info
+	 * @param  {callback} 	callback
+	 * @return {Boolean}	by callback
 	 */
 	this.userExists = function(data, callback) {
-
 		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
@@ -253,7 +255,7 @@ function Database(serverConfig, dbConfig) {
 	};
 
 
-
+	//find a way to make a transaction out of this, at the moment eventual causes for errors are caught in user.js validation.
 	/**
 	 * adds user with given data to database
 	 * @private
@@ -296,16 +298,52 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 	};
-
 }
 
 exports.Database = Database;
 
+//TESTCODE
 /*
-// TESTCODE 
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
 var database = new Database(serverConfig, dbConfig);
 
+
+var filename = "testfile2";
+var path = "./" + filename + ".pdf";
+
+var info = {
+  uploader: "Goom1981",
+  path: path
+};
+
+
+PubRecord.createPublication(info, function(err, res){
+  var pubRec = res;
+  database.addPublication(pubRec, callBack);
+});
+
+
+database.loadPublication('#21:35', info.path, callBack);
+
+
+function callBack(error, result){
+	if (error){
+	console.log(error);
+	}
+	else{
+	console.log(result);
+	//printUser(result);
+	}
+	stop();
+}
+
+
+function stop(){
+	process.exit(code=0);
+}
+
 */
+
+
