@@ -55,14 +55,14 @@ function HTTPSServer(key, cert, modules) {
 	}
 
 	/** add authentication procedure to server
-	  * @param {function} authProc - function to user for authentication
+	  * @param {Function} authProc - function to user for authentication
 	  */
 	this.useAuthentication = function(authProc) {
 		auth = authProc;
 	}
 	
 	/** lift procedure to include context item
-	  * @param {function} fun - procedure to be lifted
+	  * @param {Function} fun - procedure to be lifted
 	  * @private
 	  */
 	function includeContext(fun) {
@@ -73,8 +73,8 @@ function HTTPSServer(key, cert, modules) {
 	}
 
 	/** install handler at a certain route
-	  * @param {function} setter - used to set handler at this route
-	  * @param {function} handler - handler to be assigned at route
+	  * @param {Function} setter - used to set handler at this route
+	  * @param {Function} handler - handler to be assigned at route
 	  * @private
 	  */
 	function install(route, method, handler) {
@@ -98,7 +98,7 @@ function HTTPSServer(key, cert, modules) {
 	}
 
 	/** install a collection of handlers for HTTP-methods at a certain route
-	  * @param {object} module - record that contains path information with different handlers
+	  * @param {Object} module - record that contains path information with different handlers
 	  */
 	this.installRoute = function(module) {
 

@@ -195,7 +195,7 @@ function Affiliation(db) {
 	  	var cUser = user;
 	  	var results;
 		var content;
-		var researchgroup;
+		var researchGroup;
 		var department;
 		var faculty;
 		var institution;
@@ -203,11 +203,11 @@ function Affiliation(db) {
 		.then(function(information) {
 			results = information.results[0];
 			content = results.content[0];
-			researchgroup = content.value;
-			cUser.researchgroup = researchgroup.Name;
+			researchGroup = content.value;
+			cUser.researchGroup = researchGroup.Name;
 		})
 		.then(function() {
-			var departmentRid = RID.transformRid(researchgroup.Department);
+			var departmentRid = RID.transformRid(researchGroup.Department);
 			db.query('select from Department where @rid = ' + departmentRid)
 			.then(function(departments) {
 				department = departments[0];

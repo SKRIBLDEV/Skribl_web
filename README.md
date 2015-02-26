@@ -22,11 +22,8 @@ Skribl_web
 
 ## Install
 
-### MacOSX / Unix
-- Fire up terminal
-- Navigate to the directory of Skribl_web (make sure you can see "index.html" when pressing | ls; |)
-- type | python -m SimpleHTTPServer; |
-- open up your favorite browser and navigate to "http://localhost:8000/"
+### Terminal
 
-### Windows
-Don't know, don't wanna know. At this point you can probably just run the index.html
+- npm install bcrypt (needs seperate installation)
+- make sure the database is running on wilma
+- run node main.js
