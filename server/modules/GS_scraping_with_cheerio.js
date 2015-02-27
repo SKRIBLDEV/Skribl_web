@@ -3,28 +3,52 @@
 * @author Hannah
 */
 
+// TO DO : error handling + tests 
 
-var request = require('request');
-var cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
 
-var result = [];
+var request = require('./request');
+var cheerio = require('./cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
 
+var result;
+
+//parses the google scholar result subtitle, e.g., 
+//'P Tassin, L Zhang, R Zhao, A Jain, T Koschny… - Physical review  …, 2012 - APS'
+//'…, N Papon, V Courdavault, I Thabet, O Ginis… - Planta, 2011 - Springer'
+var parseSubTitle = function(subtitle){
+  var temp = subtitle.split("-");
+  var year = temp[1].match(/\d+/)[0]; //match the numeric characters 
+  var journal = temp[1].match(/[^…,]*/)[0].trim(); //match anything but "…" and "," and trim whitespaces
+  var publisher = temp[2].trim(); //trim whitespaces
+  var authorsStrings = temp[0].split(",");
+  var authors = [];
+  for(i in authorsStrings){
+    var nameArray = authorsStrings[i].replace(/(^\s)/, '').split(" "); //remove first whitespace and then split on whitespace
+    if (nameArray.length >= 2){
+      var author ={ //To Do: multiple initials?
+        firstName : nameArray[0].trim(),
+        lastName : nameArray[1].trim()
+      }
+      authors[authors.length] = author;
+    };
+  }
+  return [authors, journal, year, publisher];
+};
 
 var scrapeOneResult = function(result){
+  var subtitleEntries = parseSubTitle(result.find( ".gs_a" ).text());
   var articleData = {
           title : result.find( ".gs_rt" ).text(),
-          authors : result.find( ".gs_a" ).text(), //this is not correctly parsed yet - the google scholar pages display a mix of truncated strings for the authors and publishers 
+          authors : subtitleEntries[0], //this is not correctly parsed yet - the google scholar pages display a mix of truncated strings for the authors and publishers 
+          journal: subtitleEntries[1],
+          year: subtitleEntries[2],
+          publisher: subtitleEntries[3],
           abstract : result.find( ".gs_rs" ).text(),
           citations : result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0], //regex extracts the number, e.g., 149 from 'Cited by 149'
           article_url : result.find( ".gs_md_wp" ).children().attr('href')
-          /*
-          journal:
-          volume:
-          number:
-          year:
-          publisher: 
-          booktitle: 
-          organization: 
+          /*volume:  (journal)
+          number: (journal)
+          /*booktitle: (proceeding)
+          organization: (proceeding)
           keywords: 
           private: false //already on internet?
           */
@@ -32,14 +56,18 @@ var scrapeOneResult = function(result){
   return articleData;
 };
 
-//when searching on an name of someone who has a Google Scholar account, the first result is related to that account and should therefore be skipped
-var hasProfileResult = function(results){ 
+//when searching on an name of someone who has a Google Scholar account, the first result is related to that account 
+//and should therefore be skipped
+var isProfileResult = function(result){ 
   var regex = /.*User profiles.*/i;
-  return (results.eq(0).find( ".gs_rt" ).text().match(regex));
+  return result.find( ".gs_rt" ).text().match(regex);//(results.eq(0).find( ".gs_rt" ).text().match(regex));
 };
 
+//********* scrape Functions (to pass to scrapeGoogleScholar function)
+
 var scrapeFirstResult = function($){ //$ represents the DOM created from the received html
-  if (hasProfileResult($(".gs_r")))
+  result = null; 
+  if (isProfileResult($(".gs_r").eq(0)))
     result = scrapeOneResult($(".gs_r").eq(1)); //skip profile result
   else 
     result = scrapeOneResult($(".gs_r").eq(0));
@@ -48,12 +76,12 @@ var scrapeFirstResult = function($){ //$ represents the DOM created from the rec
 var scrapeAllResults = function($){ //$ represents the DOM created from the received html
   result = [];
   $(".gs_r").each(function(){ //for each of the google scholar search results on the page
-    result[result.length] = scrapeOneResult($(this)); //add metadata object to result array     
+    if (!isProfileResult($(this)))
+      result[result.length] = scrapeOneResult($(this)); //add metadata object to result array     
   });
-  if (hasProfileResult($(".gs_r"))){ 
-    result.shift(); //remove profile result
-  };
 };
+
+//*********
 
 //create the URL to the webpage resulting from a basic google scholar query
 var createGoogleScholarURL = function(searchTerms){
@@ -64,7 +92,13 @@ var createGoogleScholarURL = function(searchTerms){
   return url;
 }; 
 
-// retrieve the html page at the given url and extract the needed metadata
+
+/**
+* retrieve the html page at the given url and extract the needed metadata 
+* @param searchTerms: searchterms for the GS query
+* @param scrapeFunc: particular function used for the scraping (e.g. scrapeAll(), scrapeFirst())
+* @param clb: callback(error, result)  
+*/
 var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
   var url = createGoogleScholarURL(searchTerms);
   request({ encoding: 'binary', method: "GET", uri: url}, function(err, resp, body) { //http request 
@@ -74,7 +108,7 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
       clb(null, result); //result (global var) - array or single object, according to the scrapeFunc used 
 	  }
     else
-    	clb(err, null); 
+      clb(err, null);
   });
 };
 
@@ -97,20 +131,36 @@ exports.extractAll = extractAll;
 /*
 //test code
 
-var terms = "philippe tassin";
+var terms = "Philippe Tassin";
 
 
-extractOne(terms, function(err, result){
-  if (!err){
-    for (index = 0; index < result.length; index++) {
+console.log("Scraping the first result+++++++++++++++++");
+extractOne(terms, function(err, res){
+  if (!err){  
+    console.log("the first result:");
+    console.log(res);
+  }
+  else
+    console.log(err);
+});
+
+console.log("Scraping all results+++++++++++++++++");
+extractAll(terms, function(err, res){
+  if (!err){  
+    for (index = 0; index < res.length; index++) {
       console.log("**********************");
-      console.log(result[index]);
+      console.log(res[index]);
       console.log("");
     }
   }
+  else
+    console.log(err);
 });
-
 */
+
+
+
+
 
 
 
