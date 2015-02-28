@@ -105,8 +105,8 @@ function Publication(db) {
 	this.getPublication = function(id, clb) {
 		db.record.get(id)
 		.then(function(res) {
-			if(res.length) {
-				var metObject = res[0];
+			if(res) {
+				var metObject = res;
 				delete metObject.data
 				clb(null, metObject);
 			}
@@ -133,12 +133,15 @@ function Publication(db) {
 	};
 
 	this.uploadedBy = function(id, clb) {
-		db.query('traverse V.in, E.out from ' + id + 'while $depth < 2 and (@class = \'Library\' and Name = \'uploaded\')')
+		//
+		//db.query('traverse V.in, E.out from ' + id + ' while $depth < 2 and (@class = \'Library\' and name = \'Uploaded\')')
+		db.query('select username from (select expand( in(\'HasPublication\')) from ' + id + ') where name = \'Uploaded\'')
 			.then(function(libraries) {
 				if(libraries.length) {
-					clb(null, libraries[0].Username);
+					clb(null, libraries[0].username);
 				}
 				else {
+					
 					clb(new Error('library not found, error in function: uploadedBy in database->publication.js'));
 				}
 			});

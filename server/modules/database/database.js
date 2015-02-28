@@ -28,6 +28,7 @@ var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
 var PubRecord = require('../pdfParsing/publication.js');
+var library = require('./library.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -60,10 +61,16 @@ function Database(serverConfig, dbConfig) {
 	var aff = new Affil.Affiliation(db);
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
+	var Lib = new library.Library(db);
 
 
 	this.addPublication = PUB.addPublication;
 	this.loadPublication = PUB.loadPublication;
+	this.getPublication = PUB.getPublication;
+	this.uploadedBy = PUB.uploadedBy;
+	this.loadLibrary = Lib.loadLibrary;
+	this.createLibrary = Lib.createLibrary;
+	this.addToLibrary = Lib.addToLibrary;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -315,6 +322,18 @@ var info = {
   path: path
 };
 
+var fObject = {
+	path: path,
+	originalname: 'testfile2.pdf'
+}
+
+//database.createLibrary('tkrios', 'TestLib', callBack);
+//database.addPublication(fObject, 'tkrios', callBack);
+//database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
+//database.loadLibrary('tkrios', 'TestLib', callBack);
+//database.getPublication('#21:38', callBack);
+//database.uploadedBy('#21:38', callBack);
+
 
 PubRecord.createPublication(info, function(err, res){
   var pubRec = res;
@@ -322,7 +341,7 @@ PubRecord.createPublication(info, function(err, res){
 });
 
 
-database.loadPublication('#21:35', info.path, callBack);
+//database.loadPublication('#21:38', info.path, callBack);
 
 
 function callBack(error, result){
