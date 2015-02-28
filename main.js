@@ -56,8 +56,8 @@ SKRIBLServer.useAuthentication(authentication);
 
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
 SKRIBLServer.installRoute(require('./server/routes/user.js'));
-SKRIBLServer.installRoute(require('./server/routes/publications-A.js'));
 SKRIBLServer.installRoute(require('./server/routes/publications-B.js'));
+SKRIBLServer.installRoute(require('./server/routes/publications-A.js'));
 SKRIBLServer.installRoute(require('./server/routes/user-library.js'));
 
 /* ---- SERVE STATIC FILES ---- */
