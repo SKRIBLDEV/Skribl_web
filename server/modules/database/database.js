@@ -27,6 +27,8 @@ var Affil = require('./affiliation.js');
 var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
+var PubRecord = require('../pdfParsing/publication.js');
+var library = require('./library.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -59,10 +61,17 @@ function Database(serverConfig, dbConfig) {
 	var aff = new Affil.Affiliation(db);
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
+	var Lib = new library.Library(db);
 
 
 	this.addPublication = PUB.addPublication;
 	this.loadPublication = PUB.loadPublication;
+	this.getPublication = PUB.getPublication;
+	this.uploadedBy = PUB.uploadedBy;
+	this.loadLibrary = Lib.loadLibrary;
+	this.createLibrary = Lib.createLibrary;
+	this.addToLibrary = Lib.addToLibrary;
+	this.addDefaults = Lib.addDefaults;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -270,12 +279,19 @@ function Database(serverConfig, dbConfig) {
 			language: newData.getLanguage()})
 			.then(function (user) {
 				userRid = RID.getRid(user);
-				aff.addAffiliation(newData, function(error, ResearchGroupRid) {
-					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
-					.then(function() {
-						RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
-					});
-				});	
+				addDefaults(newData.getUsername(), function(error, res) {
+					if(error) {
+						callback(error);
+					}
+					else {
+						aff.addAffiliation(newData, function(error, ResearchGroupRid) {
+							db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
+							.then(function() {
+								RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
+							});
+						});
+					}
+				});
 			});
 	}
 
@@ -297,5 +313,61 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
+
+//TESTCODE
+/*
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
+var database = new Database(serverConfig, dbConfig);
+
+
+var filename = "testfile2";
+var path = "./" + filename + ".pdf";
+
+var info = {
+  uploader: "Goom1981",
+  path: path
+};
+
+var fObject = {
+	path: path,
+	originalname: 'testfile2.pdf'
+}
+
+//database.createLibrary('tkrios', 'TestLib', callBack);
+//database.addPublication(fObject, 'tkrios', callBack);
+//database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
+//database.loadLibrary('tkrios', 'TestLib', callBack);
+//database.getPublication('#21:38', callBack);
+//database.uploadedBy('#21:38', callBack);
+
+
+PubRecord.createPublication(info, function(err, res){
+  var pubRec = res;
+  database.addPublication(pubRec, callBack);
+});
+
+
+//database.loadPublication('#21:38', info.path, callBack);
+
+
+function callBack(error, result){
+	if (error){
+	console.log(error);
+	}
+	else{
+	console.log(result);
+	//printUser(result);
+	}
+	stop();
+}
+
+
+function stop(){
+	process.exit(code=0);
+}
+
+*/
 
 

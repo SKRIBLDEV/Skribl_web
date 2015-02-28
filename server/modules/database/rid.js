@@ -26,3 +26,15 @@
 		var result = '#' + cluster + ':' + position;
 		return result;
 	}
+
+	exports.getRids = function(array, clb) {
+		var resArray = [];
+		var counter = 0;
+		for (var i = 0; i < array.length; i++) {
+			resArray.push(getRid(array[i]));
+			counter++
+			if(counter == array.length) {
+				clb(null, resArray);
+			}
+		};
+	}

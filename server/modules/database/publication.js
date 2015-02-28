@@ -22,26 +22,10 @@ function Publication(db) {
 	 * @param {callBack} callback 
 	 * @return {String}	 callback called with publicationRid
 	 */
-	this.addPublication = function(pubRecord, callback) {
+	
+	 this.addPublication = function(fileObj, uploader, callback) {
 		var publicationRid;
-		var path;
-		pubRecord.loadPath(function(p) {
-			path = p;
-		});
-
-		/**
-		 * deletes file at path
-		 */
-		function deleteFile() {
-			fs.unlink(path, function (err) {
-  				if (err) {
-  					callback(new Error(err));
-				}
-				else {
-					callback(null, publicationRid);
-				}
-			});
-		}
+		var fileName = fileObj.originalname;
 
 		/**
 		 * will load a file into a buffer as base64 encoded.
@@ -51,6 +35,7 @@ function Publication(db) {
 		 */
 		function getFile(path, clb) {
 			var file;
+
 			fs.readFile(path, 'base64', function(error, data) {
 				if(error) {
 					callback(error);
@@ -60,43 +45,41 @@ function Publication(db) {
 				}
 			});
 		}
-
-		/**
+	
+	/**
 		 * Will add vertices and links to database.
 		 * @param  {Object} error dummy var, will never catch Error.
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('User').where({username: pubRecord.getUploader()}).all()
+			db.select().from('User').where({username: uploader}).all()
 			.then(function(users) {
 				if(users.length) {
-					db.query('create vertex Publication set Title = \'' + pubRecord.getTitle() + '\', Data = \'' + data + '\'')
+					db.query('create vertex Publication set data = \'' + data + '\', fileName = \'' + fileName + '\'')
 					.then(function(publication) {
 						publicationRid = RID.getRid(publication[0]);		
 						var userRid = RID.getRid(users[0]);
-						db.edge.from(userRid).to(publicationRid).create({
-							'@class': 'Uploaded'
-						});
-
-						AUT.addAuthor(pubRecord.getFirstName(), pubRecord.getLastName(), function(error, authorRid) {
-
-							db.edge.from(authorRid).to(publicationRid).create({
-								'@class': 'Published'
+						db.select().from('Library').where({username: uploader, name: 'Uploaded'}).all()
+						.then(function(Libraries) {
+							var libRid = RID.getRid(Libraries[0]);
+							db.edge.from(libRid).to(publicationRid).create({
+							'@class': 'HasPublication'
 							})
-							.then(function(edge) {
-
-								deleteFile();
+							.then(function() {
+								callback(null, publicationRid);
 							});
-						});							
-					});	
+						});
+						
+					});
 				}
 				else {
 					callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist.'));
 				}
-			})	
+			});	
 		}
-		getFile(path, createPub);
+		getFile(fileObj.path, createPub);
 	};
+
 
 	/**
 	 * constructs a function that takes a path and a callback, to load a file from database to a given location.
@@ -104,23 +87,37 @@ function Publication(db) {
 	 * @param  {callBack} callback
 	 * @return {Object}   a function is returned.
 	 */
-	this.loadPublication = function(id, path, callback) {
+	this.loadPublication = function(id, path, clb) {
 		db.record.get(id)
 		.then(function(res) {
-			//console.log(res);
-			fs.writeFile(path, res.Data, function (err) {
+			fs.writeFile(path, res.data, function (err) {
   				if (err) {
-  					callBack(new Error(err));
+  					clb(new Error(err));
   				}
   				else {
-  					callBack(null, true);
+  					clb(null, res.fileName);
   				}
 			});
+		});
+	}
+
+	//incomplete, returned object will support .Title only (+database info)
+	this.getPublication = function(id, clb) {
+		db.record.get(id)
+		.then(function(res) {
+			if(res) {
+				var metObject = res;
+				delete metObject.data
+				clb(null, metObject);
+			}
+			else {
+				clb(new Error('Publication not found'));
+			}
 		});
 		
 	}
 
-	this.deletePublication = function(id, callback) {
+	this.removePublication = function(id, callback) {
 		db.query('select from Publication where @rid = ' + id)
 		.then(function(publications) {
 			if(publications.length) {
@@ -134,5 +131,118 @@ function Publication(db) {
 			}
 		});
 	};
+
+	this.uploadedBy = function(id, clb) {
+		//
+		//db.query('traverse V.in, E.out from ' + id + ' while $depth < 2 and (@class = \'Library\' and name = \'Uploaded\')')
+		db.query('select username from (select expand( in(\'HasPublication\')) from ' + id + ') where name = \'Uploaded\'')
+			.then(function(libraries) {
+				if(libraries.length) {
+					clb(null, libraries[0].username);
+				}
+				else {
+					
+					clb(new Error('library not found, error in function: uploadedBy in database->publication.js'));
+				}
+			});
+	}
+
+	this.queryPublication = function(criteria, clb) {
+		/*
+		will search with
+		title
+		author ->not yet
+		year
+		uploader
+		publisher
+		journal
+		 */
+		
+		 function startQueryTitle(clb) {
+		 	if(criteria.title === undefined) {
+		 		db.select().from('Publication').all()
+		 		.then(function(publications) {
+		 			queryYear(RID.getRids(publications), clb);
+		 		});
+		 	}
+		 	else {
+		 		db.select().from('Publication').where({title: criteria.title}).all()
+		 		.then(function(publications) {
+		 			queryYear(RID.getRids(publications), clb);
+		 		});
+		 	}
+		 }
+
+		 function queryYear(tempRes, clb) {
+		 	if(criteria.year === undefined) {
+		 		queryPublisher(tempRes, clb);
+		 	}
+		 	else {
+		 		db.select().from(tempRes).where({year: criteria.year}).all()
+		 		.then(function(publications) {
+		 			queryJournal(RID.getRids(publications), clb);
+		 		});
+		 	}
+		 }
+
+		 function queryJournal(tempRes, clb) {
+		 	if(criteria.jourbal === undefined) {
+		 		queryPublisher(tempRes, clb);
+		 	}
+		 	else {
+		 		db.select().from(tempRes).where({journal: criteria.journal}).all()
+		 		.then(function(publications) {
+		 			queryPublisher(RID.getRids(publications), clb);
+		 		});
+		 	}
+		 }
+
+		 function queryPublisher(tempRes, clb) {
+		 	if(criteria.publisher === undefined) {
+		 		queryUploader(tempRes, clb);
+		 	}
+		 	else {
+		 		db.select().from(tempRes).where({publisher: criteria.publisher}).all()
+		 		.then(function(publications) {
+		 			queryUploader(RID.getRids(publications), clb);
+		 		});
+		 	}
+		 }
+
+		 function queryUploader(tempRes, clb) {
+		 	if(criteria.uploader === undefined) {
+		 		queryAuthors(tempRes, clb);
+		 	}
+		 	else {
+		 		db.query('select * from (select in(\'HasPublication\') from (select * from ' + tempRes +')) where name = \'Uploaded\' and username = \'' + criteria.uploader + '\'')
+				.then(function(publications) {
+					queryAuthors(RID.getRids(publications), clb);
+				});
+		 	}
+		 }
+
+		 /*
+		 function queryAuthors(tempRes, clb) {
+		 	if(criteria.authors === undefined) {
+		 		queryAuthors(tempRes, clb);
+		 	}
+		 	else {
+		 		db.query('select * from (select in(\'HasPublication\') from (select * from ' + tempRes +')) where @class = \'Author\' and Username = \'' + criteria.uploader + '\'')
+				.then(function(publications) {
+					queryAuthors(RID.getRids(publications), clb);
+				});
+		 	}
+		 }
+		 */
+		
+		function queryAuthors(tempRes, clb) {
+			giveRes(tempRes, clb);
+		}
+
+		function giveRes(tempRes, clb) {
+			clb(null, tempRes);
+		}
+
+	}
 }
 exports.Publication = Publication;
