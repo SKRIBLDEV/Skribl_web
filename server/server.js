@@ -26,7 +26,7 @@ function HTTPSServer(key, cert, modules) {
 
 		// enable middleware for CORS
 		app.use(function(req, res, next) {
-    			res.header('Access-Control-Allow-Origin', '*');
+    		res.header('Access-Control-Allow-Origin', '*');
 		 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 	 		res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 	 		next();
@@ -72,7 +72,7 @@ function HTTPSServer(key, cert, modules) {
 		}
 	}
 
-	/** install handler at a certain route
+	/** install handler at a certain route with a HTTP method
 	  * @param {Function} setter - used to set handler at this route
 	  * @param {Function} handler - handler to be assigned at route
 	  * @private
@@ -83,11 +83,14 @@ function HTTPSServer(key, cert, modules) {
 
 			route[method](function(req, res, next) {
 				auth(req, context, function(usr) {
-					if(handler.auth(usr, req, context)) { 
-						next(); 
-					} else {
-						res.sendStatus(401); // HTTP 401 Unauthorised
-					}
+					handler.auth(usr, req, context, function(err, success) { 
+						if (success)
+							next(); 
+						else if (err)
+							res.sendStatus(500); // HTTP 500 Server error
+						else 
+							res.sendStatus(401); // HTTP 401 Unauthorised
+					});
 				});
 			});
 		}
@@ -107,6 +110,7 @@ function HTTPSServer(key, cert, modules) {
 		install(route, 'post', module.post);
 		install(route, 'put', module.put);
 		install(route, 'delete', module.delete);
+		install(route, 'head', module.head)
 	}
 
 	/** start server on a certain port

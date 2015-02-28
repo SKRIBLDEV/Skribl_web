@@ -34,12 +34,12 @@ function authenticate(req, context, clb) {
 
 		} else {
 			//invalid input
-			clb(false);
+			clb(undefined);
 		}
 	
 	} else {
 		//invalid input
-		clb(false);
+		clb(undefined);
 	}
 }
 

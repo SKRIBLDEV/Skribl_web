@@ -1,3 +1,7 @@
+const errors = require('./routeErrors.js');
+const serverError = errors.serverError;
+const userError = errors.userError;
+
 /* --- VALIDATE --- */
 
 /** 
@@ -34,16 +38,13 @@ function validateCredentials(req, res, context) {
 
 			} else {
 
-				//server error
-				res.status(501).end();
+				serverError(res, err.toString());
 			}
 		});
 
 	} else {
 
-		//user error, credentials not supplied
-		res.status(401);
-		res.send('expected username:password');
+		userError('expected username:password');
 	}
 
 }

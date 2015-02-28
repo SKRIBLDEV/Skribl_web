@@ -1,8 +1,7 @@
 /* ---- IMPORTS ---- */
 
 const HTTPSServer = require('./server/server.js').HTTPSServer;
-const Database = 
-require('./server/modules/database/database.js').Database;
+const Database = require('./server/modules/database/database.js').Database;
 const authentication = require('./server/authentication').auth;
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth');
@@ -35,7 +34,7 @@ const modules = [ bodyParser.json(),
 				},
 				/** @debug -- log requests */
 				function(req, res, next) {
-					console.log(req.body);
+					console.log({BODY: req.body, FILES: req.files, AUTH: req.basicAuth});
 					next();
 				}];
 

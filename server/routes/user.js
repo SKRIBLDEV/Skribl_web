@@ -1,21 +1,8 @@
 /* --- IMPORTS --- */
 
-var UM = require('../modules/user.js');
-
-/* --- ERRORS --- */
-
-/**
-  * Auto-generates error that indicates a server error
-  * @param {Object} res - HTTP response to output error to
-  * @param {String} reason - description of the error
-  * @private
- */
-function serverError(res, reason) {
-
-	// report server error
-	res.status(501);
-	res.end(reason);
-}
+const UM = require('../modules/user.js');
+const errors = require('./routeErrors.js');
+const serverError = errors.serverError;
 
 /* --- LOAD USERINFO --- */
 
@@ -27,7 +14,7 @@ function serverError(res, reason) {
  */
 function getUserInfo(req, res, context) {
 
-	var username = req.param('username');
+	var username = req.params['username'];
 	var database = context.db;
 
 	database.loadUser(username, function(err, data) {
@@ -61,7 +48,7 @@ function getUserInfo(req, res, context) {
  */
 function deleteUserInfo(req, res, context) {
 
-	var username = req.param('username');
+	var username = req.params['username'];
 	var database = context.db;
 
 	database.deleteUser(username, function(err, data) {
@@ -79,12 +66,13 @@ function deleteUserInfo(req, res, context) {
 /** Checks if authenticated user is the user to be deleted
   * @param {object} auth - result of authentication
   * @param {object} req - provides context for authentication
-  * @return boolean to accept/refuse permission for this request
+  * @param {Object} context - server context with extra configurations and external objects
+  * @param {Function} clb - callback; to be called with boolean to indicate authentication success/failure
   */
-deleteUserInfo.auth = function(auth, req) {
+deleteUserInfo.auth = function(auth, req, context, clb) {
 
-	var requiredUsername = req.param('username');
-	return (auth ? (auth.getUsername() === requiredUsername) : false);
+	var requiredUsername = req.params['username'];
+	clb(null, auth && (auth.getUsername() === requiredUsername));
 }
 
 /* --- CREATE NEW USER --- */
@@ -97,7 +85,7 @@ deleteUserInfo.auth = function(auth, req) {
  */
 function createUser(req, res, context) {
 
-	req.body.username = req.param('username');
+	req.body.username = req.params['username'];
 	UM.createUser(req.body, function(err, data) {
 		if(err) {  
 			serverError(res, data[0]);
