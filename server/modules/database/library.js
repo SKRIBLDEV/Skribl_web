@@ -58,5 +58,30 @@ function Library(db) {
 
 		});
 	}
+
+	this.addDefaults = function(username, clb) {
+		createLibrary(username, 'Uploaded', function(error, res) {
+			if(error) {
+				clb(error);
+			}
+			else {
+				createLibrary(username, 'Favorites', function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						createLibrary(username, 'Portfolio', function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							else {
+								clb(null, true);
+							}
+						});
+					}
+				});
+			}
+		});
+	}
 }
 exports.Library = Library;

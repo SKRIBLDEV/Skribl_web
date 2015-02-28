@@ -71,6 +71,7 @@ function Database(serverConfig, dbConfig) {
 	this.loadLibrary = Lib.loadLibrary;
 	this.createLibrary = Lib.createLibrary;
 	this.addToLibrary = Lib.addToLibrary;
+	this.addDefaults = Lib.addDefaults;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -278,12 +279,19 @@ function Database(serverConfig, dbConfig) {
 			language: newData.getLanguage()})
 			.then(function (user) {
 				userRid = RID.getRid(user);
-				aff.addAffiliation(newData, function(error, ResearchGroupRid) {
-					db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
-					.then(function() {
-						RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
-					});
-				});	
+				addDefaults(newData.getUsername(), function(error, res) {
+					if(error) {
+						callback(error);
+					}
+					else {
+						aff.addAffiliation(newData, function(error, ResearchGroupRid) {
+							db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
+							.then(function() {
+								RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
+							});
+						});
+					}
+				});
 			});
 	}
 
