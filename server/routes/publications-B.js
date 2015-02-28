@@ -50,9 +50,9 @@ function isAuthorised(db, user, id, clb) {
 /* --- GETTING PUBLICATIONS --- */
 
 /**
-  * Get metadata from a certain publication
+  * Get a publication or its metadata, depending on the query parameter 'id'
   * @param {Object} req - HTTP-request with id of publication
-  * @param {Object} res - HTTP-response with metadata in JSON
+  * @param {Object} res - HTTP-response with file or metadata in JSON
   * @param {Object} context - server context with extra configurations and external objects
 */
 function getPublication(req, res, context) {
@@ -60,38 +60,31 @@ function getPublication(req, res, context) {
 	var id = req.params['id'];
 	var db = context.db;
 
-	db.getPublication(id, function(err, metadata) {
+	if (req.query['download']) {
 
-		if(err) {
-			serverError(res, err.toString());
-		} else {
-			res.status(200);
-			res.json(metadata);
-		}
-	});
-}
+		var path = '/temp/' + uuid.v1();
 
-/**
-  * Download a specific publication
-  * @param {Object} req - HTTP-request with id of publication
-  * @param {Object} res - HTTP-response with file to be downloaded
-  * @param {Object} context - server context with extra configurations and external objects
-*/
-function loadPublication(req, res, context) {
+		db.loadPublication(id, path, function(err, name) {
+			if (err) {
+				serverError(res, err.toString());
+			} else {
+				res.download(path, name, function() {
+					fs.unlink(path, nop);
+				});
+			}
+		});
 
-	var id = req.params['id'];
-	var path = '/temp/' + uuid.v1();
+	} else {
 
-	context.db.loadPublication(id, path, function(err, name) {
-
-		if (err) {
-			serverError(res, err.toString());
-		} else {
-			res.download(path, name, function() {
-				fs.unlink(path, nop);
-			});
-		}
-	});
+		db.getPublication(id, function(err, metadata) {
+			if(err) {
+				serverError(res, err.toString());
+			} else {
+				res.status(200);
+				res.json(metadata);
+			}
+		});
+	}
 }
 
 /* --- DELETING PUBLICATIONS --- */
@@ -152,8 +145,6 @@ function updatePublication(req, res, context) {
 
 		PUB.extract(meta, function(err, mt) {
 
-			console.log(id);
-			console.log(mt);
 			database.updatePublication(id, mt, function(err) {
 				if(err)
 					serverError(res, err.toString());
@@ -203,7 +194,6 @@ exports.preprocess = function(req, res, context, next) {
 }
 
 //http methods
-exports.get = loadPublication;
-exports.head = getPublication;
+exports.get = getPublication;
 exports.post = updatePublication;
 exports.delete = removePublication;

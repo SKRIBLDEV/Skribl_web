@@ -119,7 +119,6 @@ function HTTPSServer(key, cert, modules) {
 		install(route, 'post', module.post);
 		install(route, 'put', module.put);
 		install(route, 'delete', module.delete);
-		install(route, 'head', module.head)
 	}
 
 	/** start server on a certain port
