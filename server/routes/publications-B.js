@@ -1,6 +1,6 @@
 /* --- IMPORTS --- */
 
-const PUB = require('../modules/GS_scraping_with_cheerio.js');
+const PUB = require('../modules/publication.js');
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
@@ -150,7 +150,7 @@ function updatePublication(req, res, context) {
 
 	if (req.query['extract']) {
 
-		PUB.extractOne(meta, function(err, mt) {
+		PUB.extract(meta, function(err, mt) {
 
 			console.log(id);
 			console.log(mt);
@@ -166,8 +166,6 @@ function updatePublication(req, res, context) {
 
 	} else {
 
-		console.log(id);
-		console.log(meta);
 		database.updatePublication(id, meta, function(err) {
 			if(err)
 				serverError(res, err.toString());
