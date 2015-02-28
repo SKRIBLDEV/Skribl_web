@@ -257,7 +257,7 @@ function Publication(db) {
 									  citations: metObject.citations,
 									  journal: metObject.journal,
 									  publisher: metObject.publisher})
-		.where({@rid: id}).scalar()
+		.where({'@rid': id}).scalar()
 		.then(function() {
 			clb(null, true);
 		});
