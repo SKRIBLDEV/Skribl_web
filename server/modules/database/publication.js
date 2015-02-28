@@ -101,13 +101,16 @@ function Publication(db) {
 		});
 	}
 
-	//incomplete, returned object will support .Title only (+database info)
 	this.getPublication = function(id, clb) {
 		db.record.get(id)
 		.then(function(res) {
 			if(res) {
 				var metObject = res;
-				delete metObject.data
+				delete metObject.data;
+				delete metObject['@type'];
+				delete metObject['@class'];
+				delete metObject['in_HasPublication'];
+				delete metObject['@version'];
 				clb(null, metObject);
 			}
 			else {
