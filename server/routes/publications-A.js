@@ -1,6 +1,5 @@
 /* --- IMPORTS --- */
 
-const PUB = require('../modules/publication.js');
 const errors = require('./routeErrors.js');
 const fs = require('fs');
 const serverError = errors.serverError;

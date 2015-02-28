@@ -1,6 +1,6 @@
 /* --- IMPORTS --- */
 
-const PUB = require('../modules/publication.js');
+const PUB = require('../modules/GS_scraping_with_cheerio.js');
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
