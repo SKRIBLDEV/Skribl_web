@@ -151,6 +151,9 @@ function updatePublication(req, res, context) {
 	if (req.query['extract']) {
 
 		PUB.extractOne(meta, function(err, mt) {
+
+			console.log(id);
+			console.log(mt);
 			database.updatePublication(id, mt, function(err) {
 				if(err)
 					serverError(res, err.toString());
@@ -163,6 +166,8 @@ function updatePublication(req, res, context) {
 
 	} else {
 
+		console.log(id);
+		console.log(meta);
 		database.updatePublication(id, meta, function(err) {
 			if(err)
 				serverError(res, err.toString());
