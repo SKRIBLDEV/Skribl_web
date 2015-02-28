@@ -151,7 +151,7 @@ function updatePublication(req, res, context) {
 
 	if (req.query['extract']) {
 
-		PUB.extract(meta, function(err, mt) {
+		PUB.extractOne(meta, function(err, mt) {
 			database.updatePublication(id, mt, function(err) {
 				if(err)
 					serverError(res, err.toString());

@@ -4,8 +4,8 @@
 */
 
 
-var request = require('./request');
-var cheerio = require('./cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
+var request = require('request');
+var cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
 
 
 //parses the google scholar result subtitle, e.g., 
