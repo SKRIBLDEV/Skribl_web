@@ -51,12 +51,12 @@ function setUndefinedProperties(metadataGUI, metadataGS){
 */
 
 
-//the extracted metadata will not yet be correct/complete - further developments on dynamic scraping should resolve this
-
 function extract(info, clb){
-  GS_scraping.extractOne(info.title, function(err, res){
-    if (err)
-      clb(new Error('Failed to extract data from Google Scholar'), info); //returns the unchanged info object
+  GS_scraping.extractOne(info.title, function(err, res){ //extract the first GS result; if the title is correct, this is usually the only result
+    if (err){
+      var GSError = new Error('Failed to extract data from Google Scholar');
+      clb(GSError, info); //returns the unchanged info object
+    }
     else{
       setUndefinedProperties(info, res);
       clb(null, info);
@@ -99,7 +99,17 @@ exports.createPublication = createPublication;
 //test code:
 
 var testInfo = {
-  title: "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency"
+  title: "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency",
+  authors : undefined,
+  journal: undefined,
+  volume: undefined,
+  number: undefined,
+  year: undefined,
+  publisher: undefined,
+  abstract : undefined,
+  citations : undefined, 
+  article_url : undefined,
+  keywords : undefined
 }
 
 extract(testInfo, function(err, res){
@@ -108,6 +118,28 @@ extract(testInfo, function(err, res){
   else
     console.log(testInfo);
 });
+
+/*
+van GUI: 
+testInfo = {
+  title: "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency"
+}
+
+na scraping:
+
+testInfo = 
+{ title: 'Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency',
+  authors: 
+   [ { firstName: 'P', lastName: 'Tassin' },
+     { firstName: 'L', lastName: 'Zhang' },
+     { firstName: 'T', lastName: 'Koschny' },
+     { firstName: 'EN', lastName: 'Economou…' } ],
+  journal: 'Physical review  …',
+  year: '2009',
+  publisher: 'APS',
+  abstract: 'Abstract We demonstrate theoretically that electromagnetically induced transparency can be achieved in metamaterials, in which electromagnetic radiation is interacting resonantly with mesoscopic oscillators rather than with atoms. We describe novel metamaterial designs  ...',
+  citations: '318',
+  article_url: 'http://arxiv.org/pdf/0807.2478' }
 
 */
 
