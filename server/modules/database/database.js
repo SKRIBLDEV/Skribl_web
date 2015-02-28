@@ -68,7 +68,6 @@ function Database(serverConfig, dbConfig) {
 	this.getPublication = PUB.getPublication;
 	this.uploadedBy = PUB.uploadedBy;
 	this.loadLibrary = Lib.loadLibrary;
-	this.createLibrary = Lib.createLibrary;
 	this.addToLibrary = Lib.addToLibrary;
 	this.addDefaults = Lib.addDefaults;
 	/**
@@ -278,7 +277,7 @@ function Database(serverConfig, dbConfig) {
 			language: newData.getLanguage()})
 			.then(function (user) {
 				userRid = RID.getRid(user);
-				addDefaults(newData.getUsername(), function(error, res) {
+				Lib.addDefaults(newData.getUsername(), function(error, res) {
 					if(error) {
 						callback(error);
 					}

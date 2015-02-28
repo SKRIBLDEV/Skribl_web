@@ -4,7 +4,7 @@ var RID = require('./rid.js');
 
 function Library(db) {
 
-	 this.createLibrary = function(user, name, clb) { 
+	 function createLibrary(user, name, clb) { 
 		db.select().from('User').where({Username: user}).all()
 		.then(function (users) {
 			if(users.length) {
