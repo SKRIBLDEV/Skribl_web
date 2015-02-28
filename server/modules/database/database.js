@@ -27,7 +27,6 @@ var Affil = require('./affiliation.js');
 var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
-var PubRecord = require('../pdfParsing/publication.js');
 var library = require('./library.js');
 var path = require('path');
 var fs = require('fs');
