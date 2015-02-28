@@ -66,6 +66,7 @@ function Database(serverConfig, dbConfig) {
 	this.addPublication = PUB.addPublication;
 	this.loadPublication = PUB.loadPublication;
 	this.getPublication = PUB.getPublication;
+	this.updatePublication = PUB.updatePublication;
 	this.uploadedBy = PUB.uploadedBy;
 	this.loadLibrary = Lib.loadLibrary;
 	this.addToLibrary = Lib.addToLibrary;
