@@ -199,6 +199,7 @@ exports.path = '/publications/:id';
 //temporary fix for rid's starting with #
 exports.preprocess = function(req, res, context, next) {
 	req.params['id'] = '#' + req.params['id']; 
+	next();
 }
 
 //http methods

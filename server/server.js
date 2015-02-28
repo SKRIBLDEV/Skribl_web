@@ -108,9 +108,9 @@ function HTTPSServer(key, cert, modules) {
 		var route = app.route(module.path);
 
 		//preprocessing required?
-		if(route.preprocess) {
+		if(module.preprocess) {
 			route.all(function(req, res, next) {
-				route.preprocess(req, res, context, next);
+				module.preprocess(req, res, context, next);
 			});
 		}
 
