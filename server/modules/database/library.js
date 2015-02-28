@@ -27,6 +27,22 @@ function Library(db) {
 		});
 	}
 
+	this.addToLibrary = function(user, library, id, clb) {
+		db.select().from('Library').where({Username: user, Name: library}).all()
+		.then(function (libraries) {
+			if(libraries.length) {
+				var libRid = RID.getRid(libraries[0]);
+				db.edge.from(libRid).to(id).create('HasPublication')
+					.then(function() {
+						clb(null, true);
+					}
+			}
+			else {
+				clb(new Error('Library does not exist'));
+			}
+		}
+	}
+
 
 	 this.loadLibrary = function(user, library, clb) {
 	 	db.query('select * from (traverse * from (select * from Library where Username = \'' + user + '\' and Name = \'' + library + '\') while $depth < 2) where @class = \'Publication\'')
