@@ -191,7 +191,15 @@ updatePublication.auth = function(auth, req, context, clb) {
 
 /* --- EXPORTS --- */
 
+//route path
 exports.path = '/publications/:id';
+
+//temporary fix for rid's starting with #
+exports.preprocess = function(req, res, context, next) {
+	req.params['id'] = '#' + req.params['id']; 
+}
+
+//http methods
 exports.get = loadPublication;
 exports.head = getPublication;
 exports.post = updatePublication;

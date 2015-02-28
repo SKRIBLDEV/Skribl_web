@@ -106,6 +106,15 @@ function HTTPSServer(key, cert, modules) {
 	this.installRoute = function(module) {
 
 		var route = app.route(module.path);
+
+		//preprocessing required?
+		if(route.preprocess) {
+			route.all(function(req, res, next) {
+				route.preprocess(req, res, context, next);
+			});
+		}
+
+		//install routes for HTTP methods
 		install(route, 'get', module.get);
 		install(route, 'post', module.post);
 		install(route, 'put', module.put);
