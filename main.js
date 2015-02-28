@@ -34,7 +34,9 @@ const modules = [ bodyParser.json(),
 				},
 				/** @debug -- log requests */
 				function(req, res, next) {
-					console.log({BODY: req.body, FILES: req.files, AUTH: req.basicAuth});
+					console.log({BODY: req.body, 
+								FILES: req.files, 
+								AUTH: req.basicAuth});
 					next();
 				}];
 
