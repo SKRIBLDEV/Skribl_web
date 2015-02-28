@@ -60,6 +60,7 @@ function getPublication(req, res, context) {
 	var id = req.params['id'];
 	var db = context.db;
 
+	console.log(id);
 	db.getPublication(id, function(err, metadata) {
 
 		if(err) {
