@@ -25,7 +25,7 @@ function isAuthorised(db, user, id, clb) {
 		if (err)
 			clb(err);
 		else
-			clb(null, usr && usr.getUsername() === user.getUsername());
+			clb(null, usr === user.getUsername());
 	});
 
 	/* if uploadedBy is NYI
@@ -82,8 +82,6 @@ function loadPublication(req, res, context) {
 	var id = req.params['id'];
 	var path = '/temp/' + uuid.v1();
 
-	console.log(id);
-	console.log(path);
 	context.db.loadPublication(id, path, function(err, name) {
 
 		if (err) {
