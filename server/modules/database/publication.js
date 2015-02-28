@@ -90,7 +90,7 @@ function Publication(db) {
 	this.loadPublication = function(id, path, clb) {
 		db.record.get(id)
 		.then(function(res) {
-			fs.writeFile(__dirname + path, res.data, function (err) {
+			fs.writeFile(path, res.data, function (err) {
   				if (err) {
   					clb(new Error(err));
   				}
