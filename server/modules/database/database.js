@@ -225,7 +225,9 @@ function Database(serverConfig, dbConfig) {
 				UserRid = RID.getRid(users[0]);
 				db.query('delete vertex ' + UserRid)
 				.then(function(){
-					callback(null, true);
+					Lib.deleteDefaults(username, function(error, res) {
+						callback(null, true);
+					});
 				});
 			}
 			else {
@@ -314,9 +316,9 @@ exports.Database = Database;
 
 //TESTCODE
 /*
-//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
-var dbConfig = {dbname:'skribl_database', username:'skribl', password:'skribl'};
+var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
 
@@ -333,21 +335,30 @@ var fObject = {
 	originalname: 'testfile2.pdf'
 }
 
+//database.loadUser('jshep', callBack);
+
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addPublication(fObject, 'tkrios', callBack);
+//database.addPublication(fObject, 'jshep', callBack);
 //database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.getPublication('#21:38', callBack);
 //database.uploadedBy('#21:38', callBack);
-
-
-PubRecord.createPublication(info, function(err, res){
-  var pubRec = res;
-  database.addPublication(pubRec, callBack);
-});
-
-
 //database.loadPublication('#21:38', info.path, callBack);
+//
+//
+
+var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
+UM.createUser(userInfo, function(error, res) {
+	if(error) {
+		console.log(res);
+		callBack(error);
+	}
+	else {
+		database.createUser(res, callBack);
+	}
+})
+
+
 
 
 function callBack(error, result){
