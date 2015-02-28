@@ -167,9 +167,8 @@ function updatePublication(req, res, context) {
 		database.updatePublication(id, meta, function(err) {
 			if(err)
 				serverError(res, err.toString());
-			else {
+			else
 				res.status(200).end();
-			}
 		});
 	}
 }

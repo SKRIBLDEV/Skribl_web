@@ -17,9 +17,9 @@ const serverConfig = {
 };
 
 const dbConfig = {
-	dbname:'skribl_database', 
-	username:'skribl', 
-	password:'skribl'
+	dbname:'skribl', 
+	username:'admin', 
+	password:'admin'
 };
 
 const SKRIBLDatabase = new Database(serverConfig, dbConfig);
