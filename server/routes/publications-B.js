@@ -143,9 +143,8 @@ function updatePublication(req, res, context) {
 	var id = req.params['id'];
 
 	var meta = req.body;
-	var title = req.title;
-	if (!title)
-		return userError("Title is not specified in metadata!");
+	if (!meta.title)
+		return userError(res, "Title is not specified in metadata!");
 
 	var database = context.db;
 
