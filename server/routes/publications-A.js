@@ -28,7 +28,7 @@ function createPublication(req, res, context) {
 		return userError(res, 'unsupported filetype: ' + type);
 
 	//convert relative to absolute path
-	publicationFile.path = __dirname + publicationFile.path;
+	publicationFile.path = process.cwd() + publicationFile.path;
 
 	context.db.addPublication(publicationFile, req.uploader, function(err, pubId) {
 		if (err)
