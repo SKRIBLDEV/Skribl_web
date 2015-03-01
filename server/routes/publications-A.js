@@ -55,6 +55,7 @@ createPublication.auth = function(auth, req, context, clb) {
 	if (auth) {
 		req.uploader = auth.getUsername();
 		clb(null, true);
+		return;
 	}
 
 	clb(null, false);
