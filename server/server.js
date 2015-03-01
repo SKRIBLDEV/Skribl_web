@@ -36,7 +36,7 @@ function HTTPSServer(key, cert, modules) {
 	 		next();
 		});
 
-		server.options('/*', function(req, res) {
+		app.options('/*', function(req, res) {
 			enableCors(req, res);
    			res.send(200);
 		});
