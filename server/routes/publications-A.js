@@ -27,7 +27,7 @@ function createPublication(req, res, context) {
 	if (type !== 'application/pdf')
 		return userError(res, 'unsupported filetype: ' + type);
 
-	context.db.addPublication(publicationFile, req.uploader, function(err, pubId) {
+	context.db.addPublication(__dirname + publicationFile, req.uploader, function(err, pubId) {
 		if (err)
 			serverError(res, err.toString());
 		else {
