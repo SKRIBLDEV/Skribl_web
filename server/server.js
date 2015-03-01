@@ -25,11 +25,20 @@ function HTTPSServer(key, cert, modules) {
 		credentials.cert = fs.readFileSync(cert);
 
 		// enable middleware for CORS
-		app.use(function(req, res, next) {
-    		res.header('Access-Control-Allow-Origin', '*');
-		 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+		function enableCors(req, res) {
+    		res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+		 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 	 		res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+		}
+
+		app.use(function(req, res, next) {
+			enableCors(req, res);
 	 		next();
+		});
+
+		server.options('/*', function(req, res) {
+			enableCors(req, res);
+   			res.send(200);
 		});
 		
 		// configure extra modules
