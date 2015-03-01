@@ -271,14 +271,14 @@ function Publication(db) {
 		db.exec(
 			'update ' + id + ' set fileName = \'' + metObject.fileName +
 									'\', keywords = \'' + metObject.keywords +
-									'\', year = \'' + metObject.year +
-									'\', abstract = \'' + metObject.abstract +
+									'\', year = ' + metObject.year +
+									', abstract = \'' + metObject.abstract +
 									'\', title = \'' + metObject.title +
 									'\', articleUrl = \'' + metObject.articleUrl +
-									'\', volume = \'' + metObject.volume +
-									'\', number = \'' + metObject.number +
-									'\', citations = \'' + metObject.citations +
-									'\', journal = \'' + metObject.journal +
+									'\', volume = ' + metObject.volume +
+									', number = ' + metObject.number +
+									', citations = ' + metObject.citations +
+									', journal = \'' + metObject.journal +
 									'\', publisher = \'' + metObject.publisher + '\'')
 		.then(function() {
 			clb(null, true);
