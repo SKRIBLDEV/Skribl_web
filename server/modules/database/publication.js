@@ -280,7 +280,7 @@ function Publication(db) {
 									'\', citations = \'' + metObject.citations +
 									'\', journal = \'' + metObject.journal +
 									'\', publisher = \'' + metObject.publisher +
-			'\' where @rid =  \'' + id + '\'');
+			'\' where @rid =  \'' + id + '\'')
 		.then(function() {
 			clb(null, true);
 		});
