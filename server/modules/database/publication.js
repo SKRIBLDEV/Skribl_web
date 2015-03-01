@@ -270,16 +270,16 @@ function Publication(db) {
 	this.updatePublication = function(id, metObject, clb) {
 		db.exec(
 			'update Publication set fileName = \'' + metObject.fileName +
-									'\' keywords = \'' + metObject.keywords +
-									'\' year = \'' + metObject.year +
-									'\' abstract = \'' + metObject.abstract +
-									'\' title = \'' + metObject.title +
-									'\' articleUrl = \'' + metObject.articleUrl +
-									'\' volume = \'' + metObject.volume +
-									'\' number = \'' + metObject.number +
-									'\' citations = \'' + metObject.citations +
-									'\' journal = \'' + metObject.journal +
-									'\' publisher = \'' + metObject.publisher +
+									'\', keywords = \'' + metObject.keywords +
+									'\', year = \'' + metObject.year +
+									'\', abstract = \'' + metObject.abstract +
+									'\', title = \'' + metObject.title +
+									'\', articleUrl = \'' + metObject.articleUrl +
+									'\', volume = \'' + metObject.volume +
+									'\', number = \'' + metObject.number +
+									'\', citations = \'' + metObject.citations +
+									'\', journal = \'' + metObject.journal +
+									'\', publisher = \'' + metObject.publisher +
 			' where @rid = ' + id)
 		.then(function() {
 			clb(null, true);
