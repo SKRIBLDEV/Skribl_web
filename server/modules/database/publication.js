@@ -269,7 +269,7 @@ function Publication(db) {
 	*/
 	this.updatePublication = function(id, metObject, clb) {
 		db.exec(
-			'update Publication set fileName = \'' + metObject.fileName +
+			'update ' + id + ' set fileName = \'' + metObject.fileName +
 									'\', keywords = \'' + metObject.keywords +
 									'\', year = \'' + metObject.year +
 									'\', abstract = \'' + metObject.abstract +
@@ -279,8 +279,7 @@ function Publication(db) {
 									'\', number = \'' + metObject.number +
 									'\', citations = \'' + metObject.citations +
 									'\', journal = \'' + metObject.journal +
-									'\', publisher = \'' + metObject.publisher +
-			'\' where @rid =  \'' + id + '\'')
+									'\', publisher = \'' + metObject.publisher + '\'')
 		.then(function() {
 			clb(null, true);
 		});
