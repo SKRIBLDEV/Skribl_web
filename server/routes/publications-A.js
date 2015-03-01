@@ -36,7 +36,7 @@ function createPublication(req, res, context) {
 		else {
 			res.status(201); //HTTP 201 CREATED
 			res.json({id: pubId}); //send id in response
-			fs.unlink(path, nop); //delete the file
+			fs.unlink(publicationFile.path, nop); //delete the file
 		}
 	});
 }
