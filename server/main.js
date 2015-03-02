@@ -1,10 +1,11 @@
 /* ---- IMPORTS ---- */
 
 const HTTPSServer = require('./server/server.js').HTTPSServer;
-const Database = require('./server/modules/database.js').Database;
+const Database = require('./server/modules/database/database.js').Database;
 const authentication = require('./server/authentication').auth;
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth');
+const multer = require('multer');
 
 /* ---- DATABASE INITIALISATION ---- */
 
@@ -16,9 +17,9 @@ const serverConfig = {
 };
 
 const dbConfig = {
-	dbname:'skribl_database', 
-	username:'skribl', 
-	password:'skribl'
+	dbname:'skribl', 
+	username:'admin', 
+	password:'admin'
 };
 
 const SKRIBLDatabase = new Database(serverConfig, dbConfig);
@@ -26,13 +27,16 @@ const SKRIBLDatabase = new Database(serverConfig, dbConfig);
 /* ---- SERVER INITIALISATION ---- */
 
 const modules = [ bodyParser.json(),
+                  multer({dest: "./uploads/"}),
 				function(req, res, next) {
 					req.basicAuth = basicAuth(req);
 					next();
 				},
 				/** @debug -- log requests */
 				function(req, res, next) {
-					console.log(req.body);
+					console.log({BODY: req.body, 
+								FILES: req.files, 
+								AUTH: req.basicAuth});
 					next();
 				}];
 
@@ -43,6 +47,7 @@ const SKRIBLServer = new HTTPSServer('./server/ssl/skribl.key',
 /* ---- CONFIGURE SERVER CONTEXT ---- */
 
 SKRIBLServer.addItem('db', SKRIBLDatabase);
+SKRIBLServer.addItem('workingDir', process.cwd());
 
 /* ---- CONFIGURE AUTHENTICATION PROCEDURE ---- */
 
@@ -52,6 +57,9 @@ SKRIBLServer.useAuthentication(authentication);
 
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
 SKRIBLServer.installRoute(require('./server/routes/user.js'));
+SKRIBLServer.installRoute(require('./server/routes/publications-B.js'));
+SKRIBLServer.installRoute(require('./server/routes/publications-A.js'));
+SKRIBLServer.installRoute(require('./server/routes/user-library.js'));
 
 /* ---- SERVE STATIC FILES ---- */
 //SKRIBLServer.serveStatic('/static', __dirname + '/static');
@@ -59,4 +67,5 @@ SKRIBLServer.installRoute(require('./server/routes/user.js'));
 
 /* ---- START SERVER ---- */
 
+console.log("Setting up server @ port 8443");
 SKRIBLServer.listen(8443);
