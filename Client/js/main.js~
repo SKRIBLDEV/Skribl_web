@@ -29,3 +29,9 @@ webapp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.otherwise({redirectTo: '/home'});
 
 }]);
+
+/**
+ * Initialisation of the appdata with the empty object
+ */
+webapp.service('appData', function() {});
+

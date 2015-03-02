@@ -4,17 +4,15 @@
  * 
  * @param  {object} $scope    the scope object of the controller
  * @param  {object} $location for switching between routes/views
- * @param  {object} appData  our custom service for shared data
+ * @param  {object} $appData  our custom service for shared data
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-webapp.controller('homeController', function($scope, $location, appData, anchorSmoothScroll) {    
-	/**
-	 * Collection of the input values upon registratoin
-	 * @type {Object}
-	 */
-	$scope.userinput = {};
-    
+angular.module('skriblApp').controller('homeController', function($scope, $location, appData, anchorSmoothScroll) {
+
+	//Used to control if user has already logged-in.
+	$appData.currentUser = null;
+
 	/**
 	 * The copy text for the home page, might be dynamic in futre iterations
 	 * @type {String}
