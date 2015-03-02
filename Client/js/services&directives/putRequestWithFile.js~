@@ -1,0 +1,24 @@
+webapp.service('putRequestWithFile', ['$http','appData', function ($http,appData) {
+    var publicationID = "";
+    this.uploadPublication = function(file, url, authorization){
+        var fd = new FormData();
+        fd.append('inputFile', file);
+        $http.put(url, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined,
+                     'Authorization': authorization}
+        })
+        .success(function(data, status, headers, config){
+            publicationID = data.id.substring(1);
+	    //appData.publicationID = publicationID;
+	    console.log(publicationID);
+	    webapp.uploadMetaData(publicationID);
+ 	    //$scope.uploadMetaData(publicationID);
+            //delete appData.publicationID;
+        })
+        .error(function(){
+            //TODO error melding
+        });
+    }
+}]);
+

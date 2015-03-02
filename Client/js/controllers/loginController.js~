@@ -6,17 +6,11 @@
  * @param  {object} $scope    	the scope object of the controller
  * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
  * @param  {object} $location 	for switching between routes/views
- * @param  {object} appData  	our custom service for shared data
+ * @param  {object} $appData  	our custom service for shared data
 
  */
-webapp.controller('loginController', function($scope, $http, $location, appData) {
+angular.module('skriblApp').controller('loginController', function($scope, $http, $location, appData) {
 
-    /**
-	 * Collection of the input values upon login
-	 * @type {Object}
-	 */
-	$scope.userinput = {};
-    
 	/**
 	 * home routing function
 	 */
@@ -24,7 +18,11 @@ webapp.controller('loginController', function($scope, $http, $location, appData)
 		$location.path('/home');
 	};
 	
-	
+	/**
+	 * Collection of the input values upon login
+	 * @type {Object}
+	 */
+	$scope.userinput = {};
 
 	/**
 	 * The actual login function

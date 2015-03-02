@@ -5,10 +5,10 @@
  * @param  {object} $scope    	the scope object of the controller
  * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
  * @param  {object} $location 	for switching between routes/views
- * @param  {object} appData  	our custom service for shared data
+ * @param  {object} $appData  	our custom service for shared data
 
  */
-webapp.controller('registerController', function($scope, $http, $location, appData) {
+angular.module('skriblApp').controller('registerController', function($scope, $http, $location, appData) {
 	// only letters, numbers and underscores
 	$scope.RegEx_username = /^\w+$/; 
 
@@ -21,13 +21,7 @@ webapp.controller('registerController', function($scope, $http, $location, appDa
 	//one or more words in all languages, with apostrophes and hyphens 
 	//excludes numbers and all the special (non-letter) characters commonly found on keyboards
 	$scope.RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
-    
-	/**
-	 * Collection of the input values upon registratoin
-	 * @type {Object}
-	 */
-	$scope.userinput = {};
-    
+
 	/**
 	 * home routing function
 	 */
@@ -51,6 +45,11 @@ webapp.controller('registerController', function($scope, $http, $location, appDa
 		return $scope.userinput.language;
 	};
 
+	/**
+	 * Collection of the input values upon registratoin
+	 * @type {Object}
+	 */
+	$scope.userinput = {};
 
 	/**
 	 * Collection of available languages

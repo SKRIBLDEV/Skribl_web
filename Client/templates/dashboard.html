@@ -7,20 +7,28 @@
 	<br>
 	<button ng-click="logout()"> Logout </button>
 	<button ng-click="deleteUser()"> Delete </button>
-	<br>
-	<br>
-
-	<form enctype="multipart/form-data" action="http://wilma.vub.ac.be:8443/publications" method="post" name"inputFileForm">
-	Paper to add:<br>
-	<input type="file" name="inputFile" accept=".pdf">
-	<br>
-	<input type="text" name="brol">
-	<br>
-	<input type="submit">
-	</form>
-	
-	
-
-
+	<br><br>
+	<input type="file" file-to-upload="myFile">
+	<br><br>
+	Title: <input type="text" ng-model=userinput.title> Author first name: <input type="text" ng-model=userinput.authorsFirst>
+	Author last name: <input type="text" ng-model=userinput.authorsLast>
+	<br><br>
+	Journal name: <input type="text" ng-model=userinput.journalName> Journal volume: <input type="text" ng-model=userinput.journalVolume>  Journal number of pages: <input type="number" ng-model=userinput.journalNumber> 
+	<br><br>
+	Year: <input type="number" ng-model=userinput.year>Publisher: <input type="text" ng-model=userinput.publisher>
+	<br><br>
+	Keywords: <input type="text" ng-model=userinput.keywordFirst><input type="text" ng-model=userinput.keywordSecond><input type="text" ng-model=userinput.keywordThird>
+	<br><br>
+	<button ng-click="uploadFile()"> Publish </button>
+	<br><br><br><br><br><br>
+	get metaData of publication <input type="text" ng-model=userinput.pubID><button ng-click="getMetaData(userinput.pubID)"> get meta </button>
+	<br><br><br><br><br><br>
+	download publication <input type="text" ng-model=userinput.pubID><button ng-click="getFile(userinput.pubID)"> get file </button>
+	<br><br><br><br><br><br>
+	delete publication <input type="text" ng-model=userinput.pubID><button ng-click="deletePublication(userinput.pubID)"> delete file </button>
+	<br><br><br><br><br><br>
+	get user publications of lib<input type="text" ng-model=userinput.pubLib> <button ng-click="getUserPublications(userinput.pubLib)"> get user publications </button>
+	<br><br><br><br><br><br>
+	get current user publication titles <button ng-click="getCurrentPublicationTitles()"> get user publications titles </button>
  </center>
 </div>
