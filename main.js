@@ -47,6 +47,7 @@ const SKRIBLServer = new HTTPSServer('./server/ssl/skribl.key',
 /* ---- CONFIGURE SERVER CONTEXT ---- */
 
 SKRIBLServer.addItem('db', SKRIBLDatabase);
+SKRIBLServer.addItem('workingDir', process.cwd());
 
 /* ---- CONFIGURE AUTHENTICATION PROCEDURE ---- */
 

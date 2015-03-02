@@ -62,7 +62,7 @@ function getPublication(req, res, context) {
 
 	if (req.query['download']) {
 
-		var path = process.cwd() + '/temp/' + uuid.v1();
+		var path = context.workingDir + '/temp/' + uuid.v1();
 
 		db.loadPublication(id, path, function(err, name) {
 			if (err) {
