@@ -6,42 +6,85 @@
 <!--Tablet and above: Block 1: dynamic logo-->
 
 <!-- The Home (landing) html configuration -->
- <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Logo</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="components.html">Components</a></li>
-        <li><a href="javascript.html">JavaScript</a></li>
-      </ul>
-    </div>
-  </nav>
-
-<div class="header-block white-block">
-<canvas class="board-frame" interactivelogo></canvas>
+<div class="white-block hide-on-small-only row">
+  <div class="col s4 offset-s4 center">
+    <canvas interactivelogo></canvas>
+  </div>
+  <!-- ____ [BUTTON] ________________________-->
+  <!--...... DESKTOP ........................-->
+  <div class="col s6 offset-s3 center hide-on-med-and-down">
+   <a class="btn-floating btn-large waves-effect edge-large-btn waves-light red" ng-click="gotoElement('maincontent')">
+     <i class="large mdi-hardware-keyboard-arrow-down"></i>
+   </a>  
+ </div>
 </div>
 
-  <!-- <div class="white-block hide-on-small-only">
-    <div class="row">
-      <div class="col s6 offset-s3 grid-example center">
-        <img  class="small-spacer" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/logo_s.png" alt="skribllog">
+<div id="maincontent" class="section">
+  <div class="row">
+    <div class="col s6 offset-s3 center">
+      <div class="large-header-block">
       </div>
     </div>
   </div>  
-
-<head>
-  <div class="white-block hide-on-small-only">
-    <div class="row">
-      <div class="col s8 offset-s2 grid-example center">
-        <div>
-            <canvas class="board-frame" interactivelogo></canvas>
-            LOLOLO
-        </div>
+  <!-- ____ [NAME] __________________________-->
+  <!--...... DESKTOP ........................-->
+  <div class="row">
+    <div class="col s12 center">
+      <img class="autosizeImage" src="img/skribl_general_text.png" alt="skribllog">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s6 offset-s3 center">
+      <div class="large-header-block">
       </div>
     </div>
   </div>  
-</head>  -->
+  <!-- ____ [LOGIN / REGISTER] ______________-->
+  <div class="row">
+    <div class="col s12 m6 offset-m3 center">
+      <ul class="white-text-color">
+        <li>
+          <a class="waves-effect waves-skribl btn-large valign">
+            <h5 class="center-align">Login</h5>
+          </a>
+        </li>
+        <li>
+          <!--...... DESKTOP TABLET ..................-->
+          <h6 class="center-align hide-on-small-only">Don’t have an account yet?</h6>
+        </li>
+        <li>
+          <a class="white-text-color hide-on-small-only" href="">
+            <h6 class="center-align">Sign up here</h6>
+          </a>
+        </li>
+        <!--...... MOBILE ..........................-->
+        <li>
+          <a class="waves-effect waves-skribl btn-large valign hide-on-med-and-up ">
+            <h5 class="center-align">Sign up</h5>
+          </a>
+        </li>
+      </ul>    
+    </div>
+  </div>  
+</div>
 
+<div class="small-spacer"></div>
+
+<!-- ____ [TAGLINE] ____________________-->
+<!--...... DESKTOP TABLET MOBILE .......-->
+<div class="section row footer">
+  <div class="col s10 offset-s2 m12 white-text-color"><p class="center-align flow-text">{{copy}}</p></div>
+</div>
+
+<div class="small-spacer"></div>
+
+<!-- ____ [FOOTER] ____________________-->
+<!--...... TABLET MOBILE .......-->
+<div class="section row footer hide-on-small-only">
+  <div class="col s12 ">
+    <img style="width: 100%" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/diamondFront.png" />
+  </div>
+</div>
 
 
 

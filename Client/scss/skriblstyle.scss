@@ -17,6 +17,22 @@ $extra-large-padding: 130px;
   max-width: 300px;
 }
 
+.board-frame {
+  width: 500;
+  height: 500;
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
 .btn {
   background-color: $dark-tint-color;
 }
