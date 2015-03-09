@@ -1,29 +1,62 @@
-<!-- The Home (landing) html configuration -->
-<div class = "block1">
-  <center>
-  		<canvas class="board-frame" interactivelogo></canvas>
-  </center>
+<!--Tablet and above: Block 1: dynamic logo-->
+<div class="section white-block hide-on-small-only">
+  <div class="container valign-wrapper large-header-block">
+    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/logo_s.png" alt="skribllog">
+  </div>
 </div>
 
-<div class = "block2">
-	<img src="img/skribl_general_text.png" class ="centerSecond"	alt="skribllog" ng-click="login()">
-	<div id="middle"></div>
-	<!-- actually here we want the screen to "scroll down" -->
-	<img src="img/arrow_down.png" 	class ="lowerSecond" 	alt="skribllog" ng-click="gotoElement('middle')">
+<!--Desktop: Block 2: button-->
+<!--FIXME: link with scrolling-->
+<div class="container valign-wrapper hide-on-med-and-down">
+   <a href="#staticlogo" class="btn-floating btn-large waves-effect edge-large-btn waves-light red">
+     <i class="large mdi-hardware-keyboard-arrow-down"></i>
+  </a>  
 </div>
 
-<div class = "block3">
-	<center>
-	  <button class = "defaultButton" ng-click="login()">LOG IN</button>
-	  <p class="notification-text"> Don’t have an account yet? 
-	  	<br><br>
-	  	<a ng-click="register()">Sign up here</a>
-	  	<br><br><br><br>
-	  	<h1 style="color:white;">"{{copy}}"</h1>
-	  </p>
-	  <br><br>
-	 <img src="img/diamondFront.png" class ="img-bottom" alt="skribllog">
-	</center>
-	
+<!--Tablet and above: Block 2: Skribl logo-->
+<div class="section hide-on-small-only" id="staticlogo" data-scroll-index="2">
+  <div class="container valign-wrapper extra-large-header-block">
+    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/skribl_general_text.png" alt="skribllog">
+  </div>
 </div>
+
+<!--Mobile: Block 1: static logo-->
+<div class="section hide-on-med-and-up">
+  <div class="container valign-wrapper">
+    <img class = "autosizeImage" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/skribl_general_text.png" alt="skribllog">
+  </div>
+</div>
+
+<!--Login/register section-->
+<div class="section">
+  <div class="valign-wrapper">
+    <ul class="white-text-color">
+      <li><a class="waves-effect waves-skribl btn-large valign"><h5 class="center-align">Login?</h5></a></li>
+      <li><h5 class="center-align">Don’t have an account yet?</h5></li>
+      <li><a class="white-text-color" href=""><h5 class="center-align">Sign up here?</h5></a></li>
+    </ul>    
+  </div>
+</div>
+
+<div class="small-spacer"></div>
+
+<!--Tagline-->
+<div class="section row footer">
+  <div class="col s12 white-text-color center"><h3>{{copy}}</h3></div>
+</div>
+
+<div class="small-spacer"></div>
+
+<!--Footer section-->
+<div class="section row footer hide-on-small-only">
+  <div class="col s12 ">
+    <img style="width: 100%" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/diamondFront.png" />
+  </div>
+</div>
+  
+
+
+
+
+
 
