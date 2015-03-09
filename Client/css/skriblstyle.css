@@ -1,0 +1,75 @@
+.nav-wrapper {
+  background-color: white;
+  padding-left: 20px; }
+
+.autosizeImage {
+  width: auto;
+  height: auto;
+  max-width: 300px; }
+
+.btn {
+  background-color: #3149A1; }
+
+.waves-effect.waves-skribl .waves-ripple {
+  /* The alpha value allows the text and background color
+  of the button to still show through. */
+  background-color: #3149A1; }
+
+.btn-large {
+  background-color: #3149A1; }
+
+.edge-large-btn {
+  transform: translate(0px, -30px); }
+
+.small-spacer {
+  padding-top: 20px;
+  padding-bottom: 20px; }
+
+.primary-text-color {
+  color: #4A60B6; }
+
+.white-text-color {
+  color: white; }
+  .white-text-color a {
+    text-decoration: underline; }
+
+.white-block {
+  background-color: white; }
+
+body {
+  background-color: #4A60B6; }
+
+p {
+  line-height: 2rem; }
+
+.large-header-block {
+  padding-top: 50px;
+  padding-bottom: 50px; }
+
+.extra-large-header-block {
+  padding-top: 130px;
+  padding-bottom: 130px; }
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255, 255, 255, 0.9); }
+
+.parallax-container .section {
+  width: 100%; }
+
+@media only screen and (max-width: 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%; }
+
+  #index-banner .section {
+    top: 10%; } }
+.icon-block {
+  padding: 0 15px; }
+
+footer.page-footer {
+  margin: 0; }
+
+/*# sourceMappingURL=skriblstyle.css.map */

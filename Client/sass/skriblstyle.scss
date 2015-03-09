@@ -1,0 +1,109 @@
+$primary-color: #4A60B6;
+$dark-tint-color: #3149A1;
+$light-tint-color: #018dc4;
+$default-padding: 20px;
+$large-padding: 50px;
+$extra-large-padding: 130px;
+
+.nav-wrapper {
+  background-color: white;
+  padding-left: $default-padding;
+}
+
+.autosizeImage {
+  width: auto;
+  height: auto;
+  max-width: 300px;
+}
+
+.btn {
+  background-color: $dark-tint-color;
+}
+
+.waves-effect.waves-skribl .waves-ripple {
+     /* The alpha value allows the text and background color
+     of the button to still show through. */
+     background-color: $dark-tint-color
+   }
+
+   .btn-large{
+    background-color: $dark-tint-color;
+  }
+
+  .edge-large-btn {
+    transform: translate(0px,-30px);
+  }
+
+  @mixin addTopDownPadding($radius) {
+    padding-top: $radius;
+    padding-bottom: $radius;
+  }
+
+  .small-spacer {
+    @include addTopDownPadding($default-padding);
+  }
+
+
+//<img style="height:auto; width:auto; max-width:300px; max-height:300px;" src="...">
+
+.primary-text-color {
+  color: $primary-color;
+}
+
+.white-text-color {
+  color: white;
+  a {
+    text-decoration:underline;
+  }
+}
+
+.white-block{
+  background-color: white;
+}
+
+body {
+  background-color: $primary-color;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.large-header-block {
+  padding-top: $large-padding;
+  padding-bottom: $large-padding;
+}
+
+.extra-large-header-block {
+  padding-top: $extra-large-padding;
+  padding-bottom: $extra-large-padding;
+}
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+  width: 100%;
+}
+
+@media only screen and (max-width : 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 10%;
+  }
+}
+
+
+.icon-block {
+  padding: 0 15px;
+}
+
+footer.page-footer {
+  margin: 0;
+}
