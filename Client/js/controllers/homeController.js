@@ -8,7 +8,7 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $location, $appData, anchorSmoothScroll) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $appData, anchorSmoothScroll) {
 
 	//Used to control if user has already logged-in.
 	$appData.currentUser = null;
@@ -43,6 +43,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 		return item;
 	}
 
+	$scope.quote = $scope.getMotivationalQuote();
+
 
 	/**
 	 * The copy text for the home page, might be dynamic in futre iterations
@@ -67,6 +69,70 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 		$scope.showRegister = true;
 		// $location.path('/register');
 	};
+
+	/**
+	 * The actual login function
+	 */
+	$scope.doLogin = function() {
+
+		//Create JSON to send in a HTTPrequest.
+		var JSONToSend = {
+				"username" : $scope.userinputLogin.username,
+				"password" : $scope.userinputLogin.password
+			};
+
+		//Initialise HTTP request
+		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
+		
+		
+		loginRequest.success(function(data, status, headers, config) {
+
+			//Save Authorization when login to do important tasks.
+			$appData.Authorization = data.Authorization;
+			
+			//Prepare url to get userInformation for later use.
+			var pad = serverApi.concat('/users/').concat($scope.userinputLogin.username);
+			
+			//Get userInformation request
+			var loadUserInfoRequest = $http.get(pad,config);
+			loadUserInfoRequest.success(function(data, status, headers, config) {
+				//save userInformation in appData.
+				$appData.currentUser = data;
+
+				// change route to #/dashboard
+				$location.path('/dashboard');
+			});
+			loadUserInfoRequest.error(function(data, status, headers, config) {
+			//Error when getting user info --> database error
+			document.getElementById("error").innerHTML = "Database error, please try again later.";
+			});
+		});
+		
+		loginRequest.error(function(data, status, headers, config) {
+			
+			if(status === 0)
+			{
+			//Server is not on
+			document.getElementById("error").innerHTML = "SKRIBL is currently unavailable";
+			}
+			else{
+			//Error user has given bad username or passwore
+			document.getElementById("error").innerHTML = "Username or password is invalid, please try again";
+			}
+			
+		});
+	};
+
+	/**
+	 * Collection of the input values upon login
+	 * @type {Object}
+	 */
+	$scope.userinputLogin = {};
+
+	if($appData.currentUser === 1){
+		//just registered
+		document.getElementById("error").innerHTML = "You have successfully registered! Please log in";
+	}
 
 	/**
 	 * go to element (scrolling) function uses anchorSmoothScroll

@@ -27,7 +27,7 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 	/**
 	 * The actual login function
 	 */
-	$scope.login = function() {
+	$scope.doLogin = function() {
 
 		//Create JSON to send in a HTTPrequest.
 		var JSONToSend = {
@@ -79,6 +79,6 @@ angular.module('skriblApp').controller('loginController', function($scope, $http
 	
 	if($appData.currentUser === 1){
 		//just registered
-		document.getElementById("error").innerHTML = "You have successfully registered ! Please log in";
+		document.getElementById("error").innerHTML = "You have successfully registered! Please log in";
 	}
 });
