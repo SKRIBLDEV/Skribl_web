@@ -18,7 +18,31 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	$scope.showLogin = false;
 	$scope.showRegister = false;
 
+	
+		
+	$scope.getMotivationalQuote = function(){
+		var motivationalQuotes = [
+		"It does not matter how slowly you go as long as you do not stop. -Confucius",
+		"If you can dream it, you can do it. -Walt Disney",
+		"The octopus is like the internet, whereas we are stuck with individual CPU's - Wired (2013)",
+		"The future is already here — it's just not very evenly distributed. - Gibson",
+		"Être désespéré, mais avec élégance - Jacques Brel",
+		"If you're doing something without passion you're going to kill it - John Conomos",
+		"Strive to add function by deleting code. - John Bently",
+		"Vigorous writing is concise. Omit needless words. -Strunk and White",
+		"The cheapest, fastest, and most reliable components of a computer system are those that are not there. -Bell",
+		"Endeavor to do more and more with less and less - John Bently",
+		"If I had more time, I would have written you a shorter letter. -Pascal",
+		"The Inventor’s Paradox: The more ambitious plan may have more chance of success. -Pólya",
+		"Simplicity does not precede complexity, but follows it. -Perlis",
+		"Less is more. -Browning",
+		"Make everything as simple as possible, but no simpler. -Einstein",
+		"Software should sometimes be seen as a soap bubble. -Perlis",
+		"Seek beauty through simplicity. - John Bently"];
 
+		var item = motivationalQuotes[Math.floor(Math.random()*motivationalQuotes.length)];
+		return item;
+	}
 
 
 	/**
