@@ -13,6 +13,14 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	//Used to control if user has already logged-in.
 	$appData.currentUser = null;
 
+	//determines wether the head menu should be showed.
+	$scope.showMenu = true;
+	$scope.showLogin = false;
+	$scope.showRegister = false;
+
+
+
+
 	/**
 	 * The copy text for the home page, might be dynamic in futre iterations
 	 * @type {String}
@@ -23,14 +31,18 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	 * login routing function
 	 */
 	$scope.login = function() {
-		$location.path('/login');
+		$scope.showLogin 	= true;
+		$scope.showRegister = false;
+		// $location.path('/login');
 	};
 
 	/**
 	 * register routing function
 	 */
 	$scope.register = function() {
-		$location.path('/register');
+		$scope.showLogin 	= false;
+		$scope.showRegister = true;
+		// $location.path('/register');
 	};
 
 	/**

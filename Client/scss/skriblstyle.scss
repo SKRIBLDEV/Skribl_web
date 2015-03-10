@@ -2,8 +2,36 @@ $primary-color: #4A60B6;
 $dark-tint-color: #3149A1;
 $light-tint-color: #018dc4;
 $default-padding: 20px;
+$minimal-padding: 6px;
 $large-padding: 50px;
 $extra-large-padding: 130px;
+$minimal-dynamic-width: 300px;
+$maximum-dynamic-width: 2560px;
+$minimal-dynamic-height: 300px;
+$maximum-dynamic-height: 1920px;
+
+@mixin safe-dynamic-constraints {
+  min-height: $minimal-dynamic-height;
+  max-height: $maximum-dynamic-height;
+  min-width: $minimal-dynamic-width;
+  max-width: $maximum-dynamic-width;
+}
+
+.navImage {
+  padding-top : $minimal-padding;
+  padding-down: $minimal-padding;
+  padding-left: $minimal-padding;
+  max-width: 160px;
+}
+
+.full-page {
+  height:100vh;
+  @include safe-dynamic-constraints; 
+}
+
+.half-page {
+  height:50vh;
+}
 
 .nav-wrapper {
   background-color: white;
@@ -11,8 +39,8 @@ $extra-large-padding: 130px;
 }
 
 .autosizeImage {
-    width: auto;
-    height: auto;
+  width: auto;
+  height: auto;
   
   max-width: 300px;
 }
@@ -23,14 +51,14 @@ $extra-large-padding: 130px;
 }
 
 .visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 .btn {
@@ -40,87 +68,110 @@ $extra-large-padding: 130px;
 .waves-effect.waves-skribl .waves-ripple {
      /* The alpha value allows the text and background color
      of the button to still show through. */
-      background-color: $dark-tint-color
-    }
+     background-color: $dark-tint-color
+   }
 
-.btn-large{
-  background-color: $dark-tint-color;
-}
-
-.edge-large-btn {
-  transform: translate(0px,-30px);
-}
-
-@mixin addTopDownPadding($radius) {
-  padding-top: $radius;
-  padding-bottom: $radius;
-}
-
-.small-spacer {
-  @include addTopDownPadding($default-padding);
-}
-
-
-//<img style="height:auto; width:auto; max-width:300px; max-height:300px;" src="...">
-
-.primary-text-color {
-  color: $primary-color;
-}
-
-.white-text-color {
-  color: white;
-  a {
-    text-decoration:underline;
+   .btn-large{
+    background-color: $dark-tint-color;
   }
-}
 
-.white-block{
-  background-color: white;
-}
+  .edge-large-btn {
+    transform: translate(0px,-30px);
+  }
 
-body {
-  background-color: $primary-color;
-}
+  @mixin addTopDownPadding($radius) {
+    padding-top: $radius;
+    padding-bottom: $radius;
+  }
 
-p {
-  line-height: 2rem;
-}
+  .small-spacer {
+    @include addTopDownPadding($default-padding);
+  }
 
-.large-header-block {
-  padding-top: $large-padding;
-  padding-bottom: $large-padding;
-}
 
-.extra-large-header-block {
-  padding-top: $extra-large-padding;
-  padding-bottom: $extra-large-padding;
-}
+  .primary-text-color {
+    color: $primary-color;
+  }
 
-.parallax-container {
-  min-height: 380px;
-  line-height: 0;
-  height: auto;
-  color: rgba(255,255,255,.9);
-}
+  .white-text-color {
+    color: white;
+    a {
+      text-decoration:underline;
+    }
+  }
+
+  .white-block{
+    background-color: white;
+  }
+
+  body {
+    background-color: $primary-color;
+  }
+
+  p {
+    line-height: 2rem;
+  }
+
+  .large-header-block {
+    padding-top: $large-padding;
+    padding-bottom: $large-padding;
+  }
+
+  .extra-large-header-block {
+    padding-top: $extra-large-padding;
+    padding-bottom: $extra-large-padding;
+  }
+
+  .parallax-container {
+    min-height: 380px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+  }
   .parallax-container .section {
     width: 100%;
   }
 
-@media only screen and (max-width : 992px) {
-  .parallax-container .section {
-    position: absolute;
-    top: 40%;
+  @media only screen and (max-width : 992px) {
+    .parallax-container .section {
+      position: absolute;
+      top: 40%;
+    }
+    #index-banner .section {
+      top: 10%;
+    }
   }
-  #index-banner .section {
-    top: 10%;
+
+  .icon-block {
+    padding: 0 15px;
   }
-}
+
+  footer.page-footer {
+    margin: 0;
+  }
 
 
-.icon-block {
-  padding: 0 15px;
-}
+  .waves-effect.waves-skribl .waves-ripple {
+     /* The alpha value allows the text and background color
+     of the button to still show through. */
+     background-color: $dark-tint-color
+   }
 
-footer.page-footer {
-  margin: 0;
-}
+   body {
+    background-color: $primary-color;
+  }
+
+  nav ul a,
+  nav .brand-logo {
+    color: #444;
+  }
+
+  p {
+    line-height: 2rem;
+  }
+
+  .button-collapse {
+    color: #26a69a;
+  }
+
+
