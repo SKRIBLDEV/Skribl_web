@@ -19,7 +19,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	$scope.showRegister = false;
 
 	
-		
 	$scope.getMotivationalQuote = function(){
 		var motivationalQuotes = [
 		"It does not matter how slowly you go as long as you do not stop. -Confucius",
@@ -54,7 +53,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	/**
 	 * login routing function
 	 */
-	$scope.login = function() {
+	$scope.enableLogin = function() {
 		$scope.showLogin 	= true;
 		$scope.showRegister = false;
 		// $location.path('/login');
@@ -63,7 +62,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $locat
 	/**
 	 * register routing function
 	 */
-	$scope.register = function() {
+	$scope.enableRegister = function() {
 		$scope.showLogin 	= false;
 		$scope.showRegister = true;
 		// $location.path('/register');

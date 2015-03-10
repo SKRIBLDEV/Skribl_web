@@ -10,7 +10,6 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
     scope: true,
     link: function(scope, element) {
 
-
       var canvas = document.querySelector('canvas');
       fitToContainer(canvas);
 

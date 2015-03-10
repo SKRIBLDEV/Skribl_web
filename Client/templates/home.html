@@ -43,7 +43,7 @@
 <!-- ____ [LOGIN / REGISTER] ______________-->
 <!-- login button-->
 <div class="row" ng-hide="showLogin">
-  <a class="col offset-m5 m2 offset-s4 s4 waves-effect waves-skribl btn-large" ng-click="login()">
+  <a class="col offset-m5 m2 offset-s4 s4 waves-effect waves-skribl btn-large" ng-click="enableLogin()">
     <h5 class="center-align" style="color:white">Login</h5>
   </a>
 </div>
@@ -90,12 +90,12 @@
   <div class="col s12 m6 offset-m3 center white-text-color">
     <!--...... DESKTOP TABLET ..................-->
     <h6 class="center-align hide-on-small-only">Don’t have an account yet?</h6>
-    <a class="white-text-color hide-on-small-only" ng-click="register()">
+    <a class="white-text-color hide-on-small-only" ng-click="enableRegister()">
       <h6 class="center-align">Sign up here</h6>
     </a>
 
     <!--...... MOBILE ..........................-->        
-    <div class="hide-on-med-and-up col offset-m5 m2 offset-s4 s4 waves-effect waves-skribl btn-large" ng-click="register()">
+    <div class="hide-on-med-and-up col offset-m5 m2 offset-s4 s4 waves-effect waves-skribl btn-large" ng-click="enableRegiser()">
       <h5 class="center-align" style="color:white">Register</h5>
     </div>
   </div>
