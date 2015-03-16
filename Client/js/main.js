@@ -3,7 +3,7 @@
   * Uses ng-route to start the a controller dependent on the url.
   * @type {angular module}
   */
-var webapp = angular.module('skriblApp', ['ngRoute']);
+var webapp = angular.module('skriblApp', ['ngRoute', 'ui.materialize']);
 
 //Adres of server API to send http requests (used in multiple controllers).
 var serverApi = 'http://wilma.vub.ac.be:8443';

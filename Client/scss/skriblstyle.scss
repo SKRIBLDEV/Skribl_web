@@ -1,6 +1,5 @@
-$primary-color: #4A60B6;
-$dark-tint-color: #3149A1;
-$light-tint-color: #018dc4;
+@import "materialize";
+
 $default-padding: 20px;
 $minimal-padding: 6px;
 $large-padding: 50px;
@@ -17,6 +16,29 @@ $maximum-dynamic-height: 1920px;
   max-width: $maximum-dynamic-width;
 }
 
+// general
+body {
+  background-color: $skribl-primary;
+}
+
+//text
+.white-text-color {
+  color: white;
+  a {
+    text-decoration:underline;
+  }
+}
+
+.primary-text-color {
+  color: $skribl-primary;
+}
+
+p {
+  line-height: 2rem;
+}
+
+
+// navigation
 .navImage {
   padding-top : $minimal-padding;
   padding-down: $minimal-padding;
@@ -24,32 +46,28 @@ $maximum-dynamic-height: 1920px;
   max-width: 160px;
 }
 
-.full-page {
-  height:100vh;
-  @include safe-dynamic-constraints; 
-}
-
-.half-page {
-  height:50vh;
-}
-
 .nav-wrapper {
   background-color: white;
   padding-left: $default-padding;
 }
 
+nav ul a,
+nav .brand-logo {
+  color: #444;
+}
+
+//imagery
 .autosizeImage {
   width: auto;
-  height: auto;
-  
+  height: auto; 
   max-width: 300px;
 }
 
-.board-frame {
-  width: 500;
-  height: 500;
+.icon-block {
+  padding: 0 15px;
 }
 
+//aux
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -61,117 +79,28 @@ $maximum-dynamic-height: 1920px;
   width: 1px;
 }
 
-.btn {
-  background-color: $dark-tint-color;
+// blocks
+@mixin addTopDownPadding($radius) {
+  padding-top: $radius;
+  padding-bottom: $radius;
 }
 
-.waves-effect.waves-skribl .waves-ripple {
-     /* The alpha value allows the text and background color
-     of the button to still show through. */
-     background-color: $dark-tint-color
-   }
-
-   .btn-large{
-    background-color: $dark-tint-color;
-  }
-
-  .edge-large-btn {
-    transform: translate(0px,-30px);
-  }
-
-  @mixin addTopDownPadding($radius) {
-    padding-top: $radius;
-    padding-bottom: $radius;
-  }
-
-  .small-spacer {
-    @include addTopDownPadding($default-padding);
-  }
+.small-spacer {
+  @include addTopDownPadding($default-padding);
+}
 
 
-  .primary-text-color {
-    color: $primary-color;
-  }
+.white-block{
+  background-color: white;
+}
 
-  .white-text-color {
-    color: white;
-    a {
-      text-decoration:underline;
-    }
-  }
-
-  .white-block{
-    background-color: white;
-  }
-
-  body {
-    background-color: $primary-color;
-  }
-
-  p {
-    line-height: 2rem;
-  }
-
-  .large-header-block {
-    padding-top: $large-padding;
-    padding-bottom: $large-padding;
-  }
-
-  .extra-large-header-block {
-    padding-top: $extra-large-padding;
-    padding-bottom: $extra-large-padding;
-  }
-
-  .parallax-container {
-    min-height: 380px;
-    line-height: 0;
-    height: auto;
-    color: rgba(255,255,255,.9);
-  }
-  .parallax-container .section {
-    width: 100%;
-  }
-
-  @media only screen and (max-width : 992px) {
-    .parallax-container .section {
-      position: absolute;
-      top: 40%;
-    }
-    #index-banner .section {
-      top: 10%;
-    }
-  }
-
-  .icon-block {
-    padding: 0 15px;
-  }
-
-  footer.page-footer {
-    margin: 0;
-  }
+.large-header-block {
+  padding-top: $large-padding;
+  padding-bottom: $large-padding;
+}
 
 
-  .waves-effect.waves-skribl .waves-ripple {
-     /* The alpha value allows the text and background color
-     of the button to still show through. */
-     background-color: $dark-tint-color
-   }
 
-   body {
-    background-color: $primary-color;
-  }
 
-  nav ul a,
-  nav .brand-logo {
-    color: #444;
-  }
-
-  p {
-    line-height: 2rem;
-  }
-
-  .button-collapse {
-    color: #26a69a;
-  }
 
 

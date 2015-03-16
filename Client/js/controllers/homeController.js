@@ -18,7 +18,10 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.showLogin = false;
 	$scope.showRegister = false;
 
-	
+	$scope.dummyInputs = {};
+
+
+	// refactor this into the variable
 	$scope.getMotivationalQuote = function(){
 		var motivationalQuotes = [
 		"It does not matter how slowly you go as long as you do not stop. -Confucius",
