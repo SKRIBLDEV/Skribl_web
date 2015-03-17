@@ -312,14 +312,76 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 	};
+
+
+	////////TESTING TRANSACTIONS/////
+	/*
+	this.testTransaction = function(username, clb) {
+		var Batch = db.let('peek', function(s) {
+			for (var i = 0; i < 100; i++) {
+				if(i == 100) {
+					s.select().from('User').where({username: username});
+					console.log('t1');
+				}
+			};
+		})
+		.let('addAuthor', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: 't1',
+				lastName: 't1'
+			});
+			console.log('t2');
+		})
+		.let('peek2', function(s) {
+			s.select().from('User').where({username: username});
+			console.log('t3');
+		})
+		.commit()
+		.return('$peek')
+		.all()
+		.then(function(usrs) {
+			if(usrs.length) {
+				//clb(usrs[0]);
+				clb('success');
+			}
+			else {
+				clb(new Error('user not found'));
+			}
+		})
+		.done();
+	}
+
+	function testTransaction2(username, Batch, clb) {
+		Batch.let('peek', function(s) {
+			s.select().from('User').where({username: username});
+		});
+
+		Batch.let('addAuthor2', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: 't1',
+				lastName: 't1'
+			});
+		});
+
+		for (var i = 0; i < 10000; i++) {
+				if(i == 10000) {
+					Batch.let('lasttest', function(s) {
+						throw 'test';
+					});
+				}
+			};
+	}
+	*/
 }
 
 exports.Database = Database;
 
 //TESTCODE
 /*
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -337,6 +399,8 @@ var fObject = {
 	originalname: 'testfile2.pdf'
 }
 
+database.testTransaction('jshep', callBack);
+
 //database.loadUser('jshep', callBack);
 
 //database.createLibrary('tkrios', 'TestLib', callBack);
@@ -348,8 +412,8 @@ var fObject = {
 //database.loadPublication('#21:38', info.path, callBack);
 //
 //
-
-var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
+/*
+var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'Hvervlim', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
 		console.log(res);
