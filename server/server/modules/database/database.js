@@ -261,7 +261,7 @@ function Database(serverConfig, dbConfig) {
 		});
 	};
 
-
+///WITH TRANSACTIONS
 	//find a way to make a transaction out of this, at the moment eventual causes for errors are caught in user.js validation.
 	/**
 	 * adds user with given data to database
@@ -270,6 +270,44 @@ function Database(serverConfig, dbConfig) {
 	 * @param {callBack} callback
 	 */
 	function addUser(newData, callback){
+		var trx = db.let('user', function(s) {
+			s.create('vertex', 'User')
+			.set({
+				firstName: newData.getFirstName(),
+				lastName: newData.getLastName(),
+				email: newData.getEmail(),
+				username: newData.getUsername(),
+				password: newData.getPassword(),
+				language: newData.getLanguage()
+			});
+		});
+
+		Lib.addDefaults(newData.getUsername(), trx, function(error, res) {
+					if(error) {
+						callback(error);
+					}
+					else {
+						aff.addAffiliation(newData, trx, function(error, res) {
+							trx.let('researchGroupEdge', function(s) {
+								s.create('edge', 'InResearchGroup')
+								.from('$user')
+								.to('$researchGroup');
+							})
+							RD.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
+								if(error) {
+									callback(error);
+								}
+								else {
+									trx.commit().return('$user').all()
+									.then(function(res) {
+										callback(null, res);
+									});
+								}
+							});
+						});
+					}
+				});
+/*
 		var userRid;
 		db.vertex.create({
 			'@class': 'User',
@@ -295,6 +333,7 @@ function Database(serverConfig, dbConfig) {
 					}
 				});
 			});
+*/
 	}
 
 	/**
@@ -315,35 +354,52 @@ function Database(serverConfig, dbConfig) {
 
 
 	////////TESTING TRANSACTIONS/////
-	/*
+	
 	this.testTransaction = function(username, clb) {
 		var Batch = db.let('peek', function(s) {
-			for (var i = 0; i < 100; i++) {
-				if(i == 100) {
-					s.select().from('User').where({username: username});
+						s.select().from('Author').where({TempId: 1});
 					console.log('t1');
-				}
-			};
-		})
+		});
+		/*
 		.let('addAuthor', function(s) {
 			s.create('vertex', 'Author')
 			.set({
-				firstName: 't1',
-				lastName: 't1'
+				firstName: 't2',
+				TempId: 3,
+				lastName: 't2'
 			});
 			console.log('t2');
-		})
-		.let('peek2', function(s) {
-			s.select().from('User').where({username: username});
+		});
+		*/
+
+		Batch
+		.let('addAuthor', function(s) {
+			s.update('Author').set({
+				firstName: 't2',
+				TempId: 4,
+				lastName: 't3'
+			})
+			.upsert('TempId = 4');
+			console.log('t2');
+		});
+		
+		//db.select().from('User').where({username: 'username'})
+
+		Batch
+		.let('peek', function(s) {
+			s.select().from('Author').where({TempId: 3});
 			console.log('t3');
+
+			//console.log(Batch._state.let);
+			console.log('t4');
 		})
 		.commit()
 		.return('$peek')
 		.all()
 		.then(function(usrs) {
 			if(usrs.length) {
-				//clb(usrs[0]);
-				clb('success');
+				clb(usrs[0]);
+				//clb('success');
 			}
 			else {
 				clb(new Error('user not found'));
@@ -373,13 +429,13 @@ function Database(serverConfig, dbConfig) {
 				}
 			};
 	}
-	*/
+	
 }
 
 exports.Database = Database;
 
 //TESTCODE
-/*
+
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
@@ -399,7 +455,7 @@ var fObject = {
 	originalname: 'testfile2.pdf'
 }
 
-database.testTransaction('jshep', callBack);
+//database.testTransaction('jshep', callBack);
 
 //database.loadUser('jshep', callBack);
 
@@ -412,7 +468,7 @@ database.testTransaction('jshep', callBack);
 //database.loadPublication('#21:38', info.path, callBack);
 //
 //
-/*
+
 var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'Hvervlim', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
@@ -443,6 +499,6 @@ function stop(){
 	process.exit(code=0);
 }
 
-*/
+
 
 

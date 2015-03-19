@@ -4,27 +4,20 @@ var RID = require('./rid.js');
 
 function Library(db) {
 
-	 function createLibrary(user, name, clb) { 
-		db.select().from('User').where({Username: user}).all()
-		.then(function (users) {
-			if(users.length) {
-				var userRid = RID.getRid(users[0]);
-				db.vertex.create({
-					'@class': 'Library',
-					username: user,
-					name: name})
-				.then(function (lib) {
-					libraryRid = RID.getRid(lib);
-					db.edge.from(userRid).to(libraryRid).create('HasLibrary')
-					.then(function() {
-						clb(null, lib);
-					});
-				});
-			}
-			else {
-				clb(new Error('user does not exist'));
-			}
+	 function createLibrary(user, name, trx, clb) { 
+	 	trx.let(name, function(s) {
+			s.create('vertex', 'Library')
+			.set({
+				username: user,
+				name: name
+			});
+		})
+		.let(name + 'Edge', function(s) {
+			s.create('edge', 'HasLibrary')
+			.from('$user')
+			.to('$' + name);
 		});
+		clb(null, true);
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
@@ -59,18 +52,18 @@ function Library(db) {
 		});
 	}
 
-	this.addDefaults = function(username, clb) {
-		createLibrary(username, 'Uploaded', function(error, res) {
+	this.addDefaults = function(username, trx, clb) {
+		createLibrary(username, 'Uploaded', trx, function(error, res) {
 			if(error) {
 				clb(error);
 			}
 			else {
-				createLibrary(username, 'Favorites', function(error, res) {
+				createLibrary(username, 'Favorites', trx, function(error, res) {
 					if(error) {
 						clb(error);
 					}
 					else {
-						createLibrary(username, 'Portfolio', function(error, res) {
+						createLibrary(username, 'Portfolio', trx, function(error, res) {
 							if(error) {
 								clb(error);
 							}
