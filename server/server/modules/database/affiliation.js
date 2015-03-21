@@ -110,11 +110,10 @@ function Affiliation(db) {
 					addInstitution(newData, trx, callback);
 				}
 				else{
-
 					trx.let('institution', function(s) {
 						s.select().from('Institution').where({Name: newData.getInstitution()});
 					});
-					checkFaculty();
+					checkFaculty(RID.getRid(institutions[0]));
 				}
 			});
 		}
@@ -122,76 +121,86 @@ function Affiliation(db) {
 		/**
 		 * checks if an faculty with certain name exists, if it does it jumps to checkDepartment(), if it doesn't it jumps to addFaculty()		
 		 */
-		function checkFaculty() {
-			db.select().from('Faculty').where({Name: newData.getFaculty(), Institution: institutionRid}).all()
-			.then(function (faculties) {
-				if(faculties.length === 0) {
-					addFaculty(newData, trx, function(error, res) {
-						trx.let('institutionEdge', function(s) {
-							s.create('edge', 'HasFaculty')
-							.from('$institution')
-							.to('$faculty');
+		function checkFaculty(institutionRid) {
+			db.select('expand( out(\'HasFaculty\') )').from(institutionRid).all()
+			.then(function(tempfac) {
+				db.select().from(RID.getORids(tempfac)).where({Name: newData.getFaculty()}).all()
+				.then(function (faculties) {
+					if(faculties.length === 0) {
+						addFaculty(newData, trx, function(error, res) {
+							trx.let('institutionEdge', function(s) {
+								s.create('edge', 'HasFaculty')
+								.from('$institution')
+								.to('$faculty');
+							});
+							callback(error, res);
 						});
-						callback(error, res);
-					});
-				}
-				else{
-					trx.let('faculty', function(s) {
-						s.select().from('Faculty').where({Name: newData.getFaculty()});
-					});
-					checkDepartment();
-				}
+					}
+					else{
+						trx.let('faculty', function(s) {
+							s.select().from(RID.getORid(faculties[0]));
+						});
+						checkDepartment(RID.getRid(faculties[0]));
+					}
+				});
 			});
 		}
 
 		/**
 		 * checks if an department with certain name exists, if it does it jumps to checkResearchGroup(), if it doesn't it jumps to addDepartment()		
 		 */
-		function checkDepartment() {
-			db.select().from('Department').where({Name: newData.getDepartment(), Faculty: facultyRid}).all()
-			.then(function (departments) {
-				if(departments.length === 0) {
-					addDepartment(newData, trx, function(error, res) {
-						trx.let('facultyEdge', function(s) {
-							s.create('edge', 'HasDepartment')
-							.from('$faculty')
-							.to('$department');
+		function checkDepartment(facultyRid) {
+			db.select('expand( out(\'HasDepartment\') )').from(facultyRid).all()
+			.then(function(tempDep) {
+				db.select().from(RID.getORids(tempDep)).where({Name: newData.getDepartment()}).all()
+				.then(function (departments) {
+					if(departments.length === 0) {
+						addDepartment(newData, trx, function(error, res) {
+							trx.let('facultyEdge', function(s) {
+								s.create('edge', 'HasDepartment')
+								.from('$faculty')
+								.to('$department');
+							});
+							callback(error, res);	
 						});
-						callback(error, res);	
-					});
-				}
-				else{
-					trx.let('department', function(s) {
-						s.select().from('Department').where({Name: newData.getDepartment()});
-					});
-					checkResearchGroup();
-				}
+					}
+					else{
+						trx.let('department', function(s) {
+							s.select().from(RID.getORid(departments[0]));
+						});
+						checkResearchGroup(RID.getRid(departments[0]));
+					}
+				});
 			});
 		}
 
 		/**
 		 * checks if an researchgroup with certain name exists, if it does it calls the callback with the rid, if it doesn't it jumps to addResearchGroup()		
 		 */
-		function checkResearchGroup() {
-			db.select().from('ResearchGroup').where({Name: newData.getResearchGroup(), Department: departmentRid}).all()
-			.then(function (researchGroups) {
-				if(researchGroups.length === 0) {
-					addResearchGroup(newData, trx, function(error, res) {
-						trx.let('departmentEdge', function(s) {
-							s.create('edge', 'HasResearchGroup')
-							.from('$department')
-							.to('$researchGroup');
+		function checkResearchGroup(departmentRid) {
+			db.exec('select from (select expand( out(\'HasDepartment\') ) from ' + departmentRid + ') where Name = \'' + newData.getResearchGroup() + '\'')
+			db.select('expand( out(\'HasResearchGroup\') )').from(departmentRid).all()
+			.then(function(tempResGroups) {
+				db.select().from(RID.getORids(tempResGroups)).where({Name: newData.getResearchGroup()}).all()
+				.then(function (researchGroups) {
+					if(researchGroups.length === 0) {
+						addResearchGroup(newData, trx, function(error, res) {
+							trx.let('departmentEdge', function(s) {
+								s.create('edge', 'HasResearchGroup')
+								.from('$department')
+								.to('$researchGroup');
+							});
+							callback(error, res);
 						});
-						callback(error, res);
-					});
-				}
-				else{
-					trx.let('researchGroup', function(s) {
-						s.select().from('ResearchGroup').where({Name: newData.getResearchGroup()});
-					});
+					}
+					else{
+						trx.let('researchGroup', function(s) {
+							s.select().from(RID.getORid(researchGroups[0]));
+						});
 
-					callback(null, true);
-				}
+						callback(null, true);
+					}
+				});
 			});
 		}
 

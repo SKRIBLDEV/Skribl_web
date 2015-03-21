@@ -77,25 +77,22 @@ function Library(db) {
 		});
 	}
 
-	this.deleteLibrary = function(username, name, clb) {
-		db.select().from('Library').where({username: username, name: name}).all()
-		.then(function(libraries) {
-			var libRid = RID.getRid(libraries[0]);
-			db.vertex.delete(libRid)
-			.then(function() {
-				clb(null, true);
-			})
+	function deleteLibrary(username, name, trx, clb) {
+		trx.let(name, function(s) {							///!!!!name will cause troubles if it is more than 1 word!!!!!
+			s.delete('vertex', 'Library')
+			.where('username = ' + username + ' and name = ' + name);
 		});
+		clb(null, true);
 	}
 
-	this.deleteDefaults = function(username, clb) {
-		deleteLibrary(username, 'Uploaded', function(error, res) {
-			deleteLibrary(username, 'Favorites', function(error, res) {
-				deleteLibrary(username, 'Portfolio', function(error, res) {
+	this.deleteDefaults = function(username, trx, clb) {
+		deleteLibrary(username, 'Uploaded', trx, function(error, res) {
+			deleteLibrary(username, 'Favorites', trx, function(error, res) {
+				deleteLibrary(username, 'Portfolio', trx, function(error, res) {
 					clb(null, true);
-				})
-			})
-		})
+				});
+			});
+		});
 	}
 }
 exports.Library = Library;

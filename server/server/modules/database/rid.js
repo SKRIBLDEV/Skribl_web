@@ -1,4 +1,4 @@
-
+var Oriento = require('oriento');
 
 	/**
 	 * returns the record id of an object as a string.
@@ -12,6 +12,16 @@
 		var position = rid.position;
 		var result = '#' + cluster + ':' + position;
 		return result;
+	}
+
+	exports.getORid = getORid;
+
+	function getORid(object) {
+		var rid = object['@rid'];
+		var cluster = rid.cluster;
+		var position = rid.position;
+		var result = '#' + cluster + ':' + position;
+		return Oriento.RID(result);
 	}
 
 	/**
@@ -35,6 +45,18 @@
 			counter++
 			if(counter == array.length) {
 				clb(null, resArray);
+			}
+		};
+	}
+
+	exports.getORids = function(array) {
+		var resArray = [];
+		var counter = 0;
+		for (var i = 0; i < array.length; i++) {
+			resArray.push(getORid(array[i]));
+			counter++
+			if(counter == array.length) {
+				return resArray;
 			}
 		};
 	}

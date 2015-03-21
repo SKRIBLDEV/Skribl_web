@@ -215,6 +215,7 @@ function Database(serverConfig, dbConfig) {
 		}
 	};
 
+///WITH TRANSACTIONS
 	/**
 	 * Deletes user with given username from database, throws error if user doesn't exist.
 	 * @param  {string}   username
@@ -222,18 +223,27 @@ function Database(serverConfig, dbConfig) {
 	 */
 	this.deleteUser = function (username, callback) {
 		db.select().from('User').where({username: username}).all()
-		.then(function(users) {
-			if(users.length){
-				UserRid = RID.getRid(users[0]);
-				db.query('delete vertex ' + UserRid)
-				.then(function(){
-					Lib.deleteDefaults(username, function(error, res) {
+		.then(function(res) {
+			if(res.length) {
+				var usrRid = RID.getRid(res[0]);
+				var trx = db.let('user', function(s) {
+					s.select()
+					.from('User')
+					.where({username: username});
+				});
+				Lib.deleteDefaults(username, trx, function(error, res) {
+					trx.let('delUser', function(s) {
+						s.delete('vertex', 'User')
+						.where('@rid = ' + usrRid);
+					})
+					.commit().return('$delUser').all()
+					.then(function(res) {
 						callback(null, true);
 					});
 				});
 			}
 			else {
-				callback(new Error("user doesn't exist!"));
+				callback(new Error('user with username: ' + username + ' does not exist'));
 			}
 		});
 	};
@@ -292,7 +302,7 @@ function Database(serverConfig, dbConfig) {
 								s.create('edge', 'InResearchGroup')
 								.from('$user')
 								.to('$researchGroup');
-							})
+							});
 							RD.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
 								if(error) {
 									callback(error);
@@ -307,33 +317,6 @@ function Database(serverConfig, dbConfig) {
 						});
 					}
 				});
-/*
-		var userRid;
-		db.vertex.create({
-			'@class': 'User',
-			firstName: newData.getFirstName(),
-			lastName: newData.getLastName(),
-			email: newData.getEmail(),
-			username: newData.getUsername(),
-			password: newData.getPassword(),
-			language: newData.getLanguage()})
-			.then(function (user) {
-				userRid = RID.getRid(user);
-				Lib.addDefaults(newData.getUsername(), function(error, res) {
-					if(error) {
-						callback(error);
-					}
-					else {
-						aff.addAffiliation(newData, function(error, ResearchGroupRid) {
-							db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
-							.then(function() {
-								RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
-							});
-						});
-					}
-				});
-			});
-*/
 	}
 
 	/**
@@ -373,13 +356,9 @@ function Database(serverConfig, dbConfig) {
 		*/
 
 		Batch
-		.let('addAuthor', function(s) {
-			s.update('Author').set({
-				firstName: 't2',
-				TempId: 4,
-				lastName: 't3'
-			})
-			.upsert('TempId = 4');
+		.let('delAuthor', function(s) {
+			s.delete('vertex')
+			.where('@rid = #12:5');
 			console.log('t2');
 		});
 		
@@ -394,7 +373,7 @@ function Database(serverConfig, dbConfig) {
 			console.log('t4');
 		})
 		.commit()
-		.return('$peek')
+		.return('$delAuthor')
 		.all()
 		.then(function(usrs) {
 			if(usrs.length) {
@@ -458,6 +437,7 @@ var fObject = {
 //database.testTransaction('jshep', callBack);
 
 //database.loadUser('jshep', callBack);
+database.deleteUser('test1', callBack);
 
 //database.createLibrary('tkrios', 'TestLib', callBack);
 //database.addPublication(fObject, 'jshep', callBack);
@@ -468,8 +448,8 @@ var fObject = {
 //database.loadPublication('#21:38', info.path, callBack);
 //
 //
-
-var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'Hvervlim', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
+/*
+var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'test3', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'brol', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
 		console.log(res);
@@ -479,6 +459,7 @@ UM.createUser(userInfo, function(error, res) {
 		database.createUser(res, callBack);
 	}
 })
+*/
 
 
 
