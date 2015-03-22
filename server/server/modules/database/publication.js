@@ -4,6 +4,9 @@ var RID = require('./rid.js');
 var fs = require('fs');
 var Path = require('path');
 var Author = require('./author.js');
+var researchDomain = require('./researchdomain.js');
+var keyword = require('./keyword.js');
+var Oriento = require('oriento');
 
  /** 
    *Create a new Publication object, provides functionality to database Object.
@@ -15,6 +18,8 @@ var Author = require('./author.js');
 function Publication(db) {
 
 	var AUT = new Author.Author(db);
+	var RD = new researchDomain.ResearchDomain(db);
+	var Kw = new keyword.Keyword(db);
 
 			/**
 		 * will load a file into a buffer as base64 encoded.
@@ -296,32 +301,13 @@ function Publication(db) {
 		}
 
 	}
-//old function
-/*
-	this.updatePublication = function(id, metObject, clb) {
-		db.update('Publication').set({fileName: metObject.fileName,
-									  keywords: metObject.keywords,
-									  year: metObject.year,
-									  abstract: metObject.abstract,
-									  title: metObject.title,
-									  articleUrl: metObject.articleUrl,
-									  volume: metObject.volume,
-									  number: metObject.number,
-									  citations: metObject.citations,
-									  journal: metObject.journal,
-									  publisher: metObject.publisher})
-		.where({'@rid': id}).scalar()
-		.then(function() {
-			clb(null, true);
-		});
-	}
-	*/
+
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
-			if(res[0]['@class'] == metObjsct.type) {
+			if(res[0]['@class'] == metObject.type) {
 				var trx;
-				if(metObjsct.type == 'Journal') {
+				if(metObject.type == 'Journal') {
 					var trx = db.let('publication', function(s) {
 						s.update(id)
 						.set({
@@ -348,21 +334,25 @@ function Publication(db) {
 						abstract: metObject.abstract,
 						citations: metObject.citations,
 						url: metObject.url,
-						private?: metObject.private?
+						private: metObject.private
 					});
+				})
+				.let('publication', function(s) {
+					s.select().from(Oriento.RID(id));
 				});
-				Author.addAuthors(metObject.authors, trx, function(error, res) {
+
+				AUT.addAuthors(metObject.authors, trx, function(error, res) {
 					if(error) {
 						clb(error);
 					}
 					else {
-						Author.connectAuthors(metObject.known-authors, trx, function(error, res) {
+						AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
 							if(error) {
 								clb(error);
 							}
 							else {
-								db.RD.addResearchDomains(metObject.researchDomains, trx, function(error, res) {
-									db.Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+								RD.addResearchDomainsPub(metObject.researchDomains, trx, function(error, res) {
+									Kw.addKeywords(metObject.keywords, trx, function(error, res) {
 										trx
 										.commit().return('$publication').all()
 										.then(function(res) {
@@ -376,8 +366,9 @@ function Publication(db) {
 				});
 			}
 			else {
-				clb(new Error('given id: ' + id + 'does not match given type: ' + metObjsct.type));
+				clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
 			}
 		});
+	}
 }
 exports.Publication = Publication;

@@ -28,6 +28,8 @@ var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
 var library = require('./library.js');
+var keyword = require('./keyword.js');
+var authors = require('./author.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -61,7 +63,7 @@ function Database(serverConfig, dbConfig) {
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
 	var Lib = new library.Library(db);
-	var Kw = new Keyword.Keyword(db);
+	var Kw = new keyword.Keyword(db);
 
 
 	this.addJournal = PUB.addJournal;
@@ -436,6 +438,26 @@ var fObject = {
 	originalname: 'testfile2.pdf'
 }
 
+var metObject = {
+	type: 'Journal',
+	journal: 'journal naam',
+	publisher: 'publisher',
+	volume: '5',
+	number: '6',
+	year: 2012,
+	abstract: 'abstracte brol',
+	citations: 'enkele citaties',
+	url: 'www.brol.be',
+	private: false,
+	authors: [{fName: 'jan2',
+				lName: 'modaal1'},
+				{fName: 'jan2',
+				lName: 'modaal1'}],
+	knownAuthors: [],
+	researchDomains: ['Biological Sciences'],
+	keywords: []//['keywordA', 'keywordB']
+}
+
 //database.testTransaction('jshep', callBack);
 
 //database.loadUser('jshep', callBack);
@@ -448,6 +470,7 @@ var fObject = {
 //database.getPublication('#21:38', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
+database.updatePublication('#23:6', metObject, callBack);
 //
 //
 /*

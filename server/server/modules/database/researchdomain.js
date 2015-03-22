@@ -65,6 +65,33 @@ function ResearchDomain(db){
 			self.addResearchDomain(domains[i], i, trx, forClb);
 		}
 	};
+
+	this.addResearchDomainsPub = function(domains, trx, callback) {
+		var counter = domains.length;
+		counter--;
+		function forClb(error, varName) {
+				if(error) {
+					callback(error);
+				} 
+				else {
+					trx.let('domainEdge', function(s) {
+						s.create('edge', 'HasResearchDomain')
+						.from('$publication')
+						.to('$' + varName);
+					});
+					if(counter) {
+						counter--;
+					}
+					else {
+						callback(null, true);
+					}
+				}
+			}
+
+		for (var i = 0; i < domains.length; i++) {
+			self.addResearchDomain(domains[i], i, trx, forClb);
+		}
+	};
 }
 
 exports.ResearchDomain = ResearchDomain;

@@ -178,7 +178,7 @@ function Affiliation(db) {
 		 * checks if an researchgroup with certain name exists, if it does it calls the callback with the rid, if it doesn't it jumps to addResearchGroup()		
 		 */
 		function checkResearchGroup(departmentRid) {
-			db.exec('select from (select expand( out(\'HasDepartment\') ) from ' + departmentRid + ') where Name = \'' + newData.getResearchGroup() + '\'')
+			//db.exec('select from (select expand( out(\'HasDepartment\') ) from ' + departmentRid + ') where Name = \'' + newData.getResearchGroup() + '\'')
 			db.select('expand( out(\'HasResearchGroup\') )').from(departmentRid).all()
 			.then(function(tempResGroups) {
 				db.select().from(RID.getORids(tempResGroups)).where({Name: newData.getResearchGroup()}).all()

@@ -10,8 +10,8 @@ var RID = require('./rid.js');
  */
 function Author(db) {
 
-	function addAuthor(fName, lName, trx_id, trx, callback) {
-		trx.let(trx_id, function(s) {
+	function addAuthor(fName, lName, trx, callback) {
+		trx.let('author', function(s) {
 			s.create('vertex', 'Author')
 			.set({
 				firstName: fName,
@@ -21,45 +21,55 @@ function Author(db) {
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
 			.from('$publication')
-			.to('$' + trx_id);
+			.to('$author');
 		});
 		callback(null, true);
 	};
 
 	this.addAuthors = function(authors, trx, callback) {
-		var ctr = 0;
-		for (var i = 0; i < authors.length; i++) {
-			addAuthor(authors[i]['fName'], authors[i]['lName'], i, trx, function(error, res) {
-				ctr++;
-				if(ctr == authors.length) {
-					callback(null, true);
-				}
-			});
-		};
+		if(authors.length) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				addAuthor(authors[i]['fName'], authors[i]['lName'], trx, function(error, res) {
+					ctr++;
+					if(ctr == authors.length) {
+						callback(null, true);
+					}
+				});
+			};
+		}
+		else {
+			callback(null, true);
+		}
 	};
 
-	function connectAuthor(id, trx_id, trx, callback) {
-		trx.let(trx_id, function(s) {
+	function connectAuthor(id, trx, callback) {
+		trx.let('author', function(s) {
 			s.select().from(id);
 		})
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
 			.from('$publication')
-			.to('$' + trx_id);
+			.to('$author');
 		});
 		callback(null, true);
 	};
 
 	this.connectAuthors = function(authors, trx, callback) {
-		var ctr = 0;
-		for (var i = 0; i < authors.length; i++) {
-			addAuthor(authors[i], i, trx, function(error, res) {
-				ctr++;
-				if(ctr == authors.length) {
-					callback(null, true);
-				}
-			});
-		};
+		if(authors.length) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				connectAuthor(authors[i], trx, function(error, res) {
+					ctr++;
+					if(ctr == authors.length) {
+						callback(null, true);
+					}
+				});
+			};
+		}
+		else {
+			callback(null, true);
+		}
 	};
 
 	/**
