@@ -63,7 +63,8 @@ function Database(serverConfig, dbConfig) {
 	var Lib = new library.Library(db);
 
 
-	this.addPublication = PUB.addPublication;
+	this.addJournal = PUB.addJournal;
+	this.addProceeding = PUB.addProceeding;
 	this.loadPublication = PUB.loadPublication;
 	this.getPublication = PUB.getPublication;
 	this.updatePublication = PUB.updatePublication;
@@ -408,11 +409,11 @@ function Database(serverConfig, dbConfig) {
 				}
 			};
 	}
-	
+
 }
 
 exports.Database = Database;
-
+/*
 //TESTCODE
 
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
@@ -440,7 +441,7 @@ var fObject = {
 //database.deleteUser('test1', callBack);
 
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addPublication(fObject, 'test2', callBack);
+//database.addJournal('title4', fObject, 'test2', callBack);
 //database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.getPublication('#21:38', callBack);
@@ -462,7 +463,7 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
+/*
 
 function callBack(error, result){
 	if (error){
@@ -479,7 +480,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
+*/
 
 
 

@@ -16,18 +16,7 @@ function Publication(db) {
 
 	var AUT = new Author.Author(db);
 
-	/**
-	 * Will add a publication and link it with the proper uploader and author.
-	 * @param {Object}   pubRecord object which contains information about the publication.
-	 * @param {callBack} callback 
-	 * @return {String}	 callback called with publicationRid
-	 */
-	
-	 this.addPublication = function(fileObj, uploader, callback) {
-		var publicationRid;
-		var fileName = fileObj.originalname;
-
-		/**
+			/**
 		 * will load a file into a buffer as base64 encoded.
 		 * @param  {String}   path     path to file
 		 * @param  {callBack} callback 
@@ -45,31 +34,96 @@ function Publication(db) {
 				}
 			});
 		}
-	
+
+	 this.addJournal = function(title, fileObj, uploader, callback) {
+		var fileName = fileObj.originalname;
 	/**
 		 * Will add vertices and links to database.
 		 * @param  {Object} error dummy var, will never catch Error.
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			var trx = db.let('library', function(s) {
-				s.select().from('Library').where({username: uploader, name: 'Uploaded'});
-			})
-			.let('publication', function(s) {
-				s.create('vertex', 'Publication')
-				.set({
-					data: data,
-					fileName: fileName
-				});
-			})
-			.let('pubEdge', function(s) {
-				s.create('edge', 'HasPublication')
-				.from('$library')
-				.to('$publication');
-			})
-			.commit().return('$publication').all()
-			.then(function(pub) {
-				callback(null, pub);
+			db.select().from('Publication').where({title: title}).all()
+			.then(function(res) {
+				if(res.length) {
+					callback(new Error('publication with title: ' + title + ' already exists.'))
+				}
+				else {
+					var trx = db.let('library', function(s) {
+						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+					});
+					db.create('vertex', 'Journal')
+					.set({
+						title: title,
+						data: data,
+						fileName: fileName
+					}).one()
+					.then(function(res) {
+						trx.let('publication', function(s) {
+							console.log(res);
+							s.select().from(RID.getORid(res));
+						})
+						.let('pubEdge', function(s) {
+							s.create('edge', 'HasPublication')
+							.from('$library')
+							.to('$publication');
+						})
+						.commit().return('$publication').all()
+						.then(function(pub) {
+							callback(null, RID.getRid(pub[0]));
+						});
+					});
+				}
+			});
+		}
+		getFile(fileObj.path, createPub);
+	};
+
+	/**
+	 * Will add a publication and link it with the proper uploader and author.
+	 * @param {Object}   pubRecord object which contains information about the publication.
+	 * @param {callBack} callback 
+	 * @return {String}	 callback called with publicationRid
+	 */
+	 this.addProceeding = function(title, fileObj, uploader, callback) {
+		var fileName = fileObj.originalname;	
+	/**
+		 * Will add vertices and links to database.
+		 * @param  {Object} error dummy var, will never catch Error.
+		 * @param  {Object} data  data loaded by getFile	
+		 */
+		function createPub(error, data) {
+			db.select().from('Publication').where({title: title}).all()
+			.then(function(res) {
+				if(res.length) {
+					callback(new Error('publication with title: ' + title + ' already exists.'))
+				}
+				else {
+					var trx = db.let('library', function(s) {
+						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+					});
+					db.create('vertex', 'Proceeding')
+					.set({
+						title: title,
+						data: data,
+						fileName: fileName
+					}).one()
+					.then(function(res) {
+						trx.let('publication', function(s) {
+							console.log(res);
+							s.select().from(RID.getORid(res));
+						})
+						.let('pubEdge', function(s) {
+							s.create('edge', 'HasPublication')
+							.from('$library')
+							.to('$publication');
+						})
+						.commit().return('$publication').all()
+						.then(function(pub) {
+							callback(null, RID.getRid(pub[0]));
+						});
+					});
+				}
 			});
 		}
 		getFile(fileObj.path, createPub);
