@@ -9,48 +9,52 @@ var cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML w
 
 
 //parses the google scholar result subtitle, e.g., 
-//'P Tassin, L Zhang, R Zhao, A Jain, T Koschny… - Physical review  …, 2012 - APS'
-//'…, N Papon, V Courdavault, I Thabet, O Ginis… - Planta, 2011 - Springer'
+//journal: 'P Tassin, L Zhang, R Zhao, A Jain, T Koschny… - Physical review  …, 2012 - APS' 
+//journal: '…, N Papon, V Courdavault, I Thabet, O Ginis… - Planta, 2011 - Springer'
+//proceeding: 'P Tassin, G Van Der Sande… - … on Optics and …, 2005 - proceedings.spiedigitallibrary.org' 
 var parseSubTitle = function(subtitle){
+
     var parts = subtitle.split("-");
+
+    //parse year, journal and publisher
     var year = parts[1].match(/\d+/)[0]; //match the numeric characters 
     var journal = parts[1].match(/[^,]*/)[0].trim(); //match anything  "," and trim whitespaces
     var publisher = parts[2].trim(); //trim whitespaces
+
+    //parse authors 
     var authorsStrings = parts[0].split(",");
     var authors = [];
     for(i in authorsStrings){
       var nameArray = authorsStrings[i].replace(/(^\s)/, '').split(" "); //remove first whitespace and then split on whitespace
       if (nameArray.length >= 2){
+        var lastName = "";
+         for (index = 1; index < nameArray.length; index++) { //collect all parts of the last name
+          lastName = lastName + nameArray[index] + " ";
+         }
         var author ={ //To Do: multiple initials?
           firstName : nameArray[0].trim(),
-          lastName : nameArray[1].trim()
+          lastName : lastName.trim()
         }
         authors[authors.length] = author;
       };
     }
+
     return [authors, journal, year, publisher];
 };
 
-var scrapeOneResult = function(result){
+var scrapeOneResult = function(result, type){
     var subtitleEntries = parseSubTitle(result.find( ".gs_a" ).text());
-    var articleData = {
+    var foundArticleData = {
           title : result.find( ".gs_rt" ).text(),
-          authors : subtitleEntries[0], //this is not correctly parsed yet - the google scholar pages display a mix of truncated strings for the authors and publishers 
-          journal: subtitleEntries[1],
+          authors : subtitleEntries[0], 
+          journalOrBookTitle : subtitleEntries[1],
           year: subtitleEntries[2],
-          publisher: subtitleEntries[3],
+          publisherOrOrganization : subtitleEntries[3],
           abstract : result.find( ".gs_rs" ).text(),
           citations : result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0], //regex extracts the number, e.g., 149 from 'Cited by 149'
           article_url : result.find( ".gs_md_wp" ).children().attr('href')
-          /*volume:  (journal)
-          number: (journal)
-          /*booktitle: (proceeding)
-          organization: (proceeding)
-          keywords: 
-          private: false //already on internet?
-          */
     };
-    return articleData;
+    return foundArticleData;
 };
 
 //when searching on an name of someone who has a Google Scholar account, the first result is related to that account 
@@ -134,9 +138,10 @@ exports.extractAll = extractAll;
 
 
 
-/*
+
 //test code
 
+/*
 //var terms = "irina veretenicoff";
 var terms = "Optical feedback induces polarization mode-hopping in vertical-cavity surface-emitting lasers";
 //var terms = "philippe tassin";
@@ -152,6 +157,11 @@ extractOne(terms, function(err, res){
     console.log(err);
 });
 
+*/
+
+/*
+var terms = "Ragnhild Van Der Straeten"
+
 console.log("Scraping all results+++++++++++++++++");
 extractAll(terms, function(err, res){
   if (!err){  
@@ -164,8 +174,9 @@ extractAll(terms, function(err, res){
   else
     console.log(err);
 });
-
 */
+
+
 
 
 
