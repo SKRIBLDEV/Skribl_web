@@ -63,7 +63,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.enableLogin = function() {
 		$scope.showLogin 	= true;
 		$scope.showRegister = false;
-		// $location.path('/login');
 	};
 
 	/**
@@ -72,7 +71,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.enableRegister = function() {
 		$scope.showLogin 	= false;
 		$scope.showRegister = true;
-		// $location.path('/register');
 	};
 
 	$scope.doRegister = function(){
@@ -163,7 +161,14 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
  
       // call $anchorScroll()
       anchorSmoothScroll.scrollTo(eID);
-    };	
+    };
+
+ 	// temp fix for going to dashboard //FIXME
+    (function developLogin() {
+		$scope.userinputLogin.username = "brol";
+		$scope.userinputLogin.password = "Brol123!";
+		$scope.doLogin();
+	})();
 });
 
 

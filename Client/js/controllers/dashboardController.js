@@ -9,7 +9,7 @@
  * @param  {object} $appData  	our custom service for shared data
 
  */
-angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData) {
+ angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData) {
 
 	//Control if user has already loged in, or if he tries to go the dashboard without login in.
 	if(!($appData.currentUser))
@@ -18,36 +18,55 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
 		return;
 	}
 
+	//GUI settings
+	$scope.ui_user_basic = false;
+	$scope.ui_user_dataviz = false;
+	$scope.ui_user_settings = false;
+
+	$scope.ui_user_toggleBasic = function(){
+		$scope.ui_user_basic = ! $scope.ui_user_basic;
+	}
+
+	$scope.ui_user_toggleDataviz = function(){
+		$scope.ui_user_dataviz = !$scope.ui_user_dataviz;
+	}
+
+	$scope.ui_user_toggleSettings = function(){
+		$scope.ui_user_settings = !$scope.ui_user_settings;
+	}
+
 	/**
 	 * duplication of the username to be used in Dashboard.html
 	 * @type {String}
 	 */
-	$scope.username = $appData.currentUser.username;
+	 $scope.username = $appData.currentUser.username;
 
 	 // The logout function
-	$scope.logout = function() {
-		$location.path('/home');
-		$appData.currentUser = null;
-	};
+	 $scope.logout = function() {
+	 	$location.path('/home');
+	 	$appData.currentUser = null;
+	 	toast("succesfully logged out", 4000) // 4000 is the duration of the toast
+	 };
 
 	// TODO DELETE USER WEKRT NIET OP SERVER
 	//The delete function
 	$scope.deleteUser = function(){
 		var path = serverApi.concat('/users/').concat($scope.username);
 		var config = {headers:  {
-		        'Authorization': $appData.Authorization
-		    }
-		};
-		var deleteRequest = $http.delete(path,config);
+			'Authorization': $appData.Authorization
+		}
+	};
+	var deleteRequest = $http.delete(path,config);
 
-		deleteRequest.success(function(data, status, headers, config) {
-			$scope.logout();
+	deleteRequest.success(function(data, status, headers, config) {
+		$scope.logout();
+		toast("succesfully deleted account", 4000) // 4000 is the duration of the toast
 
-		});
+	});
 		/*deleteRequest.error(function(data, status, headers, config) {
 			//Error while deleting user
 			document.getElementById("error").innerHTML = "Database error, please try again later.";
-			});*/
-	};
+		});*/
+};
 
 });

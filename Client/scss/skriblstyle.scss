@@ -29,6 +29,15 @@ body {
   }
 }
 
+ a {
+    color: $primary-color-dark;
+    margin-right: $card-padding;
+    @include transition(color .3s ease);
+    text-transform: uppercase;
+
+    &:hover { color: lighten($primary-color, 30%); }
+  }
+
 .primary-text-color {
   color: $primary-color;
 }

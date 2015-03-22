@@ -6,7 +6,7 @@ $primary-color-dark: color("skribl-primary-color", "darken-1") !default;
 $secondary-color: darken($primary-color, 30%)  !default;
 $success-color: $primary-color-dark !default;
 $error-color: color("skribl-alert-color", "base") !default;
-$link-color: #e0f7fa !default;
+$link-color: $primary-color-dark !default;
 
 // $primary-color: $skribl-primary !default;
 // $primary-color-light: lighten($primary-color, 15%) !default;

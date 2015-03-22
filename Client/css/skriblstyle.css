@@ -2135,7 +2135,7 @@ ul {
   list-style-type: none; }
 
 a {
-  color: #e0f7fa;
+  color: #3149A1;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent; }
 
@@ -5521,7 +5521,7 @@ small {
     .card .card-title.activator {
       cursor: pointer; }
   .card a {
-    color: #ffab40;
+    color: #3149A1;
     margin-right: 20px;
     -webkit-transition: color 0.3s ease;
     -moz-transition: color 0.3s ease;
@@ -5530,7 +5530,7 @@ small {
     transition: color 0.3s ease;
     text-transform: uppercase; }
     .card a:hover {
-      color: #ffd8a6; }
+      color: #b7c0e2; }
   .card.small, .card.medium, .card.large {
     position: relative; }
     .card.small .card-image, .card.medium .card-image, .card.large .card-image {
@@ -8060,6 +8060,18 @@ body {
   color: white; }
   .white-text-color a {
     text-decoration: underline; }
+
+a {
+  color: #3149A1;
+  margin-right: 20px;
+  -webkit-transition: color 0.3s ease;
+  -moz-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  -ms-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+  text-transform: uppercase; }
+  a:hover {
+    color: #b7c0e2; }
 
 .primary-text-color {
   color: #4A60B6; }
