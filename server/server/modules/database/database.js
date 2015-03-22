@@ -437,15 +437,15 @@ var fObject = {
 //database.testTransaction('jshep', callBack);
 
 //database.loadUser('jshep', callBack);
-database.deleteUser('test1', callBack);
+//database.deleteUser('test1', callBack);
 
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addPublication(fObject, 'jshep', callBack);
+//database.addPublication(fObject, 'test2', callBack);
 //database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.getPublication('#21:38', callBack);
 //database.uploadedBy('#21:38', callBack);
-//database.loadPublication('#21:38', info.path, callBack);
+//database.loadPublication('#23:1', info.path, callBack);
 //
 //
 /*

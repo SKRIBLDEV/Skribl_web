@@ -52,30 +52,25 @@ function Publication(db) {
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('User').where({username: uploader}).all()
-			.then(function(users) {
-				if(users.length) {
-					db.query('create vertex Publication set data = \'' + data + '\', fileName = \'' + fileName + '\'')
-					.then(function(publication) {
-						publicationRid = RID.getRid(publication[0]);		
-						var userRid = RID.getRid(users[0]);
-						db.select().from('Library').where({username: uploader, name: 'Uploaded'}).all()
-						.then(function(Libraries) {
-							var libRid = RID.getRid(Libraries[0]);
-							db.edge.from(libRid).to(publicationRid).create({
-							'@class': 'HasPublication'
-							})
-							.then(function() {
-								callback(null, publicationRid);
-							});
-						});
-						
-					});
-				}
-				else {
-					callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist.'));
-				}
-			});	
+			var trx = db.let('library', function(s) {
+				s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+			})
+			.let('publication', function(s) {
+				s.create('vertex', 'Publication')
+				.set({
+					data: data,
+					fileName: fileName
+				});
+			})
+			.let('pubEdge', function(s) {
+				s.create('edge', 'HasPublication')
+				.from('$library')
+				.to('$publication');
+			})
+			.commit().return('$publication').all()
+			.then(function(pub) {
+				callback(null, pub);
+			});
 		}
 		getFile(fileObj.path, createPub);
 	};
