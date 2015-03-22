@@ -4,6 +4,9 @@ var RID = require('./rid.js');
 var fs = require('fs');
 var Path = require('path');
 var Author = require('./author.js');
+var researchDomain = require('./researchdomain.js');
+var keyword = require('./keyword.js');
+var Oriento = require('oriento');
 
  /** 
    *Create a new Publication object, provides functionality to database Object.
@@ -15,19 +18,10 @@ var Author = require('./author.js');
 function Publication(db) {
 
 	var AUT = new Author.Author(db);
+	var RD = new researchDomain.ResearchDomain(db);
+	var Kw = new keyword.Keyword(db);
 
-	/**
-	 * Will add a publication and link it with the proper uploader and author.
-	 * @param {Object}   pubRecord object which contains information about the publication.
-	 * @param {callBack} callback 
-	 * @return {String}	 callback called with publicationRid
-	 */
-	
-	 this.addPublication = function(fileObj, uploader, callback) {
-		var publicationRid;
-		var fileName = fileObj.originalname;
-
-		/**
+			/**
 		 * will load a file into a buffer as base64 encoded.
 		 * @param  {String}   path     path to file
 		 * @param  {callBack} callback 
@@ -45,37 +39,97 @@ function Publication(db) {
 				}
 			});
 		}
-	
+
+	 this.addJournal = function(title, fileObj, uploader, callback) {
+		var fileName = fileObj.originalname;
 	/**
 		 * Will add vertices and links to database.
 		 * @param  {Object} error dummy var, will never catch Error.
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('User').where({username: uploader}).all()
-			.then(function(users) {
-				if(users.length) {
-					db.query('create vertex Publication set data = \'' + data + '\', fileName = \'' + fileName + '\'')
-					.then(function(publication) {
-						publicationRid = RID.getRid(publication[0]);		
-						var userRid = RID.getRid(users[0]);
-						db.select().from('Library').where({username: uploader, name: 'Uploaded'}).all()
-						.then(function(Libraries) {
-							var libRid = RID.getRid(Libraries[0]);
-							db.edge.from(libRid).to(publicationRid).create({
-							'@class': 'HasPublication'
-							})
-							.then(function() {
-								callback(null, publicationRid);
-							});
-						});
-						
-					});
+			db.select().from('Publication').where({title: title}).all()
+			.then(function(res) {
+				if(res.length) {
+					callback(new Error('publication with title: ' + title + ' already exists.'))
 				}
 				else {
-					callback(new Error('User with username: ' + pubRecord.getUploader() + ' does not exist.'));
+					var trx = db.let('library', function(s) {
+						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+					});
+					db.create('vertex', 'Journal')
+					.set({
+						title: title,
+						data: data,
+						fileName: fileName
+					}).one()
+					.then(function(res) {
+						trx.let('publication', function(s) {
+							console.log(res);
+							s.select().from(RID.getORid(res));
+						})
+						.let('pubEdge', function(s) {
+							s.create('edge', 'HasPublication')
+							.from('$library')
+							.to('$publication');
+						})
+						.commit().return('$publication').all()
+						.then(function(pub) {
+							callback(null, RID.getRid(pub[0]));
+						});
+					});
 				}
-			});	
+			});
+		}
+		getFile(fileObj.path, createPub);
+	};
+
+	/**
+	 * Will add a publication and link it with the proper uploader and author.
+	 * @param {Object}   pubRecord object which contains information about the publication.
+	 * @param {callBack} callback 
+	 * @return {String}	 callback called with publicationRid
+	 */
+	 this.addProceeding = function(title, fileObj, uploader, callback) {
+		var fileName = fileObj.originalname;	
+	/**
+		 * Will add vertices and links to database.
+		 * @param  {Object} error dummy var, will never catch Error.
+		 * @param  {Object} data  data loaded by getFile	
+		 */
+		function createPub(error, data) {
+			db.select().from('Publication').where({title: title}).all()
+			.then(function(res) {
+				if(res.length) {
+					callback(new Error('publication with title: ' + title + ' already exists.'))
+				}
+				else {
+					var trx = db.let('library', function(s) {
+						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+					});
+					db.create('vertex', 'Proceeding')
+					.set({
+						title: title,
+						data: data,
+						fileName: fileName
+					}).one()
+					.then(function(res) {
+						trx.let('publication', function(s) {
+							console.log(res);
+							s.select().from(RID.getORid(res));
+						})
+						.let('pubEdge', function(s) {
+							s.create('edge', 'HasPublication')
+							.from('$library')
+							.to('$publication');
+						})
+						.commit().return('$publication').all()
+						.then(function(pub) {
+							callback(null, RID.getRid(pub[0]));
+						});
+					});
+				}
+			});
 		}
 		getFile(fileObj.path, createPub);
 	};
@@ -247,40 +301,73 @@ function Publication(db) {
 		}
 
 	}
-//old function
-/*
+
 	this.updatePublication = function(id, metObject, clb) {
-		db.update('Publication').set({fileName: metObject.fileName,
-									  keywords: metObject.keywords,
-									  year: metObject.year,
-									  abstract: metObject.abstract,
-									  title: metObject.title,
-									  articleUrl: metObject.articleUrl,
-									  volume: metObject.volume,
-									  number: metObject.number,
-									  citations: metObject.citations,
-									  journal: metObject.journal,
-									  publisher: metObject.publisher})
-		.where({'@rid': id}).scalar()
-		.then(function() {
-			clb(null, true);
-		});
-	}
-	*/
-	this.updatePublication = function(id, metObject, clb) {
-		db.exec(
-			'update ' + id + ' set keywords = \'' + metObject.keywords +
-									'\', year = ' + metObject.year +
-									', abstract = \'' + metObject.abstract +
-									'\', title = \'' + metObject.title +
-									'\', articleUrl = \'' + metObject.articleUrl +
-									'\', volume = ' + metObject.volume +
-									', number = ' + metObject.number +
-									', citations = ' + metObject.citations +
-									', journal = \'' + metObject.journal +
-									'\', publisher = \'' + metObject.publisher + '\'')
-		.then(function() {
-			clb(null, true);
+		db.select().from(id).all()
+		.then(function(res) {
+			if(res[0]['@class'] == metObject.type) {
+				var trx;
+				if(metObject.type == 'Journal') {
+					var trx = db.let('publication', function(s) {
+						s.update(id)
+						.set({
+							journal: metObject.journal,
+							publisher: metObject.publisher,
+							volume: metObject.volume,
+							number: metObject.number
+						});
+					});					
+				}
+				else {
+					var trx = db.let('publication', function(s) {
+						s.update(id)
+						.set({
+							booktitle: metObject.booktitle,
+							organisation: metObject.organisation
+						});
+					});	
+				}
+				trx.let('publication', function(s) {
+					s.update(id)
+					.set({
+						year: metObject.booktitle,
+						abstract: metObject.abstract,
+						citations: metObject.citations,
+						url: metObject.url,
+						private: metObject.private
+					});
+				})
+				.let('publication', function(s) {
+					s.select().from(Oriento.RID(id));
+				});
+
+				AUT.addAuthors(metObject.authors, trx, function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							else {
+								RD.addResearchDomainsPub(metObject.researchDomains, trx, function(error, res) {
+									Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+										trx
+										.commit().return('$publication').all()
+										.then(function(res) {
+											clb(null, true);
+										});
+									});
+								});
+							}
+						});
+					}
+				});
+			}
+			else {
+				clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
+			}
 		});
 	}
 }

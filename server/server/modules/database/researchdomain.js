@@ -3,28 +3,31 @@
 var RID = require('./rid.js');
 function ResearchDomain(db){
 
+	var self = this;
+
 		/**
 	 * adds a researchdomain with given name
 	 * @private
 	 * @param {String}   domain
 	 * @param {callBack} callback
 	 */
-	function addResearchDomain(domain, callback) {
+	this.addResearchDomain = function(domain, varName, trx, callback) {
 		var domName = domain;
 		db.select().from('ResearchDomain').where({Name: domName}).all()
 		.then(function(domains) {
 			if(domains.length) {
-				var domain = domains[0];
-				var domainRid = RID.getRid(domain);
-				callback(null, domainRid);
+				trx.let(varName, function(s) {
+					s.select().from('ResearchDomain').where({Name: domName});
+				})
+				callback(null, varName);
 			}
 			else {
-				db.vertex.create({
-				'@class': 'ResearchDomain',
-				Name: domName})
-				.then(function (ResearchDomain) {
-					var domainRid = RID.getRid(ResearchDomain);
-					callback(null, domainRid);
+				trx.let(varName, function(s) {
+					s.create('vertex', 'ResearchDomain')
+					.set({
+						Name: domName
+					});
+					callback(null, varName);
 				});
 			}
 		});
@@ -36,27 +39,57 @@ function ResearchDomain(db){
 	 * @param {String}   userRid  
 	 * @param {callBack} callback
 	 */
-	this.addResearchDomains = function(domains, userRid, callback) {
+	this.addResearchDomains = function(domains, trx, callback) {
 		var counter = domains.length;
 		counter--;
-		function forClb(error, domainRid) {
+		function forClb(error, varName) {
 				if(error) {
 					callback(error);
-				} else {
-					db.edge.from(userRid).to(domainRid).create('HasResearchDomain')
-					.then(function() {
-						if(counter) {
-							counter--;
-						}
-						else {
-							callback(null, true);
-						}
+				} 
+				else {
+					trx.let('domainEdge', function(s) {
+						s.create('edge', 'HasResearchDomain')
+						.from('$user')
+						.to('$' + varName);
 					});
+					if(counter) {
+						counter--;
+					}
+					else {
+						callback(null, true);
+					}
 				}
 			}
 
 		for (var i = 0; i < domains.length; i++) {
-			addResearchDomain(domains[i], forClb);
+			self.addResearchDomain(domains[i], i, trx, forClb);
+		}
+	};
+
+	this.addResearchDomainsPub = function(domains, trx, callback) {
+		var counter = domains.length;
+		counter--;
+		function forClb(error, varName) {
+				if(error) {
+					callback(error);
+				} 
+				else {
+					trx.let('domainEdge', function(s) {
+						s.create('edge', 'HasResearchDomain')
+						.from('$publication')
+						.to('$' + varName);
+					});
+					if(counter) {
+						counter--;
+					}
+					else {
+						callback(null, true);
+					}
+				}
+			}
+
+		for (var i = 0; i < domains.length; i++) {
+			self.addResearchDomain(domains[i], i, trx, forClb);
 		}
 	};
 }

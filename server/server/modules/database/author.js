@@ -10,6 +10,68 @@ var RID = require('./rid.js');
  */
 function Author(db) {
 
+	function addAuthor(fName, lName, trx, callback) {
+		trx.let('author', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: fName,
+				lastName: lName			
+			});
+		})
+		.let('authorEdge', function(s) {
+			s.create('edge', 'AuthorOf')
+			.from('$publication')
+			.to('$author');
+		});
+		callback(null, true);
+	};
+
+	this.addAuthors = function(authors, trx, callback) {
+		if(authors.length) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				addAuthor(authors[i]['fName'], authors[i]['lName'], trx, function(error, res) {
+					ctr++;
+					if(ctr == authors.length) {
+						callback(null, true);
+					}
+				});
+			};
+		}
+		else {
+			callback(null, true);
+		}
+	};
+
+	function connectAuthor(id, trx, callback) {
+		trx.let('author', function(s) {
+			s.select().from(id);
+		})
+		.let('authorEdge', function(s) {
+			s.create('edge', 'AuthorOf')
+			.from('$publication')
+			.to('$author');
+		});
+		callback(null, true);
+	};
+
+	this.connectAuthors = function(authors, trx, callback) {
+		if(authors.length) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				connectAuthor(authors[i], trx, function(error, res) {
+					ctr++;
+					if(ctr == authors.length) {
+						callback(null, true);
+					}
+				});
+			};
+		}
+		else {
+			callback(null, true);
+		}
+	};
+
 	/**
 	 * adds an author with given names to database and returns record id OR returns record id if author already exists.
 	 * @param {String}   fName    firstname of author
@@ -17,6 +79,7 @@ function Author(db) {
 	 * @param {callBack} callback
 	 * @return {String}	 callback called with authorRid
 	 */
+	/*
 	this.addAuthor = function(fName, lName, callback) {
 		db.select().from('Author').where({firstName: fName, lastName: lName}).all()
 		.then(function(authors) {
@@ -40,6 +103,7 @@ function Author(db) {
 			}
 		});
 	};
+	*/
 
 
 	/**

@@ -28,6 +28,8 @@ var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
 var library = require('./library.js');
+var keyword = require('./keyword.js');
+var authors = require('./author.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -61,9 +63,11 @@ function Database(serverConfig, dbConfig) {
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
 	var Lib = new library.Library(db);
+	var Kw = new keyword.Keyword(db);
 
 
-	this.addPublication = PUB.addPublication;
+	this.addJournal = PUB.addJournal;
+	this.addProceeding = PUB.addProceeding;
 	this.loadPublication = PUB.loadPublication;
 	this.getPublication = PUB.getPublication;
 	this.updatePublication = PUB.updatePublication;
@@ -215,6 +219,7 @@ function Database(serverConfig, dbConfig) {
 		}
 	};
 
+///WITH TRANSACTIONS
 	/**
 	 * Deletes user with given username from database, throws error if user doesn't exist.
 	 * @param  {string}   username
@@ -222,18 +227,27 @@ function Database(serverConfig, dbConfig) {
 	 */
 	this.deleteUser = function (username, callback) {
 		db.select().from('User').where({username: username}).all()
-		.then(function(users) {
-			if(users.length){
-				UserRid = RID.getRid(users[0]);
-				db.query('delete vertex ' + UserRid)
-				.then(function(){
-					Lib.deleteDefaults(username, function(error, res) {
+		.then(function(res) {
+			if(res.length) {
+				var usrRid = RID.getRid(res[0]);
+				var trx = db.let('user', function(s) {
+					s.select()
+					.from('User')
+					.where({username: username});
+				});
+				Lib.deleteDefaults(username, trx, function(error, res) {
+					trx.let('delUser', function(s) {
+						s.delete('vertex', 'User')
+						.where('@rid = ' + usrRid);
+					})
+					.commit().return('$delUser').all()
+					.then(function(res) {
 						callback(null, true);
 					});
 				});
 			}
 			else {
-				callback(new Error("user doesn't exist!"));
+				callback(new Error('user with username: ' + username + ' does not exist'));
 			}
 		});
 	};
@@ -261,7 +275,7 @@ function Database(serverConfig, dbConfig) {
 		});
 	};
 
-
+///WITH TRANSACTIONS
 	//find a way to make a transaction out of this, at the moment eventual causes for errors are caught in user.js validation.
 	/**
 	 * adds user with given data to database
@@ -270,31 +284,43 @@ function Database(serverConfig, dbConfig) {
 	 * @param {callBack} callback
 	 */
 	function addUser(newData, callback){
-		var userRid;
-		db.vertex.create({
-			'@class': 'User',
-			firstName: newData.getFirstName(),
-			lastName: newData.getLastName(),
-			email: newData.getEmail(),
-			username: newData.getUsername(),
-			password: newData.getPassword(),
-			language: newData.getLanguage()})
-			.then(function (user) {
-				userRid = RID.getRid(user);
-				Lib.addDefaults(newData.getUsername(), function(error, res) {
+		var trx = db.let('user', function(s) {
+			s.create('vertex', 'User')
+			.set({
+				firstName: newData.getFirstName(),
+				lastName: newData.getLastName(),
+				email: newData.getEmail(),
+				username: newData.getUsername(),
+				password: newData.getPassword(),
+				language: newData.getLanguage()
+			});
+		});
+
+		Lib.addDefaults(newData.getUsername(), trx, function(error, res) {
 					if(error) {
 						callback(error);
 					}
 					else {
-						aff.addAffiliation(newData, function(error, ResearchGroupRid) {
-							db.edge.from(userRid).to(ResearchGroupRid).create('HasResearchGroup')
-							.then(function() {
-								RD.addResearchDomains(newData.getResearchDomains(), userRid, callback);
+						aff.addAffiliation(newData, trx, function(error, res) {
+							trx.let('researchGroupEdge', function(s) {
+								s.create('edge', 'InResearchGroup')
+								.from('$user')
+								.to('$researchGroup');
+							});
+							RD.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
+								if(error) {
+									callback(error);
+								}
+								else {
+									trx.commit().return('$user').all()
+									.then(function(res) {
+										callback(null, res);
+									});
+								}
 							});
 						});
 					}
 				});
-			});
 	}
 
 	/**
@@ -312,14 +338,89 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 	};
+
+
+	////////TESTING TRANSACTIONS/////
+	
+	this.testTransaction = function(username, clb) {
+		var Batch = db.let('peek', function(s) {
+						s.select().from('Author').where({TempId: 1});
+					console.log('t1');
+		});
+		/*
+		.let('addAuthor', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: 't2',
+				TempId: 3,
+				lastName: 't2'
+			});
+			console.log('t2');
+		});
+		*/
+
+		Batch
+		.let('delAuthor', function(s) {
+			s.delete('vertex')
+			.where('@rid = #12:5');
+			console.log('t2');
+		});
+		
+		//db.select().from('User').where({username: 'username'})
+
+		Batch
+		.let('peek', function(s) {
+			s.select().from('Author').where({TempId: 3});
+			console.log('t3');
+
+			//console.log(Batch._state.let);
+			console.log('t4');
+		})
+		.commit()
+		.return('$delAuthor')
+		.all()
+		.then(function(usrs) {
+			if(usrs.length) {
+				clb(usrs[0]);
+				//clb('success');
+			}
+			else {
+				clb(new Error('user not found'));
+			}
+		})
+		.done();
+	}
+
+	function testTransaction2(username, Batch, clb) {
+		Batch.let('peek', function(s) {
+			s.select().from('User').where({username: username});
+		});
+
+		Batch.let('addAuthor2', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: 't1',
+				lastName: 't1'
+			});
+		});
+
+		for (var i = 0; i < 10000; i++) {
+				if(i == 10000) {
+					Batch.let('lasttest', function(s) {
+						throw 'test';
+					});
+				}
+			};
+	}
+
 }
 
 exports.Database = Database;
 
 //TESTCODE
 /*
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -337,19 +438,43 @@ var fObject = {
 	originalname: 'testfile2.pdf'
 }
 
+var metObject = {
+	type: 'Journal',
+	journal: 'journal naam',
+	publisher: 'publisher',
+	volume: '5',
+	number: '6',
+	year: 2012,
+	abstract: 'abstracte brol',
+	citations: 'enkele citaties',
+	url: 'www.brol.be',
+	private: false,
+	authors: [{fName: 'jan2',
+				lName: 'modaal1'},
+				{fName: 'jan2',
+				lName: 'modaal1'}],
+	knownAuthors: [],
+	researchDomains: ['Biological Sciences'],
+	keywords: []//['keywordA', 'keywordB']
+}
+*/
+//database.testTransaction('jshep', callBack);
+
 //database.loadUser('jshep', callBack);
+//database.deleteUser('test1', callBack);
 
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addPublication(fObject, 'jshep', callBack);
+//database.addJournal('title4', fObject, 'test2', callBack);
 //database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.getPublication('#21:38', callBack);
 //database.uploadedBy('#21:38', callBack);
-//database.loadPublication('#21:38', info.path, callBack);
+//database.loadPublication('#23:1', info.path, callBack);
+//database.updatePublication('#23:6', metObject, callBack);
 //
 //
-
-var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'KU Leuven', faculty: 'letteren en wijsbegeerte', department: 'taal en letterkunde', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
+/*
+var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'test3', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'brol', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
 		console.log(res);
@@ -359,10 +484,11 @@ UM.createUser(userInfo, function(error, res) {
 		database.createUser(res, callBack);
 	}
 })
+*/
 
 
 
-
+/*
 function callBack(error, result){
 	if (error){
 	console.log(error);
