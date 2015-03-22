@@ -4,34 +4,6 @@
 var GS_scraping = require('./GS_scraping_with_cheerio.js');
 
 
-/*
-function PublicationRecord(uploader, pdfData){
-
-  // pdfData is always defined, but not all metadata properties might be present
-  // therefore the result of these getters might be 'undefined'
-
-  this.getUploader = function() { return uploader; }; //username of uploader
-  this.getTitle = function() { return pdfData.title; }; 
-  //[I] the database now expects that getAuthors returns an array of objects that support getFirstName() and getLastName
-  this.getAuthors = function() {return pdfData.authors;};
-  this.getSubject = function() { return pdfData.subject; }; 
-  this.getDescription = function() { return pdfData.description; }; 
-  this.getPublisher = function() { return pdfData.publisher; }; 
-  this.getRights = function() { return pdfData.rights; };  
-  this.getUrl = function() { return pdfData.url; }; 
-
-  this.loadPath= function(clb) {return clb(null, pdfData.path);};
-}
-
-
-//author object 
-function Author(first, last) { 
-    this.getFirstName  = function() {return first;};
-    this.getLastName  = function() {return last;};
-}
-
-*/
-
 /**
 * replaces undefined values of object received from front with values found by scraping GS
 */
@@ -45,8 +17,26 @@ function setUndefinedProperties(metadataGUI, metadataGS){
 };
 
 /**
+* changes general properties (such as journalOrBookTitle) to specific properties, such as journal for a journal article and bookTitle for a proceeding article
+*/
+
+function setToType(type, metadataGS){
+  if (type == "journal"){
+    metadataGS.journal = metadataGS.journalOrBookTitle;
+    metadataGS.publisher = metadataGS.publisherOrOrganization;
+  };
+  if (type == "proceeding"){
+    metadataGS.bookTitle = metadataGS.journalOrBookTitle;
+    metadataGS.organization = metadataGS.publisherOrOrganization;
+  };
+  delete metadataGS.journalOrBookTitle;
+  delete metadataGS.publisherOrOrganization;
+};
+
+/**
 * extract data from google scholar first search result and update reveived metadata object accordingly
 * @param info :: contains metadata supplied from front-end: Minimally, it contains info.title as a keyword for google scholar scraping
+* @param type :: journal or proceeding, indicates whether the properties of the found result should be interpreted as journal title or booktitle, etc.  
 * @param clb: callback with updated metadata after scraping
 */
 
@@ -58,58 +48,61 @@ function extract(info, clb){
       clb(GSError, info); //returns the unchanged info object
     }
     else{
+      var type = info.type;
+      setToType(type, res);
       setUndefinedProperties(info, res);
       clb(null, info);
     } 
   });
  };
 
- exports.extract = extract;
-     
 
-/**
-* creates a publicationRecord object from info object, where info object contains a path to the pdf an the username of the uploader.
-**/
-
-/*
-
-function createPublication(info, clb){
-  /*
-  getMetadata(info.path, function(err, res){
-    var data = {}; 
-    if (!err){ data = res;}; //if no error occured during parsing, bind the metadata to the data object, otherwise the metadata properties are left undefined
-    data.path = info.path;
-    clb(null, new PublicationRecord(info.uploader, data)); 
-  });
-
-  var data = {}; 
-  authors = [new Author("someFirstName", "someLastName")]; // [H] @I: for database testing 
-  data.authors = authors;
-  data.path = info.path;    //[I] @H: path is needed too
-  clb(null, new PublicationRecord(info.uploader, data)); 
-
-};
-
-exports.createPublication = createPublication;
-
+ /**
+* extract data from all google scholar search results on the first page, return the results in an array  (= BASIC search)
+* @param searchTerms 
+* @param limit :: limit on the number of results to be returned (the maximal number of returned results is ten, since there are 10 results on the first page)
+* @param clb: callback 
 */
 
 
-/*
+function search(searchTerms, limit, clb){
+  GS_scraping.extractAll(searchTerms, function(err, res){ //extract the GS results of the first page
+    if (err){
+      var GSError = new Error('Failed to extract data from Google Scholar');
+      clb(GSError, null); 
+    }
+    else{
+      if (res.length > limit){
+        res.length = limit; 
+      }
+      clb(null, res);
+    }; 
+  });
+ };
+
+
+//exports 
+
+exports.search = search;
+
+exports.extract = function(info, clb){
+  extract(info, clb);
+ };
+
+
+
+
+
+
 //test code:
+/*
+ var proceedingArticle = "Analytical model for the optical propagation in a nonlinear left-handed material";
+ var journalArticle = "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency";
+
 
 var testInfo = {
-  title: "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency",
-  authors : undefined,
-  journal: undefined,
-  volume: undefined,
-  number: undefined,
-  year: undefined,
-  publisher: undefined,
-  abstract : undefined,
-  citations : undefined, 
-  article_url : undefined,
-  keywords : undefined
+  title: journalArticle,
+  type: "journal"
 }
 
 extract(testInfo, function(err, res){
@@ -117,7 +110,20 @@ extract(testInfo, function(err, res){
     console.log(err);
   else
     console.log(testInfo);
-});
+});*/
+
+
+
+/*var searchKey = 'optical properties of metamaterials';
+
+search(searchKey, 4, function(err, res){
+  if (err)
+    console.log(err);
+  else
+    console.log(res);
+});*/
+
+
 
 /*
 van GUI: 
