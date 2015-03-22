@@ -418,7 +418,7 @@ function Database(serverConfig, dbConfig) {
 exports.Database = Database;
 
 //TESTCODE
-
+/*
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
@@ -457,7 +457,7 @@ var metObject = {
 	researchDomains: ['Biological Sciences'],
 	keywords: []//['keywordA', 'keywordB']
 }
-
+*/
 //database.testTransaction('jshep', callBack);
 
 //database.loadUser('jshep', callBack);
@@ -470,7 +470,7 @@ var metObject = {
 //database.getPublication('#21:38', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
-database.updatePublication('#23:6', metObject, callBack);
+//database.updatePublication('#23:6', metObject, callBack);
 //
 //
 /*
@@ -488,7 +488,7 @@ UM.createUser(userInfo, function(error, res) {
 
 
 
-
+/*
 function callBack(error, result){
 	if (error){
 	console.log(error);
@@ -505,6 +505,6 @@ function stop(){
 	process.exit(code=0);
 }
 
-
+*/
 
 
