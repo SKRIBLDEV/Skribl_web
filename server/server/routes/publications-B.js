@@ -27,24 +27,6 @@ function isAuthorised(db, user, id, clb) {
 		else
 			clb(null, usr === user.getUsername());
 	});
-
-	/* if uploadedBy is NYI
-	if (user) {}
-		db.loadLibrary(user, "uploaded", function(err, ids) {
-			//sentinel search
-			if (err)
-				clb(err);
-			else {
-				var i = 0;
-				ids.push(id); 
-				while(ids[i++] !== id);
-				clb(null, i < ids.length);
-			}
-		});
-	} else {
-		clb(false);
-	}
-	*/
 }
 
 /* --- GETTING PUBLICATIONS --- */
@@ -136,8 +118,8 @@ function updatePublication(req, res, context) {
 	var id = req.params['id'];
 
 	var meta = req.body;
-	if (!meta.title)
-		return userError(res, "Title is not specified in metadata!");
+	if (!(meta.title && meta.type))
+		return userError(res, "title & type are not specified in metadata!");
 
 	var database = context.db;
 

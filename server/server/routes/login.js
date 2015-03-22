@@ -51,5 +51,5 @@ function validateCredentials(req, res, context) {
 
 /* --- EXPORTS --- */
 
-exports.post = validateCredentials;
 exports.path = '/login';
+exports.post = validateCredentials;
