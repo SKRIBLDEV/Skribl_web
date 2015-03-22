@@ -89,7 +89,7 @@ function loadUserLibrary(req, res, context) {
   context.db.loadLibrary(usr, lib, function(err, pubs) {
     if (err)
        serverError(res, err.toString());
-    } else {
+    else {
        res.status(200);
        res.json(pubs);
     }
