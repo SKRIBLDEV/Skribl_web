@@ -18,7 +18,7 @@ $maximum-dynamic-height: 1920px;
 
 // general
 body {
-  background-color: $skribl-primary;
+  background-color: $primary-color;
 }
 
 //text
@@ -30,7 +30,11 @@ body {
 }
 
 .primary-text-color {
-  color: $skribl-primary;
+  color: $primary-color;
+}
+
+.alert-color {
+  color: $error-color;
 }
 
 p {

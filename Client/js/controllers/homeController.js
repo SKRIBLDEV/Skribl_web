@@ -43,6 +43,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		"Seek beauty through simplicity. - John Bently"];
 
 		var item = motivationalQuotes[Math.floor(Math.random()*motivationalQuotes.length)];
+
+		console.log(item);
 		return item;
 	}
 
@@ -72,6 +74,16 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		$scope.showRegister = true;
 		// $location.path('/register');
 	};
+
+	$scope.doRegister = function(){
+
+		//@Douglas: its easier mainatable if we just use a function >< always document.… blabla
+		function notifyRegisterError(message){
+			 toast(message, 4000) // 4000 is the duration of the toast
+			document.getElementById("register_error").innerHTML = message;
+		}
+		// @douglas implement + test register here (c your own code at registerController.js)
+	}
 
 	/**
 	 * The actual login function
@@ -107,23 +119,26 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 			//Error when getting user info --> database error
-			document.getElementById("error").innerHTML = "Database error, please try again later.";
+				notifyLoginError("Database error, please try again later");
 			});
 		});
 		
 		loginRequest.error(function(data, status, headers, config) {
 			
-			if(status === 0)
-			{
-			//Server is not on
-			document.getElementById("error").innerHTML = "SKRIBL is currently unavailable";
-			}
-			else{
-			//Error user has given bad username or passwore
-			document.getElementById("error").innerHTML = "Username or password is invalid, please try again";
+			if(status === 0) {
+				//Server is not online
+				notifyLoginError("SKRIBL is currently unavailable");
+			} else {
+				//Error user has given bad username or passwore
+				notifyLoginError("Username or password is invalid, please try again");
 			}
 			
 		});
+
+		function notifyLoginError(message){
+			 toast(message, 4000) // 4000 is the duration of the toast
+			document.getElementById("login_error").innerHTML = message;
+		}
 	};
 
 	/**

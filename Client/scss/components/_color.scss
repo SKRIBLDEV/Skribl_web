@@ -6,10 +6,37 @@
 
 // Google Color Palette defined: http://www.google.com/design/spec/style/color.html
 
-$skribl-primary: #4A60B6;
-$skribl-dark: #3149A1;
-$skribl-light: #018dc4;
+// $skribl-primary: #4A60B6;
+// $skribl-dark: #3149A1;
+// $skribl-light: #018dc4;
+// $skribl-alert: #e51c23;
 
+
+$skribl-primary-color: (
+  "lighten-5":  #018dc4,
+  "lighten-4":  #018dc4,
+  "lighten-3":  #018dc4,
+  "lighten-2":  #018dc4,
+  "lighten-1":  #5572D4,
+  "base":       #4A60B6,
+  "darken-1":   #3149A1,
+  "darken-2":   #3149A1,
+  "darken-3":   #3149A1,
+  "darken-4":   #3149A1
+);
+
+$skribl-alert-color: (
+  "lighten-5":  #018dc4,
+  "lighten-4":  #018dc4,
+  "lighten-3":  #018dc4,
+  "lighten-2":  #018dc4,
+  "lighten-1":  #018dc4,
+  "base":       #e51c23,
+  "darken-1":   #d0181e,
+  "darken-2":   #d0181e,
+  "darken-3":   #d0181e,
+  "darken-4":   #d0181e
+);
 
 $materialize-red: (
   "lighten-5":  #fdeaeb,
@@ -22,6 +49,10 @@ $materialize-red: (
   "darken-2":   #b9151b,
   "darken-3":   #a21318,
   "darken-4":   #8b1014,
+  "accent-1":    #FF8A80,
+  "accent-2":    #FF5252,
+  "accent-3":    #FF1744,
+  "accent-4":    #D50000
 );
 
 $red: (
@@ -361,7 +392,9 @@ $colors: (
   "brown": $brown,
   "blue-grey": $blue-grey,
   "grey": $grey,
-  "shades": $shades
+  "shades": $shades,
+  "skribl-primary-color": $skribl-primary-color,
+  "skribl-alert-color":$skribl-alert-color
 );
 
 

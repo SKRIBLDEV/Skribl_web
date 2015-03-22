@@ -1,12 +1,21 @@
 /*** Colors ***/
-$primary-color: $skribl-primary !default;
-$primary-color-light: lighten($primary-color, 15%) !default;
-$primary-color-dark: darken($primary-color, 15%) !default;
+$primary-color: color("skribl-primary-color", "base") !default;
+$primary-color-light: color("skribl-primary-color", "lighten-1") !default;
+$primary-color-dark: color("skribl-primary-color", "darken-1") !default;
 
 $secondary-color: darken($primary-color, 30%)  !default;
-$success-color: $skribl-dark !default;
-$error-color: color("red", "base") !default;
-$link-color: $skribl-dark !default;
+$success-color: $primary-color-dark !default;
+$error-color: color("skribl-alert-color", "base") !default;
+$link-color: #e0f7fa !default;
+
+// $primary-color: $skribl-primary !default;
+// $primary-color-light: lighten($primary-color, 15%) !default;
+// $primary-color-dark: darken($primary-color, 15%) !default;
+
+// $secondary-color: darken($primary-color, 30%)  !default;
+// $success-color: $skribl-dark !default;
+// $error-color: color("red", "base") !default;
+// $link-color: $skribl-dark !default;
 
 /*** Badges ***/
 $badge-bg-color: $secondary-color;
