@@ -3,13 +3,15 @@
 var RID = require('./rid.js');
 function ResearchDomain(db){
 
+	var self = this;
+
 		/**
 	 * adds a researchdomain with given name
 	 * @private
 	 * @param {String}   domain
 	 * @param {callBack} callback
 	 */
-	function addResearchDomain(domain, varName, trx, callback) {
+	this.addResearchDomain = function(domain, varName, trx, callback) {
 		var domName = domain;
 		db.select().from('ResearchDomain').where({Name: domName}).all()
 		.then(function(domains) {
@@ -60,7 +62,7 @@ function ResearchDomain(db){
 			}
 
 		for (var i = 0; i < domains.length; i++) {
-			addResearchDomain(domains[i], i, trx, forClb);
+			self.addResearchDomain(domains[i], i, trx, forClb);
 		}
 	};
 }

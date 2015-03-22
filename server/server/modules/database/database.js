@@ -61,6 +61,7 @@ function Database(serverConfig, dbConfig) {
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
 	var Lib = new library.Library(db);
+	var Kw = new Keyword.Keyword(db);
 
 
 	this.addJournal = PUB.addJournal;
@@ -413,7 +414,7 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
-/*
+
 //TESTCODE
 
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
@@ -463,7 +464,7 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-/*
+
 
 function callBack(error, result){
 	if (error){
@@ -480,7 +481,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
+
 
 
 

@@ -317,20 +317,67 @@ function Publication(db) {
 	}
 	*/
 	this.updatePublication = function(id, metObject, clb) {
-		db.exec(
-			'update ' + id + ' set keywords = \'' + metObject.keywords +
-									'\', year = ' + metObject.year +
-									', abstract = \'' + metObject.abstract +
-									'\', title = \'' + metObject.title +
-									'\', articleUrl = \'' + metObject.articleUrl +
-									'\', volume = ' + metObject.volume +
-									', number = ' + metObject.number +
-									', citations = ' + metObject.citations +
-									', journal = \'' + metObject.journal +
-									'\', publisher = \'' + metObject.publisher + '\'')
-		.then(function() {
-			clb(null, true);
+		db.select().from(id).all()
+		.then(function(res) {
+			if(res[0]['@class'] == metObjsct.type) {
+				var trx;
+				if(metObjsct.type == 'Journal') {
+					var trx = db.let('publication', function(s) {
+						s.update(id)
+						.set({
+							journal: metObject.journal,
+							publisher: metObject.publisher,
+							volume: metObject.volume,
+							number: metObject.number
+						});
+					});					
+				}
+				else {
+					var trx = db.let('publication', function(s) {
+						s.update(id)
+						.set({
+							booktitle: metObject.booktitle,
+							organisation: metObject.organisation
+						});
+					});	
+				}
+				trx.let('publication', function(s) {
+					s.update(id)
+					.set({
+						year: metObject.booktitle,
+						abstract: metObject.abstract,
+						citations: metObject.citations,
+						url: metObject.url,
+						private?: metObject.private?
+					});
+				});
+				Author.addAuthors(metObject.authors, trx, function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						Author.connectAuthors(metObject.known-authors, trx, function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							else {
+								db.RD.addResearchDomains(metObject.researchDomains, trx, function(error, res) {
+									db.Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+										trx
+										.commit().return('$publication').all()
+										.then(function(res) {
+											clb(null, true);
+										});
+									});
+								});
+							}
+						});
+					}
+				});
+			}
+			else {
+				clb(new Error('given id: ' + id + 'does not match given type: ' + metObjsct.type));
+			}
 		});
-	}
 }
 exports.Publication = Publication;
