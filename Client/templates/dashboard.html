@@ -26,13 +26,13 @@
 
 <!-- fixed action button -->
 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-  <a class="btn-floating btn-large skribl-alert-color">
+  <a class="btn-floating btn-large skribl-alert-color waves-effect waves-light">
     <i class="large mdi-editor-mode-edit"></i>
   </a>
   <ul>
     <li><a class="btn-floating skribl-primary-color darken-1">
       <code class="titip-left">
-        <i class="large mdi-editor-insert-chart"></i>
+        <i class="large mdi-editor-insert-chart waves-effect waves-light"></i>
         <span class="titip-content">
           This is a demo-button
         </span>
@@ -40,7 +40,7 @@
     </a></li>
     <li><a class="btn-floating skribl-primary-color darken-1">
       <code class="titip-left">
-      <i class="large mdi-editor-format-quote"></i>
+        <i class="large mdi-editor-format-quote waves-effect waves-light"></i>
         <span class="titip-content">
           This is a demo-button
         </span>
@@ -48,7 +48,7 @@
     </a></li>
     <li><a class="btn-floating skribl-primary-color darken-1">
       <code class="titip-left">
-        <i class="large mdi-editor-attach-file"></i>
+        <i class="large mdi-editor-attach-file waves-effect waves-light"></i>
         <span class="titip-content">
           This is a demo-button
         </span>
@@ -56,7 +56,7 @@
     </a></li>
     <li><a class="btn-floating skribl-primary-color darken-1">
       <code class="titip-left">
-        <i class="large mdi-editor-publish"></i>
+        <i class="large mdi-editor-publish waves-effect waves-light" ng-click="ui_upload_activate()"></i>
         <span class="titip-content">
           Upload a new publication
         </span>
@@ -69,7 +69,8 @@
 
 
 <!-- The overal container -->
-<div class="container">
+<div class="container section">
+</br></br></br>
   <div class="animated pulse row">
 
     <!-- user card-->
@@ -79,7 +80,6 @@
           <span class="card-title grey-text text-darken-4">
             <i class="mdi-action-account-circle">&nbsp{{ username }}</i>
           </span>
-
 
           <!-- basic -->
           <div class="card">
@@ -205,14 +205,43 @@
 
 
 
-
-
-      <!-- second card-->
+      <!-- library card-->
       <div class="col l7 m6 s12">
         <div class="card z-depth-4">
-          <div class="card-content">
-            <span class="card-title grey-text text-darken-4">Publication</span>
+          <div class="card-content" style="background:#EEEEEE">
+            <span class="card-title grey-text text-darken-4">
+              <i class="mdi-action-account-circle">&nbsp{{ username }}</i>
+            </span>
 
+            <!-- upload publication -->
+            <div class="card" ng-show="ui_upload_active()">
+              <div class="card waves-effect waves-block waves-light">
+              </div>
+              <div class="card-content">
+                <span class="card-title grey-text text-darken-4">
+                  <a> Upload Publication </a>
+                  <i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i></span>
+                </div>
+                <span class="grey-text text-darken-4">
+                  <div class="animated fadeInDown col s12"> 
+                    <div class="section">
+                      
+                    <div> initial </div>
+                    <div> while uploading </div>
+                    <div> uploading with scraping </div>
+                    <div> uploading with metadata </div>
+                    <div> finished uploading </div>
+
+
+
+
+
+
+                    </div>
+                  </div>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -220,40 +249,34 @@
 
 
 
-    </div>
-  </div>
 
 
 
 
 
+      <div>
+       <center>
+
+         <h1> Hi there, {{ username }}! </h1>  
+         <br>
+         <button ng-click="logout()"> Logout </button>
+         <button ng-click="deleteUser()"> Delete </button>
+         <br>
+         <br>
+
+         <form enctype="multipart/form-data" action="http://wilma.vub.ac.be:8443/publications" method="post" name"inputFileForm">
+           Paper to add:<br>
+           <input type="file" name="inputFile" accept=".pdf">
+           <br>
+           <input type="text" name="brol">
+           <br>
+           <input type="submit">
+         </form>
 
 
 
 
-  <div>
-   <center>
-
-     <h1> Hi there, {{ username }}! </h1>  
-     <br>
-     <button ng-click="logout()"> Logout </button>
-     <button ng-click="deleteUser()"> Delete </button>
-     <br>
-     <br>
-
-     <form enctype="multipart/form-data" action="http://wilma.vub.ac.be:8443/publications" method="post" name"inputFileForm">
-       Paper to add:<br>
-       <input type="file" name="inputFile" accept=".pdf">
-       <br>
-       <input type="text" name="brol">
-       <br>
-       <input type="submit">
-     </form>
-
-
-
-
-   </center>
- </div>
+       </center>
+     </div>
 
 

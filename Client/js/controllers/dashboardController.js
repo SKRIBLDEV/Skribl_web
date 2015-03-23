@@ -37,6 +37,33 @@
 		$scope.ui_user_settings = !$scope.ui_user_settings;
 	}
 
+	//upload
+	ui_upload_status = 0;
+
+	$scope.ui_upload_active = function(){
+		 return ui_upload_status != -1;
+	}
+
+	$scope.ui_upload_initialStatus = function(){
+		return ui_upload_status == 0;
+	}
+
+	$scope.ui_upload_scrapingStatus = function(){
+		return ui_upload_status == 1;
+	}
+
+	$scope.ui_upload_activate = function(){
+		ui_upload_status = 0;
+	}
+
+	$scope.ui_upload_deActivate = function(){
+		ui_upload_status = -1;
+	}
+
+	$scope.ui_upload_nextStatus = function(){
+		ui_upload_status = ++ui_upload_status%2;
+	}
+
 	// Dataviz
 	$scope.someOptions = {
 		segementStrokeWidth: 40,
