@@ -19,6 +19,8 @@
 	}
 
 	//GUI settings
+	
+	//user
 	$scope.ui_user_basic = false;
 	$scope.ui_user_dataviz = false;
 	$scope.ui_user_settings = false;
@@ -35,6 +37,7 @@
 		$scope.ui_user_settings = !$scope.ui_user_settings;
 	}
 
+	// Dataviz
 	$scope.someOptions = {
 		segementStrokeWidth: 40,
         segmentStrokeColor: 'pink' //make global angular params
