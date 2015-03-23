@@ -10,8 +10,8 @@ var RID = require('./rid.js');
  */
 function Author(db) {
 
-	function addAuthor(fName, lName, trx, callback) {
-		trx.let('author', function(s) {
+	function addAuthor(fName, lName, trx_id, trx, callback) {
+		trx.let(trx_id, function(s) {
 			s.create('vertex', 'Author')
 			.set({
 				firstName: fName,
@@ -20,8 +20,8 @@ function Author(db) {
 		})
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
-			.from('$publication')
-			.to('$author');
+			.from('$' + trx_id)
+			.to('$publication');
 		});
 		callback(null, true);
 	};
@@ -30,7 +30,7 @@ function Author(db) {
 		if(authors.length) {
 			var ctr = 0;
 			for (var i = 0; i < authors.length; i++) {
-				addAuthor(authors[i]['fName'], authors[i]['lName'], trx, function(error, res) {
+				addAuthor(authors[i]['fName'], authors[i]['lName'], i, trx, function(error, res) {
 					ctr++;
 					if(ctr == authors.length) {
 						callback(null, true);
@@ -43,14 +43,14 @@ function Author(db) {
 		}
 	};
 
-	function connectAuthor(id, trx, callback) {
-		trx.let('author', function(s) {
+	function connectAuthor(id, trx_id, trx, callback) {
+		trx.let(trx_id, function(s) {
 			s.select().from(id);
 		})
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
-			.from('$publication')
-			.to('$author');
+			.from('$' + trx_id)
+			.to('$publication');
 		});
 		callback(null, true);
 	};
@@ -59,7 +59,7 @@ function Author(db) {
 		if(authors.length) {
 			var ctr = 0;
 			for (var i = 0; i < authors.length; i++) {
-				connectAuthor(authors[i], trx, function(error, res) {
+				connectAuthor(authors[i], i, trx, function(error, res) {
 					ctr++;
 					if(ctr == authors.length) {
 						callback(null, true);
@@ -104,7 +104,24 @@ function Author(db) {
 		});
 	};
 	*/
-
+	this.getPubAuthors = function(pubId, clb) {
+		db.select('expand( out(\'AuthorOf\') )').from(pubId).all()
+		.then(function(authors) {
+			var res = [];
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				var obj = {
+					fName: authors[i].firstName,
+					lName: authors[i].lastName
+				};
+				res.push(obj);
+				ctr++;
+				if(ctr == authors.length) {
+					clb(null, res);
+				}
+			};
+		});
+	}
 
 	/**
 	 * will return an object with author info.	
