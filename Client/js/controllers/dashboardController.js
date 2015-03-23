@@ -9,7 +9,7 @@
  * @param  {object} $appData  	our custom service for shared data
 
  */
- angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData) {
+ angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData, $timeout) {
 
 	//Control if user has already loged in, or if he tries to go the dashboard without login in.
 	if(!($appData.currentUser))
@@ -38,30 +38,84 @@
 	}
 
 	//upload
-	ui_upload_status = 0;
+
+	ui_UPLOAD_STATUS = {
+		UNACTIVE : -1,
+		INITIAL  : 0,
+		WAITING_SCRAPING : 1,
+		WAITING_MANUAL : 2,
+		SUCCES_SCRAPING : 4,
+		SUCCES_MANUAL : 5
+	}
+
+	ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
 
 	$scope.ui_upload_active = function(){
-		 return ui_upload_status != -1;
+		return ui_upload_status != -1;
 	}
 
 	$scope.ui_upload_initialStatus = function(){
-		return ui_upload_status == 0;
+		return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;
 	}
 
-	$scope.ui_upload_scrapingStatus = function(){
-		return ui_upload_status == 1;
+	$scope.ui_upload_waitingScraping = function(){
+		return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;
+	}
+
+	$scope.ui_upload_waitingManual = function(){
+		return ui_upload_status == ui_UPLOAD_STATUS.WAITING_MANUAL;
+	}
+
+	$scope.ui_upload_succesManual = function(){
+		return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_MANUAL;
+	}
+
+	$scope.ui_upload_succesScraping = function(){
+		return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;
 	}
 
 	$scope.ui_upload_activate = function(){
-		ui_upload_status = 0;
+		ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
 	}
 
 	$scope.ui_upload_deActivate = function(){
-		ui_upload_status = -1;
+		ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
 	}
 
-	$scope.ui_upload_nextStatus = function(){
-		ui_upload_status = ++ui_upload_status%2;
+
+	//@Douglas : upload should be here
+	$scope.upload = function(manual){
+		if (manual){
+			ui_upload_status = ui_UPLOAD_STATUS.WAITING_MANUAL;
+			
+			//timeout is only to test the async mode, delete this for real functionality
+			$timeout(function() {
+				var succes = true;
+				if (succes){
+					ui_upload_status = ui_UPLOAD_STATUS.SUCCES_MANUAL;
+					toast("succesfully uploaded publication with manual meta-data", 4000) // 4000 is the duration of the toast
+				} else {
+				// fill in error content 
+				ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+					toast("failed to upload publication with meta-data", 4000) // 4000 is the duration of the toast
+					document.getElementById("upload_error").innerHTML = "ERROR MESSAGE";
+				}
+			}, 3000);
+		} else {
+			ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
+			
+			$timeout(function() {
+				var succes = true;
+				if (succes){
+					ui_upload_status = ui_UPLOAD_STATUS.SUCCES_SCRAPING;
+				toast("succesfully uploaded publication with scraping", 4000) // 4000 is the duration of the toast
+			} else {
+				ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+				toast("failed to upload publication with scraping", 4000) // 4000 is the duration of the toast
+				document.getElementById("upload_error").innerHTML = "ERROR MESSAGE";
+			}
+		}, 3000);
+		}
 	}
 
 	// Dataviz
