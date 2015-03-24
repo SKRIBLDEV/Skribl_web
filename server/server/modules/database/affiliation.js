@@ -208,51 +208,21 @@ function Affiliation(db) {
 	};
 
 
-		/**
-		 * will get the researchgroup of a user and then collect the whole affiliation chain.
-		 * @private
-		 * @param  {Object}   user
-		 * @param  {callBack} callback
-		 * @return {[Object]}
-		 */
 	this.getAffiliation = function(user, callback) {
-	  	var cUser = user;
-	  	var results;
-		var content;
-		var researchGroup;
-		var department;
-		var faculty;
-		var institution;
-		db.exec('select * from (traverse * from (select * from User where username = \'' + cUser.username + '\') while $depth < 2) where @class = \'ResearchGroup\'')
-		.then(function(information) {
-			results = information.results[0];
-			content = results.content[0];
-			researchGroup = content.value;
-			cUser.researchGroup = researchGroup.Name;
-		})
-		.then(function() {
-			var departmentRid = RID.transformRid(researchGroup.Department);
-			db.query('select from Department where @rid = ' + departmentRid)
-			.then(function(departments) {
-				department = departments[0];
-				cUser.department = department.Name;
-			})
-			.then(function() {
-				var facultyRid = RID.transformRid(department.Faculty);
-				db.query('select from Faculty where @rid = ' + facultyRid)
-				.then(function(faculties) {
-					faculty = faculties[0];
-					cUser.faculty = faculty.Name;
-				})
-				.then(function() {
-					var institutionRid = RID.transformRid(faculty.Institution);
-					db.query('select from Institution where @rid = ' + institutionRid)
-					.then(function(institutions) {
-						institution = institutions[0];
-						cUser.institution = institution.Name;
-						callback(null, cUser);
+		db.query('select expand(out(\'InResearchGroup\')) from ' + RID.getRid(user)).all()
+		.then(function(res) {
+			user.researchGroup = res[0].Name;
+			db.query('select expand(in(\'HasResearchGroup\')) from ' + RID.getRid(res[0])).all()
+			.then(function(res) {
+				user.department = res[0].Name;
+				db.query('select expand(in(\'HasDepartment\')) from ' + RID.getRid(res[0])).all()
+				.then(function(res) {
+					user.faculty = res[0].Name;
+					db.query('select expand(in(\'HasFaculty\')) from ' + RID.getRid(res[0])).all()
+					.then(function(res) {
+						user.university = res[0].Name;
+						callback(null, user);
 					});
-
 				});
 			});
 		});

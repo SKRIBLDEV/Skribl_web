@@ -21,7 +21,6 @@ function ResearchDomain(db){
 			}
 			else {
 				trx.let('resDomain' + varName, function(s) {
-					console.log(s);
 					s.create('vertex', 'ResearchDomain')
 					.set({
 						Name: domName

@@ -6,7 +6,6 @@ function Library(db) {
 
 	 function createLibrary(user, name, trx, clb) { 
 	 	trx.let(name, function(s) {
-	 		console.log('test');
 			s.create('vertex', 'Library')
 			.set({
 				username: user,
