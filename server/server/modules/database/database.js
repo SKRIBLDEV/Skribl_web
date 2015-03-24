@@ -488,8 +488,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
 /*
+
 function callBack(error, result){
 	if (error){
 	console.log(error);

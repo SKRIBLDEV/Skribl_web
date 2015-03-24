@@ -228,12 +228,34 @@ function Publication(db) {
 
 //change this to one big query for pagination and sorting
 	this.querySimple = function(keyword, limit, clb) {
+		function getTitle(id, clb2) {
+			db.select('title').from(id).all()
+			.then(function(res) {
+				clb2(null, res[0].title);
+			});
+		}
+
+		function prepResults(array, callB) {
+			var ctr = 0;
+			for (var i = 0; i < array.length; i++) {
+				getTitle(array[ctr], function(error, res) {
+					array[ctr] = {id: array[ctr], title: res};
+					ctr++
+					if(ctr == array.length) {
+						callB(null, array);
+					}
+				});
+			};
+		}
+
 		var ctr = 0;
 		var nrOfQueries = 14;
 		function counter() {
 			ctr++;
 			if(ctr == nrOfQueries) {
-				clb(null, result.sort(RID.compareRid).slice(0, limit));
+				prepResults(result.sort(RID.compareRid), function(error, res) {
+					clb(null, res.slice(0, limit));
+				});
 			}
 		}
 
