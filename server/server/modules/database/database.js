@@ -476,8 +476,8 @@ var metObject = {
 //database.createLibrary('tkrios', 'TestLib', callBack);
 ////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
-//database.addJournal('test1', fObject, 'test3', callBack);
-//database.getPublication('#23:8', callBack);
+//database.addJournal('test2', fObject, 'test3', callBack);
+//database.getPublication('#23:14', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
 //database.updatePublication('#23:13', metObject, callBack);
@@ -497,14 +497,14 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
 /*
+
 function callBack(error, result){
 	if (error){
 	console.log(error);
 	}
 	else{
-	console.log(result.getDepartment());
+	console.log(result);
 	//printUser(result);
 	}
 	stop();
@@ -514,7 +514,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
 */
+
 
 

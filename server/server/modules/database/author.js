@@ -27,7 +27,7 @@ function Author(db) {
 	};
 
 	this.addAuthors = function(authors, trx, callback) {
-		if(authors.length) {
+		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
 			for (var i = 0; i < authors.length; i++) {
 				addAuthor(authors[i]['fName'], authors[i]['lName'], i, trx, function(error, res) {
@@ -56,7 +56,7 @@ function Author(db) {
 	};
 
 	this.connectAuthors = function(authors, trx, callback) {
-		if(authors.length) {
+		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
 			for (var i = 0; i < authors.length; i++) {
 				connectAuthor(authors[i], i, trx, function(error, res) {
@@ -76,19 +76,24 @@ function Author(db) {
 	this.getPubAuthors = function(pubId, clb) {
 		db.select('expand( out(\'AuthorOf\') )').from(pubId).all()
 		.then(function(authors) {
-			var res = [];
-			var ctr = 0;
-			for (var i = 0; i < authors.length; i++) {
-				var obj = {
-					fName: authors[i].firstName,
-					lName: authors[i].lastName
+			if(authors.length) {
+				var res = [];
+				var ctr = 0;
+				for (var i = 0; i < authors.length; i++) {
+					var obj = {
+						fName: authors[i].firstName,
+						lName: authors[i].lastName
+					};
+					res.push(obj);
+					ctr++;
+					if(ctr == authors.length) {
+						clb(null, res);
+					}
 				};
-				res.push(obj);
-				ctr++;
-				if(ctr == authors.length) {
-					clb(null, res);
-				}
-			};
+			}
+			else {
+				clb(null, []);
+			}
 		});
 	}
 

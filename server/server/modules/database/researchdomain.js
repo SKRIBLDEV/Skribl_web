@@ -68,38 +68,48 @@ function ResearchDomain(db){
 		var ctr = 0;
 		function forClb(error, varName) {
 			ctr++;
-				if(error) {
-					callback(error);
-				} 
-				else {
-					trx.let('domainEdge', function(s) {
-						s.create('edge', 'HasResearchDomain')
-						.from('$publication')
-						.to('$resDomain' + varName);
-					});
-					if(ctr == domains.length) {
-						callback(null, true);
-					}
+			if(error) {
+				callback(error);
+			} 
+			else {
+				trx.let('domainEdge', function(s) {
+					s.create('edge', 'HasResearchDomain')
+					.from('$publication')
+					.to('$resDomain' + varName);
+				});
+				if(ctr == domains.length) {
+					callback(null, true);
 				}
 			}
-
-		for (var i = 0; i < domains.length; i++) {
-			addResearchDomain(domains[i], i, trx, forClb);
+		}
+		if(typeof domains !== 'undefined' && domains.length) {
+			for (var i = 0; i < domains.length; i++) {
+				addResearchDomain(domains[i], i, trx, forClb);
+			}
+		}
+		else {
+			callback(null, true);
 		}
 	};
 
 	this.getPubResearchDomains = function(pubId, clb) {
 		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
 		.then(function(resDomains) {
-			var res = [];
-			var ctr = 0;
-			for (var i = 0; i < resDomains.length; i++) {
-				res.push(resDomains[i].Name);
-				ctr++;
-				if(ctr == resDomains.length) {
-					clb(null, res);
-				}
-			};
+			if(resDomains.length) {
+				var res = [];
+				var ctr = 0;
+				for (var i = 0; i < resDomains.length; i++) {
+					res.push(resDomains[i].Name);
+					ctr++;
+					if(ctr == resDomains.length) {
+						clb(null, res);
+					}
+				};	
+			}
+			else {
+				clb(null, []);
+			}
+
 		});
 	}
 }
