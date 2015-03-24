@@ -80,6 +80,7 @@ function Database(serverConfig, dbConfig) {
 	this.addToLibrary = Lib.addToLibrary;
 	this.addLibrary = Lib.addLibrary;
 	this.removeLibrary = Lib.removeLibrary;
+	this.removeFromLibrary = Lib.removeFromLibrary;
 	this.addDefaults = Lib.addDefaults;
 	this.searchAuthor = AUT.searchAuthor;
 	/**
