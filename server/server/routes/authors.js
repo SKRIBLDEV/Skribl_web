@@ -17,8 +17,8 @@ const __AUTHOR_LIMIT__ = 5;
  */
 function searchAuthors(req, res, context) {
 
-	var firstName = req.query['firstname'];
-	var lastName = req.query['lastname'];
+	var firstname = req.query['firstname'];
+	var lastname = req.query['lastname'];
 
 	if(!(firstname && lastname))
 		return userError(res, 'Expected firstname:lastname');
