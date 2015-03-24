@@ -50,34 +50,29 @@ function Publication(db) {
 		function createPub(error, data) {
 			db.select().from('Publication').where({title: title}).all()
 			.then(function(res) {
-				if(res.length) {
-					callback(new Error('publication with title: ' + title + ' already exists.'))
-				}
-				else {
-					var trx = db.let('library', function(s) {
-						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+				var trx = db.let('library', function(s) {
+					s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+				});
+				db.create('vertex', 'Journal')
+				.set({
+					title: title,
+					data: data,
+					fileName: fileName
+				}).one()
+				.then(function(res) {
+					trx.let('publication', function(s) {
+						s.select().from(RID.getORid(res));
+					})
+					.let('pubEdge', function(s) {
+						s.create('edge', 'HasPublication')
+						.from('$library')
+						.to('$publication');
+					})
+					.commit().return('$publication').all()
+					.then(function(pub) {
+						callback(null, RID.getRid(pub[0]));
 					});
-					db.create('vertex', 'Journal')
-					.set({
-						title: title,
-						data: data,
-						fileName: fileName
-					}).one()
-					.then(function(res) {
-						trx.let('publication', function(s) {
-							s.select().from(RID.getORid(res));
-						})
-						.let('pubEdge', function(s) {
-							s.create('edge', 'HasPublication')
-							.from('$library')
-							.to('$publication');
-						})
-						.commit().return('$publication').all()
-						.then(function(pub) {
-							callback(null, RID.getRid(pub[0]));
-						});
-					});
-				}
+				});
 			});
 		}
 		getFile(fileObj.path, createPub);
@@ -171,7 +166,7 @@ function Publication(db) {
 							}
 							delete res.data;
 							delete res['@type'];
-							res.type = res['@class']
+							res.type = res['@class'].toLowerCase()
 							delete res['@class'];
 							delete res['in_HasPublication'];
 							delete res['@version'];
