@@ -91,15 +91,21 @@ function ResearchDomain(db){
 	this.getPubResearchDomains = function(pubId, clb) {
 		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
 		.then(function(resDomains) {
-			var res = [];
-			var ctr = 0;
-			for (var i = 0; i < resDomains.length; i++) {
-				res.push(resDomains[i].Name);
-				ctr++;
-				if(ctr == resDomains.length) {
-					clb(null, res);
-				}
-			};
+			if(resDomains.length) {
+				var res = [];
+				var ctr = 0;
+				for (var i = 0; i < resDomains.length; i++) {
+					res.push(resDomains[i].Name);
+					ctr++;
+					if(ctr == resDomains.length) {
+						clb(null, res);
+					}
+				};	
+			}
+			else {
+				clb(null, []);
+			}
+
 		});
 	}
 }

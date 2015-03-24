@@ -76,19 +76,24 @@ function Author(db) {
 	this.getPubAuthors = function(pubId, clb) {
 		db.select('expand( out(\'AuthorOf\') )').from(pubId).all()
 		.then(function(authors) {
-			var res = [];
-			var ctr = 0;
-			for (var i = 0; i < authors.length; i++) {
-				var obj = {
-					fName: authors[i].firstName,
-					lName: authors[i].lastName
+			if(authors.length) {
+				var res = [];
+				var ctr = 0;
+				for (var i = 0; i < authors.length; i++) {
+					var obj = {
+						fName: authors[i].firstName,
+						lName: authors[i].lastName
+					};
+					res.push(obj);
+					ctr++;
+					if(ctr == authors.length) {
+						clb(null, res);
+					}
 				};
-				res.push(obj);
-				ctr++;
-				if(ctr == authors.length) {
-					clb(null, res);
-				}
-			};
+			}
+			else {
+				clb(null, []);
+			}
 		});
 	}
 

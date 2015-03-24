@@ -47,15 +47,21 @@ function Keyword(db) {
 	this.getPubKeywords = function(pubId, clb) {
 		db.select('expand( out(\'HasKeyword\') )').from(pubId).all()
 		.then(function(resKeys) {
-			var res = [];
-			var ctr = 0;
-			for (var i = 0; i < resKeys.length; i++) {
-				res.push(resKeys[i].keyword);
-				ctr++;
-				if(ctr == resKeys.length) {
-					clb(null, res);
-				}
-			};
+			if(resKeys.length) {
+				var res = [];
+				var ctr = 0;
+				for (var i = 0; i < resKeys.length; i++) {
+					res.push(resKeys[i].keyword);
+					ctr++;
+					if(ctr == resKeys.length) {
+						clb(null, res);
+					}
+				};	
+			}
+			else {
+				clb(null, []);
+			}
+
 		});
 	}
 
