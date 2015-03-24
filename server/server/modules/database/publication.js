@@ -149,9 +149,10 @@ function Publication(db) {
 	}
 
 	this.getPublication = function(id, clb) {
-		db.record.get(id)
-		.then(function(res) {
-			if(res) {
+		db.select().from(id).all()
+		.then(function(pubs) {
+			if(pubs.length) {
+				var res = pubs[0];
 				AUT.getPubAuthors(id, function(error, authors) {
 					RD.getPubResearchDomains(id, function(error, resDomains) {
 						Kw.getPubKeywords(id, function(error, resKeys) {
@@ -483,9 +484,9 @@ function Publication(db) {
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
-			if(res[0]['@class'] == metObject.type) {
+			if(res[0]['@class'].toLowerCase() == metObject.type) {
 				var trx;
-				if(metObject.type == 'Journal') {
+				if(metObject.type == 'journal') {
 					var trx = db.let('publication1', function(s) {
 						s.update(id)
 						.set({
