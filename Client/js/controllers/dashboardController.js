@@ -20,7 +20,11 @@
 
     //Used to display loading screen when necessary
     $scope.busy = false;
-    $scope.$watch('busy',function(newValue, oldValue){console.log("loading screen on/off");},true);
+    $scope.$watch('busy',function(newValue, oldValue){$scope.loading();},true);
+    $scope.loading = function(){
+        if($scope.busy){console.log("start loading screen");}
+        else{console.log("stop loading screen");}
+    }
 //-------------------------------------------------GUI settings-----------------------------------------------------------//
 	
 	//user
@@ -263,12 +267,9 @@
         .success(function(data, status, headers, config){
             publicationID = data.id.substring(1);
             $scope.uploadMetaData(publicationID);//when publication is added to database metadata of publication needs to be send/updated (currently empty)
-            console.log('file uploaded');
-            //TODO Publication added to db message
         })
         .error(function(){
-            //TODO error melding -->try again
-            console.log('failed to upload file !')
+            toast("Failed to upload file, try again later", 4000) // 4000 is the duration of the toast
             $scope.busy = false;
         });
     }
@@ -301,21 +302,21 @@
                         'abstract': undefined,
                         'citations': undefined,
                         'article_url': undefined,
-                        'keywords': $scope.userinput.keywordFirst.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)};
+                        'keywords': $scope.userinput.keywords.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)};
         
         var metaDataRequest = $http.post(url,metaData,config);
 		metaDataRequest.success(function(data, status, headers, config) {
-            //TODO if uploadingPaper = true adding papper succes, if uploadingPaper = false updating metaData succes.
             $scope.busy = false;
-            console.log('metdata uploaded');
+            if(uploadingPaper){toast("succesfully uploaded paper", 4000);} // 4000 is the duration of the toast}
+            else{toast("succesfully changeded meta data", 4000);} // 4000 is the duration of the toast
 		});
 		metaDataRequest.error(function(data, status, headers, config) {
-			//TODO if uploadingPaper = true adding meta data of papper failed but paper is uploaded, if uploadingPaper = false updating metaData failed.
-            console.log('failed to send metadata');
+            if(uploadingPaper){toast("failed to upload metadata of the paper, please modify it.", 20000);} // 20000 is the duration of the toast
+            else{toast("failed to upload metadata please try again later.", 4000);} // 4000 is the duration of the toast
             $scope.busy = false;
 			});
     }
-    
+
     //delete a publication of the db
     $scope.deletePublication = function(publicationID){
         $scope.busy = true;
@@ -326,13 +327,13 @@
         var deletePublicationRequest = $http.delete(url,config);
         
         deletePublicationRequest.success(function(data, status, headers, config) {
-            //TODO deleting publication success message
             $scope.busy = false;
-            console.log('file deleted');
+            toast("Publication deleted.", 4000);
+            
 		});
 		deletePublicationRequest.error(function(data, status, headers, config) {
-			//TODO deleting publication failed --> try again
             $scope.busy = false;
+            toast("Failed to delete publication, try again later.", 4000);
 			});
     }
     
@@ -343,31 +344,39 @@
         var getMetaDataRequest = $http.get(url, config);
         
         getMetaDataRequest.success(function(data, status, headers, config) {
-            //TODO get metaData success --> show meta data
-            $scope.currentMetaData = data;
-            $scope.busy = false;
-            console.log(data);
+        $scope.userinput.title = data.title;
+        $scope.userinput.journalName = data.journal;
+        $scope.userinput.journalNumber = data.number;
+        $scope.userinput.journalVolume = data.volume;
+        $scope.userinput.year = data.year;
+        $scope.userinput.publisher = data.publisher;
+        $scope.userinput.keywords = data.keywords;
+        console.log(data);
+        
+        $scope.busy = false;
 		});
 		getMetaDataRequest.error(function(data, status, headers, config) {
-			//TODO get metaData failed --> try again
             $scope.busy = false;
+            toast("Failed to get information about publication, try again later.", 4000);
         });
     }
     
     //function to download a file
-     $scope.getFile = function(publicationID){
+    $scope.deleteCurrentFile = function(){
+        currentFile = null;}
+    $scope.currentFile;
+    $scope.getFile = function(publicationID){
         $scope.busy = true;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
         var getFileRequest = $http.get(url, config);
         
         getFileRequest.success(function(data, status, headers, config) {
-            //TODO get file success --> preview
-            console.log(data);
             $scope.busy = false;
+            currentFile = data;
 		});
 		getFileRequest.error(function(data, status, headers, config) {
-			//TODO get file failed --> try again
             $scope.busy = false;
+            toast("Failed to download file, please try again later.", 4000);
         });
     }
     
@@ -380,14 +389,13 @@
 		    }};
         var getUserPublicationsRequest = $http.get(url,config);
         getUserPublicationsRequest.success(function(data, status, headers, config) {
-            //TODO show users publications.
             appData.currentUser.publications = data;
             console.log(appData.currentUser.publications);
             $scope.busy = false;
 		});
 		getUserPublicationsRequest.error(function(data, status, headers, config) {
-			//TODO get publications failed --> try again
             $scope.busy = false;
+            toast("Failed to get publications, try again later.", 4000);
         });
     }
     
@@ -399,8 +407,7 @@
                     if(newValue == oldValue){return;};
                     if($scope.publicationTitles.length == appData.currentUser.publications.length)
                     {appData.currentUser.publicationsTitles = $scope.publicationTitles;
-                    $scope.busy = false;
-                    console.log(appData.currentUser.publicationsTitles  );}},
+                    $scope.busy = false;}},
                   true);
     
     $scope.getCurrentPublicationTitles = function(){
@@ -413,11 +420,10 @@
             getMetaDataRequest.success(function(data, status, headers, config) {
                 $scope.publicationTitles.push(data.title);});
             getMetaDataRequest.error(function(data, status, headers, config) {
-			//TODO get metaData failed --> try again later
+			toast("Failed to get titles of publications, try again later.", 4000)
             });
         };
     }
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
     
-
 });
