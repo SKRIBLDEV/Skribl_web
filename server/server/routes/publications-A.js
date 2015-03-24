@@ -11,6 +11,38 @@ const fs = require('fs');
 
 const nop = function() {}
 
+/* --- TEST STUB --- /
+
+var bogusDb = {
+	addJournal: function(t, f, u, clb) {
+		console.log("ADDING JOURNAL TO DB: ")
+		console.log("title: " + t);
+		console.log("file: " + "(" + f.originalname + ", " + f.path + ")");
+		console.log("uploader: " + u);
+		clb(null, "#23:42");
+	},	
+	addProceeding: function(t, f, u, clb) {
+		console.log("ADDING PROCEEDING TO DB: ")
+		console.log("title: " + t);
+		console.log("file: " + "(" + f.originalname + ", " + f.path + ")");
+		console.log("uploader: " + u);
+		clb(null, "#23:41");
+	},
+	querySimple: function(k, l, clb) {
+		console.log("SIMPLE QUERY ON DB: ");
+		console.log("KEYWORD: " + k);
+		console.log("LIMIT: " + l);
+		clb(null, [1,2,3,4,5]);
+	},
+	queryAdvanced: function(c, l, clb) {
+		console.log("ADVANCED QUERY ON DB: ")
+		console.log("CRITERIA: " + c);
+		console.log("LIMIT: " + l);
+		clb(null, [5,4,3,2,1]);
+	} 
+}
+*/
+
 /* --- CREATE PUBLICATIONS --- */
 
 /**
@@ -21,6 +53,8 @@ const nop = function() {}
 */
 function createPublication(req, res, context) {
 
+	var db = context.db;
+
 	/* VALIDATION */
 	var title = req.query['title'];
 	if(!title)
@@ -30,19 +64,19 @@ function createPublication(req, res, context) {
 	var addPublication;
 	switch (type) {
 		case 'journal':
-			addPublication = context.db.addJournal;
+			addPublication = db.addJournal;
 			break;
 		case 'proceeding':
-			addPublication = context.db.addProceeding;
+			addPublication = db.addProceeding;
 			break;
 		default:
-			return userError('invalid or unspecified publication type')
+			return userError(res, 'invalid or unspecified publication type')
 	}
 
 	/* ADD A PUBLICATION TO DB */
 	function addToDatabase(publicationFile) {		
 		//add publication to the database
-		addPublication(publicationFile, req.uploader, function(err, pubId) {
+		addPublication(title, publicationFile, req.uploader, function(err, pubId) {
 			if (err)
 				serverError(res, err.toString());
 			else {
@@ -76,18 +110,17 @@ function createPublication(req, res, context) {
  	 	var fileStream = fs.createWriteStream(path);
  	 	//download file
   		http.get(publicationUrl, function(bytes) {    		
-  			fileStream.on('finish', function() {
-      			file.close(nop);
-    		});
+  			fileStream.on('finish', function() { fileStream.close(nop); });
     		bytes.pipe(fileStream);
-    		addToDatabase({path: path,
-    					   originalname: name,
-    					   mimetype: mime.lookup(path)});
-  		}).on('error', function(err) { // Handle errors
-    		fs.unlink(path); // Delete the file async. (But we don't check the result)
+    		addToDatabase({path: path, originalname: name, mimetype: mime.lookup(path)});
+  		}).on('error', function(err) {
+    		fs.unlink(path, nop);
     		serverError(res, 'DOWNLOAD FAILED: ' + err.toString());
   		});
-  	}
+
+  	/* NO FILE? */	
+  	} else
+  		userError(res, 'No file was provided!');
 }
 
 /**
@@ -157,8 +190,6 @@ function queryPublications(req, res, context) {
 	} else {
 
 		var criteria = req.body;
-		if(!criteria)
-			return userError(res, 'no criteria specified!');
 
 		db.queryAdvanced(criteria, __INTERNAL_LIMIT__, function(err, data) {
 			if(err)

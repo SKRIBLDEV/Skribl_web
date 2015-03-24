@@ -29,7 +29,7 @@ function Publication(db) {
 		 */
 		function getFile(path, clb) {
 			var file;
-
+			
 			fs.readFile(path, 'base64', function(error, data) {
 				if(error) {
 					callback(error);

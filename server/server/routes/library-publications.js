@@ -1,3 +1,5 @@
+/* IMPORTS */
+
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
