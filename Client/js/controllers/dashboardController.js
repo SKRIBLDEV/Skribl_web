@@ -74,6 +74,10 @@
 		return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;
 	}
 
+	$scope.ui_upload_success = function(){
+		return ($scope.ui_upload_succesScraping() || $scope.ui_upload_succesManual());
+	}
+
 	$scope.ui_upload_activate = function(){
 		ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
 	}

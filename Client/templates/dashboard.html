@@ -171,10 +171,6 @@
 
                   <div class="col s12">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tincidunt malesuada. Nulla placerat nulla ac leo faucibus placerat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum scelerisque sollicitudin mauris ut consectetur. Vivamus a facilisis augue. Integer bibendum tellus diam, eu ullamcorper risus rhoncus a. Vestibulum suscipit urna ipsum, sit amet venenatis odio placerat ac. Cras aliquet sapien sed elit condimentum viverra. Phasellus vitae arcu elementum neque sagittis sagittis.
-
-                    In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque. In erat tortor, imperdiet ut orci sit amet, maximus vulputate erat.
-
-                    Phasellus fermentum rutrum purus vitae facilisis. Suspendisse malesuada lacinia maximus. Maecenas odio dolor, dignissim tincidunt ultrices quis, vestibulum vitae magna. Mauris suscipit, enim vel euismod sodales, ipsum nulla pulvinar nisi, bibendum ornare purus dolor non arcu. Ut at mi vel libero vehicula congue ut vitae mauris. Pellentesque sed dapibus nisl. Maecenas ut tristique enim. Aenean eu urna aliquet, rhoncus nunc sed, mattis ligula. Maecenas dignissim, massa sit amet bibendum aliquet, tortor quam convallis orci, at vulputate nisl justo vitae neque. Fusce volutpat metus id aliquet vehicula. Integer lacinia pulvinar ex, sed luctus sem laoreet sit amet.
                   </br></br>
                 </div>
                 <div class="row">
@@ -205,6 +201,7 @@
 
 
 
+
     <!-- library card-->
     <div class="col l7 m6 s12">
       <div class="card z-depth-4">
@@ -220,7 +217,11 @@
             <div class="card-content">
               <span class="card-title grey-text text-darken-4">
                 <a> Upload Publication </a>
-                <i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i></span>
+                <a>
+                <i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i>
+                </a>
+                </span>
+
               </div>
               <span class="grey-text text-darken-4">
                 <div class="animated fadeInDown col s12"> 
@@ -316,86 +317,84 @@
                       </div>
 
                       <!-- waiting page for manual -->
-                        <div ng-show="ui_upload_waitingManual()"> 
-                          <h5 class="row center"> Oldschool manual metadata, eh?</h5>
-                          <div class="row center">
-                           <div class="preloader-wrapper big active">
-                            <div class="spinner-layer spinner-blue">
-                              <div class="circle-clipper left">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="gap-patch">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="circle-clipper right">
-                                <div class="circle"></div>
-                              </div>
+                      <div ng-show="ui_upload_waitingManual()"> 
+                        <h5 class="row center"> Oldschool manual metadata, eh?</h5>
+                        <div class="row center">
+                         <div class="preloader-wrapper big active">
+                          <div class="spinner-layer spinner-blue">
+                            <div class="circle-clipper left">
+                              <div class="circle"></div>
                             </div>
-
-                            <div class="spinner-layer spinner-red">
-                              <div class="circle-clipper left">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="gap-patch">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="circle-clipper right">
-                                <div class="circle"></div>
-                              </div>
+                            <div class="gap-patch">
+                              <div class="circle"></div>
                             </div>
-
-                            <div class="spinner-layer spinner-yellow">
-                              <div class="circle-clipper left">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="gap-patch">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="circle-clipper right">
-                                <div class="circle"></div>
-                              </div>
+                            <div class="circle-clipper right">
+                              <div class="circle"></div>
                             </div>
+                          </div>
 
-                            <div class="spinner-layer spinner-green">
-                              <div class="circle-clipper left">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="gap-patch">
-                                <div class="circle"></div>
-                              </div>
-                              <div class="circle-clipper right">
-                                <div class="circle"></div>
-                              </div>
+                          <div class="spinner-layer spinner-red">
+                            <div class="circle-clipper left">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                              <div class="circle"></div>
+                            </div>
+                          </div>
+
+                          <div class="spinner-layer spinner-yellow">
+                            <div class="circle-clipper left">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                              <div class="circle"></div>
+                            </div>
+                          </div>
+
+                          <div class="spinner-layer spinner-green">
+                            <div class="circle-clipper left">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                              <div class="circle"></div>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                  <!-- succes for scrapping -->
-                  <div ng-show="ui_upload_succesScraping()"> succes with scraping </div>
-
-                  <!-- succes for manual -->
-                  <div ng-show="ui_upload_succesManual()"> succes with metadata </div>
-
-
-
-
-
-
-                  <!-- error for uploading -->
-                  <div class="row">
-                    <div class="col s12 alert-color" id="upload_error"></div>
-                  </div>
+                    <!-- succes for all -->
+                    <div class="row center" ng-show="ui_upload_success()"> 
+                      <a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">
+                        <i class="mdi-action-done left"></i>
+                        done</a>
+                        <a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_activate()">
+                          <i class="mdi-file-file-upload left"></i>
+                          upload another</a>
+                        </div>
 
 
+                        <!-- error for uploading -->
+                        <div class="row">
+                          <div class="col s12 alert-color" id="upload_error"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </span>
                 </div>
               </div>
-            </span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
 
 
@@ -405,29 +404,5 @@
 
 
 
-  <div>
-   <center>
-
-     <h1> Hi there, {{ username }}! </h1>  
-     <br>
-     <button ng-click="logout()"> Logout </button>
-     <button ng-click="deleteUser()"> Delete </button>
-     <br>
-     <br>
-
-     <form enctype="multipart/form-data" action="http://wilma.vub.ac.be:8443/publications" method="post" name"inputFileForm">
-       Paper to add:<br>
-       <input type="file" name="inputFile" accept=".pdf">
-       <br>
-       <input type="text" name="brol">
-       <br>
-       <input type="submit">
-     </form>
-
-
-
-
-   </center>
- </div>
 
 
