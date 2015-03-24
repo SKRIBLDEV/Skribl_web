@@ -4,14 +4,14 @@
  * 
  * @param  {object} $scope    the scope object of the controller
  * @param  {object} $location for switching between routes/views
- * @param  {object} $appData  our custom service for shared data
+ * @param  {object} appData  our custom service for shared data
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $appData, anchorSmoothScroll) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, appData, anchorSmoothScroll) {
 
 	//Used to control if user has already logged-in.
-	$appData.currentUser = null;
+	appData.currentUser = null;
 
 	//determines wether the head menu should be showed.
 	$scope.showMenu = true;
@@ -44,7 +44,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 		var item = motivationalQuotes[Math.floor(Math.random()*motivationalQuotes.length)];
 
-		console.log(item);
 		return item;
 	}
 
@@ -101,7 +100,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		loginRequest.success(function(data, status, headers, config) {
 
 			//Save Authorization when login to do important tasks.
-			$appData.Authorization = data.Authorization;
+			appData.Authorization = data.Authorization;
 			
 			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinputLogin.username);
@@ -110,7 +109,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			var loadUserInfoRequest = $http.get(pad,config);
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				//save userInformation in appData.
-				$appData.currentUser = data;
+				appData.currentUser = data;
 
 				// change route to #/dashboard
 				$location.path('/dashboard');
@@ -145,7 +144,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	 */
 	$scope.userinputLogin = {};
 
-	if($appData.currentUser === 1){
+	if(appData.currentUser === 1){
 		//just registered
 		document.getElementById("error").innerHTML = "You have successfully registered! Please log in";
 	}
@@ -162,13 +161,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
       // call $anchorScroll()
       anchorSmoothScroll.scrollTo(eID);
     };
-
- 	// temp fix for going to dashboard //FIXME
-    (function developLogin() {
-		$scope.userinputLogin.username = "brol";
-		$scope.userinputLogin.password = "Brol123!";
-		$scope.doLogin();
-	})();
 });
 
 
