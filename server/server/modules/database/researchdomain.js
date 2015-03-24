@@ -68,23 +68,27 @@ function ResearchDomain(db){
 		var ctr = 0;
 		function forClb(error, varName) {
 			ctr++;
-				if(error) {
-					callback(error);
-				} 
-				else {
-					trx.let('domainEdge', function(s) {
-						s.create('edge', 'HasResearchDomain')
-						.from('$publication')
-						.to('$resDomain' + varName);
-					});
-					if(ctr == domains.length) {
-						callback(null, true);
-					}
+			if(error) {
+				callback(error);
+			} 
+			else {
+				trx.let('domainEdge', function(s) {
+					s.create('edge', 'HasResearchDomain')
+					.from('$publication')
+					.to('$resDomain' + varName);
+				});
+				if(ctr == domains.length) {
+					callback(null, true);
 				}
 			}
-
-		for (var i = 0; i < domains.length; i++) {
-			addResearchDomain(domains[i], i, trx, forClb);
+		}
+		if(typeof domains !== 'undefined' && domains.length) {
+			for (var i = 0; i < domains.length; i++) {
+				addResearchDomain(domains[i], i, trx, forClb);
+			}
+		}
+		else {
+			callback(null, true);
 		}
 	};
 

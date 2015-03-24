@@ -160,9 +160,15 @@ function Publication(db) {
 				AUT.getPubAuthors(id, function(error, authors) {
 					RD.getPubResearchDomains(id, function(error, resDomains) {
 						Kw.getPubKeywords(id, function(error, resKeys) {
-							res.authors = authors;
-							res.researchDomains = resDomains;
-							res.keywords = resKeys;
+							if(typeof authors === 'defined') {
+								res.authors = authors;
+							}
+							if(typeof resDomains === 'defined') {
+								res.researchDomains = resDomains;
+							}
+							if(typeof resKeys === 'defined') {
+								res.keywords = resKeys;
+							}
 							delete res.data;
 							delete res['@type'];
 							res.type = res['@class']
