@@ -52,18 +52,35 @@ function Library(db) {
 	}
 
 	this.removeFromLibrary = function(user, library, id, clb) {
-		db.let('library', function(s) {
-			s.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'');
-		})
-		.let('delEdge', function(s) {
-			s.delete('edge', 'HasPublication')
-			.from('$library')
-			.to(id)
-		})
-		.commit().return('$library').all()
+		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'').all()
 		.then(function(res) {
-			clb(null, true);
+			if(res.length) {
+				db.select().from(id).all()
+				.then(function(res) {
+					if(res.length) {
+						db.let('library', function(s) {
+							s.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'');
+						})
+						.let('delEdge', function(s) {
+							s.delete('edge', 'HasPublication')
+							.from('$library')
+							.to(id)
+						})
+						.commit().return('$library').all()
+						.then(function(res) {
+							clb(null, true);
+						});
+					}
+					else {
+						clb(new Error('Publication does not exist'));
+					}
+				});
+			}
+			else {
+				clb(new Error('library does not exist'));
+			}
 		});
+		
 
 	}
 

@@ -424,7 +424,7 @@ function Database(serverConfig, dbConfig) {
 exports.Database = Database;
 
 //TESTCODE
-
+/*
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
@@ -463,8 +463,8 @@ var metObject = {
 	researchDomains: ['Computer Sciences'],
 	keywords: ['testingkey1', 'dieren']
 }
-
-database.searchAuthor('jack', 'daniels', 10, callBack);
+*/
+//database.searchAuthor('jack', 'daniels', 10, callBack);
 //database.loadLibrary('test2', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
 //database.addLibrary('test2', 'newlib', callBack);
@@ -497,7 +497,7 @@ UM.createUser(userInfo, function(error, res) {
 
 
 
-
+/*
 function callBack(error, result){
 	if (error){
 	console.log(error);
@@ -513,7 +513,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
+*/
 
 
 
