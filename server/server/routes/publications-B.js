@@ -127,6 +127,8 @@ function updatePublication(req, res, context) {
 
 		PUB.extract(meta, function(err, mt) {
 
+			console.log("META: " + mt);
+
 			database.updatePublication(id, mt, function(err) {
 				if(err)
 					serverError(res, err.toString());
