@@ -470,16 +470,17 @@ var metObject = {
 //database.addLibrary('test2', 'newlib', callBack);
 //database.testTransaction('jshep', callBack);
 //database.loadLibraries('test2', callBack);
-//database.loadUser('jshep', callBack);
+//database.loadUser('test3', callBack);
 //database.deleteUser('test1', callBack);
 //database.querySimple('key', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
 ////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
+//database.addJournal('test1', fObject, 'test3', callBack);
 //database.getPublication('#23:8', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
-//database.updatePublication('#23:11', metObject, callBack);
+//database.updatePublication('#23:13', metObject, callBack);
 //
 //
 /*
@@ -503,7 +504,7 @@ function callBack(error, result){
 	console.log(error);
 	}
 	else{
-	console.log(result);
+	console.log(result.getDepartment());
 	//printUser(result);
 	}
 	stop();
@@ -513,7 +514,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
 
+*/
 
 
