@@ -3,32 +3,31 @@
 var RID = require('./rid.js');
 function ResearchDomain(db){
 
-	var self = this;
-
 		/**
 	 * adds a researchdomain with given name
 	 * @private
 	 * @param {String}   domain
 	 * @param {callBack} callback
 	 */
-	this.addResearchDomain = function(domain, varName, trx, callback) {
+	function addResearchDomain(domain, varName, trx, callback) {
 		var domName = domain;
 		db.select().from('ResearchDomain').where({Name: domName}).all()
 		.then(function(domains) {
 			if(domains.length) {
-				trx.let(varName, function(s) {
+				trx.let('resDomain' + varName, function(s) {
 					s.select().from('ResearchDomain').where({Name: domName});
 				})
 				callback(null, varName);
 			}
 			else {
-				trx.let(varName, function(s) {
+				trx.let('resDomain' + varName, function(s) {
+					console.log(s);
 					s.create('vertex', 'ResearchDomain')
 					.set({
 						Name: domName
 					});
-					callback(null, varName);
 				});
+			callback(null, varName);
 			}
 		});
 	}
@@ -50,7 +49,7 @@ function ResearchDomain(db){
 					trx.let('domainEdge', function(s) {
 						s.create('edge', 'HasResearchDomain')
 						.from('$user')
-						.to('$' + varName);
+						.to('$resDomain' + varName);
 					});
 					if(counter) {
 						counter--;
@@ -62,14 +61,14 @@ function ResearchDomain(db){
 			}
 
 		for (var i = 0; i < domains.length; i++) {
-			self.addResearchDomain(domains[i], i, trx, forClb);
+			addResearchDomain(domains[i], i, trx, forClb);
 		}
 	};
 
-	this.addResearchDomainsPub = function(domains, trx, callback) {
-		var counter = domains.length;
-		counter--;
+	this.addPubResearchDomains = function(domains, trx, callback) {
+		var ctr = 0;
 		function forClb(error, varName) {
+			ctr++;
 				if(error) {
 					callback(error);
 				} 
@@ -77,21 +76,33 @@ function ResearchDomain(db){
 					trx.let('domainEdge', function(s) {
 						s.create('edge', 'HasResearchDomain')
 						.from('$publication')
-						.to('$' + varName);
+						.to('$resDomain' + varName);
 					});
-					if(counter) {
-						counter--;
-					}
-					else {
+					if(ctr == domains.length) {
 						callback(null, true);
 					}
 				}
 			}
 
 		for (var i = 0; i < domains.length; i++) {
-			self.addResearchDomain(domains[i], i, trx, forClb);
+			addResearchDomain(domains[i], i, trx, forClb);
 		}
 	};
+
+	this.getPubResearchDomains = function(pubId, clb) {
+		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
+		.then(function(resDomains) {
+			var res = [];
+			var ctr = 0;
+			for (var i = 0; i < resDomains.length; i++) {
+				res.push(resDomains[i].Name);
+				ctr++;
+				if(ctr == resDomains.length) {
+					clb(null, res);
+				}
+			};
+		});
+	}
 }
 
 exports.ResearchDomain = ResearchDomain;

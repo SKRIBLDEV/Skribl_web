@@ -6,7 +6,8 @@ var Oriento = require('oriento');
 	 * @param  {Object} object
 	 * @return {String}
 	 */
-	exports.getRid = function(object) {
+	exports.getRid = getRid;
+	function getRid(object) {
 		var rid = object['@rid'];
 		var cluster = rid.cluster;
 		var position = rid.position;
@@ -37,14 +38,14 @@ var Oriento = require('oriento');
 		return result;
 	}
 
-	exports.getRids = function(array, clb) {
+	exports.getRids = function(array) {
 		var resArray = [];
 		var counter = 0;
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(getRid(array[i]));
 			counter++
 			if(counter == array.length) {
-				clb(null, resArray);
+				return resArray;
 			}
 		};
 	}
@@ -59,4 +60,12 @@ var Oriento = require('oriento');
 				return resArray;
 			}
 		};
+	}
+
+	exports.compareRid = function(rid1, rid2) {
+		rid1 = rid1.replace('#', '');
+		rid2 = rid2.replace('#', '');
+		rid1 = rid1.replace(':', '');
+		rid2 = rid2.replace(':', '');
+		return parseInt(rid1) - parseInt(rid2);
 	}

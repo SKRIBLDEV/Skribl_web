@@ -65,7 +65,6 @@ function Publication(db) {
 					}).one()
 					.then(function(res) {
 						trx.let('publication', function(s) {
-							console.log(res);
 							s.select().from(RID.getORid(res));
 						})
 						.let('pubEdge', function(s) {
@@ -115,7 +114,6 @@ function Publication(db) {
 					}).one()
 					.then(function(res) {
 						trx.let('publication', function(s) {
-							console.log(res);
 							s.select().from(RID.getORid(res));
 						})
 						.let('pubEdge', function(s) {
@@ -159,19 +157,31 @@ function Publication(db) {
 		db.record.get(id)
 		.then(function(res) {
 			if(res) {
-				var metObject = res;
-				delete metObject.data;
-				delete metObject['@type'];
-				delete metObject['@class'];
-				delete metObject['in_HasPublication'];
-				delete metObject['@version'];
-				clb(null, metObject);
+				AUT.getPubAuthors(id, function(error, authors) {
+					RD.getPubResearchDomains(id, function(error, resDomains) {
+						Kw.getPubKeywords(id, function(error, resKeys) {
+							res.authors = authors;
+							res.researchDomains = resDomains;
+							res.keywords = resKeys;
+							delete res.data;
+							delete res['@type'];
+							res.type = res['@class']
+							delete res['@class'];
+							delete res['in_HasPublication'];
+							delete res['@version'];
+							delete res['out_AuthorOf'];
+							delete res['out_HasResearchDomain'];
+							delete res['out_HasKeyword'];
+							delete res['@rid'];
+							clb(null, res);	
+						});
+					});
+				});
 			}
 			else {
 				clb(new Error('Publication not found'));
 			}
-		});
-		
+		});	
 	}
 
 	this.removePublication = function(id, callback) {
@@ -202,6 +212,173 @@ function Publication(db) {
 					clb(new Error('library not found, error in function: uploadedBy in database->publication.js'));
 				}
 			});
+	}
+
+	Array.prototype.unique = function() {
+    	var a = this.concat();
+    	for(var i=0; i<a.length; ++i) {
+        	for(var j=i+1; j<a.length; ++j) {
+            	if(a[i] === a[j])
+               		a.splice(j--, 1);
+        	}
+    	}
+    	return a;
+	};
+
+
+//change this to one big query for pagination and sorting
+	this.querySimple = function(keyword, limit, clb) {
+		function getTitle(id, clb2) {
+			db.select('title').from(id).all()
+			.then(function(res) {
+				clb2(null, res[0].title);
+			});
+		}
+
+		function prepResults(array, callB) {
+			var ctr = 0;
+			for (var i = 0; i < array.length; i++) {
+				getTitle(array[ctr], function(error, res) {
+					array[ctr] = {id: array[ctr], title: res};
+					ctr++
+					if(ctr == array.length) {
+						callB(null, array);
+					}
+				});
+			};
+		}
+
+		var ctr = 0;
+		var nrOfQueries = 14;
+		function counter() {
+			ctr++;
+			if(ctr == nrOfQueries) {
+				prepResults(result.sort(RID.compareRid), function(error, res) {
+					clb(null, res.slice(0, limit));
+				});
+			}
+		}
+
+		var result = [];
+		db.select().from('Publication').where('title like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('abstract like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('fileName like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('Journal like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('publisher like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('volume like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('number like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('year like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('citations like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('url like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('booktitle like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.select().from('Publication').where('organisation like \'%' + keyword + '%\' and private = false').all()
+		.then(function(res) {
+			if(res.length) {
+				result = result.concat(RID.getRids(res)).unique();
+			}
+			counter();
+		});
+
+		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasKeyword\')) from Keyword where keyword like \'%' + keyword + '%\') where private = false')
+		.then(function(res) {
+			if(res.length) {
+			result = result.concat(RID.getRids(res)).unique();
+		}
+		counter();
+		});
+
+		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where Name like \'%' + keyword + '%\') where private = false')
+		.then(function(res) {
+			if(res.length) {
+			result = result.concat(RID.getRids(res)).unique();
+		}
+		counter();
+		});
+
+		db.query('select expand(distinct(@rid)) from (select expand(in(\'AuthorOf\')) from Author where firstName like \'%' + keyword + '%\' or lastName like \'%' + keyword + '%\') where private = false')
+		.then(function(res) {
+			if(res.length) {
+			result = result.concat(RID.getRids(res)).unique();
+		}
+		counter();
+		});
 	}
 
 	this.queryPublication = function(criteria, clb) {
@@ -308,7 +485,7 @@ function Publication(db) {
 			if(res[0]['@class'] == metObject.type) {
 				var trx;
 				if(metObject.type == 'Journal') {
-					var trx = db.let('publication', function(s) {
+					var trx = db.let('publication1', function(s) {
 						s.update(id)
 						.set({
 							journal: metObject.journal,
@@ -319,7 +496,7 @@ function Publication(db) {
 					});					
 				}
 				else {
-					var trx = db.let('publication', function(s) {
+					var trx = db.let('publication1', function(s) {
 						s.update(id)
 						.set({
 							booktitle: metObject.booktitle,
@@ -327,7 +504,7 @@ function Publication(db) {
 						});
 					});	
 				}
-				trx.let('publication', function(s) {
+				trx.let('publication2', function(s) {
 					s.update(id)
 					.set({
 						year: metObject.booktitle,
@@ -336,8 +513,8 @@ function Publication(db) {
 						url: metObject.url,
 						private: metObject.private
 					});
-				})
-				.let('publication', function(s) {
+				});
+				trx.let('publication', function(s) {
 					s.select().from(Oriento.RID(id));
 				});
 
@@ -351,14 +528,23 @@ function Publication(db) {
 								clb(error);
 							}
 							else {
-								RD.addResearchDomainsPub(metObject.researchDomains, trx, function(error, res) {
-									Kw.addKeywords(metObject.keywords, trx, function(error, res) {
-										trx
-										.commit().return('$publication').all()
-										.then(function(res) {
-											clb(null, true);
+								RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
+									if(error) {
+										clb(error);
+									}
+									else {
+										Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+										if(error) {
+											clb(error);
+										}
+										else {
+											trx.commit().return('$publication').all()
+											.then(function(res) {
+												clb(null, true);
+											});	
+										}
 										});
-									});
+									}
 								});
 							}
 						});

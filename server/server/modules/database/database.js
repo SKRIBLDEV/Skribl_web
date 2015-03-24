@@ -64,18 +64,24 @@ function Database(serverConfig, dbConfig) {
 	var PUB = new Publication.Publication(db);
 	var Lib = new library.Library(db);
 	var Kw = new keyword.Keyword(db);
+	var AUT = new authors.Author(db);
 
 
 	this.addJournal = PUB.addJournal;
 	this.addProceeding = PUB.addProceeding;
 	this.loadPublication = PUB.loadPublication;
 	this.getPublication = PUB.getPublication;
+	this.querySimple = PUB.querySimple;
 	this.updatePublication = PUB.updatePublication;
 	this.removePublication = PUB.removePublication;
 	this.uploadedBy = PUB.uploadedBy;
 	this.loadLibrary = Lib.loadLibrary;
+	this.loadLibraries = Lib.loadLibraries;
 	this.addToLibrary = Lib.addToLibrary;
+	this.addLibrary = Lib.addLibrary;
+	this.removeLibrary = Lib.removeLibrary;
 	this.addDefaults = Lib.addDefaults;
+	this.searchAuthor = AUT.searchAuthor;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -440,37 +446,40 @@ var fObject = {
 
 var metObject = {
 	type: 'Journal',
-	journal: 'journal naam',
-	publisher: 'publisher',
-	volume: '5',
-	number: '6',
-	year: 2012,
-	abstract: 'abstracte brol',
-	citations: 'enkele citaties',
-	url: 'www.brol.be',
+	journal: 'journal naam2',
+	publisher: 'publisher2',
+	volume: '4',
+	number: '19',
+	year: '1900',
+	abstract: 'abstracte brol2',
+	citations: 'enkele citaties2',
+	url: 'www.brol2.be',
 	private: false,
-	authors: [{fName: 'jan2',
+	authors: [{fName: 'wil',
 				lName: 'modaal1'},
-				{fName: 'jan2',
-				lName: 'modaal1'}],
+				{fName: 'jack',
+				lName: 'daniels'}],
 	knownAuthors: [],
-	researchDomains: ['Biological Sciences'],
-	keywords: []//['keywordA', 'keywordB']
+	researchDomains: ['Computer Sciences'],
+	keywords: ['testingkey1', 'dieren']
 }
 */
+//database.searchAuthor('jack', 'daniels', 10, callBack);
+//database.loadLibrary('test2', 'Uploaded', callBack);
+//database.removeLibrary('test2', 'newlib', callBack);
+//database.addLibrary('test2', 'newlib', callBack);
 //database.testTransaction('jshep', callBack);
-
+//database.loadLibraries('test2', callBack);
 //database.loadUser('jshep', callBack);
 //database.deleteUser('test1', callBack);
-
+//database.querySimple('key', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addJournal('title4', fObject, 'test2', callBack);
-//database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
+////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
-//database.getPublication('#21:38', callBack);
+//database.getPublication('#23:8', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
-//database.updatePublication('#23:6', metObject, callBack);
+//database.updatePublication('#23:11', metObject, callBack);
 //
 //
 /*
@@ -504,7 +513,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
 */
+
 
 
