@@ -20,16 +20,25 @@ function Library(db) {
 		clb(null, true);
 	}
 
-	 this.addLibrary = function(user, name, clb) { 
-	 	var trx = db.let('user', function(s) {
-			s.select().from('User').where('username = \'' + user + '\'');
-		});
-		createLibrary(user, name, trx, function(error, res) {
-			trx.commit().return('$user').all()
-			.then(function(user) {
-				clb(null, true);
-			});
-		});
+	 this.addLibrary = function(user, name, clb) {
+	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
+	 	.then(function(res) {
+	 		if(res.length) {
+		 		var trx = db.let('user', function(s) {
+					s.select().from('User').where('username = \'' + user + '\'');
+				});
+				createLibrary(user, name, trx, function(error, res) {
+					trx.commit().return('$user').all()
+					.then(function(user) {
+						clb(null, true);
+					});
+				});	
+	 		}
+	 		else {
+	 			clb(new Error('library of user: ' + user + ' with name: ' + name + ', already exists'));
+	 		}
+	 	});
+
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
@@ -163,15 +172,20 @@ function Library(db) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 		.then(function(res) {
 			if(res.length) {
-				var trx = db.let('temp', function(s) {
-					s.select().from('#1:1');
-				});
-				deleteLibrary(user, name, trx, function(error, res) {
-					trx.commit().return().all()
-					.then(function() {
-						clb(null, true);
+				if(res[0].name == 'Uploaded' || res[0].name == 'Favorites' || res[0].name == 'Portfolio') {
+					clb(new Error('removing library: ' + name + ' not allowed'));
+				}
+				else {
+					var trx = db.let('temp', function(s) {
+						s.select().from('#1:1');
 					});
-				});
+					deleteLibrary(user, name, trx, function(error, res) {
+						trx.commit().return().all()
+						.then(function() {
+							clb(null, true);
+						});
+					});
+				}
 			}
 			else {
 				clb(new Error('user: ' + user + ' has no library with name: ' + name));
