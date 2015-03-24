@@ -3,11 +3,11 @@ var Oriento = require('oriento');
 function Keyword(db) {
 
 	function addKeyword(keyword, trx_id, trx, clb) {
-		db.select().from('Keyword').where('keyword = ' + keyword).all()
+		db.select().from('Keyword').where('keyword = \'' + keyword + '\'').all()
 		.then(function(res) {
 			if(res.length) {
 				trx.let(trx_id, function(s) {
-					s.select().from('Keyword').where('keyword = ' + keyword);
+					s.select().from('Keyword').where('keyword = \'' + keyword + '\'');
 				});
 			}
 			else {

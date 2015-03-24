@@ -64,6 +64,7 @@ function Database(serverConfig, dbConfig) {
 	var PUB = new Publication.Publication(db);
 	var Lib = new library.Library(db);
 	var Kw = new keyword.Keyword(db);
+	var AUT = new authors.Author(db);
 
 
 	this.addJournal = PUB.addJournal;
@@ -75,8 +76,12 @@ function Database(serverConfig, dbConfig) {
 	this.removePublication = PUB.removePublication;
 	this.uploadedBy = PUB.uploadedBy;
 	this.loadLibrary = Lib.loadLibrary;
+	this.loadLibraries = Lib.loadLibraries;
 	this.addToLibrary = Lib.addToLibrary;
+	this.addLibrary = Lib.addLibrary;
+	this.removeLibrary = Lib.removeLibrary;
 	this.addDefaults = Lib.addDefaults;
+	this.searchAuthor = AUT.searchAuthor;
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -419,7 +424,7 @@ function Database(serverConfig, dbConfig) {
 exports.Database = Database;
 
 //TESTCODE
-/*
+
 //var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
@@ -458,20 +463,23 @@ var metObject = {
 	researchDomains: ['Computer Sciences'],
 	keywords: ['testingkey1', 'dieren']
 }
-*/
-//database.testTransaction('jshep', callBack);
 
+database.searchAuthor('jack', 'daniels', 10, callBack);
+//database.loadLibrary('test2', 'Uploaded', callBack);
+//database.removeLibrary('test2', 'newlib', callBack);
+//database.addLibrary('test2', 'newlib', callBack);
+//database.testTransaction('jshep', callBack);
+//database.loadLibraries('test2', callBack);
 //database.loadUser('jshep', callBack);
 //database.deleteUser('test1', callBack);
 //database.querySimple('key', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
-//database.addJournal('title6', fObject, 'test2', callBack);
-//database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
+////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.getPublication('#23:8', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
-//database.updatePublication('#23:9', metObject, callBack);
+//database.updatePublication('#23:11', metObject, callBack);
 //
 //
 /*
@@ -488,7 +496,7 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-/*
+
 
 function callBack(error, result){
 	if (error){
@@ -506,6 +514,6 @@ function stop(){
 	process.exit(code=0);
 }
 
-*/
+
 
 

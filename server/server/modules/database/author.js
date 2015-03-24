@@ -72,38 +72,7 @@ function Author(db) {
 		}
 	};
 
-	/**
-	 * adds an author with given names to database and returns record id OR returns record id if author already exists.
-	 * @param {String}   fName    firstname of author
-	 * @param {String}   lName    lastname of author
-	 * @param {callBack} callback
-	 * @return {String}	 callback called with authorRid
-	 */
-	/*
-	this.addAuthor = function(fName, lName, callback) {
-		db.select().from('Author').where({firstName: fName, lastName: lName}).all()
-		.then(function(authors) {
-			if(authors.length) {
-				var author = authors[0];
-				var authorRid = RID.getRid(author);
-				callback(null, authorRid)
-			}
-			else {
-
-				db.vertex.create({
-					'@class': 'Author',
-					firstName: fName,
-					lastName: lName
-				 })
-				.then(function(author) {
-					var authorRid = RID.getRid(author);
-					console.log('here');
-					callback(null, authorRid);
-				});
-			}
-		});
-	};
-	*/
+	
 	this.getPubAuthors = function(pubId, clb) {
 		db.select('expand( out(\'AuthorOf\') )').from(pubId).all()
 		.then(function(authors) {
@@ -141,6 +110,79 @@ function Author(db) {
 			}
 		});
 	};
+
+	this.searchAuthor = function(fName, lName, limit, clb) {
+		function addPubs(authors, i, clb2) {
+			function cleanup(arr, clb1) {
+				var ctr = 0;
+				for (var j = 0; j < arr.length; j++) {
+					arr[j] = {id: RID.transformRid(arr[j].rid), title: arr[j].title};
+					ctr++;
+					if(ctr == arr.length) {
+						clb1(null, arr);
+					}
+				};
+
+			}
+
+			db.query('select @rid, title from (select expand(out(\'AuthorOf\')) from ' + RID.getRid(authors[i]) + ')').all()
+			.then(function(res) {
+				if(res.length) {
+					cleanup(res, function(error, arr) {
+						authors[i].publications = arr;
+						clb2(null, i);
+					});
+				}
+				else {
+					authors[i].publications = [];
+					clb2(null, i);
+				}
+			});
+		}
+
+		function addProfile(authors, i, clb3) {
+			db.query('select from (select expand(in(\'IsAuthor\')) from ' + RID.getRid(authors[i]) + ')').all()
+			.then(function(res) {
+				if(res.length) {
+					author.profile = RID.getRid(res[0]);
+					clb3(null, true);
+				}
+				else {
+					authors[i].profile = false;
+					clb3(null, authors);	
+				}
+			});
+		}
+
+		function prepResArray(authors, clb4) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				addPubs(authors, i, function(error, nr) {
+					addProfile(authors, nr, function(error, res) {
+						authors[nr].authorId = RID.getRid(authors[nr]);
+						delete authors[nr]['@rid'];
+						delete authors[nr]['@class'];
+						delete authors[nr]['@type'];
+						delete authors[nr]['out_AuthorOf'];
+						ctr++;
+						if(ctr == authors.length) {
+							clb4(null, authors);
+						}
+					});
+				});
+			};
+		}
+
+		db.select().from('Author').where('firstName like \'%' + fName + '%\' and lastName like \'%' + lName + '%\'').all()
+		.then(function(res) {
+			if(res.length) {
+				prepResArray(res, clb);
+			}
+			else {
+				clb(null, []);
+			}
+		});
+	}
 
 }
 
