@@ -477,7 +477,7 @@ var metObject = {
 ////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.addJournal('test2', fObject, 'test3', callBack);
-//database.getPublication('#23:14', callBack);
+//database.getPublication('#23:123', callBack);
 //database.uploadedBy('#21:38', callBack);
 //database.loadPublication('#23:1', info.path, callBack);
 //database.updatePublication('#23:13', metObject, callBack);
