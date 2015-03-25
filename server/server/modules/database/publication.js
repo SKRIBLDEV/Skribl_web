@@ -484,77 +484,81 @@ function Publication(db) {
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
-			if(res[0]['@class'].toLowerCase() == metObject.type) {
-				var trx;
-				if(metObject.type == 'journal') {
-					var trx = db.let('publication1', function(s) {
-						s.update(id)
-						.set({
-							journal: metObject.journal,
-							publisher: metObject.publisher,
-							volume: metObject.volume,
-							number: metObject.number
-						});
-					});					
-				}
-				else {
-					var trx = db.let('publication1', function(s) {
-						s.update(id)
-						.set({
-							booktitle: metObject.booktitle,
-							organisation: metObject.organisation
-						});
-					});	
-				}
-				trx.let('publication2', function(s) {
-					s.update(id)
-					.set({
-						year: metObject.booktitle,
-						abstract: metObject.abstract,
-						citations: metObject.citations,
-						url: metObject.url,
-						private: metObject.private
-					});
-				});
-				trx.let('publication', function(s) {
-					s.select().from(Oriento.RID(id));
-				});
-
-				AUT.addAuthors(metObject.authors, trx, function(error, res) {
-					if(error) {
-						clb(error);
+			if(res.length) {
+				if(res[0]['@class'].toLowerCase() == metObject.type) {
+					var trx;
+					if(metObject.type == 'journal') {
+						var trx = db.let('publication1', function(s) {
+							s.update(id)
+							.set({
+								journal: metObject.journal,
+								publisher: metObject.publisher,
+								volume: metObject.volume,
+								number: metObject.number
+							});
+						});					
 					}
 					else {
-						AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
-							if(error) {
-								clb(error);
-							}
-							else {
-								RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
-									if(error) {
-										clb(error);
-									}
-									else {
-										Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+						var trx = db.let('publication1', function(s) {
+							s.update(id)
+							.set({
+								booktitle: metObject.booktitle,
+								organisation: metObject.organisation
+							});
+						});	
+					}
+					trx.let('publication2', function(s) {
+						s.update(id)
+						.set({
+							year: metObject.booktitle,
+							abstract: metObject.abstract,
+							citations: metObject.citations,
+							url: metObject.url,
+							private: metObject.private
+						});
+					});
+					trx.let('publication', function(s) {
+						s.select().from(Oriento.RID(id));
+					});
+					AUT.addAuthors(metObject.authors, trx, function(error, res) {
+						if(error) {
+							clb(error);
+						}
+						else {
+							AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
+								if(error) {
+									clb(error);
+								}
+								else {
+									RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
 										if(error) {
 											clb(error);
 										}
 										else {
-											trx.commit().return('$publication').all()
-											.then(function(res) {
-												clb(null, true);
-											});	
+											Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+											if(error) {
+												clb(error);
+											}
+											else {
+												trx.commit().return('$publication').all()
+												.then(function(res) {
+													clb(null, true);
+												});	
+											}
+											});
 										}
-										});
-									}
-								});
-							}
-						});
-					}
-				});
+									});
+								}
+							});
+						}
+					});
+				}
+				else {
+					clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
+				}
 			}
 			else {
-				clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
+				clb(new Error('publication with id: ' + id + ' does not exist'));
 			}
 		});
 	}
