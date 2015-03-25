@@ -9,7 +9,7 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
- angular.module('skriblApp').controller('dashController', function($scope, $http, $location, appData) {
+ angular.module('skriblApp').controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll) {
 
 	//Control if user has already loged in, or if he tries to go the dashboard without login in.
 	if(!(appData.currentUser))
@@ -466,5 +466,37 @@
         };
     }
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
+    //
+    
+     // * go to element (scrolling) function uses anchorSmoothScroll
+     // * @param  {[type]} eID the tag where we want the viewport to scroll to
+     // *
+     // 
+     
+     //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
+    
+     $scope.interactiveGraph = false;
+
+    $scope.ui_interactive_graph_enable = function(){
+        $scope.interactiveGraph = true;
+        $scope.gotoElement("id_interactive_graph")
+    }
+
+    $scope.ui_interactive_graph_disable = function(){
+        $scope.gotoElement("id_top")
+        $scope.interactiveGraph = false;
+    }
+
+
+
+    $scope.gotoElement = function (eID){
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+      $location.hash('middle');
+ 
+      // call $anchorScroll()
+      anchorSmoothScroll.scrollTo(eID);
+    };
+
     
 });
