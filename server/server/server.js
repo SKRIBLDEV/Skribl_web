@@ -38,7 +38,7 @@ function HTTPSServer(key, cert, modules) {
 
 		app.options('/*', function(req, res) {
 			enableCors(req, res);
-   			res.send(200);
+   			res.sendStatus(200);
 		});
 		
 		// configure extra modules
