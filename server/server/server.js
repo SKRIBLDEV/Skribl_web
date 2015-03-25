@@ -95,9 +95,11 @@ function HTTPSServer(key, cert, modules) {
 					handler.auth(usr, req, context, function(err, success) { 
 						if (success)
 							next(); 
-						else if (err)
-							res.sendStatus(500); // HTTP 500 Server error
-						else 
+						else if (err) {
+							res.status(500); // HTTP 500 Server error
+							res.end("SERVER ERROR: " + err.toString());
+						}
+						else
 							res.sendStatus(401); // HTTP 401 Unauthorised
 					});
 				});
