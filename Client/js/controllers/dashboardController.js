@@ -404,8 +404,12 @@
     
     //function to download a file
     $scope.deleteCurrentFile = function(){
-        currentFile = null;}
+        currentFile = null;
+    }
+
     $scope.currentFile;
+
+
     $scope.getFile = function(publicationID){
         $scope.busy = true;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
@@ -465,6 +469,33 @@
             });
         };
     }
+
+
+    //------------------------------------------------LIBARARY WIP-------------------------------------------------//
+    
+    $scope.currentID = undefined
+
+    $scope.setCurrentId = function(newID){
+        $scope.currentID = newID;
+        console.log($scope.currentID);
+    }
+    
+    $scope.ui_publications_library = true;
+
+    $scope.ui_publications_toggleLibrary = function(){
+        $scope.ui_publications_library = !$scope.ui_publications_library;
+    }
+
+    $scope.ui_publications_loading = false;
+
+    $scope.ui_currentPublications = 
+    [ {title: 'titel 1', author: 'author1', id: '1', isnew:true},
+    {title: 'titel 2', author: 'author 2', id: '2'},
+    {title: 'titel 3', author: 'author 3', id: '3'},
+    {title: 'titel 4', author: 'author 4', id: '4', isnew:true},
+    {title: 'titel 5', author: 'author 5', id: '5'},
+    {title: 'titel 6', author: 'author 6', id: '6'}];
+
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
     //
     

@@ -140,7 +140,7 @@
 								<br><br>
 								<div class="col s12">
 									<div class="center">
-										<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+										<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleDataviz()"></i>
 									</div>
 								</div>
 							</div>
@@ -396,13 +396,13 @@
 										<ul class="collection">
 											<div ng:repeat="publication in ui_currentPublications">
 												<li class="collection-item avatar">
-													<i class="mdi-file-folder circle"></i>
+													<i class="mdi-content-content-paste circle"></i>
 													<span class="title">{{publication.title}}</span>
 													<p>{{publication.author}} </p>
-													<!-- <span class="new badge" ng-show="publication.isnew"></span> -->
 													<a href="#!" class="secondary-content">
-														<i class="mdi-action-grade"></i>
+													<span class="new badge" ng-show="publication.isnew"></span>
 													</a>
+													<hr>
 												</li>
 											</div>
 										</ul>
@@ -439,7 +439,7 @@
 					<div class="card z-depth-4">
 						<div class="card-content" style="background:#EEEEEE">
 							<span class="card-title grey-text text-darken-4">
-								<i class="mdi-action-account-circle">&nbsp VIEWER</i>
+								<i class="mdi-content-content-paste">&nbsp VIEWER</i>
 							</span>
 							<!-- start inner card -->
 							<!-- stop inner card -->
