@@ -125,6 +125,7 @@ function updatePublication(req, res, context) {
 
 	if (req.query['extract']) {
 
+		console.log("META: " + meta);
 		PUB.extract(meta, function(err, mt) {
 
 			if(err)
