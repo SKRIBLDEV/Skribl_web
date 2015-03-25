@@ -1,0 +1,567 @@
+<!-- The Dashboard html configuration -->
+<div class="navbar-fixed" ng-hide="showMenu">
+	<nav class="white" role="navigation">
+		<div class="col s12">
+			<div class="nav-wrapper">
+				<a id="logo-container" href="#!" class="brand-logo">           
+					<img class = "navImage" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/243373/logo_defaultcolor.png" alt="logo" />
+				</a>
+				<ul class="right">
+					<li><a class="primary-text-color" href="login">Dashboard</a></li>
+					<li><a class="primary-text-color" href="register">About</a></li>
+				</ul>
+				<!--Mobile Navigation-->
+				<ul id="nav-mobile" class="side-nav z-depth-5">
+					<li><a class="primary-text-color" href="login">Dashboard</a></li>
+					<li><a class="primary-text-color" href="register">About</a></li>
+				</ul>
+				<a href="#" data-activates="nav-mobile" class="button-collapse primary-text-color"><i class="mdi-navigation-menu primary-text-color"></i></a>
+			</div>
+		</div>
+	</nav>
+</div>
+<!-- fixed action button -->
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	<a class="btn-floating btn-large skribl-alert-color waves-effect waves-light">
+		<i class="large mdi-editor-mode-edit"></i>
+	</a>
+	<ul>
+		<li><a class="btn-floating skribl-primary-color darken-1">
+			<code class="titip-left">
+				<i class="large mdi-editor-insert-chart waves-effect waves-light"></i>
+				<span class="titip-content">
+					This is a demo-button
+				</span>
+			</code>
+		</a>
+	</li>
+	<li><a class="btn-floating skribl-primary-color darken-1">
+		<code class="titip-left">
+			<i class="large mdi-editor-format-quote waves-effect waves-light"></i>
+			<span class="titip-content">
+				This is a demo-button
+			</span>
+		</code>
+	</a>
+</li>
+<li><a class="btn-floating skribl-primary-color darken-1">
+	<code class="titip-left">
+		<i class="large mdi-editor-attach-file waves-effect waves-light"></i>
+		<span class="titip-content">
+			This is a demo-button
+		</span>
+	</code>
+</a>
+</li>
+<li><a class="btn-floating skribl-primary-color darken-1">
+	<code class="titip-left">
+		<i class="large mdi-editor-publish waves-effect waves-light" ng-click="ui_upload_activate()"></i>
+		<span class="titip-content">
+			Upload a new publication
+		</span>
+	</code>
+</a>
+</li>
+</ul>
+</div>
+<!-- The overal container -->
+<div class="container">
+</br></br></br>
+<div class="animated pulse row">
+	<div class="col s12">
+		<div class="row">
+			<!-- user card-->
+			<div class="col l5 m12 s12">
+				<div class="card z-depth-4">
+					<div class="card-content" style="background:#EEEEEE">
+						<span class="card-title grey-text text-darken-4">
+							<i class="mdi-action-account-circle">&nbsp{{ username }}</i>
+						</span>
+						<!-- basic -->
+						<div class="card">
+							<div class="card waves-effect waves-block waves-light">
+							</div>
+							<div class="card-content">
+								<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleBasic()">
+									<a> Basic </a>
+									<i class="mdi-navigation-more-vert right"></i></span>
+								</div>
+								<span class="grey-text text-darken-4" ng-show="ui_user_basic">
+									<div class="animated fadeInDown col s12">
+										<div class="section">
+											In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
+										</div>
+										<div class="center">
+											<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleBasic()"></i>
+										</div>
+									</div>
+								</span>
+							</div>
+							<!-- dataviz -->
+							<div class="card">
+								<div class="card waves-effect waves-block waves-light">
+								</div>
+								<div class="card-content">
+									<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleDataviz()">
+										<a> Dataviz </a>
+										<i class="mdi-navigation-more-vert right"></i></span>
+									</div>
+									<span class="grey-text text-darken-4" ng-show="ui_user_dataviz">
+										<div class="animated fadeInDown col s12">
+											<div class="section">
+												In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
+											</div>
+											<!-- datavisualisations -->
+											<div class="progress">
+												<div class="determinate" style="width: 0%"></div>
+											</div>
+											<div class="section">
+												<cjs-bar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-bar>
+											</div>
+											<div class="progress">
+												<div class="determinate" style="width: 0%"></div>
+											</div>
+											<div class="section">
+												<cjs-line dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-line>
+											</div>
+											<div class="progress">
+												<div class="determinate" style="width: 0%"></div>
+											</div>
+											<div class="section">
+												<cjs-radar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-radar>
+											</div>
+										</br></br>
+										<div class="col s12">
+											<div class="center">
+												<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+											</div>
+										</div>
+									</div>
+								</span>
+							</div>
+							<!-- Settings -->
+							<div class="card">
+								<div class="card waves-effect waves-block waves-light">
+								</div>
+								<div class="card-content">
+									<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleSettings()">
+										<a> Settings </a>
+										<i class="mdi-navigation-more-vert right"></i></span>
+									</div>
+									<span class="grey-text text-darken-4" ng-show="ui_user_settings">
+										<div class="animated fadeInDown col s12">
+											<!-- logout button -->
+											<div class="row">
+												<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="logout()">
+													<h5 class="center-align" style="color:white">Logout</h5>
+												</div>
+											</div>
+											<div class="col s12">
+												Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tincidunt malesuada. Nulla placerat nulla ac leo faucibus placerat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum scelerisque sollicitudin mauris ut consectetur. Vivamus a facilisis augue. Integer bibendum tellus diam, eu ullamcorper risus rhoncus a. Vestibulum suscipit urna ipsum, sit amet venenatis odio placerat ac. Cras aliquet sapien sed elit condimentum viverra. Phasellus vitae arcu elementum neque sagittis sagittis.
+												In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque. In erat tortor, imperdiet ut orci sit amet, maximus vulputate erat.
+												Phasellus fermentum rutrum purus vitae facilisis. Suspendisse malesuada lacinia maximus. Maecenas odio dolor, dignissim tincidunt ultrices quis, vestibulum vitae magna. Mauris suscipit, enim vel euismod sodales, ipsum nulla pulvinar nisi, bibendum ornare purus dolor non arcu. Ut at mi vel libero vehicula congue ut vitae mauris. Pellentesque sed dapibus nisl. Maecenas ut tristique enim. Aenean eu urna aliquet, rhoncus nunc sed, mattis ligula. Maecenas dignissim, massa sit amet bibendum aliquet, tortor quam convallis orci, at vulputate nisl justo vitae neque. Fusce volutpat metus id aliquet vehicula. Integer lacinia pulvinar ex, sed luctus sem laoreet sit amet.
+											</br></br>
+										</div>
+										<div class="row">
+											<div class="activator col s12 waves-effect waves-light btn-large ">
+												<h5 class="activator center-align" style="color:white">More</h5>
+											</div>
+											<div class="center">
+												<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+											</div>
+										</div>
+									</div>
+								</span>
+								<div class="card-reveal">
+									<span class="card-title grey-text text-darken-4">
+										Advanced Settings
+										<i class="mdi-navigation-close right"></i>
+									</span>
+									<!-- delete button -->
+									<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="deleteUser()">
+										<h5 class="center-align" style="color:white">Delete user</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- library card-->
+				<div class="col l7 m12 s12">
+					<div class="card z-depth-4">
+						<div class="card-content" style="background:#EEEEEE">
+							<span class="card-title grey-text text-darken-4">
+								<i class="mdi-av-my-library-books">&nbsp publications</i>
+							</span>
+							<!-- upload publication -->
+							<div class="card" ng-show="ui_upload_active()">
+								<div class="card waves-effect waves-block waves-light">
+								</div>
+								<div class="card-content">
+									<span class="card-title grey-text text-darken-4">
+										<a> Upload Publication </a>
+										<a>
+											<i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i>
+										</a>
+									</span>
+								</div>
+								<span class="grey-text text-darken-4">
+									<div class="animated fadeInDown col s12">
+										<div class="section">
+											<!-- initial status -->
+											<div ng-show="ui_upload_initialStatus()">
+												<!-- First name -->
+												<div class="row">
+													<div class="input-field col s10 offset-s1 ">
+														<i class="mdi-content-text-format prefix"></i>
+														<input id="upload_title" type="text" class="validate" required>
+														<label for="upload_title">Title</label>
+													</div>
+												</div>
+												<!-- actual file -->
+												<div class="row center">
+													<input type="file" file-to-upload="myFile"></input>
+												</div>
+												<!-- upload buttons -->
+												<div class="row center">
+													<code class="titip-bottom">
+														<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(false)">
+															<i class="mdi-content-send left"></i>
+															Send with scraping</a>
+															<span class="titip-content">
+																Scraping is … bla bla bla
+															</span>
+														</code>
+														<code class="titip-bottom">
+															<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(true)">
+																<i class="mdi-content-send left"></i>
+																Send with metadata</a>
+																<span class="titip-content">
+																	Metadata is … bla bla bla bla
+																</span>
+															</code>
+														</div>
+													</div>
+													<!-- waiting page for scraping -->
+													<div ng-show="ui_upload_waitingScraping()">
+														<h5 class="row center"> scraping aint no crime</h5>
+														<div class="row center">
+															<div class="preloader-wrapper big active">
+																<div class="spinner-layer spinner-blue">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-red">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-yellow">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-green">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<!-- waiting page for manual -->
+													<div ng-show="ui_upload_waitingManual()">
+														<h5 class="row center"> Oldschool manual metadata, eh?</h5>
+														<div class="row center">
+															<div class="preloader-wrapper big active">
+																<div class="spinner-layer spinner-blue">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-red">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-yellow">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+																<div class="spinner-layer spinner-green">
+																	<div class="circle-clipper left">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="gap-patch">
+																		<div class="circle"></div>
+																	</div>
+																	<div class="circle-clipper right">
+																		<div class="circle"></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<!-- succes for all -->
+													<div class="row center" ng-show="ui_upload_success()"> 
+														<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">
+															<i class="mdi-action-done left"></i>
+															done</a>
+															<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_activate()">
+																<i class="mdi-file-file-upload left"></i>
+																upload another</a>
+															</div>
+															<!-- error for uploading -->
+															<div class="row">
+																<div class="col s12 alert-color" id="upload_error"></div>
+															</div>
+														</div>
+													</div>
+												</span>
+											</div>
+											<!-- begin library card -->
+											<div class="card">
+												<div class="card waves-effect waves-block waves-light">
+												</div>
+												<div class="card-content">
+													<span class="card-title grey-text text-darken-4" ng-click="ui_publications_toggleLibrary()">
+														<a> Library </a>
+														<i class="mdi-navigation-more-vert right"></i></span>
+													</div>
+													<span class="grey-text text-darken-4" ng-show="ui_publications_library">
+														<div class="animated fadeInDown col s12">
+															<!-- begin library content -->
+															<ul class="collection">
+																<div ng:repeat="publication in ui_currentPublications">
+																	<li class="collection-item avatar">
+																		<i class="mdi-file-folder circle"></i>
+																		<span class="title">{{publication.title}}</span>
+																		<p>{{publication.author}} </p>
+																		<!-- <span class="new badge" ng-show="publication.isnew"></span> -->
+																		<a href="#!" class="secondary-content"><i class="mdi-action-grade"></i></a>
+																	</li>
+																</div>
+															</ul>
+															<!-- end library content -->
+															<div class="row">
+																<div class="activator col s12 waves-effect waves-light btn-large ">
+																	<h5 class="activator center-align" style="color:white">Settings</h5>
+																</div>
+																<div class="center">
+																	<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_publications_toggleLibrary()"></i>
+																</div>
+															</div>
+														</div>
+													</span>
+													<div class="card-reveal">
+														<span class="card-title grey-text text-darken-4">
+															Library Settings
+															<i class="mdi-navigation-close right"></i>
+														</span>
+														<!-- begin library settings content -->
+														<!-- end library settings content -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- end library card -->
+							<!-- begin single publication card -->
+							<!-- user card-->
+							<div class="row">
+								<div class="col l6 m12 s12">
+									<div class="card z-depth-4">
+										<div class="card-content" style="background:#EEEEEE">
+											<span class="card-title grey-text text-darken-4">
+												<i class="mdi-action-account-circle">&nbsp{{ username }}</i>
+											</span>
+											<!-- basic -->
+											<div class="card">
+												<div class="card waves-effect waves-block waves-light">
+												</div>
+												<div class="card-content">
+													<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleBasic()">
+														<a> Basic </a>
+														<i class="mdi-navigation-more-vert right"></i></span>
+													</div>
+													<span class="grey-text text-darken-4" ng-show="ui_user_basic">
+														<div class="animated fadeInDown col s12">
+															<div class="section">
+																In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
+															</div>
+															<div class="center">
+																<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleBasic()"></i>
+															</div>
+														</div>
+													</span>
+												</div>
+												<!-- dataviz -->
+												<div class="card">
+													<div class="card waves-effect waves-block waves-light">
+													</div>
+													<div class="card-content">
+														<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleDataviz()">
+															<a> Dataviz </a>
+															<i class="mdi-navigation-more-vert right"></i></span>
+														</div>
+														<span class="grey-text text-darken-4" ng-show="ui_user_dataviz">
+															<div class="animated fadeInDown col s12">
+																<div class="section">
+																	In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
+																</div>
+																<!-- datavisualisations -->
+																<div class="progress">
+																	<div class="determinate" style="width: 0%"></div>
+																</div>
+																<div class="section">
+																	<cjs-bar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-bar>
+																</div>
+																<div class="progress">
+																	<div class="determinate" style="width: 0%"></div>
+																</div>
+																<div class="section">
+																	<cjs-line dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-line>
+																</div>
+																<div class="progress">
+																	<div class="determinate" style="width: 0%"></div>
+																</div>
+																<div class="section">
+																	<cjs-radar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-radar>
+																</div>
+															</br></br>
+															<div class="col s12">
+																<div class="center">
+																	<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+																</div>
+															</div>
+														</div>
+													</span>
+												</div>
+												<!-- Settings -->
+												<div class="card">
+													<div class="card waves-effect waves-block waves-light">
+													</div>
+													<div class="card-content">
+														<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleSettings()">
+															<a> Settings </a>
+															<i class="mdi-navigation-more-vert right"></i></span>
+														</div>
+														<span class="grey-text text-darken-4" ng-show="ui_user_settings">
+															<div class="animated fadeInDown col s12">
+																<!-- logout button -->
+																<div class="row">
+																	<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="logout()">
+																		<h5 class="center-align" style="color:white">Logout</h5>
+																	</div>
+																</div>
+																<div class="col s12">
+																	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tincidunt malesuada. Nulla placerat nulla ac leo faucibus placerat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum scelerisque sollicitudin mauris ut consectetur. Vivamus a facilisis augue. Integer bibendum tellus diam, eu ullamcorper risus rhoncus a. Vestibulum suscipit urna ipsum, sit amet venenatis odio placerat ac. Cras aliquet sapien sed elit condimentum viverra. Phasellus vitae arcu elementum neque sagittis sagittis.
+																	In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque. In erat tortor, imperdiet ut orci sit amet, maximus vulputate erat.
+																	Phasellus fermentum rutrum purus vitae facilisis. Suspendisse malesuada lacinia maximus. Maecenas odio dolor, dignissim tincidunt ultrices quis, vestibulum vitae magna. Mauris suscipit, enim vel euismod sodales, ipsum nulla pulvinar nisi, bibendum ornare purus dolor non arcu. Ut at mi vel libero vehicula congue ut vitae mauris. Pellentesque sed dapibus nisl. Maecenas ut tristique enim. Aenean eu urna aliquet, rhoncus nunc sed, mattis ligula. Maecenas dignissim, massa sit amet bibendum aliquet, tortor quam convallis orci, at vulputate nisl justo vitae neque. Fusce volutpat metus id aliquet vehicula. Integer lacinia pulvinar ex, sed luctus sem laoreet sit amet.
+																</br></br>
+															</div>
+															<div class="row">
+																<div class="activator col s12 waves-effect waves-light btn-large ">
+																	<h5 class="activator center-align" style="color:white">More</h5>
+																</div>
+																<div class="center">
+																	<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+																</div>
+															</div>
+														</div>
+													</span>
+													<div class="card-reveal">
+														<span class="card-title grey-text text-darken-4">
+															Advanced Settings
+															<i class="mdi-navigation-close right"></i>
+														</span>
+														<!-- delete button -->
+														<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="deleteUser()">
+															<h5 class="center-align" style="color:white">Delete user</h5>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end single publication card -->
+							</div>
+						</div>
+						<div>
+							<center>
+								<h1> Hi there, {{ username }}! </h1>
+								<br>
+								<button ng-click="logout()"> Logout </button>
+								<button ng-click="deleteUser()"> Delete </button>
+								<br><br>
+								<input type="file" file-to-upload="myFile">
+								<br><br>
+								Title: <input type="text" ng-model=userinput.title> Author first name: <input type="text" ng-model=userinput.authorsFirst>
+								Author last name: <input type="text" ng-model=userinput.authorsLast>
+								<br><br>
+								Journal name: <input type="text" ng-model=userinput.journalName> Journal volume: <input type="text" ng-model=userinput.journalVolume>  Journal number of pages: <input type="number" ng-model=userinput.journalNumber> 
+								<br><br>
+								Year: <input type="number" ng-model=userinput.year>Publisher: <input type="text" ng-model=userinput.publisher>
+								<br><br>
+								Keywords: <input type="text" ng-model=userinput.keywords><input type="text" ng-model=userinput.keywordSecond><input type="text" ng-model=userinput.keywordThird>
+								<br><br>
+								<button ng-click="uploadFile(false)"> Publish </button>
+								<br><br><br><br><br><br>
+								get metaData of publication <input type="text" ng-model=userinput.pubID><button ng-click="getMetaData(userinput.pubID)"> get meta </button>
+								<br><br><br><br><br><br>
+								download publication <input type="text" ng-model=userinput.pubID><button ng-click="getFile(userinput.pubID)"> get file </button>
+								<br><br><br><br><br><br>
+								delete publication <input type="text" ng-model=userinput.pubID><button ng-click="deletePublication(userinput.pubID)"> delete file </button>
+								<br><br><br><br><br><br>
+								get user publications of lib<input type="text" ng-model=userinput.pubLib> <button ng-click="getUserPublications(userinput.pubLib)"> get user publications </button>
+								<br><br><br><br><br><br>
+								get current user publication titles <button ng-click="getCurrentPublicationTitles()"> get user publications titles </button>
+							</center>
+						</div>

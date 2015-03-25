@@ -6,19 +6,26 @@
  * @param  {object} $scope    	the scope object of the controller
  * @param  {object} $http 		abstraction for making http-related calls (ex: ajax)
  * @param  {object} $location 	for switching between routes/views
- * @param  {object} $appData  	our custom service for shared data
+ * @param  {object} appData  	our custom service for shared data
 
  */
- angular.module('skriblApp').controller('dashController', function($scope, $http, $location, $appData, $timeout) {
+ angular.module('skriblApp').controller('dashController', function($scope, $http, $location, appData) {
 
 	//Control if user has already loged in, or if he tries to go the dashboard without login in.
-	if(!($appData.currentUser))
+	if(!(appData.currentUser))
 	{
 		$location.path('/home');
 		return;
 	}
 
-	//GUI settings
+    //Used to display loading screen when necessary
+    $scope.busy = false;
+    $scope.$watch('busy',function(newValue, oldValue){$scope.loading();},true);
+    $scope.loading = function(){
+        if($scope.busy){console.log("start loading screen");}
+        else{console.log("stop loading screen");}
+    }
+//-------------------------------------------------GUI settings-----------------------------------------------------------//
 	
 	//user
 	$scope.ui_user_basic = false;
@@ -35,91 +42,6 @@
 
 	$scope.ui_user_toggleSettings = function(){
 		$scope.ui_user_settings = !$scope.ui_user_settings;
-	}
-
-	//upload
-
-	ui_UPLOAD_STATUS = {
-		UNACTIVE : -1,
-		INITIAL  : 0,
-		WAITING_SCRAPING : 1,
-		WAITING_MANUAL : 2,
-		SUCCES_SCRAPING : 4,
-		SUCCES_MANUAL : 5
-	}
-
-	ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-
-	$scope.ui_upload_active = function(){
-		return ui_upload_status != -1;
-	}
-
-	$scope.ui_upload_initialStatus = function(){
-		return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;
-	}
-
-	$scope.ui_upload_waitingScraping = function(){
-		return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;
-	}
-
-	$scope.ui_upload_waitingManual = function(){
-		return ui_upload_status == ui_UPLOAD_STATUS.WAITING_MANUAL;
-	}
-
-	$scope.ui_upload_succesManual = function(){
-		return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_MANUAL;
-	}
-
-	$scope.ui_upload_succesScraping = function(){
-		return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;
-	}
-
-	$scope.ui_upload_success = function(){
-		return ($scope.ui_upload_succesScraping() || $scope.ui_upload_succesManual());
-	}
-
-	$scope.ui_upload_activate = function(){
-		ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-	}
-
-	$scope.ui_upload_deActivate = function(){
-		ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
-	}
-
-
-	//@Douglas : upload should be here
-	$scope.upload = function(manual){
-		if (manual){
-			ui_upload_status = ui_UPLOAD_STATUS.WAITING_MANUAL;
-			
-			//timeout is only to test the async mode, delete this for real functionality
-			$timeout(function() {
-				var succes = true;
-				if (succes){
-					ui_upload_status = ui_UPLOAD_STATUS.SUCCES_MANUAL;
-					toast("succesfully uploaded publication with manual meta-data", 4000) // 4000 is the duration of the toast
-				} else {
-				// fill in error content 
-				ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-					toast("failed to upload publication with meta-data", 4000) // 4000 is the duration of the toast
-					document.getElementById("upload_error").innerHTML = "ERROR MESSAGE";
-				}
-			}, 3000);
-		} else {
-			ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
-			
-			$timeout(function() {
-				var succes = true;
-				if (succes){
-					ui_upload_status = ui_UPLOAD_STATUS.SUCCES_SCRAPING;
-				toast("succesfully uploaded publication with scraping", 4000) // 4000 is the duration of the toast
-			} else {
-				ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-				toast("failed to upload publication with scraping", 4000) // 4000 is the duration of the toast
-				document.getElementById("upload_error").innerHTML = "ERROR MESSAGE";
-			}
-		}, 3000);
-		}
 	}
 
 	// Dataviz
@@ -146,40 +68,6 @@
     	}
     	]
     };
-
-	/**
-	 * duplication of the username to be used in Dashboard.html
-	 * @type {String}
-	 */
-	 $scope.username = $appData.currentUser.username;
-
-	 // The logout function
-	 $scope.logout = function() {
-	 	$location.path('/home');
-	 	$appData.currentUser = null;
-	 	toast("succesfully logged out", 4000) // 4000 is the duration of the toast
-	 };
-
-	// TODO DELETE USER WEKRT NIET OP SERVER
-	//The delete function
-	$scope.deleteUser = function(){
-		var path = serverApi.concat('/users/').concat($scope.username);
-		var config = {headers:  {
-			'Authorization': $appData.Authorization
-		}
-	};
-	var deleteRequest = $http.delete(path,config);
-
-	deleteRequest.success(function(data, status, headers, config) {
-		$scope.logout();
-		toast("succesfully deleted account", 4000) // 4000 is the duration of the toast
-
-	});
-		/*deleteRequest.error(function(data, status, headers, config) {
-			//Error while deleting user
-			document.getElementById("error").innerHTML = "Database error, please try again later.";
-		});*/
-};
 
 	//---chart stuff
 	//
@@ -303,5 +191,280 @@
     // Function - Will fire on animation completion.
     onAnimationComplete: function(){}
 }
+    
+//-------------------------------------------------GUI settings-----------------------------------------------------------//
+    /**
+	 * duplication of the username to be used in Dashboard.html
+	 * @type {String}
+	 */
+	 $scope.username = appData.currentUser.username;
 
+	 // The logout function
+	 $scope.logout = function() {
+	 	$location.path('/home');
+	 	appData.currentUser = null;
+	 	toast("succesfully logged out", 4000) // 4000 is the duration of the toast
+	 };
+
+	//The delete function
+	$scope.deleteUser = function(){
+		var path = serverApi.concat('/users/').concat($scope.username);
+		var config = {headers:  {
+			'Authorization': appData.Authorization
+		}
+	};
+	var deleteRequest = $http.delete(path,config);
+
+	deleteRequest.success(function(data, status, headers, config) {
+		$scope.logout();
+		toast("succesfully deleted account", 4000) // 4000 is the duration of the toast
+
+	});
+    deleteRequest.error(function(data, status, headers, config) {
+			//Error while deleting user
+        toast("Database error, please try again later.", 4000) // 4000 is the duration of the toast
+    });
+    };
+     
+    //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
+
+    //upload
+    //upload :: gui
+    ui_UPLOAD_STATUS = {
+        UNACTIVE : -1,
+        INITIAL  : 0,
+        WAITING_SCRAPING : 1,
+        WAITING_MANUAL : 2,
+        SUCCES_SCRAPING : 4,
+        SUCCES_MANUAL : 5
+    }
+
+    ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+    currentPublicationID = undefined
+
+    $scope.ui_upload_active = function(){
+        return ui_upload_status != -1;
+    }
+
+    $scope.ui_upload_initialStatus = function(){
+        return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;
+    }
+
+    $scope.ui_upload_waitingScraping = function(){
+        return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;
+    }
+
+    $scope.ui_upload_waitingManual = function(){
+        return ui_upload_status == ui_UPLOAD_STATUS.WAITING_MANUAL;
+    }
+
+    $scope.ui_upload_succesManual = function(){
+        return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_MANUAL;
+    }
+
+    $scope.ui_upload_succesScraping = function(){
+        return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;
+    }
+
+    $scope.ui_upload_success = function(){
+        return ($scope.ui_upload_succesScraping() || $scope.ui_upload_succesManual());
+    }
+
+    $scope.ui_upload_activate = function(){
+        ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+    }
+
+    $scope.ui_upload_deActivate = function(){
+        ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
+    }
+
+    $scope.uploadPublication = function(file, url, authorization, withMetadata){
+
+        if (withMetadata){
+            ui_upload_status = ui_UPLOAD_STATUS.WAITING_MANUAL;
+        } else {
+            ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
+        }
+
+        var fd = new FormData();
+        fd.append('inputFile', file); //link the file to the name 'inputFile'
+        $http.put(url, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined,
+                     'Authorization': authorization}
+        })
+        .success(function(data, status, headers, config){
+            currentPublicationID = data.id.substring(1);
+            if (withMetadata){
+                //when publication is added to database 
+                //metadata of publication needs to be send/updated (currently empty)
+                var whenFinished = function(succes){
+                    if (succes){
+                        ui_upload_status = ui_UPLOAD_STATUS.SUCCES_MANUAL;
+                        toast("succesfully uploaded publication with Manual meta data", 4000);
+                    } else {
+                        ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+                        toast("Failed to upload file / metadata, try again later", 4000);
+                    }
+                }
+                $scope.uploadMetaData(currentPublicationID);
+            } else {
+                ui_upload_status = ui_UPLOAD_STATUS.SUCCES_SCRAPING;
+                toast("succesfully uploaded publication with scraping", 4000);
+            }
+        })
+        .error(function(){
+            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+            toast("Failed to upload file, try again later", 4000) 
+        });
+    }
+    
+    //preparation for the uploadPublication function
+    $scope.uploadFile = function(withMetadata){
+        // $scope.busy = true;
+        var file = $scope.myFile;
+        var url = serverApi.concat('/publications');
+        var authorization = appData.Authorization;
+        $scope.uploadPublication(file, url, authorization, withMetadata);
+    };
+    
+    //updates the currently available metadata
+    $scope.uploadMetaData = function(publicationID, whenFinished){
+        // var uploadingPaper = false;
+        // if($scope.busy){uploadingPaper = true;}
+        // else {$scope.busy = true;};
+        var url = serverApi.concat('/publications/').concat(publicationID);
+        var config = {headers:  {
+		        'Authorization': appData.Authorization
+		}};
+        var metaData = {'title': $scope.userinput.title, //get all the fields
+                        'authors': [{'firstName': $scope.userinput.authorsFirst, 'lastName': $scope.userinput.authorsLast}],
+                        'journal': $scope.userinput.journalName, 
+                        'volume': $scope.userinput.journalVolume,
+                        'number': $scope.userinput.journalNumber,
+                        'year': $scope.userinput.year,
+                        'publisher': $scope.userinput.publisher,
+                        'abstract': undefined,
+                        'citations': undefined,
+                        'article_url': undefined,
+                        'keywords': $scope.userinput.keywords.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)};
+        
+        var metaDataRequest = $http.post(url,metaData,config);
+		metaDataRequest.success(function(data, status, headers, config) {
+            whenFinished(true);
+		});
+		metaDataRequest.error(function(data, status, headers, config) {
+            whenFinished(false);
+		});
+    }
+
+    //delete a publication of the db
+    $scope.deletePublication = function(publicationID){
+        $scope.busy = true;
+        var url = serverApi.concat('/publications/').concat(publicationID);
+        var config = {headers:  {
+		        'Authorization': appData.Authorization
+		    }};
+        var deletePublicationRequest = $http.delete(url,config);
+        
+        deletePublicationRequest.success(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Publication deleted.", 4000);
+            
+		});
+		deletePublicationRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to delete publication, try again later.", 4000);
+		});
+    }
+    
+    //function to get the meta data of a specific publication.
+    $scope.getMetaData = function(publicationID){
+        $scope.busy = true;
+        var url = serverApi.concat('/publications/').concat(publicationID);
+        var getMetaDataRequest = $http.get(url, config);
+        
+        getMetaDataRequest.success(function(data, status, headers, config) {
+        $scope.userinput.title = data.title;
+        $scope.userinput.journalName = data.journal;
+        $scope.userinput.journalNumber = data.number;
+        $scope.userinput.journalVolume = data.volume;
+        $scope.userinput.year = data.year;
+        $scope.userinput.publisher = data.publisher;
+        $scope.userinput.keywords = data.keywords;
+        console.log(data);
+        
+        $scope.busy = false;
+		});
+		getMetaDataRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to get information about publication, try again later.", 4000);
+        });
+    }
+    
+    //function to download a file
+    $scope.deleteCurrentFile = function(){
+        currentFile = null;}
+    $scope.currentFile;
+    $scope.getFile = function(publicationID){
+        $scope.busy = true;
+        var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
+        var getFileRequest = $http.get(url, config);
+        
+        getFileRequest.success(function(data, status, headers, config) {
+            $scope.busy = false;
+            currentFile = data;
+		});
+		getFileRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to download file, please try again later.", 4000);
+        });
+    }
+    
+    //function to get the publications of a certain user.
+    $scope.getUserPublications = function(libraryName){
+        $scope.busy = true;
+        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName);
+        var config = {headers:  {
+		        'Authorization': appData.Authorization
+		    }};
+        var getUserPublicationsRequest = $http.get(url,config);
+        getUserPublicationsRequest.success(function(data, status, headers, config) {
+            appData.currentUser.publications = data;
+            console.log(appData.currentUser.publications);
+            $scope.busy = false;
+		});
+		getUserPublicationsRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to get publications, try again later.", 4000);
+        });
+    }
+    
+    //array that will be filled with currentPublication titles on a assynchronous way before being pushed to appData.currentUser.publicationsTitles.
+    $scope.publicationTitles = [];
+    //function that will control if the assynchronous filling of $scope.publicationTitles is finished.
+    $scope.$watch('publicationTitles',
+                  function(newValue, oldValue) {
+                    if(newValue == oldValue){return;};
+                    if($scope.publicationTitles.length == appData.currentUser.publications.length)
+                    {appData.currentUser.publicationsTitles = $scope.publicationTitles;
+                    $scope.busy = false;}},
+                  true);
+    
+    $scope.getCurrentPublicationTitles = function(){
+        $scope.busy = true;
+        var publications = appData.currentUser.publications;
+        for (i = 0; i < publications.length; i++) { 
+            var publicationID = publications[i].substring(1);
+            var url = serverApi.concat('/publications/').concat(publicationID);
+            var getMetaDataRequest = $http.get(url, config);
+            getMetaDataRequest.success(function(data, status, headers, config) {
+                $scope.publicationTitles.push(data.title);});
+            getMetaDataRequest.error(function(data, status, headers, config) {
+			toast("Failed to get titles of publications, try again later.", 4000)
+            });
+        };
+    }
+    //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
+    
 });

@@ -162,7 +162,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
       anchorSmoothScroll.scrollTo(eID);
     };
 
-    	// temp fix for going to dashboard //FIXME
+    // temp fix for going to dashboard //FIXME
     (function developLogin() {
 		$scope.userinputLogin.username = "brol";
 		$scope.userinputLogin.password = "Brol123!";
