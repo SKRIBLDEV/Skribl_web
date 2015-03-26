@@ -397,8 +397,12 @@
 											<div ng:repeat="publication in ui_currentPublications">
 												<li class="collection-item avatar">
 													<i class="mdi-content-content-paste circle"></i>
+													<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
+													
 													<span class="title">{{publication.title}}</span>
-													<p>{{publication.author}} </p>
+													<p>{{publication.publisher}} </p>
+													
+													</div>
 													<a href="#!" class="secondary-content">
 													<span class="new badge" ng-show="publication.isnew"></span>
 													</a>

@@ -473,11 +473,10 @@
 
     //------------------------------------------------LIBARARY WIP-------------------------------------------------//
     
-    $scope.currentID = undefined
+    $scope.currentViewerPublicationID = undefined
 
-    $scope.setCurrentId = function(newID){
-        $scope.currentID = newID;
-        console.log($scope.currentID);
+    $scope.loadPublicationInViewer = function(newID){
+        $scope.currentViewerPublicationID = newID;        
     }
     
     $scope.ui_publications_library = true;
@@ -488,13 +487,16 @@
 
     $scope.ui_publications_loading = false;
 
-    $scope.ui_currentPublications = 
-    [ {title: 'titel 1', author: 'author1', id: '1', isnew:true},
-    {title: 'titel 2', author: 'author 2', id: '2'},
-    {title: 'titel 3', author: 'author 3', id: '3'},
-    {title: 'titel 4', author: 'author 4', id: '4', isnew:true},
-    {title: 'titel 5', author: 'author 5', id: '5'},
-    {title: 'titel 6', author: 'author 6', id: '6'}];
+    $scope.ui_currentPublications = [
+    {title: 'title 1', id: 1, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+    {title: 'title 2', id: 2, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+    {title: 'title 3', id: 3, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+    {title: 'title 4', id: 4, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+    {title: 'title 5', id: 5, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+    {title: 'title 6', id: 6, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+    {title: 'title 7', id: 7, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+    {title: 'title 8', id: 8, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
+
 
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
     //

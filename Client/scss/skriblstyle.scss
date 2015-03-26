@@ -29,14 +29,21 @@ body {
   }
 }
 
- a {
-    color: $primary-color-dark;
-    margin-right: $card-padding;
-    @include transition(color .3s ease);
-    text-transform: uppercase;
+//text
+.selectable-black {
+  color: black;
+  @include transition(color .3s ease);
+  &:hover { color: lighten($primary-color, 5%); }
+}
 
-    &:hover { color: lighten($primary-color, 30%); }
-  }
+a {
+  color: $primary-color-dark;
+  margin-right: $card-padding;
+  @include transition(color .3s ease);
+  text-transform: uppercase;
+
+  &:hover { color: lighten($primary-color, 30%); }
+}
 
 .primary-text-color {
   color: $primary-color;
