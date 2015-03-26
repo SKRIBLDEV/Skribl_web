@@ -26,7 +26,7 @@
         else{console.log("stop loading screen");}
     }
 //-------------------------------------------------GUI settings-----------------------------------------------------------//
-	
+
 	//user
 	$scope.ui_user_basic = false;
 	$scope.ui_user_dataviz = false;
@@ -191,7 +191,7 @@
     // Function - Will fire on animation completion.
     onAnimationComplete: function(){}
 }
-    
+
 //-------------------------------------------------GUI settings-----------------------------------------------------------//
     /**
 	 * duplication of the username to be used in Dashboard.html
@@ -224,8 +224,8 @@
 			//Error while deleting user
         toast("Database error, please try again later.", 4000) // 4000 is the duration of the toast
     });
-    };
-     
+};
+
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
 
     //upload
@@ -239,7 +239,7 @@
         SUCCES_MANUAL : 5
     }
 
-    ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+    ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
     currentPublicationID = undefined
 
     $scope.ui_upload_active = function(){
@@ -291,7 +291,7 @@
         $http.put(url, fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined,
-                     'Authorization': authorization}
+            'Authorization': authorization}
         })
         .success(function(data, status, headers, config){
             currentPublicationID = data.id.substring(1);
@@ -313,12 +313,12 @@
                 toast("succesfully uploaded publication with scraping", 4000);
             }
         })
-        .error(function(){
-            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-            toast("Failed to upload file, try again later", 4000) 
-        });
-    }
-    
+.error(function(){
+    ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+    toast("Failed to upload file, try again later", 4000) 
+});
+}
+
     //preparation for the uploadPublication function
     $scope.uploadFile = function(withMetadata){
         // $scope.busy = true;
@@ -335,27 +335,27 @@
         // else {$scope.busy = true;};
         var url = serverApi.concat('/publications/').concat(publicationID);
         var config = {headers:  {
-		        'Authorization': appData.Authorization
-		}};
+          'Authorization': appData.Authorization
+      }};
         var metaData = {'title': $scope.userinput.title, //get all the fields
-                        'authors': [{'firstName': $scope.userinput.authorsFirst, 'lastName': $scope.userinput.authorsLast}],
-                        'journal': $scope.userinput.journalName, 
-                        'volume': $scope.userinput.journalVolume,
-                        'number': $scope.userinput.journalNumber,
-                        'year': $scope.userinput.year,
-                        'publisher': $scope.userinput.publisher,
-                        'abstract': undefined,
-                        'citations': undefined,
-                        'article_url': undefined,
-                        'keywords': $scope.userinput.keywords.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)};
+        'authors': [{'firstName': $scope.userinput.authorsFirst, 'lastName': $scope.userinput.authorsLast}],
+        'journal': $scope.userinput.journalName, 
+        'volume': $scope.userinput.journalVolume,
+        'number': $scope.userinput.journalNumber,
+        'year': $scope.userinput.year,
+        'publisher': $scope.userinput.publisher,
+        'abstract': undefined,
+        'citations': undefined,
+        'article_url': undefined,
+        'keywords': $scope.userinput.keywords.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)};
         
         var metaDataRequest = $http.post(url,metaData,config);
-		metaDataRequest.success(function(data, status, headers, config) {
+        metaDataRequest.success(function(data, status, headers, config) {
             whenFinished(true);
-		});
-		metaDataRequest.error(function(data, status, headers, config) {
+        });
+        metaDataRequest.error(function(data, status, headers, config) {
             whenFinished(false);
-		});
+        });
     }
 
     //delete a publication of the db
@@ -363,21 +363,21 @@
         $scope.busy = true;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var config = {headers:  {
-		        'Authorization': appData.Authorization
-		    }};
-        var deletePublicationRequest = $http.delete(url,config);
-        
-        deletePublicationRequest.success(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Publication deleted.", 4000);
-            
-		});
-		deletePublicationRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to delete publication, try again later.", 4000);
-		});
-    }
-    
+          'Authorization': appData.Authorization
+      }};
+      var deletePublicationRequest = $http.delete(url,config);
+
+      deletePublicationRequest.success(function(data, status, headers, config) {
+        $scope.busy = false;
+        toast("Publication deleted.", 4000);
+
+    });
+      deletePublicationRequest.error(function(data, status, headers, config) {
+        $scope.busy = false;
+        toast("Failed to delete publication, try again later.", 4000);
+    });
+  }
+
     //function to get the meta data of a specific publication.
     $scope.getMetaData = function(publicationID){
         $scope.busy = true;
@@ -385,18 +385,18 @@
         var getMetaDataRequest = $http.get(url, config);
         
         getMetaDataRequest.success(function(data, status, headers, config) {
-        $scope.userinput.title = data.title;
-        $scope.userinput.journalName = data.journal;
-        $scope.userinput.journalNumber = data.number;
-        $scope.userinput.journalVolume = data.volume;
-        $scope.userinput.year = data.year;
-        $scope.userinput.publisher = data.publisher;
-        $scope.userinput.keywords = data.keywords;
-        console.log(data);
-        
-        $scope.busy = false;
-		});
-		getMetaDataRequest.error(function(data, status, headers, config) {
+            $scope.userinput.title = data.title;
+            $scope.userinput.journalName = data.journal;
+            $scope.userinput.journalNumber = data.number;
+            $scope.userinput.journalVolume = data.volume;
+            $scope.userinput.year = data.year;
+            $scope.userinput.publisher = data.publisher;
+            $scope.userinput.keywords = data.keywords;
+            console.log(data);
+
+            $scope.busy = false;
+        });
+        getMetaDataRequest.error(function(data, status, headers, config) {
             $scope.busy = false;
             toast("Failed to get information about publication, try again later.", 4000);
         });
@@ -418,8 +418,8 @@
         getFileRequest.success(function(data, status, headers, config) {
             $scope.busy = false;
             currentFile = data;
-		});
-		getFileRequest.error(function(data, status, headers, config) {
+        });
+        getFileRequest.error(function(data, status, headers, config) {
             $scope.busy = false;
             toast("Failed to download file, please try again later.", 4000);
         });
@@ -430,30 +430,30 @@
         $scope.busy = true;
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName);
         var config = {headers:  {
-		        'Authorization': appData.Authorization
-		    }};
-        var getUserPublicationsRequest = $http.get(url,config);
-        getUserPublicationsRequest.success(function(data, status, headers, config) {
-            appData.currentUser.publications = data;
-            console.log(appData.currentUser.publications);
-            $scope.busy = false;
-		});
-		getUserPublicationsRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to get publications, try again later.", 4000);
-        });
-    }
-    
+          'Authorization': appData.Authorization
+      }};
+      var getUserPublicationsRequest = $http.get(url,config);
+      getUserPublicationsRequest.success(function(data, status, headers, config) {
+        appData.currentUser.publications = data;
+        console.log(appData.currentUser.publications);
+        $scope.busy = false;
+    });
+      getUserPublicationsRequest.error(function(data, status, headers, config) {
+        $scope.busy = false;
+        toast("Failed to get publications, try again later.", 4000);
+    });
+  }
+
     //array that will be filled with currentPublication titles on a assynchronous way before being pushed to appData.currentUser.publicationsTitles.
     $scope.publicationTitles = [];
     //function that will control if the assynchronous filling of $scope.publicationTitles is finished.
     $scope.$watch('publicationTitles',
-                  function(newValue, oldValue) {
-                    if(newValue == oldValue){return;};
-                    if($scope.publicationTitles.length == appData.currentUser.publications.length)
-                    {appData.currentUser.publicationsTitles = $scope.publicationTitles;
-                    $scope.busy = false;}},
-                  true);
+      function(newValue, oldValue) {
+        if(newValue == oldValue){return;};
+        if($scope.publicationTitles.length == appData.currentUser.publications.length)
+            {appData.currentUser.publicationsTitles = $scope.publicationTitles;
+                $scope.busy = false;}},
+                true);
     
     $scope.getCurrentPublicationTitles = function(){
         $scope.busy = true;
@@ -465,8 +465,8 @@
             getMetaDataRequest.success(function(data, status, headers, config) {
                 $scope.publicationTitles.push(data.title);});
             getMetaDataRequest.error(function(data, status, headers, config) {
-			toast("Failed to get titles of publications, try again later.", 4000)
-            });
+             toast("Failed to get titles of publications, try again later.", 4000)
+         });
         };
     }
 
@@ -474,28 +474,61 @@
     //------------------------------------------------LIBARARY WIP-------------------------------------------------//
     
     $scope.currentViewerPublicationID = undefined
+    currentViewerPublicationIDX = undefined 
+    $scope.ui_displayPublication = true;
 
     $scope.loadPublicationInViewer = function(newID){
-        $scope.currentViewerPublicationID = newID;        
-    }
-    
-    $scope.ui_publications_library = true;
-
-    $scope.ui_publications_toggleLibrary = function(){
-        $scope.ui_publications_library = !$scope.ui_publications_library;
+        $scope.currentViewerPublicationID = newID;
+        currentViewerPublicationIDX = arrayObjectIndexOf($scope.ui_currentPublications,newID, 'id');
+        $scope.gotoElement("id_viewer");
+        $scope.ui_displayPublication = true;        
     }
 
-    $scope.ui_publications_loading = false;
+    $scope.publicationViewerEnabled = function(){
+        return $scope.currentViewerPublicationID != undefined;
+    }
 
-    $scope.ui_currentPublications = [
-    {title: 'title 1', id: 1, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 2', id: 2, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 3', id: 3, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 4', id: 4, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 5', id: 5, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 6', id: 6, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 7', id: 7, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 8', id: 8, journalName: 'journalName', journalName: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
+    $scope.unloadPublicationInViewer = function(){
+        $scope.currentViewerPublicationID = undefined
+        currentViewerPublicationIDX = undefined 
+        $scope.gotoElement("id_top");
+    }
+
+    $scope.ui_toggleDisplayPublication = function(){
+        $scope.ui_displayPublication = !$scope.ui_displayPublication;
+    }
+
+    $scope.getCurrentViewerPublication = function(){
+        console.log($scope.ui_currentPublications[currentViewerPublicationIDX].title)
+        return $scope.ui_currentPublications[currentViewerPublicationIDX];
+    }
+
+    function arrayObjectIndexOf(myArray, searchTerm, property) {
+        for(var idx = 0, alength = myArray.length; idx < alength; idx++) {
+            if (myArray[idx][property] === searchTerm) return idx;
+        }
+    return -1; //errror
+    }
+
+
+
+$scope.ui_publications_library = true;
+
+$scope.ui_publications_toggleLibrary = function(){
+    $scope.ui_publications_library = !$scope.ui_publications_library;
+}
+
+$scope.ui_publications_loading = false;
+
+$scope.ui_currentPublications = [
+{title: 'title 1', id: 1, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+{title: 'title 2', id: 2, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+{title: 'title 3', id: 3, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+{title: 'title 4', id: 4, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+{title: 'title 5', id: 5, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+{title: 'title 6', id: 6, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+{title: 'title 7', id: 7, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+{title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
 
 
     //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
@@ -507,10 +540,11 @@
      // 
      
      //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
-    
+
      $scope.interactiveGraph = false;
 
-    $scope.ui_interactive_graph_enable = function(){
+
+     $scope.ui_interactive_graph_enable = function(){
         $scope.interactiveGraph = true;
         $scope.gotoElement("id_interactive_graph")
     }
@@ -525,11 +559,11 @@
     $scope.gotoElement = function (eID){
       // set the location.hash to the id of
       // the element you wish to scroll to.
-      $location.hash('middle');
- 
+      // $location.hash('middle');
+
       // call $anchorScroll()
       anchorSmoothScroll.scrollTo(eID);
-    };
+  };
 
-    
+
 });
