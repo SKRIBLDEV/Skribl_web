@@ -383,6 +383,139 @@ function Publication(db) {
 		});
 	}
 
+	this.queryAdvanced = function(criteria, limit, clb) {
+		var query = '';
+		var queryInitialized? = false;
+
+		function AuthorQuery(criteria, callBack) {
+			if(criteria.authors === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var authorArray = criteria.authors;
+				query = 'select * from Publication where any() traverse(0,1) (firstName = \'' + authorArray[0].fName + '\' and lastName = \'' + authorArray[0].lName + '\')';
+				authorArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < authorArray.length; i++) {
+					query = 'select * from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].fName + '\' and lastName = \'' + authorArray[i].lName + '\')'
+				};
+				callBack(null, true);
+			}
+		}
+
+		function keywordQuery(criteria, callBack) {
+			if(criteria.keywords === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var keywordArray = criteria.keywords;
+				if(queryInitialized) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+				}
+				else {
+					query = 'select * from Publication where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+				}
+				keywordArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < keywordArray.length; i++) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[i] +  '\')';
+				};
+				callBack(null, true);
+			}
+		}
+
+		function researchDomainQuery(criteria, callBack) {
+			if(criteria.researchDomains === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var researchDomainArray = criteria.researchDomains;
+				if(queryInitialized) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+				}
+				else {
+					query = 'select * from Publication where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+				}
+				researchDomainArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < researchDomainArray.length; i++) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
+				};
+				callBack(null, true);
+			}
+		}
+
+		function pubDataQuery(criteria, callBack) {
+			var tempQuery = '';
+			if(criteria.title !== undefined) {
+				tempQuery = tempQuery + ' and title = \'' + criteria.title + '\'';
+			}
+			if(criteria.fileName !== undefined) {
+				tempQuery = tempQuery + ' and fileName = \'' + criteria.fileName + '\'';
+			}
+			if(criteria.journal !== undefined) {
+				tempQuery = tempQuery + ' and journal = \'' + criteria.journal + '\'';
+			}
+			if(criteria.publisher !== undefined) {
+				tempQuery = tempQuery + ' and publisher = \'' + criteria.publisher + '\'';
+			}
+			if(criteria.volume !== undefined) {
+				tempQuery = tempQuery + ' and volume = \'' + criteria.volume + '\'';
+			}
+			if(criteria.number !== undefined) {
+				tempQuery = tempQuery + ' and number = \'' + criteria.number + '\'';
+			}
+			if(criteria.year !== undefined) {
+				tempQuery = tempQuery + ' and year = \'' + criteria.year + '\'';
+			}
+			if(criteria.abstract !== undefined) {
+				tempQuery = tempQuery + ' and abstract = \'' + criteria.abstract + '\'';
+			}
+			if(criteria.url !== undefined) {
+				tempQuery = tempQuery + ' and url = \'' + criteria.url + '\'';
+			}
+			if(criteria.booktitle !== undefined) {
+				tempQuery = tempQuery + ' and booktitle = \'' + criteria.booktitle + '\'';
+			}
+			if(criteria.organisation !== undefined) {
+				tempQuery = tempQuery + ' and organisation = \'' + criteria.organisation + '\'';
+			}
+			if(tempQuery == '') {
+				db.query(query).all()
+				.then(function(res) {
+					callBack(null, res);
+				});
+			}
+			else {
+				if(query == '') {
+					db.query('select * from Publication where' + tempQuery.slice(5)).all()
+					.then(function(res) {
+						callBack(null, res);
+					});
+				}
+				else {
+					db.query('select * from (' + query + ') where' + tempQuery.slice(5)).all()
+					.then(function(res) {
+						callBack(null, res);
+					});
+				}
+			}
+		}
+		AuthorQuery(criteria, function(error, res) {
+			keywordQuery(criteria, function(error, res) {
+				researchDomainQuery(criteria, function(error, res) {
+					pubDataQuery(criteria, clb);
+				});
+			});
+		});
+
+	}
+
+//OLDQUERY
+/*
 	this.queryPublication = function(criteria, clb) {
 		/*
 		will search with
@@ -393,7 +526,7 @@ function Publication(db) {
 		publisher
 		journal
 		 */
-		
+/*
 		 function startQueryTitle(clb) {
 		 	if(criteria.title === undefined) {
 		 		db.select().from('Publication').all()
@@ -470,7 +603,7 @@ function Publication(db) {
 		 	}
 		 }
 		 */
-		
+		/*
 		function queryAuthors(tempRes, clb) {
 			giveRes(tempRes, clb);
 		}
@@ -480,7 +613,7 @@ function Publication(db) {
 		}
 
 	}
-
+*/
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
