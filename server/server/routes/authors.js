@@ -19,11 +19,14 @@ function searchAuthors(req, res, context) {
 
 	var firstname = req.query['firstname'];
 	var lastname = req.query['lastname'];
+	var limit = req.query['limit'];
 
 	if(!(firstname && lastname))
 		return userError(res, 'Expected firstname:lastname');
 
-	context.db.searchAuthor(firstname, lastname, __AUTHOR_LIMIT__, function(err, authors) {
+	limit = (limit ? parseInt(limit) : __AUTHOR_LIMIT__);
+	
+	context.db.searchAuthor(firstname, lastname, limit, function(err, authors) {
 		if(err)
 			serverError(res, err.toString());
 		else {

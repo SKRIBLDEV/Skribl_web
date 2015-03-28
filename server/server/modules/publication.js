@@ -10,7 +10,7 @@ var GS_scraping = require('./GS_scraping_with_cheerio.js');
 function setUndefinedProperties(metadataGUI, metadataGS){
   for (var property in metadataGS) {
     if (metadataGS.hasOwnProperty(property) && metadataGS[property]){
-        if( ! metadataGUI[property] ) //undefined property (not specified)
+        if(!metadataGUI[property] ) //undefined property (not specified)
           metadataGUI[property] = metadataGS[property];
     };
   };

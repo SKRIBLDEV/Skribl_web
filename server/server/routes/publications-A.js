@@ -163,6 +163,7 @@ function queryPublications(req, res, context) {
 
 	/* BASIC SEARCH */
 	if(keyword) {
+		keyword = keyword.replace('+', ' '); //add spaces between words
 		db.querySimple(keyword, __INTERNAL_LIMIT__, function(err, data) {
 			if (err)
 				serverError(res, err.toString());
