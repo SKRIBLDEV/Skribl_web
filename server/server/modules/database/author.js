@@ -153,7 +153,6 @@ function Author(db) {
 					clb3(null, true);
 				}
 				else {
-					authors[i].profile = false;
 					clb3(null, authors);	
 				}
 			});
