@@ -149,7 +149,7 @@ function Author(db) {
 			db.query('select from (select expand(in(\'IsAuthor\')) from ' + RID.getRid(authors[i]) + ')').all()
 			.then(function(res) {
 				if(res.length) {
-					author.profile = RID.getRid(res[0]);
+					author.profile = res[0].username;
 					clb3(null, true);
 				}
 				else {
