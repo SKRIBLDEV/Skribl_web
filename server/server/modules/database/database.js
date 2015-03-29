@@ -68,6 +68,7 @@ function Database(serverConfig, dbConfig) {
 
 
 	this.addJournal = PUB.addJournal;
+	this.queryAdvanced = PUB.queryAdvanced;
 	this.addProceeding = PUB.addProceeding;
 	this.loadPublication = PUB.loadPublication;
 	this.getPublication = PUB.getPublication;
@@ -464,7 +465,12 @@ var metObject = {
 	researchDomains: ['Computer Sciences'],
 	keywords: ['testingkey1', 'dieren']
 }
+
+var criteria = {
+	authors: [{fName: 'wil', lName: 'modaal1'}]
+};
 */
+//database.queryAdvanced(criteria, 10, callBack);
 //database.searchAuthor('jack', 'daniels', 10, callBack);
 //database.loadLibrary('test2', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
@@ -515,7 +521,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
 
+*/
 
 

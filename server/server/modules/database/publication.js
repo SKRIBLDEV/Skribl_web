@@ -20,6 +20,7 @@ function Publication(db) {
 	var AUT = new Author.Author(db);
 	var RD = new researchDomain.ResearchDomain(db);
 	var Kw = new keyword.Keyword(db);
+	var self = this;
 
 			/**
 		 * will load a file into a buffer as base64 encoded.
@@ -171,7 +172,7 @@ function Publication(db) {
 							delete res['@class'];
 							delete res['in_HasPublication'];
 							delete res['@version'];
-							delete res['out_AuthorOf'];
+							delete res['in_AuthorOf'];
 							delete res['out_HasResearchDomain'];
 							delete res['out_HasKeyword'];
 							delete res['@rid'];
@@ -385,7 +386,7 @@ function Publication(db) {
 
 	this.queryAdvanced = function(criteria, limit, clb) {
 		var query = '';
-		var queryInitialized? = false;
+		var queryInitialized = false;
 
 		function AuthorQuery(criteria, callBack) {
 			if(criteria.authors === undefined) {
@@ -484,30 +485,51 @@ function Publication(db) {
 				tempQuery = tempQuery + ' and organisation = \'' + criteria.organisation + '\'';
 			}
 			if(tempQuery == '') {
-				db.query(query).all()
+				//console.log(query);
+				db.query(query + 'limit ' + limit).all()
 				.then(function(res) {
 					callBack(null, res);
 				});
 			}
 			else {
 				if(query == '') {
-					db.query('select * from Publication where' + tempQuery.slice(5)).all()
+					//console.log('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit);
+					db.query('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					});
 				}
 				else {
-					db.query('select * from (' + query + ') where' + tempQuery.slice(5)).all()
+					//console.log('select * from (' + query + ') where ' + tempQuery.slice(5));
+					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					});
 				}
 			}
 		}
+
 		AuthorQuery(criteria, function(error, res) {
 			keywordQuery(criteria, function(error, res) {
 				researchDomainQuery(criteria, function(error, res) {
-					pubDataQuery(criteria, clb);
+					pubDataQuery(criteria, function(error, res) {
+						var ridArray = RID.getRids(res);
+						if(ridArray.length) {
+							var ctr = 0;
+							for (var i = 0; i < ridArray.length; i++) {
+								self.getPublication(ridArray[i], function(error, res) {
+									ridArray[ctr] = res;
+									ctr++;
+									if(ctr == ridArray.length) {
+										clb(null, ridArray);
+									}
+								});
+							};
+						}
+						else {
+							clb(null, []);
+						}
+					});
 				});
 			});
 		});
