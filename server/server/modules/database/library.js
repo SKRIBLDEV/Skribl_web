@@ -42,21 +42,30 @@ function Library(db) {
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
-		db.select().from('Library').where({username: user, name: library}).all()
-		.then(function (libraries) {
-			if(libraries.length) {
-				var libRid = RID.getRid(libraries[0]);
-				db.create('edge', 'HasPublication')
-				.from(libRid)
-				.to(id).one()
-				.then(function() {
-					clb(null, true);
+		db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'').all()
+		.then(function(pubs) {
+			if(pubs.length) {
+				db.select().from('Library').where({username: user, name: library}).all()
+				.then(function (libraries) {
+					if(libraries.length) {
+						var libRid = RID.getRid(libraries[0]);
+						db.create('edge', 'HasPublication')
+						.from(libRid)
+						.to(id).one()
+						.then(function() {
+							clb(null, true);
+						});
+					}
+					else {
+						clb(new Error('Library does not exist'));
+					}
 				});
 			}
 			else {
-				clb(new Error('Library does not exist'));
+				clb(new Error('publication with id: ' + id + ', is already in library'));
 			}
 		});
+		
 	}
 
 	this.removeFromLibrary = function(user, library, id, clb) {

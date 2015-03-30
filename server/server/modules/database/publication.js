@@ -20,6 +20,7 @@ function Publication(db) {
 	var AUT = new Author.Author(db);
 	var RD = new researchDomain.ResearchDomain(db);
 	var Kw = new keyword.Keyword(db);
+	var self = this;
 
 			/**
 		 * will load a file into a buffer as base64 encoded.
@@ -171,7 +172,7 @@ function Publication(db) {
 							delete res['@class'];
 							delete res['in_HasPublication'];
 							delete res['@version'];
-							delete res['out_AuthorOf'];
+							delete res['in_AuthorOf'];
 							delete res['out_HasResearchDomain'];
 							delete res['out_HasKeyword'];
 							delete res['@rid'];
@@ -383,6 +384,160 @@ function Publication(db) {
 		});
 	}
 
+	this.queryAdvanced = function(criteria, limit, clb) {
+		var query = '';
+		var queryInitialized = false;
+
+		function AuthorQuery(criteria, callBack) {
+			if(criteria.authors === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var authorArray = criteria.authors;
+				query = 'select * from Publication where any() traverse(0,1) (firstName = \'' + authorArray[0].fName + '\' and lastName = \'' + authorArray[0].lName + '\')';
+				authorArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < authorArray.length; i++) {
+					query = 'select * from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].fName + '\' and lastName = \'' + authorArray[i].lName + '\')'
+				};
+				callBack(null, true);
+			}
+		}
+
+		function keywordQuery(criteria, callBack) {
+			if(criteria.keywords === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var keywordArray = criteria.keywords;
+				if(queryInitialized) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+				}
+				else {
+					query = 'select * from Publication where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+				}
+				keywordArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < keywordArray.length; i++) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[i] +  '\')';
+				};
+				callBack(null, true);
+			}
+		}
+
+		function researchDomainQuery(criteria, callBack) {
+			if(criteria.researchDomains === undefined) {
+				callBack(null, true);
+			}
+			else {
+				var researchDomainArray = criteria.researchDomains;
+				if(queryInitialized) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+				}
+				else {
+					query = 'select * from Publication where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+				}
+				researchDomainArray.shift();
+				queryInitialized = true;
+
+				for (var i = 0; i < researchDomainArray.length; i++) {
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
+				};
+				callBack(null, true);
+			}
+		}
+
+		function pubDataQuery(criteria, callBack) {
+			var tempQuery = '';
+			if(criteria.title !== undefined) {
+				tempQuery = tempQuery + ' and title = \'' + criteria.title + '\'';
+			}
+			if(criteria.fileName !== undefined) {
+				tempQuery = tempQuery + ' and fileName = \'' + criteria.fileName + '\'';
+			}
+			if(criteria.journal !== undefined) {
+				tempQuery = tempQuery + ' and journal = \'' + criteria.journal + '\'';
+			}
+			if(criteria.publisher !== undefined) {
+				tempQuery = tempQuery + ' and publisher = \'' + criteria.publisher + '\'';
+			}
+			if(criteria.volume !== undefined) {
+				tempQuery = tempQuery + ' and volume = \'' + criteria.volume + '\'';
+			}
+			if(criteria.number !== undefined) {
+				tempQuery = tempQuery + ' and number = \'' + criteria.number + '\'';
+			}
+			if(criteria.year !== undefined) {
+				tempQuery = tempQuery + ' and year = \'' + criteria.year + '\'';
+			}
+			if(criteria.abstract !== undefined) {
+				tempQuery = tempQuery + ' and abstract = \'' + criteria.abstract + '\'';
+			}
+			if(criteria.url !== undefined) {
+				tempQuery = tempQuery + ' and url = \'' + criteria.url + '\'';
+			}
+			if(criteria.booktitle !== undefined) {
+				tempQuery = tempQuery + ' and booktitle = \'' + criteria.booktitle + '\'';
+			}
+			if(criteria.organisation !== undefined) {
+				tempQuery = tempQuery + ' and organisation = \'' + criteria.organisation + '\'';
+			}
+			if(tempQuery == '') {
+				//console.log(query);
+				db.query(query + 'limit ' + limit).all()
+				.then(function(res) {
+					callBack(null, res);
+				});
+			}
+			else {
+				if(query == '') {
+					//console.log('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit);
+					db.query('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					.then(function(res) {
+						callBack(null, res);
+					});
+				}
+				else {
+					//console.log('select * from (' + query + ') where ' + tempQuery.slice(5));
+					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					.then(function(res) {
+						callBack(null, res);
+					});
+				}
+			}
+		}
+
+		AuthorQuery(criteria, function(error, res) {
+			keywordQuery(criteria, function(error, res) {
+				researchDomainQuery(criteria, function(error, res) {
+					pubDataQuery(criteria, function(error, res) {
+						var ridArray = RID.getRids(res);
+						if(ridArray.length) {
+							var ctr = 0;
+							for (var i = 0; i < ridArray.length; i++) {
+								self.getPublication(ridArray[i], function(error, res) {
+									ridArray[ctr] = res;
+									ctr++;
+									if(ctr == ridArray.length) {
+										clb(null, ridArray);
+									}
+								});
+							};
+						}
+						else {
+							clb(null, []);
+						}
+					});
+				});
+			});
+		});
+
+	}
+
+//OLDQUERY
+/*
 	this.queryPublication = function(criteria, clb) {
 		/*
 		will search with
@@ -393,7 +548,7 @@ function Publication(db) {
 		publisher
 		journal
 		 */
-		
+/*
 		 function startQueryTitle(clb) {
 		 	if(criteria.title === undefined) {
 		 		db.select().from('Publication').all()
@@ -470,7 +625,7 @@ function Publication(db) {
 		 	}
 		 }
 		 */
-		
+		/*
 		function queryAuthors(tempRes, clb) {
 			giveRes(tempRes, clb);
 		}
@@ -480,81 +635,85 @@ function Publication(db) {
 		}
 
 	}
-
+*/
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
-			if(res[0]['@class'].toLowerCase() == metObject.type) {
-				var trx;
-				if(metObject.type == 'journal') {
-					var trx = db.let('publication1', function(s) {
-						s.update(id)
-						.set({
-							journal: metObject.journal,
-							publisher: metObject.publisher,
-							volume: metObject.volume,
-							number: metObject.number
-						});
-					});					
-				}
-				else {
-					var trx = db.let('publication1', function(s) {
-						s.update(id)
-						.set({
-							booktitle: metObject.booktitle,
-							organisation: metObject.organisation
-						});
-					});	
-				}
-				trx.let('publication2', function(s) {
-					s.update(id)
-					.set({
-						year: metObject.booktitle,
-						abstract: metObject.abstract,
-						citations: metObject.citations,
-						url: metObject.url,
-						private: metObject.private
-					});
-				});
-				trx.let('publication', function(s) {
-					s.select().from(Oriento.RID(id));
-				});
-
-				AUT.addAuthors(metObject.authors, trx, function(error, res) {
-					if(error) {
-						clb(error);
+			if(res.length) {
+				if(res[0]['@class'].toLowerCase() == metObject.type) {
+					var trx;
+					if(metObject.type == 'journal') {
+						var trx = db.let('publication1', function(s) {
+							s.update(id)
+							.set({
+								journal: metObject.journal,
+								publisher: metObject.publisher,
+								volume: metObject.volume,
+								number: metObject.number
+							});
+						});					
 					}
 					else {
-						AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
-							if(error) {
-								clb(error);
-							}
-							else {
-								RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
-									if(error) {
-										clb(error);
-									}
-									else {
-										Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+						var trx = db.let('publication1', function(s) {
+							s.update(id)
+							.set({
+								booktitle: metObject.booktitle,
+								organisation: metObject.organisation
+							});
+						});	
+					}
+					trx.let('publication2', function(s) {
+						s.update(id)
+						.set({
+							year: metObject.booktitle,
+							abstract: metObject.abstract,
+							citations: metObject.citations,
+							url: metObject.url,
+							private: metObject.private
+						});
+					});
+					trx.let('publication', function(s) {
+						s.select().from(Oriento.RID(id));
+					});
+					AUT.addAuthors(metObject.authors, trx, function(error, res) {
+						if(error) {
+							clb(error);
+						}
+						else {
+							AUT.connectAuthors(metObject.knownAuthors, trx, function(error, res) {
+								if(error) {
+									clb(error);
+								}
+								else {
+									RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
 										if(error) {
 											clb(error);
 										}
 										else {
-											trx.commit().return('$publication').all()
-											.then(function(res) {
-												clb(null, true);
-											});	
+											Kw.addKeywords(metObject.keywords, trx, function(error, res) {
+											if(error) {
+												clb(error);
+											}
+											else {
+												trx.commit().return('$publication').all()
+												.then(function(res) {
+													clb(null, true);
+												});	
+											}
+											});
 										}
-										});
-									}
-								});
-							}
-						});
-					}
-				});
+									});
+								}
+							});
+						}
+					});
+				}
+				else {
+					clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
+				}
 			}
 			else {
-				clb(new Error('type of given metadata: ' + metObject.type + ' does not match type of publication with id: ' + id + ', and type: ' + res[0]['@class']));
+				clb(new Error('publication with id: ' + id + ' does not exist'));
 			}
 		});
 	}
