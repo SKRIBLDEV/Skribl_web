@@ -91,9 +91,9 @@ exports.extract = function(info, clb){
 
 
 
-
-//test code:
 /*
+//test code:
+
  var proceedingArticle = "Analytical model for the optical propagation in a nonlinear left-handed material";
  var journalArticle = "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency";
 
@@ -108,8 +108,8 @@ extract(testInfo, function(err, res){
     console.log(err);
   else
     console.log(testInfo);
-});*/
-
+});
+*/
 
 
 /*var searchKey = 'optical properties of metamaterials';

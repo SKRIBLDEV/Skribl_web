@@ -108,14 +108,28 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
   var url = createGoogleScholarURL(searchTerms);
   request({ encoding: 'binary', method: "GET", uri: url}, function(err, resp, body) { //http request 
   	if (!err && resp.statusCode == 200) { //request succeeded
-      try{
+      /*try{
         $ = cheerio.load(body); //create traversable DOM from retrieved html
         var result = scrapeFunc($); //array or single object, according to the scrapeFunc used 
         clb(null, result); 
       }
       catch(error){
         clb(new Error("Failed to scrape results"), null);
+      }*/
+      //detailed error handling:
+      try{
+        $ = cheerio.load(body); //create traversable DOM from retrieved html
       }
+      catch(error){
+        clb(new Error("failure on cheerio.load(body) "), null);
+      }
+      try{
+        var result = scrapeFunc($); //array or single object, according to the scrapeFunc used 
+      }
+      catch(error){
+        clb(new Error("failure on scrapeFunc($) "), null);
+      }
+      clb(null, result); 
 	  }
     else
       clb(new Error("Request to Google Scholar failed"), null);
