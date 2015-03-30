@@ -118,7 +118,7 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
       }
 	  }
     else
-      clb(new Error("Failed to connect to Google Scholar"), null);
+      clb(new Error("Request to Google Scholar failed"), null);
   });
 };
 

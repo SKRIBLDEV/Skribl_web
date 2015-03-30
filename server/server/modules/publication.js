@@ -44,8 +44,7 @@ function setToType(type, metadataGS){
 function extract(info, clb){
   GS_scraping.extractOne(info.title, function(err, res){ //extract the first GS result; if the title is correct, this is usually the only result
     if (err){
-      var GSError = new Error('Failed to extract data from Google Scholar');
-      clb(GSError, info); //returns the unchanged info object
+      clb(err, info); //returns the unchanged info object
     }
     else{
       var type = info.type;
@@ -68,8 +67,7 @@ function extract(info, clb){
 function search(searchTerms, limit, clb){
   GS_scraping.extractAll(searchTerms, function(err, res){ //extract the GS results of the first page
     if (err){
-      var GSError = new Error('Failed to extract data from Google Scholar');
-      clb(GSError, null); 
+      clb(err, null); 
     }
     else{
       if (res.length > limit){
