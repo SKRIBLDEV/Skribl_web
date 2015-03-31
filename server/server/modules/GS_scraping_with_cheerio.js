@@ -24,11 +24,16 @@ var parseSubTitle = function(subtitle){
     //parse authors 
     var authorsStrings = parts[0].split(",");
     var authors = [];
-    for(i in authorsStrings){
+
+    //[N] attempting fix
+    var len = authorsStrings.length;
+    for(var i = 0; i < len; ++i) {
       var nameArray = authorsStrings[i].replace(/(^\s)/, '').split(" "); //remove first whitespace and then split on whitespace
       if (nameArray.length >= 2){
         var lastName = "";
-         for (index = 1; index < nameArray.length; index++) { //collect all parts of the last name
+        //[N] you also forgot 'var' here, keep this in mind
+        //because otherwise index is global to our entire application!
+         for (var index = 1; index < nameArray.length; index++) { //collect all parts of the last name
           lastName = lastName + nameArray[index] + " ";
          }
         var author ={ //To Do: multiple initials?
