@@ -127,7 +127,7 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
         var result = scrapeFunc($); //array or single object, according to the scrapeFunc used 
       }
       catch(error){
-        clb(new Error("failure on scrapeFunc($) "), null);
+        clb(error, null);
       }
       clb(null, result); 
 	  }
