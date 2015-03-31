@@ -210,7 +210,7 @@ function Database(serverConfig, dbConfig) {
 			.then(function(researchDomains) {
 				var resArray = [];
 				for (var i = 0; i < researchDomains.length; i++) {
-					resArray.push(researchDomains[i].Name);
+					resArray.push({major: researchDomains[i].major, minor: researchDomains[i].minor});
 				}
 				callback(null, resArray);
 			});
@@ -220,7 +220,7 @@ function Database(serverConfig, dbConfig) {
 			.then(function(domains) {
 				var resArray = [];
 				for (var i = 0; i < domains.length; i++) {
-					resArray.push(domains[i].Name);
+					resArray.push({major: domains[i].major, minor: domains[i].minor});
 				}
 				callback(null, resArray);
 			});

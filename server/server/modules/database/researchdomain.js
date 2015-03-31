@@ -10,12 +10,11 @@ function ResearchDomain(db){
 	 * @param {callBack} callback
 	 */
 	function addResearchDomain(domain, varName, trx, callback) {
-		var domName = domain;
-		db.select().from('ResearchDomain').where({Name: domName}).all()
+		db.select().from('ResearchDomain').where({major: domain.major, minor: domain.minor}).all()
 		.then(function(domains) {
 			if(domains.length) {
 				trx.let('resDomain' + varName, function(s) {
-					s.select().from('ResearchDomain').where({Name: domName});
+					s.select().from('ResearchDomain').where({major: domain.major, minor: domain.minor});
 				})
 				callback(null, varName);
 			}
@@ -23,7 +22,8 @@ function ResearchDomain(db){
 				trx.let('resDomain' + varName, function(s) {
 					s.create('vertex', 'ResearchDomain')
 					.set({
-						Name: domName
+						major: domain.major,
+						minor: domain.minor
 					});
 				});
 			callback(null, varName);
@@ -99,7 +99,7 @@ function ResearchDomain(db){
 				var res = [];
 				var ctr = 0;
 				for (var i = 0; i < resDomains.length; i++) {
-					res.push(resDomains[i].Name);
+					res.push({major: resDomains[i].major, minor: resDomains[i].minor});
 					ctr++;
 					if(ctr == resDomains.length) {
 						clb(null, res);

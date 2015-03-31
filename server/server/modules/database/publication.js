@@ -367,7 +367,7 @@ function Publication(db) {
 		counter();
 		});
 
-		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where Name like \'%' + keyword + '%\') where private = false')
+		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where major like \'%' + keyword + '%\' or minor like \'%' + keyword + '%\') where private = false')
 		.then(function(res) {
 			if(res.length) {
 			result = result.concat(RID.getRids(res)).unique();
@@ -434,16 +434,16 @@ function Publication(db) {
 			else {
 				var researchDomainArray = criteria.researchDomains;
 				if(queryInitialized) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (major = \'' + researchDomainArray[0].major +  '\' and minor = \'' + researchDomainArray[0].minor + '\')';
 				}
 				else {
-					query = 'select * from Publication where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+					query = 'select * from Publication where any() traverse(0,1) (major = \'' + researchDomainArray[0].major +  '\' and minor = \'' + researchDomainArray[0].minor + '\')';
 				}
 				researchDomainArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < researchDomainArray.length; i++) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
+					query = 'select * from (' + query +  ') where any() traverse(0,1) (major = \'' + researchDomainArray[0].major +  '\' and minor = \'' + researchDomainArray[0].minor + '\')';
 				};
 				callBack(null, true);
 			}
@@ -486,7 +486,7 @@ function Publication(db) {
 			}
 			if(tempQuery == '') {
 				//console.log(query);
-				db.query(query + 'limit ' + limit).all()
+				db.query('select * from (' + query + ') where private = false limit ' + limit).all()
 				.then(function(res) {
 					callBack(null, res);
 				});
@@ -494,14 +494,14 @@ function Publication(db) {
 			else {
 				if(query == '') {
 					//console.log('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit);
-					db.query('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select * from Publication where ' + tempQuery.slice(5) + ' and private = false limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					});
 				}
 				else {
 					//console.log('select * from (' + query + ') where ' + tempQuery.slice(5));
-					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' and private = false limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					});
