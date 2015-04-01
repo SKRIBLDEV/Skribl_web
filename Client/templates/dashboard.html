@@ -397,10 +397,14 @@
 											<div ng:repeat="publication in ui_currentPublications">
 												<li class="collection-item avatar">
 													<i class="mdi-content-content-paste circle"></i>
-													<span class="title">{{publication.title}}</span>
-													<p>{{publication.author}} </p>
+													<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
+
+														<span class="title">{{publication.title}}</span>
+														<p>{{publication.publisher}} </p>
+
+													</div>
 													<a href="#!" class="secondary-content">
-													<span class="new badge" ng-show="publication.isnew"></span>
+														<span class="new badge" ng-show="publication.isnew"></span>
 													</a>
 													<hr>
 												</li>
@@ -435,17 +439,57 @@
 				<!-- OPTIONAL CARDS -->
 
 				<!-- start VIEWER card -->
-				<div class="col l7 m12 s12">
+				
+				<div class="col l7 m12 s12" ng-show="publicationViewerEnabled()">
 					<div class="card z-depth-4">
 						<div class="card-content" style="background:#EEEEEE">
 							<span class="card-title grey-text text-darken-4">
 								<i class="mdi-content-content-paste">&nbsp VIEWER</i>
+								<i class="mdi-content-clear right" ng-click="unloadPublicationInViewer()"></i>
 							</span>
-							<!-- start inner card -->
+							<!-- start $NAME card -->
+							<div class="card">
+								<div class="card-content">
+									<span class="card-title grey-text text-darken-4" ng-click="ui_toggleDisplayPublication()">
+									<a> {{getCurrentViewerPublication().title}} </a>
+										<i class="mdi-navigation-more-vert right"></i>
+									</span>
+								</div>
+								<span class="grey-text text-darken-4" ng-show="ui_displayPublication">
+									<div class="animated fadeInDown col s12">
+										<div class="section">
+										<div class="row center">
+											<code class="titip-bottom">
+												<a class="waves-effect waves-light btn" style="color:white;" ng-click="getFile(getCurrentViewerPublication().id)">
+													<i class="mdi-file-file-download left"></i>
+													Download publication
+												</a>
+												<span class="titip-content">
+													Download the pdf to your device
+												</span>
+											</code>
+										</div>
+										<div class="row">
+										<li> {{getCurrentViewerPublication().journalName}} </li>
+										<li> {{getCurrentViewerPublication().journalNumber}} </li>
+										<li> {{getCurrentViewerPublication().journalVolume}} </li>
+										<li> {{getCurrentViewerPublication().year}} </li>
+										<li> {{getCurrentViewerPublication().publisher}} </li>
+										<li> {{getCurrentViewerPublication().keywords}} </li>
+										</div>
+
+										</div>
+										<div class="center">
+											<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_toggleDisplayPublication()"></i>
+										</div>
+									</div>
+								</span>
+							</div>
 							<!-- stop inner card -->
 						</div>
 					</div>
 				</div>
+
 				<!-- stop viewer card -->
 				
 
@@ -458,7 +502,7 @@
 		<!-- stop overall container -->
 	</div>
 </div>
-
+<div id="id_viewer"></div>
 
 
 <div id="id_interactive_graph"></div>
@@ -490,7 +534,6 @@
 		</div>
 	</div>
 </div>
-
 
 
 
