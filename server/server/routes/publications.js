@@ -114,18 +114,18 @@ function createPublication(req, res, context) {
  	 	//download file
  	 	request.get(publicationUrl)
  	 	  .on('error', function(err) {
- 	 	  	fs.unlink(path, nop);
+ 	 	  	fs.unlink(file.path, nop);
  	 	  	serverError(res, 'download from URL failed: ' + err.toString());
  	 	  })
  	 	  .on('response', function(resp) {
  	 	  	var type = resp.headers['content-type'];
- 	 	  	file.mimetype = (type? type : mime.lookup(path));
+ 	 	  	file.mimetype = (type? type : mime.lookup(file.path));
  	 		fileStream.on('finish', function() {
  	 			filestream.close(nop);
  	 			addToDatabase(file);
  	 		});
  	 	  })
- 	 	  .pipe(path);
+ 	 	  .pipe(file.path);
 
   	/* NO FILE? */	
   	} else
