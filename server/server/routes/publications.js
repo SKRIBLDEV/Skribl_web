@@ -110,7 +110,7 @@ function createPublication(req, res, context) {
  	 	var file = Object.create(null);
 		file.name = publicationUrl.substring(publicationUrl.lastIndexOf('/')+1);
 		file.path = context.workingDir + '/temp/' + uuid.v1();
- 	 	var fileStream = fs.createWriteStream(path);
+ 	 	var fileStream = fs.createWriteStream(file.path);
  	 	//download file
  	 	request.get(publicationUrl)
  	 	  .on('error', function(err) {
