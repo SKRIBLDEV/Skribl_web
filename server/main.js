@@ -55,14 +55,14 @@ SKRIBLServer.useAuthentication(authentication);
 
 /* ---- CONFIGURE ROUTES ---- */
 
-SKRIBLServer.installRoute(require('./server/routes/login.js'));
 SKRIBLServer.installRoute(require('./server/routes/user.js'));
-SKRIBLServer.installRoute(require('./server/routes/publications-B.js'));
-SKRIBLServer.installRoute(require('./server/routes/publications-A.js'));
+SKRIBLServer.installRoute(require('./server/routes/publications.js'));
+SKRIBLServer.installRoute(require('./server/routes/user-publication.js'));
 SKRIBLServer.installRoute(require('./server/routes/library-publications.js'));
 SKRIBLServer.installRoute(require('./server/routes/user-library.js'));
 SKRIBLServer.installRoute(require('./server/routes/libraries.js'));
 SKRIBLServer.installRoute(require('./server/routes/authors.js'));
+SKRIBLServer.installRoute(require('./server/routes/login.js'));
 
 /* ---- SERVE STATIC FILES ---- */
 //SKRIBLServer.serveStatic('/static', __dirname + '/static');
