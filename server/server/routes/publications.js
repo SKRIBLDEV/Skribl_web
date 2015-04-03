@@ -59,6 +59,7 @@ function createPublication(req, res, context) {
 	var title = req.query['title'];
 	if(!title)
 		return userError(res, 'no publication title specified');
+	title = title.replace('+', ' ');
 
 	var type = req.query['type'];
 	var addPublication;
