@@ -121,7 +121,7 @@ function createPublication(req, res, context) {
  	 	  	var type = resp.headers['content-type'];
  	 	  	file.mimetype = (type? type : mime.lookup(file.path));
  	 		fileStream.on('finish', function() {
- 	 			filestream.close(nop);
+ 	 			fileStream.close(nop);
  	 			addToDatabase(file);
  	 		});
  	 	  })
