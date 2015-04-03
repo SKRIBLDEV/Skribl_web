@@ -125,7 +125,7 @@ function createPublication(req, res, context) {
  	 			addToDatabase(file);
  	 		});
  	 	  })
- 	 	  .pipe(file.path);
+ 	 	  .pipe(fileStream);
 
   	/* NO FILE? */	
   	} else
