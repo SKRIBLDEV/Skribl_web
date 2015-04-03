@@ -108,8 +108,8 @@ function createPublication(req, res, context) {
 	} else if (publicationUrl) {
 		//file data
  	 	var file = Object.create(null);
-		file.name = publicationUrl.substring(publicationUrl.lastIndexOf('/')+1);
 		file.path = context.workingDir + '/temp/' + uuid.v1();
+		file.originalname = publicationUrl.substring(publicationUrl.lastIndexOf('/')+1);
  	 	var fileStream = fs.createWriteStream(file.path);
  	 	//download file
  	 	request.get(publicationUrl)
@@ -122,7 +122,6 @@ function createPublication(req, res, context) {
  	 	  	file.mimetype = (type? type : mime.lookup(file.path));
  	 		fileStream.on('finish', function() {
  	 			fileStream.close(nop);
- 	 			console.log(file);
  	 			addToDatabase(file);
  	 		});
  	 	  })
