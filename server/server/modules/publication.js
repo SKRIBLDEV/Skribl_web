@@ -82,17 +82,7 @@ function search(searchTerms, limit, clb){
 //exports 
 
 exports.search = search;
-
-exports.extract = function(info, clb){
-  //sanity checks
-  console.log("TITLE: " + info.title);
-  console.log("TYPE: " + info.type);
-  //extract
-  extract(info, clb);
- };
-
-
-
+exports.extract = extract;
 
 
 /*
