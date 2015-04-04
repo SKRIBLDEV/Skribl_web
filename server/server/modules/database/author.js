@@ -30,7 +30,7 @@ function Author(db) {
 		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
 			for (var i = 0; i < authors.length; i++) {
-				addAuthor(authors[i]['fName'], authors[i]['lName'], i, trx, function(error, res) {
+				addAuthor(authors[i]['firstName'], authors[i]['lastName'], i, trx, function(error, res) {
 					ctr++;
 					if(ctr == authors.length) {
 						callback(null, true);
@@ -81,8 +81,8 @@ function Author(db) {
 				var ctr = 0;
 				for (var i = 0; i < authors.length; i++) {
 					var obj = {
-						fName: authors[i].firstName,
-						lName: authors[i].lastName
+						firstName: authors[i].firstName,
+						lastName: authors[i].lastName
 					};
 					res.push(obj);
 					ctr++;

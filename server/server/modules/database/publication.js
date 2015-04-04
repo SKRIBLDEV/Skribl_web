@@ -394,12 +394,12 @@ function Publication(db) {
 			}
 			else {
 				var authorArray = criteria.authors;
-				query = 'select * from Publication where any() traverse(0,1) (firstName = \'' + authorArray[0].fName + '\' and lastName = \'' + authorArray[0].lName + '\')';
+				query = 'select * from Publication where any() traverse(0,1) (firstName = \'' + authorArray[0].firstName + '\' and lastName = \'' + authorArray[0].lastName + '\')';
 				authorArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < authorArray.length; i++) {
-					query = 'select * from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].fName + '\' and lastName = \'' + authorArray[i].lName + '\')'
+					query = 'select * from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].firstName + '\' and lastName = \'' + authorArray[i].lastName + '\')'
 				};
 				callBack(null, true);
 			}
