@@ -324,7 +324,7 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 
-		AUT.addAuthors(newData.getFirstName(), newData.getLastName(), trx, function(error, res) {
+		AUT.createAuthor(newData.getFirstName(), newData.getLastName(), trx, function(error, res) {
 			Lib.addDefaults(newData.getUsername(), trx, function(error, res) {
 					if(error) {
 						callback(error);
