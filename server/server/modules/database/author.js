@@ -74,7 +74,7 @@ function Author(db) {
 
 	
 	this.getPubAuthors = function(pubId, clb) {
-		db.select('expand( out(\'AuthorOf\') )').from(pubId).all()
+		db.query('select expand(in(\'AuthorOf\')) from ' + pubId)
 		.then(function(authors) {
 			if(authors.length) {
 				var res = [];

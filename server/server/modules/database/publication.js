@@ -171,13 +171,15 @@ function Publication(db) {
 				AUT.getPubAuthors(id, function(error, authors) {
 					RD.getPubResearchDomains(id, function(error, resDomains) {
 						Kw.getPubKeywords(id, function(error, resKeys) {
-							if(typeof authors === 'defined') {
+							console.log('here');
+							console.log(resDomains);
+							if(authors.length) {
 								res.authors = authors;
 							}
-							if(typeof resDomains === 'defined') {
+							if(resDomains.length) {
 								res.researchDomains = resDomains;
 							}
-							if(typeof resKeys === 'defined') {
+							if(resKeys.length) {
 								res.keywords = resKeys;
 							}
 							delete res['@type'];
