@@ -324,7 +324,7 @@ function Database(serverConfig, dbConfig) {
 			});
 		});
 
-		AUT.addAuthors([{firstName: newData.getFirstName(), lastName: newData.getLastName()}], trx, function(error, res) {
+		AUT.addAuthors(newData.getFirstName(), newData.getLastName(), trx, function(error, res) {
 			Lib.addDefaults(newData.getUsername(), trx, function(error, res) {
 					if(error) {
 						callback(error);
@@ -439,8 +439,8 @@ exports.Database = Database;
 
 //TESTCODE
 /*
-//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -492,7 +492,7 @@ var criteria = {
 //database.loadLibraries('test2', callBack);
 //database.loadUser('test3', callBack);
 //database.deleteUser('test1', callBack);
-//database.querySimple('brol', 10, callBack);
+//database.querySimple('compilers', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
 //database.addToLibrary('test3', 'Favorites', '#23:13', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
@@ -518,8 +518,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-/*
 
+/*
 function callBack(error, result){
 	if (error){
 	console.log(error);

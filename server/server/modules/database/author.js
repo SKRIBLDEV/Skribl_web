@@ -26,6 +26,22 @@ function Author(db) {
 		callback(null, true);
 	};
 
+	this.createAuthor = function(fName, lName, trx, callback) {
+		trx.let('author', function(s) {
+			s.create('vertex', 'Author')
+			.set({
+				firstName: fName,
+				lastName: lName			
+			});
+		})
+		.let('isAuthorEdge', function(s) {
+			s.create('edge', 'isAuthor')
+			.from('$user')
+			.to('$author');
+		});
+		callback(null, true);
+	};
+
 	this.addAuthors = function(authors, trx, callback) {
 		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
