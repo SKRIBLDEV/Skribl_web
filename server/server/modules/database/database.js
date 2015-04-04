@@ -439,8 +439,8 @@ exports.Database = Database;
 
 //TESTCODE
 /*
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -492,7 +492,7 @@ var criteria = {
 //database.loadLibraries('test2', callBack);
 //database.loadUser('test3', callBack);
 //database.deleteUser('test1', callBack);
-//database.querySimple('compilers', 10, callBack);
+//database.querySimple('test2', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
 //database.addToLibrary('test3', 'Favorites', '#23:13', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
@@ -535,7 +535,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
 
+*/
 
 

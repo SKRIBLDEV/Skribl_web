@@ -49,32 +49,28 @@ function Publication(db) {
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('Publication').where({title: title}).all()
+			var trx = db.let('library', function(s) {
+				s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+			});
+			db.create('vertex', 'Journal')
+			.set({
+				title: title,
+				data: data,
+				fileName: fileName,
+				private: false
+			}).one()
 			.then(function(res) {
-				var trx = db.let('library', function(s) {
-					s.select().from('Library').where({username: uploader, name: 'Uploaded'});
-				});
-				db.create('vertex', 'Journal')
-				.set({
-					title: title,
-					data: data,
-					fileName: fileName
-				}).one()
-				.then(function(res) {
-					trx.let('publication', function(s) {
-						s.select().from(RID.getORid(res));
-					})
-					.let('pubEdge', function(s) {
-						s.create('edge', 'HasPublication')
-						.from('$library')
-						.to('$publication');
-					})
-					.commit().return('$publication').all()
-					.then(function(pub) {
-						callback(null, RID.getRid(pub[0]));
-					}).error(function(er) {
-						callback(er);
-					});
+				trx.let('publication', function(s) {
+					s.select().from(RID.getORid(res));
+				})
+				.let('pubEdge', function(s) {
+					s.create('edge', 'HasPublication')
+					.from('$library')
+					.to('$publication');
+				})
+				.commit().return('$publication').all()
+				.then(function(pub) {
+					callback(null, RID.getRid(pub[0]));
 				}).error(function(er) {
 					callback(er);
 				});
@@ -99,40 +95,31 @@ function Publication(db) {
 		 * @param  {Object} data  data loaded by getFile	
 		 */
 		function createPub(error, data) {
-			db.select().from('Publication').where({title: title}).all()
+			var trx = db.let('library', function(s) {
+				s.select().from('Library').where({username: uploader, name: 'Uploaded'});
+			});
+			db.create('vertex', 'Proceeding')
+			.set({
+				title: title,
+				data: data,
+				fileName: fileName,
+				private: false
+			}).one()
 			.then(function(res) {
-				if(res.length) {
-					callback(new Error('publication with title: ' + title + ' already exists.'))
-				}
-				else {
-					var trx = db.let('library', function(s) {
-						s.select().from('Library').where({username: uploader, name: 'Uploaded'});
-					});
-					db.create('vertex', 'Proceeding')
-					.set({
-						title: title,
-						data: data,
-						fileName: fileName
-					}).one()
-					.then(function(res) {
-						trx.let('publication', function(s) {
-							s.select().from(RID.getORid(res));
-						})
-						.let('pubEdge', function(s) {
-							s.create('edge', 'HasPublication')
-							.from('$library')
-							.to('$publication');
-						})
-						.commit().return('$publication').all()
-						.then(function(pub) {
-							callback(null, RID.getRid(pub[0]));
-						}).error(function(er) {
-							callback(er);
-						});
-					}).error(function(er) {
-						callback(er);
-					});
-				}
+				trx.let('publication', function(s) {
+					s.select().from(RID.getORid(res));
+				})
+				.let('pubEdge', function(s) {
+					s.create('edge', 'HasPublication')
+					.from('$library')
+					.to('$publication');
+				})
+				.commit().return('$publication').all()
+				.then(function(pub) {
+					callback(null, RID.getRid(pub[0]));
+				}).error(function(er) {
+					callback(er);
+				});
 			}).error(function(er) {
 				callback(er);
 			});
@@ -257,10 +244,11 @@ function Publication(db) {
 					}
 				});
 			};
+			callB(null, []);
 		}
 
 		var ctr = 0;
-		var nrOfQueries = 14;
+		var nrOfQueries = 15;
 		function counter() {
 			ctr++;
 			if(ctr == nrOfQueries) {
@@ -301,7 +289,7 @@ function Publication(db) {
 			clb(er);
 		});
 
-		db.select('@rid').from('Publication').where('Journal like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('journal like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
 				result = result.concat(RID.getFieldRids(res)).unique();
