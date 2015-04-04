@@ -115,6 +115,8 @@ function Affiliation(db) {
 					});
 					checkFaculty(RID.getRid(institutions[0]));
 				}
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 
@@ -142,7 +144,11 @@ function Affiliation(db) {
 						});
 						checkDepartment(RID.getRid(faculties[0]));
 					}
+				}).error(function(er) {
+					callback(er);
 				});
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 
@@ -170,7 +176,11 @@ function Affiliation(db) {
 						});
 						checkResearchGroup(RID.getRid(departments[0]));
 					}
+				}).error(function(er) {
+					callback(er);
 				});
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 
@@ -200,7 +210,11 @@ function Affiliation(db) {
 
 						callback(null, true);
 					}
+				}).error(function(er) {
+					callback(er);
 				});
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 
@@ -222,9 +236,17 @@ function Affiliation(db) {
 					.then(function(res) {
 						user.university = res[0].Name;
 						callback(null, user);
+					}).error(function(er) {
+						callback(er);
 					});
+				}).error(function(er) {
+					callback(er);
 				});
+			}).error(function(er) {
+				callback(er);
 			});
+		}).error(function(er) {
+			callback(er);
 		});
 	};
 }

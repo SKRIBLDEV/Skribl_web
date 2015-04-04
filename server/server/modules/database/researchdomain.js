@@ -28,6 +28,8 @@ function ResearchDomain(db){
 				});
 			callback(null, varName);
 			}
+		}).error(function(er) {
+			callback(er);
 		});
 	}
 
@@ -110,6 +112,8 @@ function ResearchDomain(db){
 				clb(null, []);
 			}
 
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 }

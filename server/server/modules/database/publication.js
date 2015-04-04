@@ -72,8 +72,14 @@ function Publication(db) {
 					.commit().return('$publication').all()
 					.then(function(pub) {
 						callback(null, RID.getRid(pub[0]));
+					}).error(function(er) {
+						callback(er);
 					});
+				}).error(function(er) {
+					callback(er);
 				});
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 		getFile(fileObj.path, createPub);
@@ -120,9 +126,15 @@ function Publication(db) {
 						.commit().return('$publication').all()
 						.then(function(pub) {
 							callback(null, RID.getRid(pub[0]));
+						}).error(function(er) {
+							callback(er);
 						});
+					}).error(function(er) {
+						callback(er);
 					});
 				}
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 		getFile(fileObj.path, createPub);
@@ -146,6 +158,8 @@ function Publication(db) {
   					clb(null, res.fileName);
   				}
 			});
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 
@@ -178,13 +192,17 @@ function Publication(db) {
 			else {
 				clb(new Error('Publication not found'));
 			}
-		});	
+		}).error(function(er) {
+			clb(er);
+		});
 	}
 
 	this.removePublication = function(id, callback) {
 		db.delete('vertex').where('@rid = ' + id).one()
 		.then(function(nr) {
 			callback(null, true);
+		}).error(function(er) {
+			callback(er);
 		});
 	};
 
@@ -200,6 +218,8 @@ function Publication(db) {
 					
 					clb(new Error('library not found, error in function: uploadedBy in database->publication.js'));
 				}
+			}).error(function(er) {
+				clb(er);
 			});
 	}
 
@@ -221,6 +241,8 @@ function Publication(db) {
 			db.select('title').from(id).all()
 			.then(function(res) {
 				clb2(null, res[0].title);
+			}).error(function(er) {
+				clb(er);
 			});
 		}
 
@@ -255,6 +277,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('abstract like \'%' + keyword + '%\' and private = false').all()
@@ -263,6 +287,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('fileName like \'%' + keyword + '%\' and private = false').all()
@@ -271,6 +297,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('Journal like \'%' + keyword + '%\' and private = false').all()
@@ -279,6 +307,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('publisher like \'%' + keyword + '%\' and private = false').all()
@@ -287,6 +317,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('volume like \'%' + keyword + '%\' and private = false').all()
@@ -295,6 +327,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('number like \'%' + keyword + '%\' and private = false').all()
@@ -303,6 +337,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('year like \'%' + keyword + '%\' and private = false').all()
@@ -311,6 +347,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('citations like \'%' + keyword + '%\' and private = false').all()
@@ -319,6 +357,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('url like \'%' + keyword + '%\' and private = false').all()
@@ -327,6 +367,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('booktitle like \'%' + keyword + '%\' and private = false').all()
@@ -335,6 +377,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.select().from('Publication').where('organisation like \'%' + keyword + '%\' and private = false').all()
@@ -343,6 +387,8 @@ function Publication(db) {
 				result = result.concat(RID.getRids(res)).unique();
 			}
 			counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasKeyword\')) from Keyword where keyword like \'%' + keyword + '%\') where private = false')
@@ -351,6 +397,8 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where Name like \'%' + keyword + '%\') where private = false')
@@ -359,6 +407,8 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		}).error(function(er) {
+			clb(er);
 		});
 
 		db.query('select expand(distinct(@rid)) from (select expand(in(\'AuthorOf\')) from Author where firstName like \'%' + keyword + '%\' or lastName like \'%' + keyword + '%\') where private = false')
@@ -367,6 +417,8 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 
@@ -483,6 +535,8 @@ function Publication(db) {
 					db.query('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
+					}).error(function(er) {
+						clb(er);
 					});
 				}
 				else {
@@ -490,6 +544,8 @@ function Publication(db) {
 					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
+					}).error(function(er) {
+						clb(er);
 					});
 				}
 			}
@@ -522,106 +578,6 @@ function Publication(db) {
 
 	}
 
-//OLDQUERY
-/*
-	this.queryPublication = function(criteria, clb) {
-		/*
-		will search with
-		title
-		author ->not yet
-		year
-		uploader
-		publisher
-		journal
-		 */
-/*
-		 function startQueryTitle(clb) {
-		 	if(criteria.title === undefined) {
-		 		db.select().from('Publication').all()
-		 		.then(function(publications) {
-		 			queryYear(RID.getRids(publications), clb);
-		 		});
-		 	}
-		 	else {
-		 		db.select().from('Publication').where({title: criteria.title}).all()
-		 		.then(function(publications) {
-		 			queryYear(RID.getRids(publications), clb);
-		 		});
-		 	}
-		 }
-
-		 function queryYear(tempRes, clb) {
-		 	if(criteria.year === undefined) {
-		 		queryPublisher(tempRes, clb);
-		 	}
-		 	else {
-		 		db.select().from(tempRes).where({year: criteria.year}).all()
-		 		.then(function(publications) {
-		 			queryJournal(RID.getRids(publications), clb);
-		 		});
-		 	}
-		 }
-
-		 function queryJournal(tempRes, clb) {
-		 	if(criteria.jourbal === undefined) {
-		 		queryPublisher(tempRes, clb);
-		 	}
-		 	else {
-		 		db.select().from(tempRes).where({journal: criteria.journal}).all()
-		 		.then(function(publications) {
-		 			queryPublisher(RID.getRids(publications), clb);
-		 		});
-		 	}
-		 }
-
-		 function queryPublisher(tempRes, clb) {
-		 	if(criteria.publisher === undefined) {
-		 		queryUploader(tempRes, clb);
-		 	}
-		 	else {
-		 		db.select().from(tempRes).where({publisher: criteria.publisher}).all()
-		 		.then(function(publications) {
-		 			queryUploader(RID.getRids(publications), clb);
-		 		});
-		 	}
-		 }
-
-		 function queryUploader(tempRes, clb) {
-		 	if(criteria.uploader === undefined) {
-		 		queryAuthors(tempRes, clb);
-		 	}
-		 	else {
-		 		db.query('select * from (select in(\'HasPublication\') from (select * from ' + tempRes +')) where name = \'Uploaded\' and username = \'' + criteria.uploader + '\'')
-				.then(function(publications) {
-					queryAuthors(RID.getRids(publications), clb);
-				});
-		 	}
-		 }
-
-		 /*
-		 function queryAuthors(tempRes, clb) {
-		 	if(criteria.authors === undefined) {
-		 		queryAuthors(tempRes, clb);
-		 	}
-		 	else {
-		 		db.query('select * from (select in(\'HasPublication\') from (select * from ' + tempRes +')) where @class = \'Author\' and Username = \'' + criteria.uploader + '\'')
-				.then(function(publications) {
-					queryAuthors(RID.getRids(publications), clb);
-				});
-		 	}
-		 }
-		 */
-		/*
-		function queryAuthors(tempRes, clb) {
-			giveRes(tempRes, clb);
-		}
-
-		function giveRes(tempRes, clb) {
-			clb(null, tempRes);
-		}
-
-	}
-*/
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
@@ -684,6 +640,8 @@ function Publication(db) {
 												trx.commit().return('$publication').all()
 												.then(function(res) {
 													clb(null, true);
+												}).error(function(er) {
+													clb(er);
 												});	
 											}
 											});
@@ -701,6 +659,8 @@ function Publication(db) {
 			else {
 				clb(new Error('publication with id: ' + id + ' does not exist'));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 }

@@ -94,6 +94,8 @@ function Author(db) {
 			else {
 				clb(null, []);
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 
@@ -113,6 +115,8 @@ function Author(db) {
 			else {
 				callback(new Error('Author with name: ' + fName + ' ' + lName + ' does not exist.'));
 			}
+		}).error(function(er) {
+			callback(er);
 		});
 	};
 
@@ -142,6 +146,8 @@ function Author(db) {
 					authors[i].publications = [];
 					clb2(null, i);
 				}
+			}).error(function(er) {
+				clb(er);
 			});
 		}
 
@@ -155,6 +161,8 @@ function Author(db) {
 				else {
 					clb3(null, authors);	
 				}
+			}).error(function(er) {
+				clb(er);
 			});
 		}
 
@@ -185,6 +193,8 @@ function Author(db) {
 			else {
 				clb(null, []);
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 

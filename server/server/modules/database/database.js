@@ -104,6 +104,8 @@ function Database(serverConfig, dbConfig) {
 					resArray.push(results[i].Name);
 				}
 				callback(null, resArray);
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 
@@ -144,10 +146,16 @@ function Database(serverConfig, dbConfig) {
 								} else {
 									callback(new Error('Department with name: ' + department + ' does not exist'));
 								}
+							}).error(function(er) {
+								callback(er);
 							});
 						}
+					}).error(function(er) {
+						callback(er);
 					});
 				}
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 	};
@@ -163,6 +171,8 @@ function Database(serverConfig, dbConfig) {
 		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
+			}).error(function(er) {
+				callback(er);
 			});
 			// @ Ivo, if you want, add e-mail check here too...
 			// however, i don't think its necessary right now...
@@ -213,6 +223,8 @@ function Database(serverConfig, dbConfig) {
 					resArray.push(researchDomains[i].Name);
 				}
 				callback(null, resArray);
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 		else {
@@ -223,6 +235,8 @@ function Database(serverConfig, dbConfig) {
 					resArray.push(domains[i].Name);
 				}
 				callback(null, resArray);
+			}).error(function(er) {
+				callback(er);
 			});
 		}
 	};
@@ -251,13 +265,17 @@ function Database(serverConfig, dbConfig) {
 					.commit().return('$delUser').all()
 					.then(function(res) {
 						callback(null, true);
+					}).error(function(er) {
+						callback(er);
 					});
 				});
 			}
 			else {
 				callback(new Error('user with username: ' + username + ' does not exist'));
 			}
-		});
+		}).error(function(er) {
+				callback(er);
+			});
 	};
 
 	/**
@@ -280,7 +298,9 @@ function Database(serverConfig, dbConfig) {
 			else {
 			   callback(new Error('user not found'));
 			}
-		});
+		}).error(function(er) {
+				callback(er);
+			});
 	};
 
 ///WITH TRANSACTIONS
@@ -323,6 +343,8 @@ function Database(serverConfig, dbConfig) {
 									trx.commit().return('$user').all()
 									.then(function(res) {
 										callback(null, res);
+									}).error(function(er) {
+										callback(er);
 									});
 								}
 							});
@@ -343,7 +365,11 @@ function Database(serverConfig, dbConfig) {
 			db.vertex.delete(domainRid) 
 			.then(function(){
 				callback(null, true);
+			}).error(function(er) {
+				callback(er);
 			});
+		}).error(function(er) {
+			callback(er);
 		});
 	};
 
@@ -352,7 +378,7 @@ function Database(serverConfig, dbConfig) {
 	
 	this.testTransaction = function(username, clb) {
 		var Batch = db.let('peek', function(s) {
-						s.select().from('Author').where({TempId: 1});
+						s.select().from('Publication').where({title: 'test1'});
 					console.log('t1');
 		});
 		/*
@@ -360,32 +386,23 @@ function Database(serverConfig, dbConfig) {
 			s.create('vertex', 'Author')
 			.set({
 				firstName: 't2',
-				TempId: 3,
 				lastName: 't2'
 			});
 			console.log('t2');
 		});
 		*/
-
-		Batch
-		.let('delAuthor', function(s) {
-			s.delete('vertex')
-			.where('@rid = #12:5');
-			console.log('t2');
-		});
-		
 		//db.select().from('User').where({username: 'username'})
 
 		Batch
 		.let('peek', function(s) {
-			s.select().from('Author').where({TempId: 3});
+			s.select().from('Publication').where({title: 'test1'});
 			console.log('t3');
 
 			//console.log(Batch._state.let);
 			console.log('t4');
 		})
 		.commit()
-		.return('$delAuthor')
+		.return('$peek')
 		.all()
 		.then(function(usrs) {
 			if(usrs.length) {
@@ -395,30 +412,22 @@ function Database(serverConfig, dbConfig) {
 			else {
 				clb(new Error('user not found'));
 			}
+		}).error(function(er) {
+			clb(er);
 		})
 		.done();
 	}
 
-	function testTransaction2(username, Batch, clb) {
-		Batch.let('peek', function(s) {
-			s.select().from('User').where({username: username});
-		});
+	this.testError = function(clb) {
+		db.query('select from no').all()
+		.then(function(res) {
+			clb(null, 'success');
+		}).then(function(arg) {
+			console.log('fin');
+		}).error(function(er) {
+			clb(er)
+		})
 
-		Batch.let('addAuthor2', function(s) {
-			s.create('vertex', 'Author')
-			.set({
-				firstName: 't1',
-				lastName: 't1'
-			});
-		});
-
-		for (var i = 0; i < 10000; i++) {
-				if(i == 10000) {
-					Batch.let('lasttest', function(s) {
-						throw 'test';
-					});
-				}
-			};
 	}
 
 }
@@ -470,6 +479,7 @@ var criteria = {
 	authors: [{fName: 'wil', lName: 'modaal1'}]
 };
 */
+//database.testError(callBack);
 //database.queryAdvanced(criteria, 10, callBack);
 //database.searchAuthor('jack', 'daniels', 10, callBack);
 //database.loadLibrary('test3', 'Uploaded', callBack);
@@ -505,8 +515,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-/*
 
+/*
 function callBack(error, result){
 	if (error){
 	console.log(error);
@@ -522,7 +532,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
 */
+
 
 

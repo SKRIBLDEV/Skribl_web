@@ -24,6 +24,8 @@ function Keyword(db) {
 				.to('$' + trx_id);
 			});
 			clb(null, true);
+		}).error(function(er) {
+			callback(er);
 		});
 	}
 
@@ -62,6 +64,8 @@ function Keyword(db) {
 				clb(null, []);
 			}
 
+		}).error(function(er) {
+			callback(er);
 		});
 	}
 

@@ -31,13 +31,17 @@ function Library(db) {
 					trx.commit().return('$user').all()
 					.then(function(user) {
 						clb(null, true);
+					}).error(function(er) {
+						clb(er);
 					});
 				});	
 	 		}
 	 		else {
 	 			clb(new Error('library of user: ' + user + ' with name: ' + name + ', already exists'));
 	 		}
-	 	});
+	 	}).error(function(er) {
+			clb(er);
+		});
 
 	}
 
@@ -54,16 +58,22 @@ function Library(db) {
 						.to(id).one()
 						.then(function() {
 							clb(null, true);
+						}).error(function(er) {
+							clb(er);
 						});
 					}
 					else {
 						clb(new Error('Library does not exist'));
 					}
+				}).error(function(er) {
+					clb(er);
 				});
 			}
 			else {
 				clb(new Error('publication with id: ' + id + ', is already in library'));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 		
 	}
@@ -86,16 +96,22 @@ function Library(db) {
 						.commit().return('$library').all()
 						.then(function(res) {
 							clb(null, true);
+						}).error(function(er) {
+							clb(er);
 						});
 					}
 					else {
 						clb(new Error('Publication does not exist'));
 					}
+				}).error(function(er) {
+					clb(er);
 				});
 			}
 			else {
 				clb(new Error('library does not exist'));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 		
 
@@ -122,6 +138,8 @@ function Library(db) {
 			else {
 				clb(new Error('no libraries found'));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 
@@ -150,11 +168,15 @@ function Library(db) {
 					else{
 						clb(null, []);
 					}
+				}).error(function(er) {
+					clb(er);
 				});
 			}
 			else {
 				clb(new Error('library: ' + library + ' of user: ' + user + 'does not exist'));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	 	
 	}
@@ -199,6 +221,8 @@ function Library(db) {
 						trx.commit().return().all()
 						.then(function() {
 							clb(null, true);
+						}).error(function(er) {
+							clb(er);
 						});
 					});
 				}
@@ -206,6 +230,8 @@ function Library(db) {
 			else {
 				clb(new Error('user: ' + user + ' has no library with name: ' + name));
 			}
+		}).error(function(er) {
+			clb(er);
 		});
 	}
 
