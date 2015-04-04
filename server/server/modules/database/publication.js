@@ -273,120 +273,120 @@ function Publication(db) {
 		}
 
 		var result = [];
-		db.select().from('Publication').where('title like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('title like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('abstract like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('abstract like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('fileName like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('fileName like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('Journal like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('Journal like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('publisher like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('publisher like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('volume like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('volume like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('number like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('number like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('year like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('year like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('citations like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('citations like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('url like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('url like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('booktitle like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('booktitle like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {
 			clb(er);
 		});
 
-		db.select().from('Publication').where('organisation like \'%' + keyword + '%\' and private = false').all()
+		db.select('@rid').from('Publication').where('organisation like \'%' + keyword + '%\' and private = false').all()
 		.then(function(res) {
 			if(res.length) {
-				result = result.concat(RID.getRids(res)).unique();
+				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
 		}).error(function(er) {

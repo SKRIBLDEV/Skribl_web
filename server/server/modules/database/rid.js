@@ -31,7 +31,8 @@ var Oriento = require('oriento');
 	 * @param  {Object} data
 	 * @return {String}
 	 */
-	exports.transformRid = function(data) {
+	exports.transformRid = transformRid;
+	function transformRid(data) {
 		var cluster = data.cluster;
 		var position = data.position;
 		var result = '#' + cluster + ':' + position;
@@ -43,6 +44,18 @@ var Oriento = require('oriento');
 		var counter = 0;
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(getRid(array[i]));
+			counter++
+			if(counter == array.length) {
+				return resArray;
+			}
+		};
+	}
+
+	exports.getFieldRids = function(array) {
+		var resArray = [];
+		var counter = 0;
+		for (var i = 0; i < array.length; i++) {
+			resArray.push(transformRid(array[i].rid));
 			counter++
 			if(counter == array.length) {
 				return resArray;
