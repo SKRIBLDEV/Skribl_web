@@ -42,7 +42,7 @@ function getPublication(req, res, context) {
 	var id = req.params['id'];
 	var db = context.db;
 
-	if (req.query['download']) {
+	if (req.query['download'] === 'true') {
 
 		var path = context.workingDir + '/temp/' + uuid.v1();
 
@@ -62,8 +62,19 @@ function getPublication(req, res, context) {
 			if(err) {
 				serverError(res, err.toString());
 			} else {
-				res.status(200);
-				res.json(metadata);
+				if (req.query['extract'] === 'true') {	
+					PUB.extract(metadata, function(err, mt) {
+						if(err)
+							serverError(res, "Scraping error: " + err.toString());
+						else {
+							res.status(200);
+							res.json(mt);		
+						}
+					});
+				} else {
+					res.status(200);
+					res.json(metadata);
+				}
 			}
 		});
 	}
@@ -121,35 +132,14 @@ function updatePublication(req, res, context) {
 	if (!(meta.title && meta.type))
 		return userError(res, "title & type are not specified in metadata!");
 
-	var database = context.db;
-
-	if (req.query['extract']) {
-
-		PUB.extract(meta, function(err, mt) {
-
-			if(err)
-				return serverError(res, "Scraping error: " + err.toString());
-
-			database.updatePublication(id, mt, function(err) {
-				if(err)
-					serverError(res, err.toString());
-				else {
-					res.status(200);
-					res.json(mt);
-				}
-			});
-		});
-
-	} else {
-
-		database.updatePublication(id, meta, function(err) {
-			if(err)
-				serverError(res, err.toString());
-			else
-				res.status(200).end();
-		});
-	}
+	context.db.updatePublication(id, meta, function(err) {
+		if(err)
+			serverError(res, err.toString());
+		else
+			res.status(200).end();
+	});
 }
+
 
 /**
   * Checks if authenticated user has permission to update the publication

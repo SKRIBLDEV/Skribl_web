@@ -4,6 +4,7 @@ const PUB = require('../modules/publication.js');
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
+const request = require('request');
 const uuid = require('node-uuid');
 const http = require('http');
 const mime = require('mime');
@@ -59,6 +60,7 @@ function createPublication(req, res, context) {
 	var title = req.query['title'];
 	if(!title)
 		return userError(res, 'no publication title specified');
+	title = title.replace('+', ' ');
 
 	var type = req.query['type'];
 	var addPublication;
@@ -105,18 +107,25 @@ function createPublication(req, res, context) {
 	/* URL */
 	} else if (publicationUrl) {
 		//file data
-		var name = publicationUrl.substring(publicationUrl.lastIndexOf('/')+1);
-		var path = context.workingDir + '/temp/' + uuid.v1();
- 	 	var fileStream = fs.createWriteStream(path);
+ 	 	var file = Object.create(null);
+		file.path = context.workingDir + '/temp/' + uuid.v1();
+		file.originalname = publicationUrl.substring(publicationUrl.lastIndexOf('/')+1);
+ 	 	var fileStream = fs.createWriteStream(file.path);
  	 	//download file
-  		http.get(publicationUrl, function(bytes) {    		
-  			fileStream.on('finish', function() { fileStream.close(nop); });
-    		bytes.pipe(fileStream);
-    		addToDatabase({path: path, originalname: name, mimetype: mime.lookup(path)});
-  		}).on('error', function(err) {
-    		fs.unlink(path, nop);
-    		serverError(res, 'DOWNLOAD FAILED: ' + err.toString());
-  		});
+ 	 	request.get(publicationUrl)
+ 	 	  .on('error', function(err) {
+ 	 	  	fs.unlink(file.path, nop);
+ 	 	  	serverError(res, 'download from URL failed: ' + err.toString());
+ 	 	  })
+ 	 	  .on('response', function(resp) {
+ 	 	  	var type = resp.headers['content-type'];
+ 	 	  	file.mimetype = (type? type : mime.lookup(file.path));
+ 	 		fileStream.on('finish', function() {
+ 	 			fileStream.close(nop);
+ 	 			addToDatabase(file);
+ 	 		});
+ 	 	  })
+ 	 	  .pipe(fileStream);
 
   	/* NO FILE? */	
   	} else

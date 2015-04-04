@@ -24,15 +24,10 @@ var parseSubTitle = function(subtitle){
     //parse authors 
     var authorsStrings = parts[0].split(",");
     var authors = [];
-
-    //[N] attempting fix
-    var len = authorsStrings.length;
-    for(var i = 0; i < len; ++i) {
+    for(var i = 0; i < authorsStrings.length; ++i) {
       var nameArray = authorsStrings[i].replace(/(^\s)/, '').split(" "); //remove first whitespace and then split on whitespace
       if (nameArray.length >= 2){
         var lastName = "";
-        //[N] you also forgot 'var' here, keep this in mind
-        //because otherwise index is global to our entire application!
          for (var index = 1; index < nameArray.length; index++) { //collect all parts of the last name
           lastName = lastName + nameArray[index] + " ";
          }
@@ -43,7 +38,6 @@ var parseSubTitle = function(subtitle){
         authors[authors.length] = author;
       };
     }
-
     return [authors, journal, year, publisher];
 };
 
@@ -113,30 +107,14 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
   var url = createGoogleScholarURL(searchTerms);
   request({ encoding: 'binary', method: "GET", uri: url}, function(err, resp, body) { //http request 
   	if (!err && resp.statusCode == 200) { //request succeeded
-      /*try{
+      try {
         $ = cheerio.load(body); //create traversable DOM from retrieved html
         var result = scrapeFunc($); //array or single object, according to the scrapeFunc used 
         clb(null, result); 
-      }
-      catch(error){
+      } catch(error) {
         clb(new Error("Failed to scrape results"), null);
-      }*/
-      //detailed error handling:
-      try{
-        $ = cheerio.load(body); //create traversable DOM from retrieved html
       }
-      catch(error){
-        clb(new Error("failure on cheerio.load(body) "), null);
-      }
-      try{
-        var result = scrapeFunc($); //array or single object, according to the scrapeFunc used 
-      }
-      catch(error){
-        clb(error, null);
-      }
-      clb(null, result); 
-	  }
-    else
+	  } else
       clb(new Error("Request to Google Scholar failed"), null);
   });
 };
@@ -161,6 +139,7 @@ exports.extractAll = extractAll;
 //test code
 
 /*
+
 //var terms = "irina veretenicoff";
 var terms = "Optical feedback induces polarization mode-hopping in vertical-cavity surface-emitting lasers";
 //var terms = "philippe tassin";
@@ -177,6 +156,8 @@ extractOne(terms, function(err, res){
 });
 
 */
+
+
 
 /*
 var terms = "Ragnhild Van Der Straeten"
