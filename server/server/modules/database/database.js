@@ -472,7 +472,7 @@ var criteria = {
 */
 //database.queryAdvanced(criteria, 10, callBack);
 //database.searchAuthor('jack', 'daniels', 10, callBack);
-//database.loadLibrary('test2', 'Uploaded', callBack);
+//database.loadLibrary('test3', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
 //database.addLibrary('test2', 'newlib', callBack);
 //database.testTransaction('jshep', callBack);
@@ -481,7 +481,7 @@ var criteria = {
 //database.deleteUser('test1', callBack);
 //database.querySimple('key', 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
-////database.addToLibrary('tkrios', 'TestLib', '#21:38', callBack);
+//database.addToLibrary('test3', 'Favorites', '#23:13', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
 //database.addJournal('test2', fObject, 'test3', callBack);
 //database.getPublication('#23:13', callBack);
@@ -505,8 +505,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
 /*
+
 function callBack(error, result){
 	if (error){
 	console.log(error);
@@ -523,6 +523,6 @@ function stop(){
 	process.exit(code=0);
 }
 
-
 */
+
 

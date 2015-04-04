@@ -23,7 +23,7 @@ function Library(db) {
 	 this.addLibrary = function(user, name, clb) {
 	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 	 	.then(function(res) {
-	 		if(res.length) {
+	 		if(res.length === 0) {
 		 		var trx = db.let('user', function(s) {
 					s.select().from('User').where('username = \'' + user + '\'');
 				});
@@ -42,9 +42,9 @@ function Library(db) {
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
-		db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'').all()
+		db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
 		.then(function(pubs) {
-			if(pubs.length) {
+			if(pubs.length === 0) {
 				db.select().from('Library').where({username: user, name: library}).all()
 				.then(function (libraries) {
 					if(libraries.length) {
@@ -130,26 +130,33 @@ function Library(db) {
 		function prepResults(array, callB) {
 			var ctr = 0;
 			for (var i = 0; i < array.length; i++) {
-				array[ctr] = {id: RID.getRid(array[ctr]), title: array[ctr]['title']};
+				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title']};
 				ctr++
 				if(ctr == array.length) {
 					callB(null, array);
-				}
+				} 
 			};
 		}
-
-	 	db.query('select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\'')
-		.then(function(publications) {
-			if(publications.length) {
-				prepResults(publications, function(error, res) {
-					clb(null, res);
-				})
+		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
+		.then(function(res) {
+			if(res.length) {
+				db.query('select title, @rid from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
+				.then(function(publications) {
+					if(publications.length) {
+						prepResults(publications, function(error, res) {
+							clb(null, res);
+						})
+					}
+					else{
+						clb(null, []);
+					}
+				});
 			}
-			else{
-				clb(new Error('no publications found'));
+			else {
+				clb(new Error('library: ' + library + ' of user: ' + user + 'does not exist'));
 			}
-
 		});
+	 	
 	}
 
 	this.addDefaults = function(username, trx, clb) {
