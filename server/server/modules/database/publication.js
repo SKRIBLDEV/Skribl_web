@@ -234,17 +234,21 @@ function Publication(db) {
 		}
 
 		function prepResults(array, callB) {
-			var ctr = 0;
-			for (var i = 0; i < array.length; i++) {
-				getTitle(array[ctr], function(error, res) {
-					array[ctr] = {id: array[ctr], title: res};
-					ctr++
-					if(ctr == array.length) {
-						callB(null, array);
-					}
-				});
-			};
-			callB(null, []);
+			if(array.length) {
+				var ctr = 0;
+				for (var i = 0; i < array.length; i++) {
+					getTitle(array[i], function(error, res) {
+						array[ctr] = {id: array[ctr], title: res};
+						ctr++
+						if(ctr == array.length) {
+							callB(null, array);
+						}
+					});
+				};
+			}
+			else {
+				callB(null, []);
+			}
 		}
 
 		var ctr = 0;
