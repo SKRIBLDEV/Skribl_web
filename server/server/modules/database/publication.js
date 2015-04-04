@@ -516,7 +516,7 @@ function Publication(db) {
 			}
 			if(tempQuery == '') {
 				//console.log(query);
-				db.query(query + 'limit ' + limit).all()
+				db.query('select @rid, title from (' + query + ') limit ' + limit).all()
 				.then(function(res) {
 					callBack(null, res);
 				});
@@ -524,7 +524,7 @@ function Publication(db) {
 			else {
 				if(query == '') {
 					//console.log('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit);
-					db.query('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -533,7 +533,7 @@ function Publication(db) {
 				}
 				else {
 					//console.log('select * from (' + query + ') where ' + tempQuery.slice(5));
-					db.query('select * from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -547,17 +547,17 @@ function Publication(db) {
 			keywordQuery(criteria, function(error, res) {
 				researchDomainQuery(criteria, function(error, res) {
 					pubDataQuery(criteria, function(error, res) {
-						var ridArray = RID.getRids(res);
-						if(ridArray.length) {
+						if(res.length) {
 							var ctr = 0;
-							for (var i = 0; i < ridArray.length; i++) {
-								self.getPublication(ridArray[i], function(error, res) {
-									ridArray[ctr] = res;
-									ctr++;
-									if(ctr == ridArray.length) {
-										clb(null, ridArray);
-									}
-								});
+							for (var i = 0; i < res.length; i++) {
+								delete res[i]['@rid'];
+								delete res[i]['@type'];
+								res[i].id = res[i].rid;
+								delete res[i]['rid'];
+								ctr++;
+								if(ctr == res.length) {
+									clb(null, res);
+								}
 							};
 						}
 						else {
