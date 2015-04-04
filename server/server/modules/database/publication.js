@@ -150,7 +150,7 @@ function Publication(db) {
 	}
 
 	this.getPublication = function(id, clb) {
-		db.select().from(id).all()
+		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation').from(id).all()
 		.then(function(pubs) {
 			if(pubs.length) {
 				var res = pubs[0];
@@ -166,15 +166,9 @@ function Publication(db) {
 							if(typeof resKeys === 'defined') {
 								res.keywords = resKeys;
 							}
-							delete res.data;
 							delete res['@type'];
-							res.type = res['@class'].toLowerCase()
-							delete res['@class'];
-							delete res['in_HasPublication'];
-							delete res['@version'];
-							delete res['in_AuthorOf'];
-							delete res['out_HasResearchDomain'];
-							delete res['out_HasKeyword'];
+							res.type = res['class'].toLowerCase()
+							delete res['class'];
 							delete res['@rid'];
 							clb(null, res);	
 						});
@@ -188,17 +182,9 @@ function Publication(db) {
 	}
 
 	this.removePublication = function(id, callback) {
-		db.query('select from Publication where @rid = ' + id)
-		.then(function(publications) {
-			if(publications.length) {
-				db.vertex.delete(id)
-				.then(function(nr) {
-					callback(null, true);
-				});
-			}
-			else {
-				callback(null, true);
-			}
+		db.delete('vertex').where('@rid = ' + id).one()
+		.then(function(nr) {
+			callback(null, true);
 		});
 	};
 
