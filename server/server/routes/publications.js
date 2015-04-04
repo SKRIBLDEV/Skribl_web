@@ -160,60 +160,69 @@ const __INTERNAL_LIMIT__ = 5;
 const __EXTERNAL_LIMIT__ = 5;
 
 /**
-  * Searches for a publication based on certain criteria
+  * Searches for a publication based on a keyword
   * @param {Object} req - HTTP-request sent with query parameters
   * @param {Object} res - HTTP-response with array of matched publication id's
   * @param {Object} context - server context with extra configurations and external objects
 */  
-function queryPublications(req, res, context) {
+function querySimple(req, res, context) {
+
+	/* CHECK KEYWORD */
+	var keyword = req.query['q'];
+	if(!(keyword && keyword.length))
+		return userError(res, 'keyword not specified!');
+	keyword = keyword.replace('+', ' '); //add spaces between words
+
+	/* QUERY DATABASE AND/OR EXTERNAL SOURCES*/
+	context.db.querySimple(keyword, __INTERNAL_LIMIT__, function(err, data) {
+		if (err)
+			serverError(res, err.toString());
+		else {
+			var result = { internal: data };
+			//include external results as well?
+			if (req.query['external']) {
+				PUB.search(keyword, __EXTERNAL_LIMIT__, function(err, data) {
+					if(err)
+						serverError(res, err.toString());
+					else {
+						result.external = data;
+						res.status(200);
+						res.json(result);
+					}
+				});
+			} else {
+				res.status(200);
+				res.json(result);
+			}
+		}
+	});
+}
+
+
+/**
+  * Searches for a publication based on a multiple criteria
+  * @param {Object} req - HTTP-request sent with query parameters
+  * @param {Object} res - HTTP-response with array of matched publication id's
+  * @param {Object} context - server context with extra configurations and external objects
+*/  
+function queryAdvanced(req, res, context) {
 
 	var db = context.db;
-	var keyword = req.query['q'];
-
-	/* BASIC SEARCH */
-	if(keyword) {
-		keyword = keyword.replace('+', ' '); //add spaces between words
-		db.querySimple(keyword, __INTERNAL_LIMIT__, function(err, data) {
-			if (err)
-				serverError(res, err.toString());
-			else {
-				var result = { internal: data };
-				//include external results as well?
-				if (req.query['external']) {
-					PUB.search(keyword, __EXTERNAL_LIMIT__, function(err, data) {
-						if(err)
-							serverError(res, err.toString());
-						else {
-							result.external = data;
-							res.status(200);
-							res.json(result);
-						}
-					});
-				} else {
-					res.status(200);
-					res.json(result);
-				}
-			}
-		});
-
-	/* ADVANCED SEARCH */
-	} else {
-
-		var criteria = req.body;
-
-		db.queryAdvanced(criteria, __INTERNAL_LIMIT__, function(err, data) {
-			if(err)
-				serverError(res, err.toString());
-			else {
-				res.status(200);
-				res.json(data);
-			}
-		});
-	}
+	var criteria = req.body;
+	
+	db.queryAdvanced(criteria, __INTERNAL_LIMIT__, function(err, data) {
+		if(err)
+			serverError(res, err.toString());
+		else {
+			res.status(200);
+			res.json(data);
+		}
+	});
 }
 
 /* --- EXPORTS --- */
 
 exports.path = '/publications';
 exports.put = createPublication;
-exports.get = queryPublications;
+exports.get = querySimple;
+exports.post = queryAdvanced;
