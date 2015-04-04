@@ -30,7 +30,7 @@ function searchAuthors(req, res, context) {
 		if(err)
 			serverError(res, err.toString());
 		else {
-			console.log('results for: ' + firstname ' & ' + lastname 'with limit ' + limit);
+			console.log('results for: ' + firstname + ' & ' + lastname 'with limit ' + limit);
 			console.log(authors);
 			res.status(200);
 			res.json(authors);
