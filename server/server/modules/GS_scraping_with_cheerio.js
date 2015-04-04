@@ -51,7 +51,7 @@ var scrapeOneResult = function(result, type){
           publisherOrOrganization : subtitleEntries[3],
           abstract : result.find( ".gs_rs" ).text(),
           citations : result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0], //regex extracts the number, e.g., 149 from 'Cited by 149'
-          article_url : result.find( ".gs_md_wp" ).children().attr('href')
+          url : result.find( ".gs_md_wp" ).children().attr('href')
     };
     return foundArticleData;
 };

@@ -26,8 +26,8 @@ function setToType(type, metadataGS){
     metadataGS.publisher = metadataGS.publisherOrOrganization;
   };
   if (type == "proceeding"){
-    metadataGS.bookTitle = metadataGS.journalOrBookTitle;
-    metadataGS.organization = metadataGS.publisherOrOrganization;
+    metadataGS.booktitle = metadataGS.journalOrBookTitle;
+    metadataGS.organisation = metadataGS.publisherOrOrganization;
   };
   delete metadataGS.journalOrBookTitle;
   delete metadataGS.publisherOrOrganization;
