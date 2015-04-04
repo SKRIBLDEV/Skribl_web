@@ -171,8 +171,6 @@ function Publication(db) {
 				AUT.getPubAuthors(id, function(error, authors) {
 					RD.getPubResearchDomains(id, function(error, resDomains) {
 						Kw.getPubKeywords(id, function(error, resKeys) {
-							console.log('here');
-							console.log(resDomains);
 							if(authors.length) {
 								res.authors = authors;
 							}
