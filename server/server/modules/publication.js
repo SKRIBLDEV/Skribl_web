@@ -34,6 +34,24 @@ function setToType(type, metadataGS){
 };
 
 /**
+* removes the properties not shared amongst different publication types 
+*/
+
+function makeGeneric(metadataGS){
+  delete metadataGS.journalOrBookTitle;
+  delete metadataGS.publisherOrOrganization;
+};
+
+
+/**
+* checks if url leads to a pdf file and is http prefixed
+*/
+
+function pdfUrl(url){ 
+  return (url && url.match((/(https|http).*(\.pdf$)/)));
+}
+
+/**
 * extract data from google scholar first search result and update reveived metadata object accordingly
 * @param info :: contains metadata supplied from front-end: Minimally, it contains info.title as a keyword for google scholar scraping
 * @param type :: journal or proceeding, indicates whether the properties of the found result should be interpreted as journal title or booktitle, etc.  
@@ -58,6 +76,8 @@ function extract(info, clb){
 
  /**
 * extract data from all google scholar search results on the first page, return the results in an array  (= BASIC search)
+* gives back results with only the properties that are chared amongst all publication types
+* checks if url is a http(s) and postfixed with ".pdf", returns an undefined url otherwise
 * @param searchTerms 
 * @param limit :: limit on the number of results to be returned (the maximal number of returned results is ten, since there are 10 results on the first page)
 * @param clb: callback 
@@ -73,6 +93,12 @@ function search(searchTerms, limit, clb){
       if (res.length > limit){
         res.length = limit; 
       }
+      for(var i = 0; i < res.length; i++){
+        if(! pdfUrl(res[i].url)){
+          res[i].url = undefined;
+        }
+        makeGeneric(res[i]);
+      }
       clb(null, res);
     }; 
   });
@@ -85,12 +111,12 @@ exports.search = search;
 exports.extract = extract;
 
 
-/*
 //test code:
+
+/*
 
  var proceedingArticle = "Analytical model for the optical propagation in a nonlinear left-handed material";
  var journalArticle = "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency";
-
 
 var testInfo = {
   title: journalArticle,
@@ -98,22 +124,29 @@ var testInfo = {
 }
 
 extract(testInfo, function(err, res){
+  console.log("EXTRACT");
   if (err)
     console.log(err);
   else
     console.log(testInfo);
 });
-*/
 
 
-/*var searchKey = 'optical properties of metamaterials';
 
-search(searchKey, 4, function(err, res){
+
+
+var withWrongUrl = "Module superimposition: a composition technique for rule-based model transformation languages";
+
+
+search(withWrongUrl, 4, function(err, res){
+  console.log("SEARCH");
   if (err)
     console.log(err);
   else
     console.log(res);
-});*/
+});
+
+*/
 
 
 
