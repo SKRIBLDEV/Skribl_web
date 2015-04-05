@@ -19,10 +19,8 @@ var parseSubTitle = function(subtitle){
 
     //parse year, journal and publisher
     var year = parseInt(parts[1].match(/\d{4}/)[0]); //match four numeric characters 
-    var journal = parts[1].match(/[^,]*/)[0].trim(); //match anything but  "," and trim whitespaces
-    if (journal.match(/\d{4}/)) //no journal title was given, only a year, consequently the year was matched 
-      journal = undefined;
-    var publisher = parts[2].trim(); //trim whitespaces
+    var journal = parts[1].match(/[^,]*/)[0].replace(/\d{4}/, '').trim(); //match anything but  ",", remove year,  and trim whitespaces
+    var publisher = parts[2].replace(/\d{4}/, '').trim(); //trim whitespaces
 
     //parse authors 
     var authorsStrings = parts[0].split(",");
@@ -44,10 +42,12 @@ var parseSubTitle = function(subtitle){
     return [authors, journal, year, publisher];
 };
 
+
+
 var scrapeOneResult = function(result, type){
     var subtitleEntries = parseSubTitle(result.find( ".gs_a" ).text());
     var foundArticleData = {
-          title : result.find( ".gs_rt" ).text(),
+          title : result.find( ".gs_rt" ).text().replace(/(\[BOOK\]|\[PDF\]|\[B\])*/,'').trim(),
           authors : subtitleEntries[0], 
           journalOrBookTitle : subtitleEntries[1],
           year: subtitleEntries[2],
@@ -141,8 +141,8 @@ exports.extractAll = extractAll;
 
 //test code
 
-/*
 
+/*
 //var terms = "irina veretenicoff";
 var terms = "Isolating Process-Level Concerns using Padus";
 //var terms = "philippe tassin";
@@ -158,11 +158,9 @@ extractOne(terms, function(err, res){
     console.log(err);
 });
 
-*/
 
 
 
-/*
 var terms = "Ragnhild Van Der Straeten"
 
 console.log("Scraping all results+++++++++++++++++");
@@ -178,6 +176,7 @@ extractAll(terms, function(err, res){
     console.log(err);
 });
 */
+
 
 
 
