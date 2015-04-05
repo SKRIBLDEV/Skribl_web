@@ -12,13 +12,16 @@ var cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML w
 //journal: 'P Tassin, L Zhang, R Zhao, A Jain, T Koschny… - Physical review  …, 2012 - APS' 
 //journal: '…, N Papon, V Courdavault, I Thabet, O Ginis… - Planta, 2011 - Springer'
 //proceeding: 'P Tassin, G Van Der Sande… - … on Optics and …, 2005 - proceedings.spiedigitallibrary.org' 
+//no title:  'M Braem, K Verlaenen, N Joncheere, W Vanderperren… - 2006 - Springer'
 var parseSubTitle = function(subtitle){
 
     var parts = subtitle.split("-");
 
     //parse year, journal and publisher
-    var year = parts[1].match(/\d+/)[0]; //match the numeric characters 
-    var journal = parts[1].match(/[^,]*/)[0].trim(); //match anything  "," and trim whitespaces
+    var year = parseInt(parts[1].match(/\d{4}/)[0]); //match four numeric characters 
+    var journal = parts[1].match(/[^,]*/)[0].trim(); //match anything but  "," and trim whitespaces
+    if (journal.match(/\d{4}/)) //no journal title was given, only a year, consequently the year was matched 
+      journal = undefined;
     var publisher = parts[2].trim(); //trim whitespaces
 
     //parse authors 
@@ -50,7 +53,7 @@ var scrapeOneResult = function(result, type){
           year: subtitleEntries[2],
           publisherOrOrganization : subtitleEntries[3],
           abstract : result.find( ".gs_rs" ).text(),
-          citations : result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0], //regex extracts the number, e.g., 149 from 'Cited by 149'
+          citations : parseInt(result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0]), //regex extracts the number, e.g., 149 from 'Cited by 149'
           url : result.find( ".gs_md_wp" ).children().attr('href')
     };
     return foundArticleData;
@@ -141,7 +144,7 @@ exports.extractAll = extractAll;
 /*
 
 //var terms = "irina veretenicoff";
-var terms = "Optical feedback induces polarization mode-hopping in vertical-cavity surface-emitting lasers";
+var terms = "Isolating Process-Level Concerns using Padus";
 //var terms = "philippe tassin";
 
 
