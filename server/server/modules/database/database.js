@@ -459,28 +459,43 @@ var fObject = {
 }
 
 var metObject = {
-	type: 'Journal',
-	journal: 'journal naam2',
-	publisher: 'publisher2',
+	type: 'journal',
+	journal: 'Cerberus Monthly',
+	publisher: 'Illusive Industries',
 	volume: '4',
 	number: '19',
-	year: '1900',
-	abstract: 'abstracte brol2',
-	citations: 'enkele citaties2',
-	url: 'www.brol2.be',
+	year: 2430,
+	abstract: 'Reaper killing 101',
+	citations: 25,
+	url: 'www.skynet.be',
 	private: false,
-	authors: [{fName: 'wil',
-				lName: 'modaal1'},
-				{fName: 'jack',
-				lName: 'daniels'}],
-	knownAuthors: [],
-	researchDomains: ['Computer Sciences'],
-	keywords: ['testingkey1', 'dieren']
+	authors: [{firstName: 'Garrus',
+				lastName: 'Vakarian'},
+				{firstName: 'W',
+				lastName: 'Urdnot'}]
+				
+	knownAuthors: ['#13:33', '#13:4', '#13:35', '#13:34'],
+	researchDomains: ['Computer Sciences', 'Biological Sciences', 'Languages'],
+	keywords: ['killing', 'reapers', 'space']
 }
 
 var criteria = {
-	year: 2006
+	title: 'How to kill Reapers',
+	journal: 'Cerberus Monthly',
+	publisher: 'Illusive Industries',
+	fileName: 'testfile2.pdf',
+	volume: 4,
+	number: 19,
+	url: 'www.skynet.be',
+	//: ['Languages', 'Computer Sciences', 'Biological Sciences'],
+	//keywords: ['killing', 'reapers', 'space'],
+	//authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Garrus', lastName: 'Vakarian'}, {firstName: 'M', lastName: 'Braem'}]
 };
+
+var d = new Date();
+var t = d.getTime();
+console.log(t);
+
 */
 //database.testError(callBack);
 //database.queryAdvanced(criteria, 10, callBack);
@@ -492,20 +507,20 @@ var criteria = {
 //database.loadLibraries('test2', callBack);
 //database.loadUser('test3', callBack);
 //database.deleteUser('test1', callBack);
-//database.querySimple('compilers', 10, callBack);
+//database.querySimple(19, 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
 //database.addToLibrary('test3', 'Favorites', '#23:13', callBack);
 //database.loadLibrary('tkrios', 'TestLib', callBack);
-//database.addJournal('test2', fObject, 'test3', callBack);
+//database.addJournal('How to kill Reapers', fObject, 'jshep', callBack);
 //database.getPublication('#23:13', callBack);
 //database.uploadedBy('#21:38', callBack);
-//database.loadPublication('#23:1', info.path, callBack);
-//database.updatePublication('#23:13', metObject, callBack);
+//database.loadPublication('#23:14', info.path, callBack);
+//database.updatePublication('#23:16', metObject, callBack);
 //database.removePublication('#23:132', callBack);
 //
 //
 /*
-var userInfo = {firstName:'Helene', lastName:'Vervlimmeren', username:'test3', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'brol', researchGroup: 'engels', researchDomains: ['Biological Sciences']};
+var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'mgermaanse talen', researchGroup: 'engels', researchDomains: ['Biological Sciences', 'Languages']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
 		console.log(res);
@@ -515,12 +530,17 @@ UM.createUser(userInfo, function(error, res) {
 		database.createUser(res, callBack);
 	}
 })
+
 */
 
 
 /*
-
 function callBack(error, result){
+	var nd = new Date();
+	var nt = nd.getTime();
+	console.log(nt);
+	var res = nt - t;
+	console.log(res);
 	if (error){
 	console.log(error);
 	}

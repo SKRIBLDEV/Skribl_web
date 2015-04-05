@@ -252,7 +252,8 @@ function Publication(db) {
 		}
 
 		var ctr = 0;
-		var nrOfQueries = 15;
+		var nrOfQueries = 4;
+		var query = '';
 		function counter() {
 			ctr++;
 			if(ctr == nrOfQueries) {
@@ -263,117 +264,7 @@ function Publication(db) {
 		}
 
 		var result = [];
-		db.select('@rid').from('Publication').where('title like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('abstract like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('fileName like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('journal like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('publisher like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('volume like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('number like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('year like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('citations like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('url like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('booktitle like \'%' + keyword + '%\' and private = false').all()
-		.then(function(res) {
-			if(res.length) {
-				result = result.concat(RID.getFieldRids(res)).unique();
-			}
-			counter();
-		}).error(function(er) {
-			clb(er);
-		});
-
-		db.select('@rid').from('Publication').where('organisation like \'%' + keyword + '%\' and private = false').all()
+		db.query('select @rid from Publication where private = false and (title like \'%' + keyword + '%\' or abstract like \'%' + keyword + '%\' or fileName like \'%' + keyword + '%\' or journal like \'%' + keyword + '%\' or publisher like \'%' + keyword + '%\' or volume like \'%' + keyword + '%\' or number like \'%' + keyword + '%\' or year like \'%' + keyword + '%\' or citations like \'%' + keyword + '%\' or url like \'%' + keyword + '%\' or booktitle like \'%' + keyword + '%\' or organisation like \'%' + keyword + '%\')')
 		.then(function(res) {
 			if(res.length) {
 				result = result.concat(RID.getFieldRids(res)).unique();
@@ -417,6 +308,7 @@ function Publication(db) {
 	this.queryAdvanced = function(criteria, limit, clb) {
 		var query = '';
 		var queryInitialized = false;
+		var tempRes = [];
 
 		function AuthorQuery(criteria, callBack) {
 			if(criteria.authors === undefined) {
@@ -424,12 +316,12 @@ function Publication(db) {
 			}
 			else {
 				var authorArray = criteria.authors;
-				query = 'select * from Publication where any() traverse(0,1) (firstName = \'' + authorArray[0].firstName + '\' and lastName = \'' + authorArray[0].lastName + '\')';
+				query = 'select expand(out(AuthorOf)) from Author where (firstName = \'' + authorArray[0].firstName + '\' and lastName = \'' + authorArray[0].lastName + '\')';
 				authorArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < authorArray.length; i++) {
-					query = 'select * from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].firstName + '\' and lastName = \'' + authorArray[i].lastName + '\')'
+					query = 'select from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].firstName + '\' and lastName = \'' + authorArray[i].lastName + '\')'
 				};
 				callBack(null, true);
 			}
@@ -441,17 +333,19 @@ function Publication(db) {
 			}
 			else {
 				var keywordArray = criteria.keywords;
+				
 				if(queryInitialized) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+					query = 'select from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
 				}
 				else {
-					query = 'select * from Publication where any() traverse(0,1) (keyword = \'' + keywordArray[0] +  '\')';
+					query = 'select expand(in(HasKeyword)) from Keyword where keyword = \'' + keywordArray[0] +  '\'';
 				}
+
 				keywordArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < keywordArray.length; i++) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[i] +  '\')';
+					query = 'select from (' + query +  ') where any() traverse(0,1) (keyword = \'' + keywordArray[i] +  '\')';
 				};
 				callBack(null, true);
 			}
@@ -464,16 +358,16 @@ function Publication(db) {
 			else {
 				var researchDomainArray = criteria.researchDomains;
 				if(queryInitialized) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+					query = 'select from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
 				}
 				else {
-					query = 'select * from Publication where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+					query = 'select expand(in(HasResearchDomain)) from ResearchDomain where Name = \'' + researchDomainArray[0] +  '\'';
 				}
 				researchDomainArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < researchDomainArray.length; i++) {
-					query = 'select * from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
+					query = 'select from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
 				};
 				callBack(null, true);
 			}

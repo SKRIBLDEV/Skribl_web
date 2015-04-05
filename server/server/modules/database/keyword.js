@@ -30,7 +30,7 @@ function Keyword(db) {
 	}
 
 	this.addKeywords = function(keywords, trx, callback) {
-		if(typeof authors !== 'undefined' && keywords.length) {
+		if(typeof keywords !== 'undefined' && keywords.length) {
  			var ctr = 0;
 			for (var i = 0; i < keywords.length; i++) {
 				addKeyword(keywords[i], i, trx, function(error, res) {
