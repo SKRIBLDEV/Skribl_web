@@ -145,7 +145,6 @@ function Affiliation(db) {
 						checkDepartment(RID.getRid(faculties[0]));
 					}
 				}).error(function(er) {
-					console.log(er);
 					callback(er);
 				});
 			}).error(function(er) {

@@ -316,12 +316,12 @@ function Publication(db) {
 			}
 			else {
 				var authorArray = criteria.authors;
-				query = 'select expand(out(AuthorOf)) from Author where (firstName = \'' + authorArray[0].firstName + '\' and lastName = \'' + authorArray[0].lastName + '\')';
+				query = 'select expand(out(AuthorOf)) from Author where (firstName like \'%' + authorArray[0].firstName + '%\' and lastName like \'%' + authorArray[0].lastName + '%\')';
 				authorArray.shift();
 				queryInitialized = true;
 
 				for (var i = 0; i < authorArray.length; i++) {
-					query = 'select from (' + query + ') where any() traverse(0,1) (firstName = \'' + authorArray[i].firstName + '\' and lastName = \'' + authorArray[i].lastName + '\')'
+					query = 'select from (' + query + ') where any() traverse(0,1) (firstName like \'%' + authorArray[i].firstName + '%\' and lastName like \'%' + authorArray[i].lastName + '%\')'
 				};
 				callBack(null, true);
 			}
@@ -376,7 +376,7 @@ function Publication(db) {
 		function pubDataQuery(criteria, callBack) {
 			var tempQuery = '';
 			if(criteria.title !== undefined) {
-				tempQuery = tempQuery + ' and title = \'' + criteria.title + '\'';
+				tempQuery = tempQuery + ' and title like \'%' + criteria.title + '%\'';
 			}
 			if(criteria.fileName !== undefined) {
 				tempQuery = tempQuery + ' and fileName = \'' + criteria.fileName + '\'';
