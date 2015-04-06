@@ -211,8 +211,11 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		loginRequest.success(function(data, status, headers, config) {
 
 			//Save Authorization when login to do important tasks.
-			appData.Authorization = data.Authorization;
-			
+			appData.Authorization = 
+                {headers: 
+                    {'Content-type' : 'application/json',
+                     'Authorization': data.Authorization}};
+                
 			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinputLogin.username);
 			

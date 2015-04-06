@@ -8,7 +8,7 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
-angular.module('skriblApp').controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll) {
+angular.module('skriblApp').controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll, userService, managePublications) {
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
     if (!(appData.currentUser)) {
         $location.path('/home');
@@ -192,87 +192,112 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         onAnimationComplete: function() {}
     }
 
-    //-------------------------------------------------GUI settings---------------------------------------------------------//
-    /**
-     * duplication of the username to be used in Dashboard.html
-     * @type {String}
-     */
+    //-------------------------------------------------GUI settings-----------------------------------------------------//
+   
+    //-------------------------------------------------USER settings----------------------------------------------------//
     $scope.username = appData.currentUser.username;
+    $scope.logout = function(){ userService.logout(); };
+    $scope.deleteUser = function(){ userService.deleteUser($scope.username); };
+    //-------------------------------------------------USER settings----------------------------------------------------//
 
-    // The logout function
-    $scope.logout = function() {
-        $location.path('/home');
-        appData.currentUser = null;
-        toast("succesfully logged out", 4000) // 4000 is the duration of the toast
-    };
-
-    //The delete function
-    $scope.deleteUser = function() {
-        var path = serverApi.concat('/users/').concat($scope.username);
-        var deleteRequest = $http.delete(path, config);
-
-        deleteRequest.success(function(data, status, headers, config) {
-            $scope.logout();
-            toast("succesfully deleted account", 4000) // 4000 is the duration of the toast
-        });
-
-        deleteRequest.error(function(data, status, headers, config) {
-            //Error while deleting user
-            toast("Database error, please try again later.", 4000) // 4000 is the duration of the toast
-        });
-    };
-
-    //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
-
-    //upload
-    //upload :: gui
-    ui_UPLOAD_STATUS = {
-        UNACTIVE: -1,
-        INITIAL: 0,
-        WAITING_SCRAPING: 1,
-        WAITING_MANUAL: 2,
-        SUCCES_SCRAPING: 4,
-        SUCCES_MANUAL: 5
-    }
-
-    ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
-    currentPublicationID = undefined
-
+    //------------------------------------------------MANAGE PUBLICATIONS-----------------------------------------------//
     $scope.ui_upload_active = function() {
-        return ui_upload_status != -1;
+        return managePublications.ui_upload_active;
     }
-
     $scope.ui_upload_initialStatus = function() {
-        return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;
+        return managePublications.ui_delete_initialStatus;
     }
-
     $scope.ui_upload_waitingScraping = function() {
-        return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;
+        return managePublications.ui_upload_waitingScraping;
     }
-
     $scope.ui_upload_waitingManual = function() {
-        return ui_upload_status == ui_UPLOAD_STATUS.WAITING_MANUAL;
+        return managePublications.ui_upload_waitingManual;
     }
-
     $scope.ui_upload_succesManual = function() {
-        return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_MANUAL;
+        return managePublications.ui_upload_succesManual;
     }
-
     $scope.ui_upload_succesScraping = function() {
-        return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;
+        return managePublications.ui_upload_succesScraping;
     }
-
     $scope.ui_upload_success = function() {
-        return ($scope.ui_upload_succesScraping() || $scope.ui_upload_succesManual());
+        return managePublications.ui_upload_succesManual;
     }
-
     $scope.ui_upload_activate = function() {
-        ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+        managePublications.ui_upload_activate;
     }
-
     $scope.ui_upload_deActivate = function() {
-        ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
+        managePublications.ui_upload_deActivate;
     }
+    
+    
+    $scope.ui_modifyMeta_activate = function() {
+        managePublications.ui_modifyMeta_activate;
+    }
+    $scope.ui_modifyMeta_deActivate = function() {
+        managePublications.ui_modifyMeta_deActivate;
+    }
+    $scope.ui_modifyMeta_active = function() {
+        return managePublications.ui_modifyMeta_active;
+    }
+    $scope.ui_modifyMeta_initialStatus = function() {
+        return managePublications.ui_modifyMeta_initialStatus;
+    }
+    $scope.ui_modifyMeta_modifying = function(){
+        return managePublications.ui_modifyMeta_modifying;
+    }
+    $scope.ui_modifyMeta_succes = function(){
+        return managePublications.ui_modifyMeta_succes;
+    }
+    $scope.ui_modifyMeta = function(publicationID,){
+        var meta = 
+            {
+               //Pieter hier de naam van u meta veldjes juist invullen 
+            }
+        managePublications.ui_modifyMeta(publicationID, meta);
+    }
+    
+    
+    $scope.ui_getMeta = function(publicationID){
+        return managePublications.ui_getMeta(publicationID);
+    }
+    
+    
+    $scope.ui_delete_activate = function(){
+        managePublications.ui_delete_activate;
+    }
+    $scope.ui_delete_deActivate = function(){
+        managePublications.ui_delete_deActivate;   
+    }
+    $scope.ui_delete_active = function() {
+       return managePublications.ui_delete_active;
+    }
+    $scope.ui_delete_initialStatus = function() {
+        return managePublications.ui_delete_initialStatus;
+    }
+    $scope.ui_delete_deleting = function(){
+        return managePublications.ui_delete_deleting;
+    }
+    $scope.ui_delete_succes = function(){
+        return managePublications.ui_delete_succes;
+    }
+    $scope.ui_deletePublication = function(publicationID){
+        managePublications.ui_deletePublication(publicationID);
+    }
+   //-------------------------------------------------------------------------------------------------------------------// 
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    var currentPublicationID = undefined
 
     $scope.uploadPublication = function(file, url, authorization, withMetadata) {
 
@@ -357,90 +382,23 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
             whenFinished(false);
         });
     }
-
-    //delete a publication of the db
-    $scope.deletePublication = function(publicationID) {
-        $scope.busy = true;
-        var url = serverApi.concat('/publications/').concat(publicationID);
-        var deletePublicationRequest = $http.delete(url, config);
-
-        deletePublicationRequest.success(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Publication deleted.", 4000);
-
-        });
-        deletePublicationRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to delete publication, try again later.", 4000);
-        });
-    }
-
-    //function to get the meta data of a specific publication.
-    $scope.currentMeta;
-    $scope.getMetaData = function(publicationID, edit) {
-        $scope.busy = true;
-        var url = serverApi.concat('/publications/').concat(publicationID);
-        var getMetaDataRequest = $http.get(url, config);
-
-        getMetaDataRequest.success(function(data, status, headers, config) {
-            if (edit) {
-                $scope.userinput.title = data.title;
-                $scope.userinput.journalName = data.journal;
-                $scope.userinput.journalNumber = data.number;
-                $scope.userinput.journalVolume = data.volume;
-                $scope.userinput.year = data.year;
-                $scope.userinput.publisher = data.publisher;
-                $scope.userinput.keywords = data.keywords;
-            } else {
-                $scope.currentMeta = data;
-            }
-
-            $scope.busy = false;
-        });
-        getMetaDataRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to get information about publication, try again later.", 4000);
-        });
-    }
-
-    //function to download a file
-    $scope.deleteCurrentFile = function() {
-        currentFile = null;
-    }
-
-    $scope.currentFile;
-
-
-    $scope.getFile = function(publicationID) {
-        $scope.busy = true;
-        var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
-        var getFileRequest = $http.get(url, config);
-
-        getFileRequest.success(function(data, status, headers, config) {
-            $scope.busy = false;
-            currentFile = data;
-        });
-        getFileRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to download file, please try again later.", 4000);
-        });
-    }
-
-    //function to get the publications of a certain user.
-    $scope.getUserPublications = function(libraryName) {
-        $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName);
-        var getUserPublicationsRequest = $http.get(url, config);
-        getUserPublicationsRequest.success(function(data, status, headers, config) {
-            appData.currentUser.publications = data;
-            $scope.busy = false;
-        });
-        getUserPublicationsRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to get publications, try again later.", 4000);
-        });
-    };
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //------------------------------------------------MANAGE PUBLICATIONS-----------------------------------------------//
+    
     //------------------------------------------------LIBARARY WIP-------------------------------------------------//
 
    $scope.currentViewerPublicationID = undefined
@@ -501,7 +459,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     {title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
 
 
-    $scope.creatLib = function(libName) {
+    $scope.createLib = function(libName) {
         $scope.busy = true;
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
         var createRequest = $http.put(url, config);
