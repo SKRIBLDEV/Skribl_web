@@ -491,33 +491,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
         //
 
-    $scope.addPublications = function(libraryName, publicationID) {
-        $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var addPublicationsRequest = $http.put(url, config);
-        addPublicationsRequest.success(function(data, status, headers, config) {
-            toast("Publication added to library.", 4000);
-            $scope.busy = false;
-        });
-        getUserPublicationsRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to add library, try again later.", 4000);
-        });
-    }
-
-    $scope.deletePublications = function(libraryName, publicationID) {
-        $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var deletePublicationsRequest = $http.put(url, config);
-        deletePublicationsRequest.success(function(data, status, headers, config) {
-            toast("Publication removed from library.", 4000);
-            $scope.busy = false;
-        });
-        deletePublicationsRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to remove publication, try again later.", 4000);
-        });
-    }
+   
 
     $scope.searchResult;
     function replaceSpace(toReplace){

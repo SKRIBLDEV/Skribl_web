@@ -2,15 +2,18 @@
 * Initialisation of the appdata with the empty object
 */
 webapp.service('managePublications', function($location, appData, $http) {
+    //@Pieter : dit wordt gebruikt in de publications card. Wanneer de status op corrupt staat moet je in die card efjes een lading screen tonen omdat de library niet juist is. Je moet wel oppassen want de user mag niet nog is op delete clicken wanneer een delete al bezig is !
     var ui_PUBLICATIONS_STATUS = {
         CORRUPT: 0,
         UPTODATE: 1};
     var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
     var publications;
     var libName;
-    this.ui_publications_library = function(name){getUserPublications(name);};
-    this.ui_publications_addToLibrary = function(libName, publicationID){addPublications(libName, publicationId);};
-    this.ui_publications_deleteFromLibrary = function(libName, publicationID){deletePublication(libName, publicationID)
+    this.ui_publications_change_library = function(name){getUserPublications(name);};
+    this.ui_publications_addToLibrary = function(name, publicationID){addPublications(libName, publicationId);};
+    this.ui_publications_deleteFromLibrary = function(name, publicationID){deletePublication(libName, publicationID)
+    this.ui_publications_currentLibName = function(){return libName;};
+    this.ui_publications_currentLib = function(){return currentLib;};
 
 
 function getUserPublications(libraryName) {
@@ -22,22 +25,20 @@ function getUserPublications(libraryName) {
         ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;  
     });
     getUserPublicationsRequest.error(function(data, status, headers, config) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        getUserPublications(libraryName);
         toast("Failed to get your publications, try again later.", 4000);
     });
 };
 
-function addPublications(libraryName, publicationID, publicationTitle) {
+function addPublications(libraryName, publicationID) {
     ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
     var url =  serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
     var addPublicationsRequest = $http.put(url, config);
     addPublicationsRequest.success(function(data, status, headers, config) {
         if(libraryName.equals(libName))
-        {var newPub =  {id: publicationID, title: publicationTitle};
-         publications = publications.concat(newPub);
-        };
+        {getUserPublications(libName);}
+        else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
         toast("Publication added to library.", 4000);
-        ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
     });
     getUserPublicationsRequest.error(function(data, status, headers, config) {
         ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
@@ -50,14 +51,44 @@ function deletePublication(libraryName, publicationID) {
     var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
     var deletePublicationsRequest = $http.put(url, config);
     deletePublicationsRequest.success(function(data, status, headers, config) {
+        if(libraryName.equals(libName))
+        {getUserPublications(libName);}
+        else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
         toast("Publication removed from library.", 4000);
-        $scope.busy = false;
     });
     deletePublicationsRequest.error(function(data, status, headers, config) {
-        $scope.busy = false;
+        ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
         toast("Failed to remove publication, try again later.", 4000);
     });
 }
+//----------------------------------------------------------------------------------------------------------------------//
+  $scope.addPublications = function(libraryName, publicationID) {
+        $scope.busy = true;
+        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
+        var addPublicationsRequest = $http.put(url, config);
+        addPublicationsRequest.success(function(data, status, headers, config) {
+            toast("Publication added to library.", 4000);
+            $scope.busy = false;
+        });
+        getUserPublicationsRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to add library, try again later.", 4000);
+        });
+    }
+
+    $scope.deletePublications = function(libraryName, publicationID) {
+        $scope.busy = true;
+        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
+        var deletePublicationsRequest = $http.put(url, config);
+        deletePublicationsRequest.success(function(data, status, headers, config) {
+            toast("Publication removed from library.", 4000);
+            $scope.busy = false;
+        });
+        deletePublicationsRequest.error(function(data, status, headers, config) {
+            $scope.busy = false;
+            toast("Failed to remove publication, try again later.", 4000);
+        });
+    }                                                                          
 
 //----------------------------------------------------------------------------------------------------------------------//
         //@Pieter eerst scrapen en later manual aanpassen --> SUCCES_MANUAL = algemeen succes !
