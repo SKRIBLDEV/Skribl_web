@@ -473,10 +473,9 @@ var metObject = {
 				lastName: 'Vakarian'},
 				{firstName: 'W',
 				lastName: 'Urdnot'}]
-				
-	knownAuthors: ['#13:33', '#13:4', '#13:35', '#13:34'],
-	researchDomains: ['Computer Sciences', 'Biological Sciences', 'Languages'],
-	keywords: ['killing', 'reapers', 'space']
+	//knownAuthors: ['#13:33', '#13:4', '#13:35', '#13:34'],
+	//researchDomains: ['Computer Sciences', 'Biological Sciences', 'Languages'],
+	//keywords: ['killing', 'reapers', 'space']
 }
 
 var criteria = {
@@ -487,16 +486,16 @@ var criteria = {
 	volume: 4,
 	number: 19,
 	url: 'www.skynet.be',
-	//: ['Languages', 'Computer Sciences', 'Biological Sciences'],
-	//keywords: ['killing', 'reapers', 'space'],
-	//authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Garrus', lastName: 'Vakarian'}, {firstName: 'M', lastName: 'Braem'}]
+	ResearchDomains: ['Languages', 'Computer Sciences', 'Biological Sciences'],
+	keywords: ['killing', 'reapers', 'space'],
+	authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Gar', lastName: 'Vakar'}, {firstName: 'M', lastName: 'Braem'}]
 };
 
 var d = new Date();
 var t = d.getTime();
-console.log(t);
 
-*/
+
+
 //database.testError(callBack);
 //database.queryAdvanced(criteria, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
@@ -519,8 +518,21 @@ console.log(t);
 //database.removePublication('#23:132', callBack);
 //
 //
+
+//var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'mgermaanse talen', researchGroup: 'engels', researchDomains: ['Biological Sciences', 'Languages']};
+var userInfo = { firstName: "Beli",
+lastName: "Copter",
+language: "NL",
+username: 'bcopter',
+password: "HCopt123",
+email: "hcopter@vub.ac.be",
+institution: "VUB",
+faculty: "Exact sciences",
+department: "DINF",
+researchDomains: ["Computer and Information Science"],
+researchGroup: "none" }
+*/
 /*
-var userInfo = {firstName:'John', lastName:'Shepard', username:'jshep', password:'Algoon1', email:'jshep@vub.ac.be', language:'ENG', institution: 'VUB', faculty: 'letteren en wijsbegeerte', department: 'mgermaanse talen', researchGroup: 'engels', researchDomains: ['Biological Sciences', 'Languages']};
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
 		console.log(res);
@@ -530,17 +542,17 @@ UM.createUser(userInfo, function(error, res) {
 		database.createUser(res, callBack);
 	}
 })
-
 */
 
 
+
 /*
+
 function callBack(error, result){
 	var nd = new Date();
 	var nt = nd.getTime();
-	console.log(nt);
 	var res = nt - t;
-	console.log(res);
+	console.log('operation took: ' + res + 'ms');
 	if (error){
 	console.log(error);
 	}
