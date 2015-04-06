@@ -417,7 +417,6 @@ function Publication(db) {
 			}
 			else {
 				if(query == '') {
-					//console.log('select * from Publication where ' + tempQuery.slice(5) + ' limit ' + limit);
 					db.query('select @rid, title from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
@@ -426,7 +425,6 @@ function Publication(db) {
 					});
 				}
 				else {
-					//console.log('select * from (' + query + ') where ' + tempQuery.slice(5));
 					db.query('select @rid, title from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);

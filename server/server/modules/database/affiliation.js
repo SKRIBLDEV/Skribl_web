@@ -126,7 +126,7 @@ function Affiliation(db) {
 		function checkFaculty(institutionRid) {
 			db.select('expand( out(\'HasFaculty\') )').from(institutionRid).all()
 			.then(function(tempfac) {
-				db.select().from(RID.getORids(tempfac)).where({Name: newData.getFaculty()}).all()
+				db.select().from('[' + RID.getRids(tempfac).toString() + ']').where({Name: newData.getFaculty()}).all() 
 				.then(function (faculties) {
 					if(faculties.length === 0) {
 						addFaculty(newData, trx, function(error, res) {
@@ -145,6 +145,7 @@ function Affiliation(db) {
 						checkDepartment(RID.getRid(faculties[0]));
 					}
 				}).error(function(er) {
+					console.log(er);
 					callback(er);
 				});
 			}).error(function(er) {
@@ -158,7 +159,7 @@ function Affiliation(db) {
 		function checkDepartment(facultyRid) {
 			db.select('expand( out(\'HasDepartment\') )').from(facultyRid).all()
 			.then(function(tempDep) {
-				db.select().from(RID.getORids(tempDep)).where({Name: newData.getDepartment()}).all()
+				db.select().from('[' + RID.getRids(tempDep).toString() + ']').where({Name: newData.getDepartment()}).all()
 				.then(function (departments) {
 					if(departments.length === 0) {
 						addDepartment(newData, trx, function(error, res) {
@@ -191,7 +192,7 @@ function Affiliation(db) {
 			//db.exec('select from (select expand( out(\'HasDepartment\') ) from ' + departmentRid + ') where Name = \'' + newData.getResearchGroup() + '\'')
 			db.select('expand( out(\'HasResearchGroup\') )').from(departmentRid).all()
 			.then(function(tempResGroups) {
-				db.select().from(RID.getORids(tempResGroups)).where({Name: newData.getResearchGroup()}).all()
+				db.select().from('[' + RID.getRids(tempResGroups).toString() + ']').where({Name: newData.getResearchGroup()}).all()
 				.then(function (researchGroups) {
 					if(researchGroups.length === 0) {
 						addResearchGroup(newData, trx, function(error, res) {
