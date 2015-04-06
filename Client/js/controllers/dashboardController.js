@@ -459,39 +459,9 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     {title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
 
 
-    $scope.createLib = function(libName) {
-        $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
-        var createRequest = $http.put(url, config);
-        createRequest.success(function(data, status, headers, config) {
-            $scope.busy = false;
-            var messageToToast = "Library ".concat(libName).concat(" created.");
-            toast(messageToToast, 4000);
-        });
-        createRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to create publication, try again later.", 4000);
-        });
-    }
-
-    $scope.deleteLib = function(libName) {
-            $scope.busy = true;
-            var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
-            var createRequest = $http.delete(url, config);
-            createRequest.success(function(data, status, headers, config) {
-                $scope.busy = false;
-                var messageToToast = "Library ".concat(libName).concat(" deleted.");
-                toast(messageToToast, 4000);
-            });
-            createRequest.error(function(data, status, headers, config) {
-                $scope.busy = false;
-                toast("Failed to delete publication, try again later.", 4000);
-            });
-        }
+    
         //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
         //
-
-   
 
     $scope.searchResult;
     function replaceSpace(toReplace){

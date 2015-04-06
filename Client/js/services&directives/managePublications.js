@@ -9,6 +9,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
     var publications;
     var libName;
+    var librariesNames;
     this.ui_publications_change_library = function(name){getUserPublications(name);};
     this.ui_publications_addToLibrary = function(name, publicationID){addPublications(libName, publicationId);};
     this.ui_publications_deleteFromLibrary = function(name, publicationID){deletePublication(libName, publicationID)
@@ -62,33 +63,35 @@ function deletePublication(libraryName, publicationID) {
     });
 }
 //----------------------------------------------------------------------------------------------------------------------//
-  $scope.addPublications = function(libraryName, publicationID) {
+ $scope.createLib = function(libName) {
         $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var addPublicationsRequest = $http.put(url, config);
-        addPublicationsRequest.success(function(data, status, headers, config) {
-            toast("Publication added to library.", 4000);
+        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
+        var createRequest = $http.put(url, config);
+        createRequest.success(function(data, status, headers, config) {
             $scope.busy = false;
+            var messageToToast = "Library ".concat(libName).concat(" created.");
+            toast(messageToToast, 4000);
         });
-        getUserPublicationsRequest.error(function(data, status, headers, config) {
+        createRequest.error(function(data, status, headers, config) {
             $scope.busy = false;
-            toast("Failed to add library, try again later.", 4000);
+            toast("Failed to create publication, try again later.", 4000);
         });
     }
 
-    $scope.deletePublications = function(libraryName, publicationID) {
-        $scope.busy = true;
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var deletePublicationsRequest = $http.put(url, config);
-        deletePublicationsRequest.success(function(data, status, headers, config) {
-            toast("Publication removed from library.", 4000);
-            $scope.busy = false;
-        });
-        deletePublicationsRequest.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to remove publication, try again later.", 4000);
-        });
-    }                                                                          
+    $scope.deleteLib = function(libName) {
+            $scope.busy = true;
+            var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
+            var createRequest = $http.delete(url, config);
+            createRequest.success(function(data, status, headers, config) {
+                $scope.busy = false;
+                var messageToToast = "Library ".concat(libName).concat(" deleted.");
+                toast(messageToToast, 4000);
+            });
+            createRequest.error(function(data, status, headers, config) {
+                $scope.busy = false;
+                toast("Failed to delete publication, try again later.", 4000);
+            });
+        }                                                                          
 
 //----------------------------------------------------------------------------------------------------------------------//
         //@Pieter eerst scrapen en later manual aanpassen --> SUCCES_MANUAL = algemeen succes !
