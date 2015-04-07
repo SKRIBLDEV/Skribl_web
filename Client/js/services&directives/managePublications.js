@@ -24,7 +24,8 @@ webapp.service('managePublications', function($location, appData, $http) {
     function getUserLibraries() {
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
-        var getUserLibrariesRequest = $http.get(url, config);
+        var authorization = appData.Authorization;
+        var getUserLibrariesRequest = $http.get(url, authorization);
         getUserLibrariesRequest.success(function(data, status, headers, config) {
             librariesNames = data;
             ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
