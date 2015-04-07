@@ -19,6 +19,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.ui_publications_librariesNames = function(){return librariesNames;};
     this.ui_publications_addLibrary = function(name){createLib(name);};
     this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
+    this.ui_publications_getUserLibraries = function(){getUserLibraries();};
 
     function getUserLibraries() {
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
@@ -38,7 +39,8 @@ webapp.service('managePublications', function($location, appData, $http) {
     function getUserPublications(libraryName) {
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
-        var getUserPublicationsRequest = $http.get(url, config);
+        var authorization = appData.Authorization;
+        var getUserPublicationsRequest = $http.get(url, authorization);
         getUserPublicationsRequest.success(function(data, status, headers, config) {
             publictions = data;
             libName = libraryName;
@@ -135,7 +137,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     }
     var currentFile = null;
 
-    function getFile = function(publicationID) {
+    function getFile(publicationID) {
         ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.DOWNLOADING;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
         var getFileRequest = $http.get(url, config);

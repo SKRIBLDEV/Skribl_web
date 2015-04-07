@@ -197,6 +197,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     $scope.ui_publications_librariesNames =  function(){return managePublications.ui_publications_librariesNames();};
     $scope.ui_publications_addLibrary =  function(name){managePublications.ui_publications_addLibrary(name);};
     $scope.ui_publications_deleteLibrary =  function(name){managePublications.ui_publications_deleteLibrary(name);};
+    $scope.ui_publications_getUserLibraries = function(){managePublications.ui_publications_getUserLibraries();};
     //-------------------------------------------------Manage Lib----------------------------------------------------// 
 
     //-------------------------------------------------Download File----------------------------------------------------// 
@@ -251,7 +252,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     
     //------------------------------------------------Upload-----------------------------------------------//
     $scope.ui_upload_active = function() {return managePublications.ui_upload_active();};
-    $scope.ui_upload_initialStatus = function() {return managePublications.ui_delete_initialStatus();};
+    $scope.ui_upload_initialStatus = function() {return managePublications.ui_upload_initialStatus();};
     $scope.ui_upload_waitingScraping = function() {return managePublications.ui_upload_waitingScraping();};
     $scope.ui_upload_succesScraping = function() {return managePublications.ui_upload_succesScraping();};
     $scope.ui_upload_activate = function() {managePublications.ui_upload_activate();};
