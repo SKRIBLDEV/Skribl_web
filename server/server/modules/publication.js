@@ -113,7 +113,7 @@ exports.extract = extract;
 
 //test code:
 
-
+/*
 
  var proceedingArticle = "Analytical model for the optical propagation in a nonlinear left-handed material";
  var journalArticle = "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency";
@@ -130,6 +130,7 @@ extract(testInfo, function(err, res){
   else
     console.log(testInfo);
 });
+*/
 
 
 
