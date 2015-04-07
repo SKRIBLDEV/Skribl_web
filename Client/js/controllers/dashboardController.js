@@ -186,7 +186,32 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     $scope.logout = function(){ userService.logout(); };
     $scope.deleteUser = function(){ userService.deleteUser($scope.username); };
     //-------------------------------------------------USER settings----------------------------------------------------//
+    
+    //-------------------------------------------------Manage Lib----------------------------------------------------// 
+    $scope.ui_publications_corrupt =  function(){return managePublications.ui_publications_corrupt();};
+    $scope.ui_publications_change_library =  function(name){managePublications.ui_publications_change_library(name);};
+    $scope.ui_publications_addToLibrary =  function(name, publicationID){managePublications.publications_addToLibrary(name, publicationID);};
+    $scope.ui_publications_deleteFromLibrary =  function(name, publicationID) {managePublications.ui_publications_deleteFromLibrary(name, publicationID);};
+    $scope.ui_publications_currentLibName =  function(){return managePublications.ui_publications_currentLibName();};
+    $scope.ui_publications_currentLib =  function(){return managePublications.ui_publications_currentLib();};
+    $scope.ui_publications_librariesNames =  function(){return managePublications.ui_publications_librariesNames();};
+    $scope.ui_publications_addLibrary =  function(name){managePublications.ui_publications_addLibrary(name);};
+    $scope.ui_publications_deleteLibrary =  function(name){managePublications.ui_publications_deleteLibrary(name);};
+    //-------------------------------------------------Manage Lib----------------------------------------------------// 
 
+    //-------------------------------------------------Download File----------------------------------------------------// 
+    $scope.ui_downloadFile = function(publicationID){managePublications.ui_downloadFile(publicationID);};
+    $scope.ui_downloadFile_getFile = function(){return managePublications.ui_downloadFile_getFile();};
+    $scope.ui_downloadFile_deleteFile = function(){managePublications.ui_downloadFile_deleteFile();};
+    $scope.ui_downloadFile_downloading = function(){return managePublications.ui_downloadFile_downloading();};
+    $scope.ui_downloadFile_succes = function(){ return managePublications.ui_downloadFile_succes();};
+    $scope.ui_downloadFile_reset = function(){managePublications.ui_downloadFile_reset();};
+    //-------------------------------------------------Download File----------------------------------------------------// 
+    
+    //-------------------------------------------------Meta Data----------------------------------------------------// 
+    
+    //-------------------------------------------------Meta Data----------------------------------------------------// 
+    
     //------------------------------------------------MANAGE PUBLICATIONS-----------------------------------------------//
     $scope.ui_upload_active = function() {
         return managePublications.ui_upload_active;
@@ -246,115 +271,6 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
     
     $scope.ui_getMeta = function(publicationID){
         return managePublications.ui_getMeta(publicationID);
-    }
-    
-    
-    $scope.ui_delete_activate = function(){
-        managePublications.ui_delete_activate;
-    }
-    $scope.ui_delete_deActivate = function(){
-        managePublications.ui_delete_deActivate;   
-    }
-    $scope.ui_delete_active = function() {
-       return managePublications.ui_delete_active;
-    }
-    $scope.ui_delete_initialStatus = function() {
-        return managePublications.ui_delete_initialStatus;
-    }
-    $scope.ui_delete_deleting = function(){
-        return managePublications.ui_delete_deleting;
-    }
-    $scope.ui_delete_succes = function(){
-        return managePublications.ui_delete_succes;
-    }
-    $scope.ui_deletePublication = function(publicationID){
-        managePublications.ui_deletePublication(publicationID);
-    }
-   //-------------------------------------------------------------------------------------------------------------------// 
-    currentPublicationID = undefined
-
-    $scope.uploadPublication = function(file, url, authorization, withMetadata) {
-
-        if (withMetadata) {
-            ui_upload_status = ui_UPLOAD_STATUS.WAITING_MANUAL;
-        } else {
-            ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
-        }
-
-        var fd = new FormData();
-        fd.append('inputFile', file); //link the file to the name 'inputFile'
-        $http.put(url, fd, {
-                transformRequest: angular.identity,
-                headers: {
-                    'Content-Type': undefined,
-                    'Authorization': authorization
-                }
-            })
-            .success(function(data, status, headers, config) {
-                currentPublicationID = data.id.substring(1);
-                if (withMetadata) {
-                    //when publication is added to database 
-                    //metadata of publication needs to be send/updated (currently empty)
-                    var whenFinished = function(succes) {
-                        if (succes) {
-                            ui_upload_status = ui_UPLOAD_STATUS.SUCCES_MANUAL;
-                            toast("succesfully uploaded publication with Manual meta data", 4000);
-                        } else {
-                            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-                            toast("Failed to upload file / metadata, try again later", 4000);
-                        }
-                    }
-                    $scope.uploadMetaData(currentPublicationID);
-                } else {
-                    ui_upload_status = ui_UPLOAD_STATUS.SUCCES_SCRAPING;
-                    toast("succesfully uploaded publication with scraping", 4000);
-                }
-            })
-            .error(function() {
-                ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-                toast("Failed to upload file, try again later", 4000)
-            });
-    }
-
-    //preparation for the uploadPublication function
-    $scope.uploadFile = function(withMetadata) {
-        // $scope.busy = true;
-        var file = $scope.myFile;
-        var url = serverApi.concat('/publications');
-        var authorization = appData.Authorization;
-        $scope.uploadPublication(file, url, authorization, withMetadata);
-    };
-
-    //updates the currently available metadata
-    $scope.uploadMetaData = function(publicationID, whenFinished) {
-        // var uploadingPaper = false;
-        // if($scope.busy){uploadingPaper = true;}
-        // else {$scope.busy = true;};
-        var url = serverApi.concat('/publications/').concat(publicationID);
-        var metaData = {
-            'title': $scope.userinput.title, //get all the fields
-            'authors': [{
-                'firstName': $scope.userinput.authorsFirst,
-                'lastName': $scope.userinput.authorsLast
-            }],
-            'journal': $scope.userinput.journalName,
-            'volume': $scope.userinput.journalVolume,
-            'number': $scope.userinput.journalNumber,
-            'year': $scope.userinput.year,
-            'publisher': $scope.userinput.publisher,
-            'abstract': undefined,
-            'citations': undefined,
-            'article_url': undefined,
-            'keywords': $scope.userinput.keywords.concat('+').concat($scope.userinput.keywordSecond).concat('+').concat($scope.userinput.keywordThird)
-        };
-
-        var metaDataRequest = $http.post(url, metaData, config);
-        metaDataRequest.success(function(data, status, headers, config) {
-            whenFinished(true);
-        });
-        metaDataRequest.error(function(data, status, headers, config) {
-            whenFinished(false);
-        });
     }
     
     //------------------------------------------------MANAGE PUBLICATIONS-----------------------------------------------//

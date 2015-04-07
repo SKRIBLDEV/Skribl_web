@@ -185,6 +185,39 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
+        var ui_MODIFYMETA_STATUS = {
+            UNACTIVE: -1,
+            INITIAL: 0,
+            MODIFYING: 1,
+            SUCCES_MODIFYING: 2}
+        var ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;
+
+    this.ui_modifyMeta_activate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;}
+    this.ui_modifyMeta_deActivate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;}
+    this.ui_modifyMeta_active = function() {return ui_modifyMeta_status != ui_MODIFYMETA_STATUS.UNACTIVE;}
+    this.ui_modifyMeta_initialStatus = function() {return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.INITIAL;}
+    this.ui_modifyMeta_modifying = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.MODIFYING;}
+    this.ui_modifyMeta_succes = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;}
+    this.ui_modifyMeta = function(publicationID){modifyMeta(publicationID, meta);}
+
+    function modifyMeta(publicationID, meta) {
+        ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
+        var url = serverApi.concat('/publications/').concat(publicationID);
+        var authorization = appDataK.Authorization;
+        var setMetaDataRequest = $http.post(url, authorization);
+
+        setMetaDataRequest.success(function(data, status, headers, config) {
+            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;
+            toast("The meta data of the publication has been changed.",4000);
+        });
+        setMetaDataRequest.error(function(data, status, headers, config) {
+            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;
+            toast("Failed to get information about publication, try again later.", 4000);
+        });
+    }
+//----------------------------------------------------------------------------------------------------------------------//
+
+//----------------------------------------------------------------------------------------------------------------------//
     //@Pieter scraping word alleen maar gebruikt door andere functies namelijk search en de viewer ofzo --> geen unactive.
     //@Pieter zou ook kunnen met maar 2 statussen
     var ui_SCRAPING_STATUS = {
@@ -279,58 +312,82 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    var ui_MODIFYMETA_STATUS = {
-        UNACTIVE: -1,
-        INITIAL: 0,
-        MODIFYING: 1,
-        SUCCES_MODIFYING: 2}
-    var ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;
-
-    this.ui_modifyMeta_activate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;}
-    this.ui_modifyMeta_deActivate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;}
-    this.ui_modifyMeta_active = function() {return ui_modifyMeta_status != ui_MODIFYMETA_STATUS.UNACTIVE;}
-    this.ui_modifyMeta_initialStatus = function() {return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.INITIAL;}
-    this.ui_modifyMeta_modifying = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.MODIFYING;}
-    this.ui_modifyMeta_succes = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;}
-    this.ui_modifyMeta = function(publicationID){modifyMeta(publicationID, meta);}
-
-    function modifyMeta(publicationID, meta) {
-        ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
-        var url = serverApi.concat('/publications/').concat(publicationID);
-        var authorization = appDataK.Authorization;
-        var setMetaDataRequest = $http.post(url, authorization);
-
-        setMetaDataRequest.success(function(data, status, headers, config) {
-            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;
-            toast("The meta data of the publication has been changed.",4000);
-        });
-        setMetaDataRequest.error(function(data, status, headers, config) {
-            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;
-            toast("Failed to get information about publication, try again later.", 4000);
-        });
-    }
-//----------------------------------------------------------------------------------------------------------------------//
-
-//----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter eerst scrapen en later manual aanpassen --> SUCCES_MANUAL = algemeen succes !
+    //@Pieter je moet eerste checken dat scraping niet gebruikt word voor upload mag beginnen anders conflicten met de statussen !!
+    /*@Pieter stappen : 
+    -User vult titel en journal of proceeding aan en de file INITIAL
+    -Gebruik de search en de titel om aan de gebruiker te vragen of publicatie al niet bestaat (met external op false) EXISTS
+    -Indien niet bestaat upload de file adhv ui_upload -> gaat scrapen en in WAITING_EDITING belanden
+    -Gebruik MODIFYMETA om de meta data door te sturen en gebruik SUCCES_EDITING EN SUCCES_UPLOADING STATUSSEN om juiste elementen te tonen
+    -done
+    */
     var ui_UPLOAD_STATUS = {
         UNACTIVE: -1,
         INITIAL: 0,
-        WAITING_SCRAPING: 1,
-        WAITING_MANUAL: 2,
-        SUCCES_SCRAPING: 4,
-        SUCCES_MANUAL: 5
-    }
+        EXISTS:1,
+        UPLOADING: 2,
+        WAITING_SCRAPING: 3,
+        WAITING_EDITING: 4,
+        SUCCES_EDITING: 5,
+        SUCCES_UPLOADING: 6}
     var ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
 
     this.ui_upload_active = function() {return ui_upload_status != ui_UPLOAD_STATUS.UNACTIVE;}
     this.ui_upload_initialStatus = function() {return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;}
+    this.ui_upload_uploading = function(){return ui_upload_status == ui_UPLOAD_STATUS.UPLOADING;}
     this.ui_upload_waitingScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;}
-    this.ui_upload_waitingManual = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_MANUAL;}
-    this.ui_upload_succesManual = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_MANUAL;}
     this.ui_upload_succesScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;}
+    this.ui_upload_waitingEditing = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_EDITING;}
+    this.ui_upload_succesEditing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
+    this.ui_upload_succesUploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
     this.ui_upload_activate = function() {ui_upload_status = ui_UPLOAD_STATUS.INITIAL;}
     this.ui_upload_deActivate = function() {ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;}
-//----------------------------------------------------------------------------------------------------------------------//
+    this.ui_upload = function(file, title, type){uploadFile(file, title, type);};
+    this.ui_upload_set_exists = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
+    this.ui_upload_set_succes_editing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
+    this.ui_upload_set_succes_uploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
+    
+   function uploadPublication(file, url, authorization) {
 
+        var fd = new FormData();
+        fd.append('inputFile', file); //link the file to the name 'inputFile'
+        $http.put(url, fd, {
+            transformRequest: angular.identity,
+            headers: {
+                'Content-Type': undefined,
+                'Authorization': authorization
+            }
+        })
+            .success(function(data, status, headers, config) {
+            currentPublicationID = data.id.substring(1);
+            //when publication is added to database 
+            //metadata of publication needs to be send/updated (currently empty)
+            
+            ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
+            $watch('ui_scraping_status', function(newValue, oldValue) {
+                if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
+                {
+                    ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+                    ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
+                }
+                else {toast("Failed to find information about the given publcation.");
+                      ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+                     }
+            }, true);
+
+        })
+            .error(function() {
+            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+            toast("Failed to upload file, try again later", 4000)
+        });
+    }
+
+    //preparation for the uploadPublication function
+    function uploadFile(file, title, type) {
+        ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
+       // var file = $scope.myFile;
+        var url = serverApi.concat('/publications?title=').concat(title).concat('&type=').concat(type);
+        var authorization = appData.Authorization;
+        uploadPublication(file, url, authorization);
+    };
+//----------------------------------------------------------------------------------------------------------------------//
 });
