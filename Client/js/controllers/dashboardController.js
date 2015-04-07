@@ -14,19 +14,6 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         $location.path('/home');
         return;
     }
-
-    //Used to display loading screen when necessary
-    $scope.busy = false;
-    $scope.$watch('busy', function(newValue, oldValue) {
-        $scope.loading();
-    }, true);
-    $scope.loading = function() {
-            if ($scope.busy) {
-                console.log("start loading screen");
-            } else {
-                console.log("stop loading screen");
-            }
-    }
 //-------------------------------------------------GUI settings---------------------------------------------------------//
 
     //user
@@ -284,20 +271,7 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         managePublications.ui_deletePublication(publicationID);
     }
    //-------------------------------------------------------------------------------------------------------------------// 
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    var currentPublicationID = undefined
+    currentPublicationID = undefined
 
     $scope.uploadPublication = function(file, url, authorization, withMetadata) {
 
@@ -383,20 +357,6 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         });
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     //------------------------------------------------MANAGE PUBLICATIONS-----------------------------------------------//
     
     //------------------------------------------------LIBARARY WIP-------------------------------------------------//
@@ -460,54 +420,9 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
 
 
     
-        //------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
-        //
+//------------------------------------------------MANAGE PUBLICATIONS-------------------------------------------------//
 
-    $scope.searchResult;
-    function replaceSpace(toReplace){
-        return toReplace.replace(/ /g, "+");
-    }
-    $scope.searchPublication = function(keyword, external) {
-        $scope.body = true;
-
-        var url;
-        if (external) {
-            url = serverApi.concat('publications?q=').concat(keyword).concat('&external=true');
-        } else {
-            url = serverApi.concat('publications?q=').concat(keyword);
-        }
-
-        var requestSearchPublication = $http.get(url);
-
-        requestSearchPublication.success(function(data, status, headers, config) {
-            $scope.searchResult = data;
-            $scope.busy = false;
-        });
-        requestSearchPublication.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to search publication, try again later.", 4000);
-        });
-    }
-
-    $scope.searchPublicationKeywords = function(searchData) {
-        $scope.busy = true;
-
-        var url = serverApi.concat('/publications');
-        var requestSearchPublication = $http.get(url, searchData);
-
-        requestSearchPublication.success(function(data, status, headers, config) {
-            $scope.searchResult = data;
-            $scope.busy = false;
-        });
-        requestSearchPublication.error(function(data, status, headers, config) {
-            $scope.busy = false;
-            toast("Failed to search publication, try again later.", 4000);
-        });
-    }
-
-
-
-    //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
+//------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
 
     $scope.interactiveGraph = false;
 
