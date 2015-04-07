@@ -51,7 +51,7 @@ var scrapeOneResult = function(result, type){
           authors : subtitleEntries[0], 
           journalOrBookTitle : subtitleEntries[1],
           year: subtitleEntries[2],
-          publisherOrOrganization : subtitleEntries[3],
+          publisherOrOrganisation : subtitleEntries[3],
           abstract : result.find( ".gs_rs" ).text(),
           citations : parseInt(result.find( ".gs_fl" ).children().eq(2).text().match(/\d+/)[0]), //regex extracts the number, e.g., 149 from 'Cited by 149'
           url : result.find( ".gs_md_wp" ).children().attr('href')
