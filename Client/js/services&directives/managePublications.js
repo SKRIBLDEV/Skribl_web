@@ -161,7 +161,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     var ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
     var metaData;
 
-    this.metaData = function(){return metaData;};
+    this.ui_getMeta_metaData = function(){return metaData;};
     this.ui_getMeta = function(publicationID){getMetaData(publicationID);};
     this.ui_getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
     this.ui_getMeta_getting = function(){return ui_getMeta_status == ui_GETMETA_STATUS.GETTING;};
@@ -198,7 +198,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.ui_modifyMeta_initialStatus = function() {return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.INITIAL;}
     this.ui_modifyMeta_modifying = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.MODIFYING;}
     this.ui_modifyMeta_succes = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;}
-    this.ui_modifyMeta = function(publicationID){modifyMeta(publicationID, meta);}
+    this.ui_modifyMeta = function(publicationID, meta){modifyMeta(publicationID, meta);}
 
     function modifyMeta(publicationID, meta) {
         ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
@@ -227,7 +227,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     var ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
     var scrapeData;
 
-    this.scrapeData = function(){return scrapeData;};
+    this.ui_scrape_scrapeData = function(){return scrapeData;};
     this.ui_scrape = function(publicationID){scrape(publicationID);};
     this.ui_scraping_initialStatus = function() {return ui_scraping_status == ui_SCRAPING_STATUS.INITIAL;};
     this.ui_scraping_getting = function(){return ui_scraping_status == ui_SCRAPING_STATUS.SCRAPING;};
