@@ -17,7 +17,6 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     
     //-------------------------------------------------GUI settings---------------------------------------------------------//
     //user
-    
     $scope.userService = userService;
     
 
@@ -33,7 +32,8 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     //-------------------------------------------------USER settings----------------------------------------------------//
     
     //-------------------------------------------------Manage Lib----------------------------------------------------// 
-    $scope.ui_publications_corrupt =  function(){return managePublications.ui_publications_corrupt();};
+    $scope.publications = managePublications;
+    
     $scope.ui_publications_change_library =  function(name){managePublications.ui_publications_change_library(name);};
     $scope.ui_publications_addToLibrary =  function(name, publicationID){managePublications.publications_addToLibrary(name, publicationID);};
     $scope.ui_publications_deleteFromLibrary =  function(name, publicationID) {managePublications.ui_publications_deleteFromLibrary(name, publicationID);};

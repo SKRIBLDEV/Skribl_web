@@ -11,6 +11,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     var ui_PUBLICATIONS_STATUS = {
         CORRUPT: 0,
         UPTODATE: 1};
+
     var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
     var publications;
     var libName;
@@ -321,6 +322,8 @@ webapp.service('managePublications', function($location, appData, $http) {
 
 //----------------------------------------------------------------------------------------------------------------------//
     //@Pieter je moet eerste checken dat scraping niet gebruikt word voor upload mag beginnen anders conflicten met de statussen !!
+    // ?? -> ik denk dat je dat zelf moet resolven door een melding te geven via "toast"
+    
     /*@Pieter stappen : 
     -User vult titel en journal of proceeding aan en de file INITIAL
     -Gebruik de search en de titel om aan de gebruiker te vragen of publicatie al niet bestaat (met external op false) EXISTS
@@ -337,7 +340,7 @@ webapp.service('managePublications', function($location, appData, $http) {
         WAITING_EDITING: 4,
         SUCCES_EDITING: 5,
         SUCCES_UPLOADING: 6}
-    var ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;
+    var ui_upload_status = ui_UPLOAD_STATUS.INITIAL; //change this to unactive
 
     this.ui_upload_active = function() {return ui_upload_status != ui_UPLOAD_STATUS.UNACTIVE;}
     this.ui_upload_initialStatus = function() {return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;}
@@ -349,11 +352,17 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.ui_upload_succesUploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
     this.ui_upload_activate = function() {ui_upload_status = ui_UPLOAD_STATUS.INITIAL;}
     this.ui_upload_deActivate = function() {ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;}
-    this.ui_upload = function(file, title, type){uploadFile(file, title, type);};
+    
     this.ui_upload_set_exists = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
     this.ui_upload_set_succes_editing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
     this.ui_upload_set_succes_uploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
     
+    this.uploadData = {
+        file : undefined,
+        title : undefined,
+        type : undefined
+    }
+
    function uploadPublication(file, url, authorization) {
 
         var fd = new FormData();
@@ -377,7 +386,7 @@ webapp.service('managePublications', function($location, appData, $http) {
                     ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
                     ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
                 }
-                else {toast("Failed to find information about the given publcation.");
+                else {toast("Failed to find information about the given publication.");
                       ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
                      }
             }, true);
@@ -390,12 +399,11 @@ webapp.service('managePublications', function($location, appData, $http) {
     }
 
     //preparation for the uploadPublication function
-    function uploadFile(file, title, type) {
+    this.uploadFile = function() {
         ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
-       // var file = $scope.myFile;
-        var url = serverApi.concat('/publications?title=').concat(title).concat('&type=').concat(type);
+        var url = serverApi.concat('/publications?title=').concat(this.uploadData.title).concat('&type=').concat(this.uploadData.type);
         var authorization = appData.Authorization;
-        uploadPublication(file, url, authorization);
+        uploadPublication(this.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//
 });

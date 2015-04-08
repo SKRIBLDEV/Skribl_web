@@ -6,13 +6,13 @@
 				<i class="mdi-av-my-library-books">&nbsp publications</i>
 			</span>
 			<!-- corrupt publication status -->
-			<div ng-show="ui_publications_corrupt()">
+			<div ng-show="publications.ui_publications_corrupt()">
 				<div class="row center">
 					<spinner></spinner>
 				</div>
 			</div>
 			<!-- incorrupt publication status -->
-			<div ng-hide="ui_publications_corrupt()">
+			<div ng-hide="publications.ui_publications_corrupt()">
 				<upload-card></upload-card>
 				<!-- begin library card -->
 				<div class="card">
