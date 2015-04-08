@@ -15,7 +15,9 @@ angular.module('skriblApp').controller('dashController', function($scope, $http,
         return;
     }
 //-------------------------------------------------GUI settings---------------------------------------------------------//
-
+    $scope.successMessage = "Item saved successfully";
+    $scope.errorMessage = "lolo nono";
+    
     //user
     $scope.ui_user_basic = false;
     $scope.ui_user_dataviz = false;

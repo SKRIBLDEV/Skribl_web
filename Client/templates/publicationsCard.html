@@ -1,0 +1,236 @@
+<div class="col l7 m12 s12">
+	<div class="card z-depth-4">
+		<div class="card-content" style="background:#EEEEEE">
+			<!-- title -->
+			<span class="card-title grey-text text-darken-4">
+				<i class="mdi-av-my-library-books">&nbsp publications</i>
+			</span>
+			<!-- inner card :: upload publication -->
+			<div class="card" ng-show="ui_upload_active()">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4">
+						<a> Upload Publication </a>
+						<a> 
+							<i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i>
+						</a>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							<!-- start initial status -->
+							<div ng-show="ui_upload_initialStatus()">
+								<!-- First name -->
+								<div class="row">
+									<div class="input-field col s10 offset-s1">
+										<i class="mdi-content-text-format prefix"></i>
+										<input id="upload_title" type="text" class="validate" required>
+										<label for="upload_title">Title</label>
+									</div>
+								</div>
+								<!-- actual file -->
+								<div class="row center">
+									<input type="file" file-to-upload="myFile"></input>
+								</div>
+								<!-- upload buttons -->
+								<div class="row center">
+									<code class="titip-bottom">
+										<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(false)">
+											<i class="mdi-content-send left"></i>
+											Send with scraping
+										</a>
+										<span class="titip-content">
+											Scraping is … bla bla bla
+										</span>
+									</code>
+									<code class="titip-bottom">
+										<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(true)">
+											<i class="mdi-content-send left"></i>
+											Send with metadata
+										</a>
+										<span class="titip-content">
+											Metadata is … bla bla bla bla
+										</span>
+									</code>
+								</div>
+							</div>
+							<!-- stop initial status -->
+							<!-- waiting page for scraping -->
+							<div ng-show="ui_upload_waitingScraping()">
+								<h5 class="row center"> scraping aint no crime</h5>
+								<div class="row center">
+									<div class="preloader-wrapper big active">
+										<div class="spinner-layer spinner-blue">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-red">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-yellow">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-green">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- stop waiting page for scraping -->
+							<!-- waiting page for manual -->
+							<div ng-show="ui_upload_waitingManual()">
+								<h5 class="row center"> Oldschool manual metadata, eh?</h5>
+								<div class="row center">
+									<div class="preloader-wrapper big active">
+										<div class="spinner-layer spinner-blue">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-red">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-yellow">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+										<div class="spinner-layer spinner-green">
+											<div class="circle-clipper left">
+												<div class="circle"></div>
+											</div>
+											<div class="gap-patch">
+												<div class="circle"></div>
+											</div>
+											<div class="circle-clipper right">
+												<div class="circle"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- stop waiting page for manual -->
+							<!-- succes for all -->
+							<div class="row center" ng-show="ui_upload_success()"> 
+								<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">
+									<i class="mdi-action-done left"></i>
+									done</a>
+									<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_activate()">
+										<i class="mdi-file-file-upload left"></i>
+										upload another</a>
+									</div>
+									<!-- error for uploading -->
+									<div class="row">
+										<div class="col s12 alert-color" id="upload_error"></div>
+									</div>
+								</div>
+							</div>
+							<!-- end succes -->
+						</div>
+						<!-- </div> -->
+					</span>
+					<!-- </div> -->
+					<!-- end upload publication -->
+					<!-- begin library card -->
+					<div class="card">
+						<div class="card-content">
+							<span class="card-title grey-text text-darken-4" ng-click="ui_publications_toggleLibrary()">
+								<a> Library </a>
+								<i class="mdi-navigation-more-vert right"></i>
+							</span>
+						</div>
+						<span class="grey-text text-darken-4" ng-show="ui_publications_library">
+							<div class="animated fadeInDown col s12">
+								<!-- begin library content -->
+								<ul class="collection">
+									<div ng:repeat="publication in ui_currentPublications">
+										<li class="collection-item avatar">
+											<i class="mdi-content-content-paste circle"></i>
+											<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
+
+												<span class="title">{{publication.title}}</span>
+												<p>{{publication.publisher}} </p>
+
+											</div>
+											<a href="#!" class="secondary-content">
+												<span class="new badge" ng-show="publication.isnew"></span>
+											</a>
+											<hr>
+										</li>
+									</div>
+								</ul>
+								<!-- end library content -->
+								<div class="row">
+									<div class="activator col s12 waves-effect waves-light btn-large ">
+										<h5 class="activator center-align" style="color:white">Settings</h5>
+									</div>
+									<div class="center">
+										<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_publications_toggleLibrary()"></i>
+									</div>
+								</div>
+							</div>
+						</span>
+						<div class="card-reveal">
+							<span class="card-title grey-text text-darken-4">
+								Library Settings
+								<i class="mdi-navigation-close right"></i>
+							</span>
+							<!-- begin library settings content -->
+							<!-- end library settings content -->
+						</div>
+					</div>
+					<!-- end library card -->
+				</div>
+			</div>
+		</div>
