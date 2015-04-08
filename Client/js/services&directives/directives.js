@@ -39,6 +39,13 @@ return {
 		scope:false,
 		templateUrl: 'templates/interactiveGraphCard.html'
 	}
+
+}).directive('spinner',function(){
+	return {
+		restrict: 'E',
+		scope:false,
+		templateUrl: 'templates/spinner.html'
+	}
 });
 
 
