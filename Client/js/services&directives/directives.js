@@ -26,6 +26,13 @@ return {
 		templateUrl: 'templates/publicationsCard.html'
 	}
 
+}).directive('uploadCard',function(){
+return {
+		restrict: 'E',
+		scope: false,
+		templateUrl: 'templates/uploadCard.html'
+	}
+
 }).directive('publicationViewerCard',function(){
 	return {
 		restrict: 'E',

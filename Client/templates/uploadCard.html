@@ -1,0 +1,91 @@
+<!-- inner card :: upload publication -->
+<div class="card" ng-show="ui_upload_active()">
+	<div class="card-content">
+		<span class="card-title grey-text text-darken-4">
+			<a> Upload Publication </a>
+			<a> 
+				<i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i>
+			</a>
+		</span>
+	</div>
+	<span class="grey-text text-darken-4">
+		<div class="animated fadeInDown col s12">
+			<div class="section">
+				<!-- start initial status -->
+				<div ng-show="ui_upload_initialStatus()">
+					<!-- First name -->
+					<div class="row">
+						<div class="input-field col s10 offset-s1">
+							<i class="mdi-content-text-format prefix"></i>
+							<input id="upload_title" type="text" class="validate" required>
+							<label for="upload_title">Title</label>
+						</div>
+					</div>
+					<!-- actual file -->
+					<div class="row center">
+						<input type="file" file-to-upload="myFile"></input>
+					</div>
+					<!-- upload buttons -->
+					<div class="row center">
+						<code class="titip-bottom">
+							<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(false)">
+								<i class="mdi-content-send left"></i>
+								Send with scraping
+							</a>
+							<span class="titip-content">
+								Scraping is … bla bla bla
+							</span>
+						</code>
+						<code class="titip-bottom">
+							<a class="waves-effect waves-light btn" style="color:white;" ng-click="uploadFile(true)">
+								<i class="mdi-content-send left"></i>
+								Send with metadata
+							</a>
+							<span class="titip-content">
+								Metadata is … bla bla bla bla
+							</span>
+						</code>
+					</div>
+				</div>
+				<!-- stop initial status -->
+				<!-- waiting page for scraping -->
+				<div ng-show="ui_upload_waitingScraping()">
+					<h5 class="row center"> scraping aint no crime</h5>
+					<div class="row center">
+						<spinner></spinner>
+						<!-- 2DO remove this if works -->
+						do you c spinner? 
+					</div>
+				</div>
+				<!-- stop waiting page for scraping -->
+				<!-- waiting page for manual -->
+				<div ng-show="ui_upload_waitingManual()">
+					<h5 class="row center"> Oldschool manual metadata, eh?</h5>
+					<div class="row center">
+						<spinner></spinner>
+						<!-- 2DO remove this if works -->
+						do you c spinner? 
+					</div>
+				</div>
+				<!-- stop waiting page for manual -->
+				<!-- succes for all -->
+				<div class="row center" ng-show="ui_upload_success()"> 
+					<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">
+						<i class="mdi-action-done left"></i>
+						done</a>
+						<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_activate()">
+							<i class="mdi-file-file-upload left"></i>
+							upload another</a>
+						</div>
+						<!-- error for uploading -->
+						<div class="row">
+							<div class="col s12 alert-color" id="upload_error"></div>
+						</div>
+					</div>
+				</div>
+				<!-- end succes -->
+			</div>
+		</div>
+	</span>
+</div>
+<!-- end upload publication -->
