@@ -297,6 +297,7 @@ webapp.service('managePublications', function($location, appData, $http) {
         requestSearchPublication.success(function(data, status, headers, config) {
            searchResult = data;
            ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
+           //@douglas : notify using toast when no search result was found
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
@@ -344,6 +345,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 
     this.ui_upload_active = function() {return ui_upload_status != ui_UPLOAD_STATUS.UNACTIVE;}
     this.ui_upload_initialStatus = function() {return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;}
+    this.ui_upload_checkForExisting = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
     this.ui_upload_uploading = function(){return ui_upload_status == ui_UPLOAD_STATUS.UPLOADING;}
     this.ui_upload_waitingScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;}
     this.ui_upload_succesScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;}
@@ -359,8 +361,14 @@ webapp.service('managePublications', function($location, appData, $http) {
     
     this.uploadData = {
         file : undefined,
-        title : undefined,
-        type : undefined
+        title : "",
+        type : ""
+    }
+
+    this.ui_upload_searchExcisting = function(){
+        search(this.uploadData.title, false);
+        ui_upload_status = ui_UPLOAD_STATUS.EXISTS;
+        // make sure you can select
     }
 
    function uploadPublication(file, url, authorization) {
@@ -390,7 +398,6 @@ webapp.service('managePublications', function($location, appData, $http) {
                       ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
                      }
             }, true);
-
         })
             .error(function() {
             ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
@@ -400,9 +407,11 @@ webapp.service('managePublications', function($location, appData, $http) {
 
     //preparation for the uploadPublication function
     this.uploadFile = function() {
+
         ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
         var url = serverApi.concat('/publications?title=').concat(this.uploadData.title).concat('&type=').concat(this.uploadData.type);
         var authorization = appData.Authorization;
+        console.log(appData.Authorization);
         uploadPublication(this.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//

@@ -33,6 +33,27 @@
 							<label for="upload_title">Title</label>
 						</div>
 					</div>
+
+					<!-- check button -->
+					<div class="row center">
+						<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.ui_upload_searchExcisting()">
+							<i class="mdi-content-send left"></i>
+							check for excisting
+						</a>
+					</div>
+				</div>
+				<!-- stop initial status -->
+
+				<!-- start checking status -->
+				<div ng-show="publications.ui_upload_checkForExisting()">
+					<!-- check for searching -->
+					<div ng-show="publications.ui_search_searching()" class="row center">
+					<h5> Searching for excisting publications </h5>
+					<br>
+						<spinner></spinner>	
+					</div> 
+
+					<div ng-hide="publications.ui_search_searching()">
 					<!-- actual file -->
 					<div class="row center">
 						<input type="file" file-to-upload="publications.uploadData.file"></input>
@@ -43,19 +64,25 @@
 							<i class="mdi-content-send left"></i>
 							send
 						</a>
+					</div>
+				</div>
+				</div>
+				<!-- stop checking status -->
 
-					</div>
+				<!-- waiting page for uploading -->
+				<div class="row center" ng-show="publications.ui_upload_uploading()">
+					<h5> uploading </h5>
+					<br>
+					<spinner></spinner>
 				</div>
-				<!-- stop initial status -->
+
 				<!-- waiting page for scraping -->
-				<div ng-show="ui_upload_waitingScraping()">
-					<h5 class="row center"> scraping aint no crime</h5>
-					<div class="row center">
-						<spinner></spinner>
-						<!-- 2DO remove this if works -->
-						do you c spinner? 
-					</div>
+				<div class="row center" ng-show="publications.ui_upload_waitingScraping()">
+					<h5> scraping </h5>
+					<br>
+					<spinner></spinner>
 				</div>
+
 				<!-- stop waiting page for scraping -->
 				<!-- waiting page for manual -->
 				<div ng-show="ui_upload_waitingManual()">

@@ -113,50 +113,52 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     //------------------------------------------------Upload-----------------------------------------------//
     
     
-   $scope.currentViewerPublicationID = undefined
-    currentViewerPublicationIDX = undefined 
-    $scope.ui_displayPublication = true;
+   // $scope.currentViewerPublicationID = undefined
+   //  currentViewerPublicationIDX = undefined 
+   //  $scope.ui_displayPublication = true;
 
-    $scope.loadPublicationInViewer = function(newID){
-        $scope.currentViewerPublicationID = newID;
-        currentViewerPublicationIDX = arrayObjectIndexOf($scope.ui_currentPublications,newID, 'id');
-        $scope.gotoElement("id_viewer");
-        $scope.ui_displayPublication = true;        
-    }
+   //  $scope.loadPublicationInViewer = function(newID){
+   //      $scope.currentViewerPublicationID = newID;
+   //      currentViewerPublicationIDX = arrayObjectIndexOf($scope.ui_currentPublications,newID, 'id');
+   //      $scope.gotoElement("id_viewer");
+   //      $scope.ui_displayPublication = true;        
+   //  }
 
-    $scope.publicationViewerEnabled = function(){
-        return $scope.currentViewerPublicationID != undefined;
-    }
+   //  $scope.publicationViewerEnabled = function(){
+   //      return $scope.currentViewerPublicationID != undefined;
+   //  }
 
-    $scope.unloadPublicationInViewer = function(){
-        $scope.currentViewerPublicationID = undefined
-        currentViewerPublicationIDX = undefined 
-        $scope.gotoElement("id_top");
-    }
+   //  $scope.unloadPublicationInViewer = function(){
+   //      $scope.currentViewerPublicationID = undefined
+   //      currentViewerPublicationIDX = undefined 
+   //      $scope.gotoElement("id_top");
+   //  }
 
-    $scope.ui_toggleDisplayPublication = function(){
-        $scope.ui_displayPublication = !$scope.ui_displayPublication;
-    }
+   //  $scope.ui_toggleDisplayPublication = function(){
+   //      $scope.ui_displayPublication = !$scope.ui_displayPublication;
+   //  }
 
-    $scope.getCurrentViewerPublication = function(){
-        console.log($scope.ui_currentPublications[currentViewerPublicationIDX].title)
-        return $scope.ui_currentPublications[currentViewerPublicationIDX];
-    }
+   //  $scope.getCurrentViewerPublication = function(){
+   //      console.log($scope.ui_currentPublications[currentViewerPublicationIDX].title)
+   //      return $scope.ui_currentPublications[currentViewerPublicationIDX];
+   //  }
 
-    function arrayObjectIndexOf(myArray, searchTerm, property) {
-        for(var idx = 0, alength = myArray.length; idx < alength; idx++) {
-            if (myArray[idx][property] === searchTerm) return idx;
-        }
-    return -1; //errror
-    }
+   //  function arrayObjectIndexOf(myArray, searchTerm, property) {
+   //      for(var idx = 0, alength = myArray.length; idx < alength; idx++) {
+   //          if (myArray[idx][property] === searchTerm) return idx;
+   //      }
+   //  return -1; //errror
+   //  }
 
-    $scope.ui_publications_library = true;
+   //  $scope.ui_publications_library = true;
 
-    $scope.ui_publications_toggleLibrary = function(){
-    $scope.ui_publications_library = !$scope.ui_publications_library;
-    }
+   //  $scope.ui_publications_toggleLibrary = function(){
+   //  $scope.ui_publications_library = !$scope.ui_publications_library;
+   //  }
 
-    $scope.ui_publications_loading = false;
+   //  $scope.ui_publications_loading = false;
+   //  
+   
 
     $scope.ui_currentPublications = [
     {title: 'title 1', id: 1, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume:                       'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
