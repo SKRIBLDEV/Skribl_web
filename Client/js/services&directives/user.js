@@ -4,6 +4,22 @@
 webapp.service('userService', function($location, appData, $http) {
     
     this.logout = function(){logout();};
+
+    this.showBasic = false;
+    this.showDataviz = false;
+    this.showSettings = false;
+
+    this.toggleBasic = function() {
+        this.showBasic = !this.showBasic;
+    }
+
+    this.toggleDataviz = function() {
+        this.showDataviz = !this.showDataviz;
+    }
+
+    this.toggleSettings = function() {
+        this.showSettings = !this.showSettings;
+    }
     
     function logout(){
         $location.path('/home');

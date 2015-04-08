@@ -1,8 +1,13 @@
 webapp.service('managePublications', function($location, appData, $http) {
 
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter : dit wordt gebruikt in de publications card. Wanneer de status op corrupt staat moet je in die card efjes een lading screen tonen omdat de library niet juist is. Je moet wel oppassen want de user mag niet nog is op delete clicken wanneer een delete al bezig is ! Dit geld in het algemeen voor elke functie met een status!
-    //@Pieter Omdat al deze elementen bij een card behoren en niet iets laten tonen afhankelijk van hun status (behoren allemaal tot dezelfde card die hellemaal corrupt is wanneer een element fout is) --> geen unactive en initial.
+    //@Pieter : dit wordt gebruikt in de publications card. 
+    //Wanneer de status op corrupt staat moet je in die card efjes een lading screen tonen omdat de library niet juist is. 
+    //Je moet wel oppassen want de user mag niet nog is op delete clicken wanneer een delete al bezig is ! Dit geld in het 
+    //algemeen voor elke functie met een status!
+    //@Pieter Omdat al deze elementen bij een card behoren en niet iets laten tonen afhankelijk van hun status 
+    //(behoren allemaal tot dezelfde card die hellemaal corrupt is wanneer een element fout is) --> geen unactive en initial.
+    //--> @Douglas :: done
     var ui_PUBLICATIONS_STATUS = {
         CORRUPT: 0,
         UPTODATE: 1};

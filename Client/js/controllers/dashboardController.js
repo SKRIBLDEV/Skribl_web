@@ -14,29 +14,16 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         $location.path('/home');
         return;
     }
-//-------------------------------------------------GUI settings---------------------------------------------------------//
     
+    //-------------------------------------------------GUI settings---------------------------------------------------------//
     //user
-    $scope.ui_user_basic = false;
-    $scope.ui_user_dataviz = false;
-    $scope.ui_user_settings = false;
+    
+    $scope.userService = userService;
+    
 
-    $scope.ui_user_toggleBasic = function() {
-        $scope.ui_user_basic = !$scope.ui_user_basic;
-    }
-
-    $scope.ui_user_toggleDataviz = function() {
-        $scope.ui_user_dataviz = !$scope.ui_user_dataviz;
-    }
-
-    $scope.ui_user_toggleSettings = function() {
-        $scope.ui_user_settings = !$scope.ui_user_settings;
-    }
-
-    $scope.someOptions = chartService.someOptions;
-    $scope.someData = chartService.someData;
+    //-------------------------------------------------dataviz settings-----------------------------------------------------//
+    $scope.chartService = chartService;
         
-
     //-------------------------------------------------GUI settings-----------------------------------------------------//
    
     //-------------------------------------------------USER settings----------------------------------------------------//

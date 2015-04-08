@@ -7,18 +7,18 @@
 			<!-- start basic card -->
 			<div class="card">
 				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleBasic()">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleBasic()">
 						<a> Basic </a>
 						<i class="mdi-navigation-more-vert right"></i>
 					</span>
 				</div>
-				<span class="grey-text text-darken-4" ng-show="ui_user_basic">
+				<span class="grey-text text-darken-4" ng-show="userService.showBasic">
 					<div class="animated fadeInDown col s12">
 						<div class="section">
 							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
 						</div>
 						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleBasic()"></i>
+							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleBasic()"></i>
 						</div>
 					</div>
 				</span>
@@ -27,12 +27,12 @@
 			<!-- start dataviz card -->
 			<div class="card">
 				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleDataviz()">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleDataviz()">
 						<a> Dataviz </a>
 						<i class="mdi-navigation-more-vert right"></i>
 					</span>
 				</div>
-				<span class="grey-text text-darken-4" ng-show="ui_user_dataviz">
+				<span class="grey-text text-darken-4" ng-show="userService.showDataviz">
 					<div class="animated fadeInDown col s12">
 						<div class="section">
 							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
@@ -43,26 +43,26 @@
 							</div>
 						</div>
 						<div class="section">
-							<cjs-bar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-bar>
+							<cjs-bar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-bar>
 						</div>
 						<div class="progress">
 							<div class="determinate" style="width: 0%">
 							</div>
 						</div>
 						<div class="section">
-							<cjs-line dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-line>
+							<cjs-line dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-line>
 						</div>
 						<div class="progress">
 							<div class="determinate" style="width: 0%">
 							</div>
 						</div>
 						<div class="section">
-							<cjs-radar dataset="someData" options="someOptions" segement-stroke-width="5"></cjs-radar>
+							<cjs-radar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-radar>
 						</div>
 						<br><br>
 						<div class="col s12">
 							<div class="center">
-								<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleDataviz()"></i>
+								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleDataviz()"></i>
 							</div>
 						</div>
 					</div>
@@ -72,12 +72,12 @@
 			<!-- start Settings card -->
 			<div class="card">
 				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="ui_user_toggleSettings()">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSettings()">
 						<a> Settings </a>
 						<i class="mdi-navigation-more-vert right"></i>
 					</span>
 				</div>
-				<span class="grey-text text-darken-4" ng-show="ui_user_settings">
+				<span class="grey-text text-darken-4" ng-show="userService.showSettings">
 					<div class="animated fadeInDown col s12">
 						<!-- logout button -->
 						<div class="row">
@@ -96,7 +96,7 @@
 								<h5 class="activator center-align" style="color:white">More</h5>
 							</div>
 							<div class="center">
-								<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_user_toggleSettings()"></i>
+								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSettings()"></i>
 							</div>
 						</div>
 					</div>
