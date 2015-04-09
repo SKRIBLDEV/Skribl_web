@@ -452,5 +452,3 @@ profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, i
 
 //----------------------------------------------------------------------------------------------------------------------//
 });
-
-});
