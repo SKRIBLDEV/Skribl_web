@@ -31,12 +31,9 @@
 								<!-- <div ng:repeat="publication in ui_currentPublications"> -->
 									<li class="collection-item avatar">
 										<i class="mdi-content-content-paste circle"></i>
-										<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
-
+										<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
 											<span class="title">{{publication.title}}</span>
 											<p> author!! </p>
-											
-
 										</div>
 										
 										<a class="secondary-content">
@@ -47,7 +44,6 @@
 												add to favorites
 											</span>
 										</code>
-											
 										</a>
 
 										<hr>

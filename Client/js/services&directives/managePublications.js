@@ -28,11 +28,6 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
     this.ui_publications_getUserLibraries = function(){getUserLibraries();};
 
-    this.test = function(param, param2){
-        console.log(param);
-        console.log(param2);
-    }
-
     this.showLibraryCard = true;
 
     this.toggleLibraryCard = function(){
@@ -186,6 +181,17 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     var ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
     var metaData;
 
+    this.showPublicationViewer = false;
+    this.disablePublicationViewer = function(){ this.showPublicationViewer = false;};
+    this.publicationViewerEnabled = function(){ return this.showPublicationViewer;};
+
+    this.loadPublicationInViewer = function(publicationID){
+        getMetaData(publicationID);
+        this.showPublicationViewer = true;
+    }
+
+
+
     this.ui_getMeta_metaData = function(){return metaData;};
     this.ui_getMeta = function(publicationID){getMetaData(publicationID);};
     this.ui_getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
@@ -193,8 +199,12 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     this.ui_getMeta_succes = function(){ return ui_getMeta_status == ui_GETMETA_STATUS.SUCCES_GETTING;};
     this.ui_getMeta_reset = function(){ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;};
 
+
+
     //@Pieter geeft geen toast terug want word gebruikt door andere functies
     function getMetaData(publicationID) {
+        console.log(publicationID);
+        
         ui_getMeta_status = ui_GETMETA_STATUS.GETTING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var getMetaDataRequest = $http.get(url, config);
