@@ -26,19 +26,30 @@
 					<span class="grey-text text-darken-4" ng-show="publications.showLibraryCard">
 						<div class="animated fadeInDown col s12">
 							<!-- begin library content -->
-							<ul >
-								<div ng:repeat="publication in ui_currentPublications">
+							<ul class="collection">
+								<div ng:repeat="publication in publications.ui_publications_currentLib()">
+								<!-- <div ng:repeat="publication in ui_currentPublications"> -->
 									<li class="collection-item avatar">
 										<i class="mdi-content-content-paste circle"></i>
 										<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
 
 											<span class="title">{{publication.title}}</span>
-											<p>{{publication.publisher}} </p>
+											<p> author!! </p>
+											
 
 										</div>
-										<a href="#!" class="secondary-content">
-											<span class="new badge" ng-show="publication.isnew"></span>
+										
+										<a class="secondary-content">
+											<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
+											<code class="titip-left">
+											<i class="mdi-action-grade" ng-click="publications.ui_publications_addToLibrary('Favorites', publication.id)"></i>&nbsp;
+											<span class="titip-content">
+												add to favorites
+											</span>
+										</code>
+											
 										</a>
+
 										<hr>
 									</li>
 								</div>
@@ -85,7 +96,7 @@
 												Click me to load "{{lib}}" publications
 											</span>
 										</code>
-										&nbsp;{{lib}} test test
+										&nbsp;{{lib}}
 									</h5>
 
 								</div>
@@ -106,10 +117,12 @@
 						<span class="title"> create new library </span>
 					</div> -->
 					<div class="row">
-						<div class="input-field col s4">
+						<div class="input-field col s6">
 							<i class="mdi-content-text-format prefix"></i>
 							<input id="newlib-title" type="text" class="validate" ng-model="publications.uploadData.title" required>
 							<label for="newlib-title">new library name</label>
+							</div>
+							<div class="input-field col s6">
 							<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.ui_upload_searchExcisting()">
 								<i class="mdi-content-send left"></i>
 								add

@@ -19,21 +19,25 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     var librariesNames;
     this.ui_publications_corrupt = function(){return ui_publication_status == ui_PUBLICATIONS_STATUS.CORRUPT;};
     this.ui_publications_change_library = function(name){getUserPublications(name);};
-    this.ui_publications_addToLibrary = function(name, publicationID){addPublications(libName, publicationId);};
+    this.ui_publications_addToLibrary = function(name, publicationID){addPublications(name, publicationID);};
     this.ui_publications_deleteFromLibrary = function(name, publicationID){deletePublication(libName, publicationID)};
     this.ui_publications_currentLibName = function(){return libName;};
-    this.ui_publications_currentLib = function(){return publications;};
+    this.ui_publications_currentLib = function() { return publications;};
     this.ui_publications_librariesNames = function(){return librariesNames;};
     this.ui_publications_addLibrary = function(name){createLib(name);};
     this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
     this.ui_publications_getUserLibraries = function(){getUserLibraries();};
+
+    this.test = function(param, param2){
+        console.log(param);
+        console.log(param2);
+    }
 
     this.showLibraryCard = true;
 
     this.toggleLibraryCard = function(){
         this.showLibraryCard = !this.showLibraryCard;
     }
-
 
     function getUserLibraries() {
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
@@ -57,7 +61,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var authorization = appData.Authorization;
         var getUserPublicationsRequest = $http.get(url, authorization);
         getUserPublicationsRequest.success(function(data, status, headers, config) {
-            publictions = data;
+            publications = data;
             libName = libraryName;
             ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
         });
@@ -67,14 +71,18 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         });
     };
 
+
     function addPublications(libraryName, publicationID) {
+        console.log(libraryName, publicationID);
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
         var url =  serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var addPublicationsRequest = $http.put(url, config);
         addPublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(libName))
-            {getUserPublications(libName);}
-            else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
+            if(libraryName.equals(libName)){
+                getUserPublications(libName);
+            } else{
+                ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+            };
             toast("Publication added to library.", 4000);
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
