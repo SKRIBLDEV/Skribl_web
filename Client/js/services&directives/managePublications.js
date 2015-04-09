@@ -250,11 +250,15 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var scrapingRequest = $http.get(url, config);
 
         scrapingRequest.success(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.SUCCES_SCRAPING;
             scrapeData = data;
+            ui_scraping_status = ui_SCRAPING_STATUS.SUCCES_SCRAPING;
+            ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen
         });
+        
         scrapingRequest.error(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
+            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+            toast("Failed to find information about the given publication.");
+            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
@@ -364,6 +368,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         title : "",
         type : ""
     }
+    var currentPublicationID ; 
 
     this.ui_upload_searchExcisting = function(){
         search(this.uploadData.title, false);
@@ -388,20 +393,8 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             //metadata of publication needs to be send/updated (currently empty)
             
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
-            $rootScope.$watch('ui_scraping_status', function(newValue, oldValue) {
-                if(newValue != undefined){
-                    if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
-                    {
-                        console.log(newValue);
-                        ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
-                        ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
-                    }
-                    else {toast("Failed to find information about the given publication.");
-                          console.log(newValue);
-                          ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-                         }
-                }
-            }, true);
+            console.log(currentPublicationID);
+            scrape(currentPublicationID);
         })
             .error(function() {
             ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
