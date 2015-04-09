@@ -1,4 +1,4 @@
-webapp.service('managePublications', function($location, appData, $http) {
+webapp.service('managePublications', function($location, appData, $http, $rootScope) {
 
 //----------------------------------------------------------------------------------------------------------------------//
     //@Pieter : dit wordt gebruikt in de publications card. 
@@ -389,14 +389,18 @@ webapp.service('managePublications', function($location, appData, $http) {
             
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
             $rootScope.$watch('ui_scraping_status', function(newValue, oldValue) {
-                if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
-                {
-                    ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
-                    ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
+                if(newValue != undefined){
+                    if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
+                    {
+                        console.log(newValue);
+                        ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+                        ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
+                    }
+                    else {toast("Failed to find information about the given publication.");
+                          console.log(newValue);
+                          ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+                         }
                 }
-                else {toast("Failed to find information about the given publication.");
-                      ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-                     }
             }, true);
         })
             .error(function() {
