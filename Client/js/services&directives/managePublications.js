@@ -439,7 +439,7 @@ profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, i
         var getAuthorsRequest = $http.get(url, config);
 
         getAuthorsRequest.success(function(data, status, headers, config) {
-            ui_authors_status = ui_AUTHORS_STATUS.SEARCHING;
+            ui_authors_status = ui_AUTHORS_STATUS.SUCCES_SEARCHING;
             self.authors = data;
         })
         getAuthorsRequest.error(function(data, status, headers, config) {
