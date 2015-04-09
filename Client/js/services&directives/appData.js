@@ -22,6 +22,6 @@ webapp.service('appData', function() {
         currentPublicationID: null
     };
     
-    this.deleteCurrentFile(){self.data.currentFile = null;};
+    this.deleteCurrentFile = function(){self.data.currentFile = null;};
     
 });

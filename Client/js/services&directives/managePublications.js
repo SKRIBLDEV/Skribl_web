@@ -2,59 +2,48 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 
     var self = this;
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter : dit wordt gebruikt in de publications card. 
-    //Wanneer de status op corrupt staat moet je in die card efjes een lading screen tonen omdat de library niet juist is. 
-    //Je moet wel oppassen want de user mag niet nog is op delete clicken wanneer een delete al bezig is ! Dit geld in het 
-    //algemeen voor elke functie met een status!
-    //@Pieter Omdat al deze elementen bij een card behoren en niet iets laten tonen afhankelijk van hun status 
-    //(behoren allemaal tot dezelfde card die hellemaal corrupt is wanneer een element fout is) --> geen unactive en initial.
-    //--> @Douglas :: done
+    //CODE USED IN THE PUBLICATIONS CARD
+    
+    //ui_publication_status --> current publication data corrupt or not
+    //ui_PUBLICATIONS_STATUS reference of all possible status
     var ui_PUBLICATIONS_STATUS = {
         CORRUPT: 0,
         UPTODATE: 1};
-
     var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
     
     this.ui_publications_corrupt = function(){return ui_publication_status == ui_PUBLICATIONS_STATUS.CORRUPT;};
-    this.ui_publications_change_library = function(name){getUserPublications(name);};
-    this.ui_publications_addToLibrary = function(name, publicationID){addPublications(libName, publicationId);};
-    this.ui_publications_deleteFromLibrary = function(name, publicationID){deletePublication(libName, publicationID)};
-    this.ui_publications_addLibrary = function(name){createLib(name);};
-    this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
-    this.ui_publications_getUserLibraries = function(){getUserLibraries();};
-
     this.showLibraryCard = true;
+    this.toggleLibraryCard = function(){self.showLibraryCard = ! self.showLibraryCard;}
+    function corrupt(){ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;};
+    function upToDate(){ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
 
-    this.toggleLibraryCard = function(){
-        this.showLibraryCard = !this.showLibraryCard;
-    }
-
-
-    function getUserLibraries() {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+    this.getUserLibraries = function() { 
+        corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
         var authorization = appData.Authorization;
         var getUserLibrariesRequest = $http.get(url, authorization);
+        
         getUserLibrariesRequest.success(function(data, status, headers, config) {
             appData.data.userLibrariesNames = data;
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+            upToDate();
         });
         getUserLibrariesRequest.error(function(data, status, headers, config) {
-            getUserLibraries(); // @Douglas da fuk? this seems pretty fucked up?
+            getUserLibraries();
             toast("Failed to get your libraries, try again later.", 4000);
         });
     };
 
-
+    //get alle the publications of a certain user in a certain library
     function getUserPublications(libraryName) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = appData.Authorization;
         var getUserPublicationsRequest = $http.get(url, authorization);
+        
         getUserPublicationsRequest.success(function(data, status, headers, config) {
             appData.data.publications = data;
             appData.data.currentLibraryName = libraryName;
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+            upToDate();
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
             getUserPublications(libraryName);
@@ -62,42 +51,48 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         });
     };
 
+    //add a certain publication to a certain library of a user
     function addPublications(libraryName, publicationID) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        corrupt();
         var url =  serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var addPublicationsRequest = $http.put(url, config);
+        
         addPublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName.equals(libName))
             {getUserPublications(libName);}
-            else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
+            else{upToDate();};
             toast("Publication added to library.", 4000);
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+            upToDate();
             toast("Failed to add library, try again later.", 4000);
         });
     }
 
+    //delete a certain publication of a certain library of a user
     function deletePublication(libraryName, publicationID) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var deletePublicationsRequest = $http.put(url, config);
+        
         deletePublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName.equals(libName))
             {getUserPublications(libName);}
-            else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
+            else{upToDate();};
             toast("Publication removed from library.", 4000);
         });
         deletePublicationsRequest.error(function(data, status, headers, config) {
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+           upToDate();
             toast("Failed to remove publication, try again later.", 4000);
         });
     }
 
+    //Create a new library for a user 
     function createLib(libName) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
         var createRequest = $http.put(url, config);
+        
         createRequest.success(function(data, status, headers, config) {
             getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" created.");
@@ -109,17 +104,19 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         });
     }
 
+    //Delete a library of a user
     function deleteLib(libName) {
-        ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+        corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
         var createRequest = $http.delete(url, config);
+        
         createRequest.success(function(data, status, headers, config) {
             getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" deleted.");
             toast(messageToToast, 4000);
         });
         createRequest.error(function(data, status, headers, config) {
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+           upToDate();
             toast("Failed to delete library, try again later.", 4000);
         });
     }
@@ -298,7 +295,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         requestSearchPublication.success(function(data, status, headers, config) {
            appData.data.searchResult = data;
            ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
-           toast("No results found for your search);
+           toast("No results found for your search");
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
