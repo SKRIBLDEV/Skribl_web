@@ -14,6 +14,9 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         $location.path('/home');
         return;
     }
+
+    //init
+    managePublications.ui_publications_getUserLibraries();
     
     //-------------------------------------------------GUI settings---------------------------------------------------------//
     //user

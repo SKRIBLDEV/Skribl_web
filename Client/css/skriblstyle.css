@@ -1619,28 +1619,28 @@
   color: #FFFFFF !important; }
 
 .skribl-primary-color.lighten-5 {
-  background-color: #018dc4 !important; }
+  background-color: #5572D4 !important; }
 
 .skribl-primary-color-text.text-lighten-5 {
-  color: #018dc4 !important; }
+  color: #5572D4 !important; }
 
 .skribl-primary-color.lighten-4 {
-  background-color: #018dc4 !important; }
+  background-color: #5572D4 !important; }
 
 .skribl-primary-color-text.text-lighten-4 {
-  color: #018dc4 !important; }
+  color: #5572D4 !important; }
 
 .skribl-primary-color.lighten-3 {
-  background-color: #018dc4 !important; }
+  background-color: #5572D4 !important; }
 
 .skribl-primary-color-text.text-lighten-3 {
-  color: #018dc4 !important; }
+  color: #5572D4 !important; }
 
 .skribl-primary-color.lighten-2 {
-  background-color: #018dc4 !important; }
+  background-color: #5572D4 !important; }
 
 .skribl-primary-color-text.text-lighten-2 {
-  color: #018dc4 !important; }
+  color: #5572D4 !important; }
 
 .skribl-primary-color.lighten-1 {
   background-color: #5572D4 !important; }
@@ -5317,7 +5317,7 @@ html {
       font-size: 15px; } }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 400; }
+  font-weight: 300; }
 
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   font-weight: inherit; }
@@ -5348,9 +5348,9 @@ h5 {
   margin: 0.82rem 0 0.656rem 0; }
 
 h6 {
-  font-size: 1rem;
-  line-height: 1.1rem;
-  margin: 0.5rem 0 0.4rem 0; }
+  font-size: 1.476rem;
+  line-height: 1.6236rem;
+  margin: 0.738rem 0 0.5904rem 0; }
 
 em {
   font-style: italic; }
@@ -8061,6 +8061,26 @@ body {
   .white-text-color a {
     text-decoration: underline; }
 
+.selectable-black {
+  color: black;
+  -webkit-transition: color 0.3s ease;
+  -moz-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  -ms-transition: color 0.3s ease;
+  transition: color 0.3s ease; }
+  .selectable-black:hover {
+    color: #5c70bd; }
+
+.selectable-white {
+  color: white;
+  -webkit-transition: color 0.3s ease;
+  -moz-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  -ms-transition: color 0.3s ease;
+  transition: color 0.3s ease; }
+  .selectable-white:hover {
+    color: #8190cc; }
+
 a {
   color: #3149A1;
   margin-right: 20px;
@@ -8075,6 +8095,9 @@ a {
 
 .primary-text-color {
   color: #4A60B6; }
+
+.dark-text-color {
+  color: #2c3a6e; }
 
 .alert-color {
   color: #e51c23; }

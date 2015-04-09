@@ -27,6 +27,13 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
     this.ui_publications_getUserLibraries = function(){getUserLibraries();};
 
+    this.showLibraryCard = true;
+
+    this.toggleLibraryCard = function(){
+        this.showLibraryCard = !this.showLibraryCard;
+    }
+
+
     function getUserLibraries() {
         ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
@@ -37,7 +44,7 @@ webapp.service('managePublications', function($location, appData, $http) {
             ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
         });
         getUserLibrariesRequest.error(function(data, status, headers, config) {
-            getUserLibraries();
+            getUserLibraries(); // @Douglas da fuk? this seems pretty fucked up?
             toast("Failed to get your libraries, try again later.", 4000);
         });
     };
@@ -415,4 +422,5 @@ webapp.service('managePublications', function($location, appData, $http) {
         uploadPublication(this.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//
+    
 });
