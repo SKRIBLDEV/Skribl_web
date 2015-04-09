@@ -14,16 +14,11 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         UPTODATE: 1};
 
     var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
-    var publications;
-    var libName;
-    var librariesNames;
+    
     this.ui_publications_corrupt = function(){return ui_publication_status == ui_PUBLICATIONS_STATUS.CORRUPT;};
     this.ui_publications_change_library = function(name){getUserPublications(name);};
     this.ui_publications_addToLibrary = function(name, publicationID){addPublications(libName, publicationId);};
     this.ui_publications_deleteFromLibrary = function(name, publicationID){deletePublication(libName, publicationID)};
-    this.ui_publications_currentLibName = function(){return libName;};
-    this.ui_publications_currentLib = function(){return publications;};
-    this.ui_publications_librariesNames = function(){return librariesNames;};
     this.ui_publications_addLibrary = function(name){createLib(name);};
     this.ui_publications_deleteLibrary = function(name){deleteLib(name);};
     this.ui_publications_getUserLibraries = function(){getUserLibraries();};
@@ -41,7 +36,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var authorization = appData.Authorization;
         var getUserLibrariesRequest = $http.get(url, authorization);
         getUserLibrariesRequest.success(function(data, status, headers, config) {
-            librariesNames = data;
+            appData.data.userLibrariesNames = data;
             ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
         });
         getUserLibrariesRequest.error(function(data, status, headers, config) {
@@ -57,8 +52,8 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var authorization = appData.Authorization;
         var getUserPublicationsRequest = $http.get(url, authorization);
         getUserPublicationsRequest.success(function(data, status, headers, config) {
-            publictions = data;
-            libName = libraryName;
+            appData.data.publications = data;
+            appData.data.currentLibraryName = libraryName;
             ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
@@ -146,12 +141,6 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     this.ui_downloadFile_succes = function(){ return ui_downloadFile_status == ui_DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;};
     this.ui_downloadFile_reset = function(){ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;};
 
-    //function to download a file
-    function deleteCurrentFile() {
-        currentFile = null;
-    }
-    var currentFile = null;
-
     function getFile(publicationID) {
         ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.DOWNLOADING;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
@@ -159,7 +148,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 
         getFileRequest.success(function(data, status, headers, config) {
             ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;
-            currentFile = data;
+            appData.data.currentFile = data;
         });
         getFileRequest.error(function(data, status, headers, config) {
             ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;
@@ -176,7 +165,6 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         GETTING :1,
         SUCCES_GETTING: 2}
     var ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
-    var metaData;
 
     this.ui_getMeta_metaData = function(){return metaData;};
     this.ui_getMeta = function(publicationID){getMetaData(publicationID);};
@@ -193,7 +181,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 
         getMetaDataRequest.success(function(data, status, headers, config) {
             ui_getMeta_status = ui_GETMETA_STATUS.SUCCES_GETTING;
-            metaData = data;
+            appData.data.currentMetaData = data;
         });
         getMetaDataRequest.error(function(data, status, headers, config) {
             ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
@@ -243,7 +231,6 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         SCRAPING :1,
         SUCCES_SCRAPING: 2}
     var ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
-    var scrapeData;
 
     this.ui_scrape_scrapeData = function(){return scrapeData;};
     this.ui_scrape = function(publicationID){scrape(publicationID);};
@@ -259,7 +246,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var scrapingRequest = $http.get(url, config);
 
         scrapingRequest.success(function(data, status, headers, config) {
-            scrapeData = data;
+            appData.data.currentMetaData = data;
             ui_scraping_status = ui_SCRAPING_STATUS.SUCCES_SCRAPING;
             ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen
@@ -309,9 +296,9 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var requestSearchPublication = $http.get(url);
 
         requestSearchPublication.success(function(data, status, headers, config) {
-           searchResult = data;
+           appData.data.searchResult = data;
            ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
-           //@douglas : notify using toast when no search result was found
+           toast("No results found for your search);
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
@@ -325,7 +312,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var requestSearchPublication = $http.post(url, searchData);
 
         requestSearchPublication.success(function(data, status, headers, config) {
-            searchResult = data;
+            appData.data.searchResult = data;
             ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
         });
         requestSearchPublication.error(function(data, status, headers, config) {
@@ -371,17 +358,10 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     
     this.ui_upload_set_exists = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
     this.ui_upload_set_succes_editing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
-    this.ui_upload_set_succes_uploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
-    
-    this.uploadData = {
-        file : undefined,
-        title : "",
-        type : ""
-    }
-    var currentPublicationID ; 
+    this.ui_upload_set_succes_uploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;} 
 
     this.ui_upload_searchExcisting = function(){
-        search(this.uploadData.title, false);
+        search(appData.uploadData.title, false);
         ui_upload_status = ui_UPLOAD_STATUS.EXISTS;
         // make sure you can select
     }
@@ -398,13 +378,13 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             }
         })
             .success(function(data, status, headers, config) {
-            currentPublicationID = data.id.substring(1);
+            appData.uploadData.currentPublicationID = data.id.substring(1);
             //when publication is added to database 
             //metadata of publication needs to be send/updated (currently empty)
             
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
             console.log(currentPublicationID);
-            scrape(currentPublicationID);
+            scrape(appData.uploadData.currentPublicationID);
         })
             .error(function() {
             ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
@@ -416,9 +396,9 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     this.uploadFile = function() {
 
         ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
-        var url = serverApi.concat('/publications?title=').concat(this.uploadData.title).concat('&type=').concat(this.uploadData.type);
+        var url = serverApi.concat('/publications?title=').concat(appData.uploadData.title).concat('&type=').concat(appData.uploadData.type);
         var authorization = appData.Authorization.headers.Authorization;
-        uploadPublication(this.uploadData.file, url, authorization);
+        uploadPublication(appData.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//
     
@@ -431,7 +411,6 @@ profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, i
         SEARCHING: 1,
         SUCCES_SEARCHING: 2}
     var ui_authors_status = ui_AUTHORS_STATUS.INITIAL;
-    this.authors;
 
     this.getAuthors = function(firstName, lastName, number){
         ui_authors_status = ui_AUTHORS_STATUS.SEARCHING;
@@ -440,7 +419,7 @@ profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, i
 
         getAuthorsRequest.success(function(data, status, headers, config) {
             ui_authors_status = ui_AUTHORS_STATUS.SUCCES_SEARCHING;
-            self.authors = data;
+            appData.searchAuthorsResult = data;
         })
         getAuthorsRequest.error(function(data, status, headers, config) {
             ui_authors_status = ui_AUTHORS_STATUS.INITIAL
