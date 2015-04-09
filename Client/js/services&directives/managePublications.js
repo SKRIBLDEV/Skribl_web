@@ -287,9 +287,9 @@ webapp.service('managePublications', function($location, appData, $http) {
         var url;
         var keywordMod = replaceSpace(keyword);
         if (external) {
-            url = serverApi.concat('publications?q=').concat(keywordMod).concat('&external=true');
+            url = serverApi.concat('/publications?q=').concat(keywordMod).concat('&external=true');
         } else {
-            url = serverApi.concat('publications?q=').concat(keywordMod);
+            url = serverApi.concat('/publications?q=').concat(keywordMod);
         }
 
         var requestSearchPublication = $http.get(url);
@@ -388,7 +388,7 @@ webapp.service('managePublications', function($location, appData, $http) {
             //metadata of publication needs to be send/updated (currently empty)
             
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
-            $watch('ui_scraping_status', function(newValue, oldValue) {
+            $rootScope.$watch('ui_scraping_status', function(newValue, oldValue) {
                 if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
                 {
                     ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
@@ -410,8 +410,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 
         ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
         var url = serverApi.concat('/publications?title=').concat(this.uploadData.title).concat('&type=').concat(this.uploadData.type);
-        var authorization = appData.Authorization;
-        console.log(appData.Authorization);
+        var authorization = appData.Authorization.headers.Authorization;
         uploadPublication(this.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//
