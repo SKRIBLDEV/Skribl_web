@@ -1,5 +1,6 @@
 webapp.service('managePublications', function($location, appData, $http, $rootScope) {
 
+    var self = this;
 //----------------------------------------------------------------------------------------------------------------------//
     //@Pieter : dit wordt gebruikt in de publications card. 
     //Wanneer de status op corrupt staat moet je in die card efjes een lading screen tonen omdat de library niet juist is. 
@@ -421,4 +422,35 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     };
 //----------------------------------------------------------------------------------------------------------------------//
     
+//----------------------------------------------------------------------------------------------------------------------//
+    /*AuthorInfo ::= {  firstname: …, lastname: …, publications: <publicationArray>, profile: … }
+profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, indien dit zo is zal hier de gebruikersnaam terug te vinden zijn (en is GET /users/<username> dus mogelijk…), anders wordt dit veld niet meegegeven (maw ‘undefined’)*/
+
+    var ui_AUTHORS_STATUS = {
+        INITIAL: 0,
+        SEARCHING: 1,
+        SUCCES_SEARCHING: 2}
+    var ui_authors_status = ui_AUTHORS_STATUS.INITIAL;
+    this.authors;
+
+    this.getAuthors = function(firstName, lastName, number){
+        ui_authors_status = ui_AUTHORS_STATUS.SEARCHING;
+        var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastName=').concat(lastName).concat('&limit=').concat(number);
+        var getAuthorsRequest = $http.get(url, config);
+
+        getAuthorsRequest.success(function(data, status, headers, config) {
+            ui_authors_status = ui_AUTHORS_STATUS.SEARCHING;
+            self.authors = data;
+        })
+        getAuthorsRequest.error(function(data, status, headers, config) {
+            ui_authors_status = ui_AUTHORS_STATUS.INITIAL
+
+        })
+    }
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+});
+
 });
