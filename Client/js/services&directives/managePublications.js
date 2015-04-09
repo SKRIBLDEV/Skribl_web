@@ -28,7 +28,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             upToDate();
         });
         getUserLibrariesRequest.error(function(data, status, headers, config) {
-            getUserLibraries();
+            self.getUserLibraries();
             toast("Failed to get your libraries, try again later.", 4000);
         });
     };
@@ -46,7 +46,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             upToDate();
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
-            getUserPublications(libraryName);
+            self.getUserPublications(libraryName);
             toast("Failed to get your publications, try again later.", 4000);
         });
     };
@@ -58,8 +58,8 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var addPublicationsRequest = $http.put(url, config);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(libName))
-            {getUserPublications(libName);}
+            if(libraryName.equals(appData.data.currentLibraryName))
+            {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication added to library.", 4000);
         });
@@ -76,8 +76,8 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var deletePublicationsRequest = $http.put(url, config);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(libName))
-            {getUserPublications(libName);}
+            if(libraryName.equals(appData.data.currentLibraryName))
+            {getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication removed from library.", 4000);
         });
@@ -99,7 +99,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             toast(messageToToast, 4000);
         });
         createRequest.error(function(data, status, headers, config) {
-            ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;
+            upToDate();
             toast("Failed to create library, try again later.", 4000);
         });
     }
