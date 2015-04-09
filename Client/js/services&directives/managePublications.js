@@ -34,7 +34,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     };
 
     //get alle the publications of a certain user in a certain library
-    function getUserPublications(libraryName) {
+    this.getUserPublications = function(libraryName) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = appData.Authorization;
@@ -52,7 +52,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     };
 
     //add a certain publication to a certain library of a user
-    function addPublications(libraryName, publicationID) {
+    this.addPublications = function(libraryName, publicationID) {
         corrupt();
         var url =  serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var addPublicationsRequest = $http.put(url, config);
@@ -70,7 +70,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     }
 
     //delete a certain publication of a certain library of a user
-    function deletePublication(libraryName, publicationID) {
+    this.deletePublication = function(libraryName, publicationID) {
         corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var deletePublicationsRequest = $http.put(url, config);
@@ -88,7 +88,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     }
 
     //Create a new library for a user 
-    function createLib(libName) {
+    this.createLib = function(libName) {
         corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
         var createRequest = $http.put(url, config);
@@ -105,7 +105,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     }
 
     //Delete a library of a user
-    function deleteLib(libName) {
+    this.deleteLib = function(libName) {
         corrupt();
         var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
         var createRequest = $http.delete(url, config);
@@ -123,13 +123,12 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter is geen apparte card --> geen unactive, wel initial om te kunnen zien wanneer downloading bezig is
-    //@Pieter zou ook kunnen met maar 2 statussen
+   //Used to download a certain file of the db
     var ui_DOWNLOADFILE_STATUS = {
         INITIAL: 0,
-        DOWNLOADING :1,
-        SUCCES_DOWNLOADING: 2}
+        DOWNLOADING :1}
     var ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;
+    
 
     this.ui_downloadFile = function(publicationID){getFile(publicationID);};
     this.ui_downloadFile_getFile = function(){return currentFile;};
