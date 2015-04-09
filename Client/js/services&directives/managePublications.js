@@ -210,6 +210,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     this.ui_modifyMeta = function(publicationID, meta){modifyMeta(publicationID, meta);}
 
     function modifyMeta(publicationID, meta) {
+        
         ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var authorization = appDataK.Authorization;
@@ -252,6 +253,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         scrapingRequest.success(function(data, status, headers, config) {
             scrapeData = data;
             ui_scraping_status = ui_SCRAPING_STATUS.SUCCES_SCRAPING;
+            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen
         });
         
