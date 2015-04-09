@@ -8,8 +8,21 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $location, appData, anchorSmoothScroll) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, appData, anchorSmoothScroll, managePublications) {
+    // only letters, numbers and underscores
+	$scope.RegEx_username = /^\w+$/; 
 
+	// common email 
+	$scope.RegEx_emailAdress = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+	//at least one number, at least 6 and at most 20 characters from the set [a-zA-Z0-9!@#$%^&*]
+	$scope.RegEx_password = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/; 
+
+	//one or more words in all languages, with apostrophes and hyphens 
+	//excludes numbers and all the special (non-letter) characters commonly found on keyboards
+	$scope.RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
+    
+    
 	//Used to control if user has already logged-in.
 	appData.currentUser = null;
 
@@ -72,14 +85,112 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		$scope.showRegister = true;
 	};
 
-	$scope.doRegister = function(){
-		//TO : @Douglas
-		//@Douglas: its easier mainatable if we just use a function >< always document.… blabla
-		function notifyRegisterError(message){
+    //regex control for all input fields to register
+    $scope.regexControl = function(){
+        
+        function notifyRegisterError(message){
 			 toast(message, 4000) // 4000 is the duration of the toast
 			document.getElementById("register_error").innerHTML = message;
 		}
-		// @douglas implement + test register here (c your own code at registerController.js)
+
+		if((!($scope.RegEx_generalName.test($scope.userinput.firstName))) || ($scope.userinput.firstName == undefined)){
+			//Error when trying to register with a "bad" first name.
+			notifyRegisterError("First name not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.lastName))) || ($scope.userinput.lastName == undefined)){
+			//Error when trying to register with a "bad" last name.
+			notifyRegisterError("Name not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_username.test($scope.userinput.username))) || ($scope.userinput.username == undefined)){
+			//Error when trying to register with a "bad" username.
+			notifyRegisterError("Username not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_emailAdress.test($scope.userinput.email))) || ($scope.userinput.email == undefined)){
+			//Error when trying to register with a "bad" email.
+			notifyRegisterError("Email is not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.institution))) || ($scope.userinput.institution == undefined)){
+			//Error when trying to register with a "bad" institution.
+			notifyRegisterError("Institution is not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.faculty))) || ($scope.userinput.faculty == undefined)){
+			//Error when trying to register with a "bad" faculty.
+			notifyRegisterError("Faculty is not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.department))) || ($scope.userinput.department == undefined)){
+			//Error when trying to register with a "bad" department.
+			notifyRegisterError("Department is not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
+			//Error when trying to register with "bad" research domains.
+			notifyRegisterError("Research domains are not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_generalName.test($scope.userinput.researchGroup))) || ($scope.userinput.researchGroup == undefined)){
+			//Error when trying to register with a "bad" research group.
+			notifyRegisterError("Research group is not valid.");
+			return false;
+		}
+		if((!($scope.RegEx_password.test($scope.userinput.password))) || ($scope.userinput.password == undefined)){
+			//Error when trying to register with a "bad" password.
+			notifyRegisterError("Password is not valid.");
+			return false;
+		}
+
+		return true;
+	};
+    
+	$scope.doRegister = function(){
+		
+        var test = $scope.regexControl();
+		if (test){
+					
+			//JSON file to send when registering.
+			var JSONToSend = {
+				"firstName": $scope.userinput.firstName,
+				"lastName": $scope.userinput.lastName,
+				"language": "NL",
+				"password": $scope.userinput.password,
+				"email": $scope.userinput.email,
+				"institution": $scope.userinput.institution,
+				"faculty": $scope.userinput.faculty, 
+				"department": $scope.userinput.department, 
+				"researchDomains": [$scope.userinput.researchDomains],
+				"researchGroup": $scope.userinput.researchGroup };
+
+			//Prepare url to add user.
+		    var to = serverApi.concat('/users/').concat($scope.userinput.username);
+		    
+		    //Register http request.
+		    var registerRequest = $http.put(to,JSONToSend,config);
+
+		    registerRequest.success(function(data, status, headers, config) {
+				
+				//When register worked,change route to #/login.
+				$scope.enableLogin;
+                toast("successfully registered please log in", 4000) // 4000 is the duration of the toast
+
+			});
+
+			registerRequest.error(function(data, status, headers, config) {
+
+				if((status === 501) && (data === "Error: username taken!"))
+				{
+					//Error when trying to register with a username that is already token.
+					notifyRegisterError("Username is already used please try an other.");
+				}
+					//Error when trying to register --> database error
+				else{	notifyRegisterError("Database error, please try again later.");
+			}
+			});
+		}
 	}
 
 	/**
@@ -100,8 +211,11 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		loginRequest.success(function(data, status, headers, config) {
 
 			//Save Authorization when login to do important tasks.
-			appData.Authorization = data.Authorization;
-			
+			appData.Authorization = 
+                {headers: 
+                    {'Content-type' : 'application/json',
+                     'Authorization': data.Authorization}};
+                
 			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinputLogin.username);
 			
@@ -110,6 +224,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				//save userInformation in appData.
 				appData.currentUser = data;
+                managePublications.ui_publications_change_library('Portfolio');
+                managePublications.ui_publications_getUserLibraries();
 
 				// change route to #/dashboard
 				$location.path('/dashboard');

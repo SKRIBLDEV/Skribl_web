@@ -1,0 +1,69 @@
+<div class="col l7 m12 s12">
+	<div class="card z-depth-4">
+		<div class="card-content" style="background:#EEEEEE">
+			<!-- title -->
+			<span class="card-title grey-text text-darken-4">
+				<i class="mdi-av-my-library-books">&nbsp publications</i>
+			</span>
+			<!-- corrupt publication status -->
+			<div ng-show="publications.ui_publications_corrupt()">
+				<div class="row center">
+					<spinner></spinner>
+				</div>
+			</div>
+			<!-- incorrupt publication status -->
+			<div ng-hide="publications.ui_publications_corrupt()">
+				<upload-card></upload-card>
+				<!-- begin library card -->
+				<div class="card">
+					<div class="card-content">
+						<span class="card-title grey-text text-darken-4" ng-click="ui_publications_toggleLibrary()">
+							<a> Library </a>
+							<i class="mdi-navigation-more-vert right"></i>
+						</span>
+					</div>
+					<span class="grey-text text-darken-4" ng-show="ui_publications_library">
+						<div class="animated fadeInDown col s12">
+							<!-- begin library content -->
+							<ul class="collection">
+								<div ng:repeat="publication in ui_currentPublications">
+									<li class="collection-item avatar">
+										<i class="mdi-content-content-paste circle"></i>
+										<div class="selectable-black" ng-click="loadPublicationInViewer(publication.id)">
+
+											<span class="title">{{publication.title}}</span>
+											<p>{{publication.publisher}} </p>
+
+										</div>
+										<a href="#!" class="secondary-content">
+											<span class="new badge" ng-show="publication.isnew"></span>
+										</a>
+										<hr>
+									</li>
+								</div>
+							</ul>
+							<!-- end library content -->
+							<div class="row">
+								<div class="activator col s12 waves-effect waves-light btn-large ">
+									<h5 class="activator center-align" style="color:white">Settings</h5>
+								</div>
+								<div class="center">
+									<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_publications_toggleLibrary()"></i>
+								</div>
+							</div>
+						</div>
+					</span>
+					<div class="card-reveal">
+						<span class="card-title grey-text text-darken-4">
+							Library Settings
+							<i class="mdi-navigation-close right"></i>
+						</span>
+						<!-- begin library settings content -->
+						<!-- end library settings content -->
+					</div>
+				</div>
+				<!-- end library card -->
+			</div>
+		</div>
+	</div>
+</div>

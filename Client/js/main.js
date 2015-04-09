@@ -22,10 +22,8 @@ var config = {headers:  {
  */
 webapp.config(['$routeProvider', function($routeProvider) {
 
-	$routeProvider.when('/login', 			{ templateUrl: 'templates/login.html', 			controller: 'loginController' });
 	$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});
 	$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });
-	$routeProvider.when('/register', 		{ templateUrl: 'templates/register.html',		controller: 'registerController' });
 	$routeProvider.otherwise({redirectTo: '/home'});
 
 }]);
