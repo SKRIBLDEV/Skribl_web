@@ -1,4 +1,4 @@
-webapp.service('managePublications', function($location, appData, $http) {
+webapp.service('managePublications', function($location, appData, $http, $rootScope) {
 
 //----------------------------------------------------------------------------------------------------------------------//
     //@Pieter : dit wordt gebruikt in de publications card. 
@@ -217,6 +217,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.ui_modifyMeta = function(publicationID, meta){modifyMeta(publicationID, meta);}
 
     function modifyMeta(publicationID, meta) {
+        
         ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var authorization = appDataK.Authorization;
@@ -257,11 +258,16 @@ webapp.service('managePublications', function($location, appData, $http) {
         var scrapingRequest = $http.get(url, config);
 
         scrapingRequest.success(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.SUCCES_SCRAPING;
             scrapeData = data;
+            ui_scraping_status = ui_SCRAPING_STATUS.SUCCES_SCRAPING;
+            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+            ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen
         });
+        
         scrapingRequest.error(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
+            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+            toast("Failed to find information about the given publication.");
+            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
@@ -294,9 +300,9 @@ webapp.service('managePublications', function($location, appData, $http) {
         var url;
         var keywordMod = replaceSpace(keyword);
         if (external) {
-            url = serverApi.concat('publications?q=').concat(keywordMod).concat('&external=true');
+            url = serverApi.concat('/publications?q=').concat(keywordMod).concat('&external=true');
         } else {
-            url = serverApi.concat('publications?q=').concat(keywordMod);
+            url = serverApi.concat('/publications?q=').concat(keywordMod);
         }
 
         var requestSearchPublication = $http.get(url);
@@ -371,6 +377,7 @@ webapp.service('managePublications', function($location, appData, $http) {
         title : "",
         type : ""
     }
+    var currentPublicationID ; 
 
     this.ui_upload_searchExcisting = function(){
         search(this.uploadData.title, false);
@@ -395,16 +402,8 @@ webapp.service('managePublications', function($location, appData, $http) {
             //metadata of publication needs to be send/updated (currently empty)
             
             ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
-            $watch('ui_scraping_status', function(newValue, oldValue) {
-                if(newValue == ui_SCRAPING_STATUS.SUCCES_SCRAPING)
-                {
-                    ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
-                    ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen 
-                }
-                else {toast("Failed to find information about the given publication.");
-                      ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
-                     }
-            }, true);
+            console.log(currentPublicationID);
+            scrape(currentPublicationID);
         })
             .error(function() {
             ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
@@ -417,8 +416,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 
         ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
         var url = serverApi.concat('/publications?title=').concat(this.uploadData.title).concat('&type=').concat(this.uploadData.type);
-        var authorization = appData.Authorization;
-        console.log(appData.Authorization);
+        var authorization = appData.Authorization.headers.Authorization;
         uploadPublication(this.uploadData.file, url, authorization);
     };
 //----------------------------------------------------------------------------------------------------------------------//
