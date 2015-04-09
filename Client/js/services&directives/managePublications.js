@@ -77,7 +77,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName.equals(appData.data.currentLibraryName))
-            {getUserPublications(appData.data.currentLibraryName);}
+            {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication removed from library.", 4000);
         });
@@ -94,7 +94,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var createRequest = $http.put(url, config);
         
         createRequest.success(function(data, status, headers, config) {
-            getUserLibraries();
+            self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" created.");
             toast(messageToToast, 4000);
         });
@@ -111,7 +111,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         var createRequest = $http.delete(url, config);
         
         createRequest.success(function(data, status, headers, config) {
-            getUserLibraries();
+            self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" deleted.");
             toast(messageToToast, 4000);
         });
