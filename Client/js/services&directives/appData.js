@@ -5,6 +5,7 @@ webapp.service('appData', function() {
     var self = this;
     
     this.Authorization = null;
+    this.getAuth = function(){return self.Authorization;};
     this.currentUser = null;
     this.userinput = {};
     this.data ={

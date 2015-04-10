@@ -24,7 +24,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.getUserLibraries = function() {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
-        var authorization = appData.Authorization;
+        var authorization = appData.getAuth();
         var getUserLibrariesRequest = $http.get(url, authorization);
         
         getUserLibrariesRequest.success(function(data, status, headers, config) {
@@ -43,7 +43,7 @@ webapp.service('managePublications', function($location, appData, $http) {
         
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
-        var authorization = appData.Authorization;
+        var authorization = appData.getAuth();
         var getUserPublicationsRequest = $http.get(url, authorization);
         
         getUserPublicationsRequest.success(function(data, status, headers, config) {
@@ -58,12 +58,11 @@ webapp.service('managePublications', function($location, appData, $http) {
         });
     };
 
-    //TODO 401
     //add a publication to a certan library of a user
     this.addPublications = function(libraryName, publicationID) {
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var authorization = appData.Authorization;
+        var authorization = appData.getAuth();
         var addPublicationsRequest = $http.put(url, {}, authorization);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
@@ -86,8 +85,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.deletePublication = function(libraryName, publicationID) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var authorization = appData.Authorization;
-        console.log(authorization);
+        var authorization = appData.getAuth();
         var deletePublicationsRequest = $http.delete(url, {}, authorization);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
