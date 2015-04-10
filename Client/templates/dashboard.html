@@ -18,6 +18,17 @@
 		<!-- start VIEWER card -->
 		<publication-viewer-card></publication-viewer-card>
 		<!-- stop viewer card -->
+        
+        <!-- testing -->
+        <input type="text" ng-model="brol">
+        <input type="text" ng-model="brol2">
+        
+        <button ng-click="publications.getUserLibraries()">getUserLibraries</button>
+        <button ng-click="publications.getUserPublications(brol)">getUserPublications</button>
+        <button ng-click="publications.addPublications(brol, brol2)">addPublications</button>
+        <button ng-click="publications.deletePublication(brol, brol2)">deletePublication</button>
+        <!-- testing -->
+        
 	</div>
 </div>
 <!-- stop overall container -->

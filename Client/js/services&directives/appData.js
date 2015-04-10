@@ -4,6 +4,7 @@
 webapp.service('appData', function() {
     var self = this;
     
+    this.Authorization = null;
     this.currentUser = null;
     this.userinput = {};
     this.data ={

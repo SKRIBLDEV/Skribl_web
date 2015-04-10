@@ -1,4 +1,4 @@
-webapp.service('managePublications', function($location, appData, $http, $rootScope) {
+webapp.service('managePublications', function($location, appData, $http) {
 
     var self = this;
 //----------------------------------------------------------------------------------------------------------------------//
@@ -30,6 +30,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         getUserLibrariesRequest.success(function(data, status, headers, config) {
             appData.data.userLibrariesNames = data;
             upToDate();
+            console.log(data);
         });
         getUserLibrariesRequest.error(function(data, status, headers, config) {
             self.getUserLibraries();
@@ -39,6 +40,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 
     //get alle the publications of a certain user in a certain library
     this.getUserPublications = function(libraryName) {
+        
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = appData.Authorization;
@@ -48,6 +50,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             appData.data.publications = data;
             appData.data.currentLibraryName = libraryName;
             upToDate();
+            console.log(data);
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
             self.getUserPublications(libraryName);
@@ -55,11 +58,13 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         });
     };
 
+    //TODO 401
     //add a publication to a certan library of a user
     this.addPublications = function(libraryName, publicationID) {
         corrupt();
-        var url =  serverApi.concat('/user/').concat(appData.currentUser).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var addPublicationsRequest = $http.put(url, config);
+        var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
+        var authorization = appData.Authorization;
+        var addPublicationsRequest = $http.put(url, authorization);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName.equals(appData.data.currentLibraryName))
@@ -67,7 +72,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
             else{upToDate();};
             toast("Publication added to library.", 4000);
         });
-        getUserPublicationsRequest.error(function(data, status, headers, config) {
+        addPublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to add library, try again later.", 4000);
         });
@@ -76,7 +81,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     //delete a certain publication of a certain library of a user
     this.deletePublication = function(libraryName, publicationID) {
         corrupt();
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var deletePublicationsRequest = $http.put(url, config);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
@@ -94,7 +99,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     //Create a new library for a user 
     this.createLib = function(libName) {
         corrupt();
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
         var createRequest = $http.put(url, config);
         
         createRequest.success(function(data, status, headers, config) {
@@ -177,7 +182,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 
 
 
-    this.ui_getMeta_metaData = function(){return metaData;};
+    this.ui_getMeta_metaData = function(){return appData.data.currentMetaData;};
     this.ui_getMeta = function(publicationID){getMetaData(publicationID);};
     this.ui_getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
     this.ui_getMeta_getting = function(){return ui_getMeta_status == ui_GETMETA_STATUS.GETTING;};
@@ -224,7 +229,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         
         ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
         var url = serverApi.concat('/publications/').concat(publicationID);
-        var authorization = appDataK.Authorization;
+        var authorization = appData.Authorization;
         var setMetaDataRequest = $http.post(url, authorization);
 
         setMetaDataRequest.success(function(data, status, headers, config) {
