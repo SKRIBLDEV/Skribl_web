@@ -218,101 +218,101 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-        var ui_MODIFYMETA_STATUS = {
-            UNACTIVE: -1,
-            INITIAL: 0,
-            MODIFYING: 1,
-            SUCCES_MODIFYING: 2}
-        var ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;
+    //Used to modify the meta data of a certain publication
+    //@Pieter wordt gebruikt in de edit mode. 
+    var MODIFYMETA_STATUS = {
+        UNACTIVE: -1,
+        INITIAL: 0,
+        MODIFYING: 1,
+        SUCCES_MODIFYING: 2}
+    var modifyMeta_status = MODIFYMETA_STATUS.UNACTIVE;
 
-    this.ui_modifyMeta_activate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;}
-    this.ui_modifyMeta_deActivate = function() {ui_modifyMeta_status = ui_MODIFYMETA_STATUS.UNACTIVE;}
-    this.ui_modifyMeta_active = function() {return ui_modifyMeta_status != ui_MODIFYMETA_STATUS.UNACTIVE;}
-    this.ui_modifyMeta_initialStatus = function() {return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.INITIAL;}
-    this.ui_modifyMeta_modifying = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.MODIFYING;}
-    this.ui_modifyMeta_succes = function(){return ui_modifyMeta_status == ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;}
-    this.ui_modifyMeta = function(publicationID, meta){modifyMeta(publicationID, meta);}
+    this.modifyMeta_activate = function() {modifyMeta_status = MODIFYMETA_STATUS.INITIAL;}
+    this.modifyMeta_deActivate = function() {modifyMeta_status = MODIFYMETA_STATUS.UNACTIVE;}
+    this.modifyMeta_active = function() {return modifyMeta_status != MODIFYMETA_STATUS.UNACTIVE;}
+    this.modifyMeta_initialStatus = function() {return modifyMeta_status == MODIFYMETA_STATUS.INITIAL;}
+    this.modifyMeta_modifying = function(){return modifyMeta_status == MODIFYMETA_STATUS.MODIFYING;}
+    this.modifyMeta_succes = function(){return modifyMeta_status == MODIFYMETA_STATUS.SUCCES_MODIFYING;}
 
-    function modifyMeta(publicationID, meta) {
+    this.modifyMeta = function(publicationID, meta) {
         
-        ui_modifyMeta_status = ui_MODIFYMETA_STATUS.MODIFYING;
+        modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
         var url = serverApi.concat('/publications/').concat(publicationID);
-        var authorization = appData.Authorization;
-        var setMetaDataRequest = $http.post(url, authorization);
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
+        var setMetaDataRequest = $http.post(url, meta, authorization);
 
         setMetaDataRequest.success(function(data, status, headers, config) {
-            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.SUCCES_MODIFYING;
+            modifyMeta_status = MODIFYMETA_STATUS.SUCCES_MODIFYING;
             toast("The meta data of the publication has been changed.",4000);
         });
         setMetaDataRequest.error(function(data, status, headers, config) {
-            ui_modifyMeta_status = ui_MODIFYMETA_STATUS.INITIAL;
-            toast("Failed to get information about publication, try again later.", 4000);
+            modifyMeta_status = MODIFYMETA_STATUS.INITIAL;
+            toast("Failed to change the informations about the publication, try again later.", 4000);
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter scraping word alleen maar gebruikt door andere functies namelijk search en de viewer ofzo --> geen unactive.
-    //@Pieter zou ook kunnen met maar 2 statussen
-    var ui_SCRAPING_STATUS = {
+    //Used to scrape data while uploading a publication
+    //Needs to manually reset when the metaData has been used.
+    var SCRAPING_STATUS = {
         INITIAL: 0,
         SCRAPING :1,
         SUCCES_SCRAPING: 2}
-    var ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+    var scraping_status = SCRAPING_STATUS.INITIAL;
 
-    this.ui_scrape_scrapeData = function(){return scrapeData;};
-    this.ui_scrape = function(publicationID){scrape(publicationID);};
-    this.ui_scraping_initialStatus = function() {return ui_scraping_status == ui_SCRAPING_STATUS.INITIAL;};
-    this.ui_scraping_getting = function(){return ui_scraping_status == ui_SCRAPING_STATUS.SCRAPING;};
-    this.ui_scraping_succes = function(){ return ui_scraping_status == ui_SCRAPING_STATUS.SUCCES_GETTING;};
-    this.ui_scraping_reset = function(){ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;};
+    this.scraping_initialStatus = function() {return scraping_status == SCRAPING_STATUS.INITIAL;};
+    this.scraping_getting = function(){return scraping_status == SCRAPING_STATUS.SCRAPING;};
+    this.scraping_succes = function(){ return scraping_status == SCRAPING_STATUS.SUCCES_GETTING;};
+    this.scraping_reset = function(){scraping_status = SCRAPING_STATUS.INITIAL; appData.data.currentMetaData = null;};
 
-    //@Pieter geeft geen toast terug want word gebruikt door andere functies
-    function scrape(publicationID) {
-        ui_scraping_status = ui_SCRAPING_STATUS.SCRAPING;
+    this.scrape = function(publicationID) {
+        
+        scraping_status = SCRAPING_STATUS.SCRAPING;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?extract=true');
         var scrapingRequest = $http.get(url, config);
 
         scrapingRequest.success(function(data, status, headers, config) {
             appData.data.currentMetaData = data;
-            ui_scraping_status = ui_SCRAPING_STATUS.SUCCES_SCRAPING;
-            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
-            ui_upload_status = ui_UPLOAD_STATUS.WAITING_EDITING; //@Pieter dit status doet de edit mode open MODIFYMETA kan u hier bij helpen
+            scraping_status = SCRAPING_STATUS.SUCCES_SCRAPING;
+            upload_status = UPLOAD_STATUS.WAITING_EDITING; //@Pieter kan de edit mode 'aan' zetten
+            console.log(appData.data.currentMetaData);
         });
         
         scrapingRequest.error(function(data, status, headers, config) {
-            ui_scraping_status = ui_SCRAPING_STATUS.INITIAL;
+            scraping_status = SCRAPING_STATUS.INITIAL;
             toast("Failed to find information about the given publication.");
-            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+            upload_status = UPLOAD_STATUS.INITIAL;
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    var ui_SEARCH_STATUS = {
+    var SEARCH_STATUS = {
         UNACTIVE: -1,
         INITIAL: 0,
         SEARCHING: 1,
         SUCCES_SEARCHING: 2}
-    var ui_search_status = ui_SEARCH_STATUS.UNACTIVE;
+    var search_status = SEARCH_STATUS.UNACTIVE;
 
-    this.ui_search_activate = function() {ui_search_status = ui_SEARCH_STATUS.INITIAL;}
-    this.ui_search_deActivate = function() {ui_search_status = ui_SEARCH_STATUS.UNACTIVE;}
-    this.ui_search_active = function() {return ui_search_status != ui_SEARCH_STATUS.UNACTIVE;}
-    this.ui_search_initialStatus = function() {return ui_search_status == ui_SEARCH_STATUS.INITIAL;}
-    this.ui_search_searching = function(){return ui_search_status == ui_SEARCH_STATUS.SEARCHING;}
-    this.ui_search_succes = function(){return ui_search_status == ui_SEARCH_STATUS.SUCCES_SEARCHING;}
-    this.ui_search = function(keyword, external){search(keyword, external);}
-    this.ui_searchMultiple = function(data){searchMultiple(data);};
-    this.ui_searchResult = function(){return searchResult;};
+    this.search_activate = function() {ui_search_status = ui_SEARCH_STATUS.INITIAL;}
+    this.search_deActivate = function() {search_status = SEARCH_STATUS.UNACTIVE;}
+    this.search_active = function() {return search_status != SEARCH_STATUS.UNACTIVE;}
+    this.search_initialStatus = function() {return search_status == SEARCH_STATUS.INITIAL;}
+    this.search_searching = function(){return search_status == SEARCH_STATUS.SEARCHING;}
+    this.search_succes = function(){return search_status == SEARCH_STATUS.SUCCES_SEARCHING;}
+    function searching(){ search_status = SEARCH_STATUS.SEARCHING;};
+    function succes(){ searc_status = SEARCH_STATUS.SUCCES_SEARCHING;};
+
     
-    var searchResult;
     function replaceSpace(toReplace){
         return toReplace.replace(/ /g, "+");
     }
     
-    function search(keyword, external) {
-        ui_search_status = ui_SEARCH_STATUS.SEARCHING;
+    this.search = function(keyword, external) {
+        searching();
         var url;
         var keywordMod = replaceSpace(keyword);
         if (external) {
@@ -320,32 +320,35 @@ webapp.service('managePublications', function($location, appData, $http) {
         } else {
             url = serverApi.concat('/publications?q=').concat(keywordMod);
         }
-
-        var requestSearchPublication = $http.get(url);
+        var requestSearchPublication = $http.get(url,config);
 
         requestSearchPublication.success(function(data, status, headers, config) {
            appData.data.searchResult = data;
-           ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
-           toast("No results found for your search");
+           console.log(data); 
+           succes();
+           if (data.internal.length === 0) {toast("No results found for your search")};
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
-            ui_search_status = ui_SEARCH_STATUS.INITIAL;
+            self.search_activate();
         });
     }
 
-    function searchMultiple(searchData) {
-        ui_search_status = ui_SEARCH_STATUS.SEARCHING;
+    //TODO TO TEST zien met noah welke searchData moet opgestuurd worden
+    this.searchMultiple = function(searchData) {
+        searching();
         var url = serverApi.concat('/publications');
-        var requestSearchPublication = $http.post(url, searchData);
+        var requestSearchPublication = $http.post(url, searchData, config);
 
         requestSearchPublication.success(function(data, status, headers, config) {
             appData.data.searchResult = data;
-            ui_search_status = ui_SEARCH_STATUS.SUCCES_SEARCHING;
+            console.log(data);
+            succes();
+            if (data.internal.length === 0) {toast("No results found for your search")};
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
-            ui_search_status = ui_SEARCH_STATUS.INITIAL;
+            self.search_activate();
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
@@ -361,7 +364,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     -Gebruik MODIFYMETA om de meta data door te sturen en gebruik SUCCES_EDITING EN SUCCES_UPLOADING STATUSSEN om juiste elementen te tonen
     -done
     */
-    var ui_UPLOAD_STATUS = {
+    var UPLOAD_STATUS = {
         UNACTIVE: -1,
         INITIAL: 0,
         EXISTS:1,
@@ -370,27 +373,27 @@ webapp.service('managePublications', function($location, appData, $http) {
         WAITING_EDITING: 4,
         SUCCES_EDITING: 5,
         SUCCES_UPLOADING: 6}
-    var ui_upload_status = ui_UPLOAD_STATUS.INITIAL; //change this to unactive
+    var upload_status = UPLOAD_STATUS.INITIAL; //change this to unactive
 
-    this.ui_upload_active = function() {return ui_upload_status != ui_UPLOAD_STATUS.UNACTIVE;}
-    this.ui_upload_initialStatus = function() {return ui_upload_status == ui_UPLOAD_STATUS.INITIAL;}
-    this.ui_upload_checkForExisting = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
-    this.ui_upload_uploading = function(){return ui_upload_status == ui_UPLOAD_STATUS.UPLOADING;}
-    this.ui_upload_waitingScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_SCRAPING;}
-    this.ui_upload_succesScraping = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_SCRAPING;}
-    this.ui_upload_waitingEditing = function() {return ui_upload_status == ui_UPLOAD_STATUS.WAITING_EDITING;}
-    this.ui_upload_succesEditing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
-    this.ui_upload_succesUploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;}
-    this.ui_upload_activate = function() {ui_upload_status = ui_UPLOAD_STATUS.INITIAL;}
-    this.ui_upload_deActivate = function() {ui_upload_status = ui_UPLOAD_STATUS.UNACTIVE;}
+    this.ui_upload_active = function() {return upload_status != UPLOAD_STATUS.UNACTIVE;}
+    this.ui_upload_initialStatus = function() {return upload_status == UPLOAD_STATUS.INITIAL;}
+    this.ui_upload_checkForExisting = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
+    this.ui_upload_uploading = function(){return upload_status == UPLOAD_STATUS.UPLOADING;}
+    this.ui_upload_waitingScraping = function() {return upload_status == UPLOAD_STATUS.WAITING_SCRAPING;}
+    this.ui_upload_succesScraping = function() {return upload_status == UPLOAD_STATUS.SUCCES_SCRAPING;}
+    this.ui_upload_waitingEditing = function() {return upload_status == UPLOAD_STATUS.WAITING_EDITING;}
+    this.ui_upload_succesEditing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
+    this.ui_upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
+    this.ui_upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
+    this.ui_upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
     
-    this.ui_upload_set_exists = function() {return ui_upload_status == ui_UPLOAD_STATUS.EXISTS;}
-    this.ui_upload_set_succes_editing = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_EDITING;}
-    this.ui_upload_set_succes_uploading = function() {return ui_upload_status == ui_UPLOAD_STATUS.SUCCES_UPLOADING;} 
+    this.ui_upload_set_exists = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
+    this.ui_upload_set_succes_editing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
+    this.ui_upload_set_succes_uploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;} 
 
     this.ui_upload_searchExcisting = function(){
         search(appData.uploadData.title, false);
-        ui_upload_status = ui_UPLOAD_STATUS.EXISTS;
+        upload_status = UPLOAD_STATUS.EXISTS;
         // make sure you can select
     }
 
@@ -410,12 +413,12 @@ webapp.service('managePublications', function($location, appData, $http) {
             //when publication is added to database 
             //metadata of publication needs to be send/updated (currently empty)
             
-            ui_upload_status = ui_UPLOAD_STATUS.WAITING_SCRAPING;
+            upload_status = UPLOAD_STATUS.WAITING_SCRAPING;
             console.log(currentPublicationID);
             scrape(appData.uploadData.currentPublicationID);
         })
             .error(function() {
-            ui_upload_status = ui_UPLOAD_STATUS.INITIAL;
+            upload_status = UPLOAD_STATUS.INITIAL;
             toast("Failed to upload file, try again later", 4000)
         });
     }
@@ -423,7 +426,7 @@ webapp.service('managePublications', function($location, appData, $http) {
     //preparation for the uploadPublication function
     this.uploadFile = function() {
 
-        ui_upload_status = ui_UPLOAD_STATUS.UPLOADING;
+        upload_status = UPLOAD_STATUS.UPLOADING;
         var url = serverApi.concat('/publications?title=').concat(appData.uploadData.title).concat('&type=').concat(appData.uploadData.type);
         var authorization = appData.Authorization.headers.Authorization;
         uploadPublication(appData.uploadData.file, url, authorization);

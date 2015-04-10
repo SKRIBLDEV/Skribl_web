@@ -31,6 +31,11 @@
         <button ng-click="publications.deleteLib(brol)">deleteLib</button>
         <button ng-click="publications.getFile(brol2)">downloadFile</button>
         <button ng-click="publications.getMetaData(brol2)">getMetaData</button>
+        <button ng-click="publications.modifyMeta(brol2, 
+                          {title: 'brol', fileName: 'Efficient Java RMI for parallel programming.pdf', private: false, type: 'journal'})">setMetaData</button>
+        <button ng-click="publications.scrape(brol2)">scrape</button>
+        <button ng-click="publications.search(brol, false)">search word without external</button>
+        
         
         <!-- testing -->
         
