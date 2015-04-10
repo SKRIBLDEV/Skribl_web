@@ -333,7 +333,9 @@ webapp.service('managePublications', function($location, appData, $http) {
             console.log(data); 
             succes();
             if (data.internal.length === 0) {toast("No results found in our database.")};
-            if (data.external) {toast("No results found from external sources.")};
+            if(external){
+                if (data.external.length === 0) {toast("No results found from external sources.")};
+            };
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
@@ -352,7 +354,6 @@ webapp.service('managePublications', function($location, appData, $http) {
             console.log(data);
             succes();
             if (data.internal.length === 0) {toast("No results found in our database.")};
-            if (data.external) {toast("No results found from external sources.")};
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
