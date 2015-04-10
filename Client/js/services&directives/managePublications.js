@@ -72,7 +72,6 @@ webapp.service('managePublications', function($location, appData, $http) {
         var addPublicationsRequest = $http.put(url, {}, authorization);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
-            console.log(libraryName === appData.data.currentLibraryName);
             if(libraryName === appData.data.currentLibraryName)
             {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
@@ -149,7 +148,8 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-   //Used to download a certain file of the db
+    //Used to download a certain file of the db
+    //@Pieter hier moet jij reseten na dat de file download gedaan is via html, ik heb hem in appData.currentFile gestoken
     var DOWNLOADFILE_STATUS = {
         INITIAL: 0,
         DOWNLOADING: 1,
@@ -157,21 +157,22 @@ webapp.service('managePublications', function($location, appData, $http) {
     var downloadFile_status = DOWNLOADFILE_STATUS.INITIAL;
     
 
-    this.downloadFile_downloading = function(){return downloadFile_status == ui_DOWNLOADFILE_STATUS.DOWNLOADING;};
+    this.downloadFile_downloading = function(){return downloadFile_status == DOWNLOADFILE_STATUS.DOWNLOADING;};
     this.downloadFile_succes = function(){ return downloadFile_status == DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;};
-    this.downloadFile_reset = function(){downloadFile_status = DOWNLOADFILE_STATUS.INITIAL;};
+    this.downloadFile_reset = function(){downloadFile_status = DOWNLOADFILE_STATUS.INITIAL; appData.deleteCurrentFile();};
 
-    function getFile(publicationID) {
-        ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.DOWNLOADING;
+    this.getFile = function(publicationID) {
+        self.downloadFile_downloading();
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?download=true');
         var getFileRequest = $http.get(url, config);
 
         getFileRequest.success(function(data, status, headers, config) {
-            ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;
+            self.downloadFile_succes();
             appData.data.currentFile = data;
+            console.log(appData.data.currentFile);
         });
         getFileRequest.error(function(data, status, headers, config) {
-            ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;
+           self.downloadFile_reset();
             toast("Failed to download file, please try again later.", 4000);
         });
     }
