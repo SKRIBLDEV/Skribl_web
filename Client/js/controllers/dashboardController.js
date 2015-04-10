@@ -9,25 +9,24 @@
 
  */
 webapp.controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll, userService, managePublications, chartService) {
+    
+    //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
     if (!(appData.currentUser)) {
         $location.path('/home');
         return;
     }
-
-    //init
     managePublications.getUserPublications('Uploaded');
     managePublications.getUserLibraries();
+    //----------------------------------------------------INIT----------------------------------------------------------//
     
-    //-------------------------------------------------GUI settings---------------------------------------------------------//
-    //user
+    //------------------------------------------------GUI settings------------------------------------------------------//
     $scope.userService = userService;
+    //------------------------------------------------GUI settings------------------------------------------------------//
     
-
-    //-------------------------------------------------dataviz settings-----------------------------------------------------//
+    //-----------------------------------------------dataviz settings---------------------------------------------------//
     $scope.chartService = chartService;
-        
-    //-------------------------------------------------GUI settings-----------------------------------------------------//
+    //-----------------------------------------------dataviz settings---------------------------------------------------//
    
     //-------------------------------------------------USER settings----------------------------------------------------//
     $scope.username = appData.currentUser.username;
@@ -35,9 +34,47 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     $scope.deleteUser = function(){ userService.deleteUser($scope.username); };
     //-------------------------------------------------USER settings----------------------------------------------------//
     
-    //-------------------------------------------------Manage Lib----------------------------------------------------// 
+    //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
     $scope.publications = managePublications;
+    //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
+
+    //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
+    $scope.interactiveGraph = false;
+
+    $scope.ui_interactive_graph_enable = function() {
+        $scope.interactiveGraph = true;
+        $scope.gotoElement("id_interactive_graph")};
+    $scope.ui_interactive_graph_disable = function() {
+        $scope.gotoElement("id_top")
+        $scope.interactiveGraph = false;};
+    $scope.gotoElement = function(eID) {
+        // set the location.hash to the id of
+        // the element you wish to scroll to.
+        $location.hash('middle');
+
+        // call $anchorScroll()
+        anchorSmoothScroll.scrollTo(eID);};
+    //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
+
+    //-------------------------------------------------GUI settings-----------------------------------------------------//
+    $scope.ui_currentPublications = [
+        {title: 'title 1', id: 1, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume:                       'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+        {title: 'title 2', id: 2, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+        {title: 'title 3', id: 3, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+        {title: 'title 4', id: 4, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+        {title: 'title 5', id: 5, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+        {title: 'title 6', id: 6, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
+        {title: 'title 7', id: 7, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
+        {title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
     
+    //-------------------------------------------------GUI settings-----------------------------------------------------//
+    
+    
+    
+    //---------------------------------------!!@PIETER MOET ALLEMAAL WEG!!----------------------------------------------//
+    //------------------------------------------------------------------------------------------------------------------//
+    
+    //-------------------------------------------------Manage Lib----------------------------------------------------// 
     $scope.ui_publications_change_library =  function(name){managePublications.ui_publications_change_library(name);};
     $scope.ui_publications_addToLibrary =  function(name, publicationID){managePublications.publications_addToLibrary(name, publicationID);};
     $scope.ui_publications_deleteFromLibrary =  function(name, publicationID) {managePublications.ui_publications_deleteFromLibrary(name, publicationID);};
@@ -116,88 +153,8 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     $scope.ui_upload_set_succes_uploading = function() {return managePublications.ui_upload_succesUploading();}
     //------------------------------------------------Upload-----------------------------------------------//
     
-    
-   // $scope.currentViewerPublicationID = undefined
-   //  currentViewerPublicationIDX = undefined 
-   //  $scope.ui_displayPublication = true;
 
-   //  $scope.loadPublicationInViewer = function(newID){
-   //      $scope.currentViewerPublicationID = newID;
-   //      currentViewerPublicationIDX = arrayObjectIndexOf($scope.ui_currentPublications,newID, 'id');
-   //      $scope.gotoElement("id_viewer");
-   //      $scope.ui_displayPublication = true;        
-   //  }
-
-   //  $scope.publicationViewerEnabled = function(){
-   //      return $scope.currentViewerPublicationID != undefined;
-   //  }
-
-   //  $scope.unloadPublicationInViewer = function(){
-   //      $scope.currentViewerPublicationID = undefined
-   //      currentViewerPublicationIDX = undefined 
-   //      $scope.gotoElement("id_top");
-   //  }
-
-   //  $scope.ui_toggleDisplayPublication = function(){
-   //      $scope.ui_displayPublication = !$scope.ui_displayPublication;
-   //  }
-
-   //  $scope.getCurrentViewerPublication = function(){
-   //      console.log($scope.ui_currentPublications[currentViewerPublicationIDX].title)
-   //      return $scope.ui_currentPublications[currentViewerPublicationIDX];
-   //  }
-
-   //  function arrayObjectIndexOf(myArray, searchTerm, property) {
-   //      for(var idx = 0, alength = myArray.length; idx < alength; idx++) {
-   //          if (myArray[idx][property] === searchTerm) return idx;
-   //      }
-   //  return -1; //errror
-   //  }
-
-   //  $scope.ui_publications_library = true;
-
-   //  $scope.ui_publications_toggleLibrary = function(){
-   //  $scope.ui_publications_library = !$scope.ui_publications_library;
-   //  }
-
-   //  $scope.ui_publications_loading = false;
-   //  
-   
-
-    $scope.ui_currentPublications = [
-    {title: 'title 1', id: 1, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume:                       'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 2', id: 2, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 3', id: 3, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 4', id: 4, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 5', id: 5, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 6', id: 6, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-    {title: 'title 7', id: 7, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-    {title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
-
-//------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
-
-    $scope.interactiveGraph = false;
-
-    $scope.ui_interactive_graph_enable = function() {
-        $scope.interactiveGraph = true;
-        $scope.gotoElement("id_interactive_graph")
-    }
-
-    $scope.ui_interactive_graph_disable = function() {
-        $scope.gotoElement("id_top")
-        $scope.interactiveGraph = false;
-    }
-
-
-
-    $scope.gotoElement = function(eID) {
-        // set the location.hash to the id of
-        // the element you wish to scroll to.
-        $location.hash('middle');
-
-        // call $anchorScroll()
-        anchorSmoothScroll.scrollTo(eID);
-    };
-
+    //------------------------------------------------------------------------------------------------------------------//
+    //---------------------------------------!!@PIETER MOET ALLEMAAL WEG!!----------------------------------------------//
 
 });
