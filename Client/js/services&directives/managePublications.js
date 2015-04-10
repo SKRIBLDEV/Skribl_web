@@ -179,48 +179,40 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter get metadata word alleen maar gebruikt door andere functies namelijk search en de viewer ofzo --> geen unactive.
-    //@Pieter zou ook kunnen met maar 2 statussen
-    var ui_GETMETA_STATUS = {
+    //Used to get the meta data of a certain publication
+    //@Pieter hier moet jij reseten na dat de metaData gebruikt werd en verwijderd mag worden
+    var GETMETA_STATUS = {
         INITIAL: 0,
         GETTING :1,
         SUCCES_GETTING: 2}
-    var ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
+    var getMeta_status = GETMETA_STATUS.INITIAL;
 
     this.showPublicationViewer = false;
-    this.disablePublicationViewer = function(){ this.showPublicationViewer = false;};
-    this.publicationViewerEnabled = function(){ return this.showPublicationViewer;};
+    this.disablePublicationViewer = function(){ self.showPublicationViewer = false;};
+    this.publicationViewerEnabled = function(){ return self.showPublicationViewer;};
 
     this.loadPublicationInViewer = function(publicationID){
-        getMetaData(publicationID);
-        this.showPublicationViewer = true;
-    }
+        self.getMetaData(publicationID);
+        self.showPublicationViewer = true;}
 
+    this.getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
+    this.getMeta_getting = function(){return ui_getMeta_status == ui_GETMETA_STATUS.GETTING;};
+    this.getMeta_succes = function(){ return ui_getMeta_status == ui_GETMETA_STATUS.SUCCES_GETTING;};
+    this.getMeta_reset = function(){ui_getMeta_status = ui_GETMETA_STATUS.INITIAL; appData.data.currentMetaData = null;};
 
-
-    this.ui_getMeta_metaData = function(){return appData.data.currentMetaData;};
-    this.ui_getMeta = function(publicationID){getMetaData(publicationID);};
-    this.ui_getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
-    this.ui_getMeta_getting = function(){return ui_getMeta_status == ui_GETMETA_STATUS.GETTING;};
-    this.ui_getMeta_succes = function(){ return ui_getMeta_status == ui_GETMETA_STATUS.SUCCES_GETTING;};
-    this.ui_getMeta_reset = function(){ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;};
-
-
-
-    //@Pieter geeft geen toast terug want word gebruikt door andere functies
-    function getMetaData(publicationID) {
-        console.log(publicationID);
+    this.getMetaData = function(publicationID) {
         
-        ui_getMeta_status = ui_GETMETA_STATUS.GETTING;
+        getMeta_status = GETMETA_STATUS.GETTING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var getMetaDataRequest = $http.get(url, config);
 
         getMetaDataRequest.success(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.SUCCES_GETTING;
+            getMeta_status = GETMETA_STATUS.SUCCES_GETTING;
             appData.data.currentMetaData = data;
+            console.log(appData.data.currentMetaData);
         });
         getMetaDataRequest.error(function(data, status, headers, config) {
-            ui_getMeta_status = ui_GETMETA_STATUS.INITIAL;
+            getMeta_status = GETMETA_STATUS.INITIAL;
         });
     }
 //----------------------------------------------------------------------------------------------------------------------//
