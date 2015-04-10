@@ -24,7 +24,9 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.getUserLibraries = function() {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
-        var authorization = appData.getAuth();
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
         var getUserLibrariesRequest = $http.get(url, authorization);
         
         getUserLibrariesRequest.success(function(data, status, headers, config) {
@@ -43,7 +45,9 @@ webapp.service('managePublications', function($location, appData, $http) {
         
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
-        var authorization = appData.getAuth();
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
         var getUserPublicationsRequest = $http.get(url, authorization);
         
         getUserPublicationsRequest.success(function(data, status, headers, config) {
@@ -62,14 +66,15 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.addPublications = function(libraryName, publicationID) {
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var authorization = appData.getAuth();
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
         var addPublicationsRequest = $http.put(url, {}, authorization);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
-            console.log('done');
             console.log(libraryName === appData.data.currentLibraryName);
             if(libraryName === appData.data.currentLibraryName)
-            {getUserPublications(appData.data.currentLibraryName);}
+            {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication added to library.", 4000);
         });
@@ -85,7 +90,10 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.deletePublication = function(libraryName, publicationID) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var authorization = appData.getAuth();
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
+        console.log(authorization);
         var deletePublicationsRequest = $http.delete(url, {}, authorization);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
