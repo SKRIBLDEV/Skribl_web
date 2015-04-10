@@ -16,7 +16,8 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     }
 
     //init
-    managePublications.ui_publications_getUserLibraries();
+    managePublications.getUserPublications('Uploaded');
+    managePublications.getUserLibraries();
     
     //-------------------------------------------------GUI settings---------------------------------------------------------//
     //user

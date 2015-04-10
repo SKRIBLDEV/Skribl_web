@@ -224,9 +224,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				//save userInformation in appData.
 				appData.currentUser = data;
-				//@douglas: zouden we niet beter een init function hebben in dashboardcontroller??
-                managePublications.ui_publications_change_library('Uploaded');
-                managePublications.ui_publications_getUserLibraries();
 
 				// change route to #/dashboard
 				$location.path('/dashboard');

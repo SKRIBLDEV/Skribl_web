@@ -4,19 +4,19 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
 //----------------------------------------------------------------------------------------------------------------------//
     //CODE USED IN THE PUBLICATIONS CARD
     
-    //ui_publication_status --> current publication data corrupt or not
-    //ui_PUBLICATIONS_STATUS reference of all possible status
-    var ui_PUBLICATIONS_STATUS = {
+    //publication_status --> current publication data corrupt or not
+    //PUBLICATIONS_STATUS reference of all possible status
+    var PUBLICATIONS_STATUS = {
         CORRUPT: 0,
         UPTODATE: 1};
-    var ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;
+    var publication_status = PUBLICATIONS_STATUS.CORRUPT;
     
-    this.ui_publications_corrupt = function(){return ui_publication_status == ui_PUBLICATIONS_STATUS.CORRUPT;};
+    this.publications_corrupt = function(){return publication_status == PUBLICATIONS_STATUS.CORRUPT;};
     
     this.showLibraryCard = true;
     this.toggleLibraryCard = function(){self.showLibraryCard = ! self.showLibraryCard;}
-    function corrupt(){ui_publication_status = ui_PUBLICATIONS_STATUS.CORRUPT;};
-    function upToDate(){ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
+    function corrupt(){publication_status = PUBLICATIONS_STATUS.CORRUPT;};
+    function upToDate(){publication_status = PUBLICATIONS_STATUS.UPTODATE;};
 
     this.toggleLibraryCard = function(){ self.showLibraryCard = !self.showLibraryCard;};
 
