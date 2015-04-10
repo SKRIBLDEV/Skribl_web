@@ -46,35 +46,46 @@ function Library(db) {
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
-		db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
-		.then(function(pubs) {
-			if(pubs.length === 0) {
-				db.select().from('Library').where({username: user, name: library}).all()
-				.then(function (libraries) {
-					if(libraries.length) {
-						var libRid = RID.getRid(libraries[0]);
-						db.create('edge', 'HasPublication')
-						.from(libRid)
-						.to(id).one()
-						.then(function() {
-							clb(null, true);
+		db.select('@rid').from('Pulication').where('@rid = ' + id).all()
+		.then(function(res) {
+			if(res.length) {
+				db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
+				.then(function(pubs) {
+					if(pubs.length === 0) {
+						db.select().from('Library').where({username: user, name: library}).all()
+						.then(function (libraries) {
+							if(libraries.length) {
+								var libRid = RID.getRid(libraries[0]);
+								db.create('edge', 'HasPublication')
+								.from(libRid)
+								.to(id).one()
+								.then(function() {
+									clb(null, true);
+								}).error(function(er) {
+									clb(er);
+								});
+							}
+							else {
+								clb(new Error('Library does not exist'));
+							}
 						}).error(function(er) {
 							clb(er);
 						});
 					}
 					else {
-						clb(new Error('Library does not exist'));
+						clb(new Error('publication with id: ' + id + ', is already in library'));
 					}
 				}).error(function(er) {
 					clb(er);
 				});
 			}
 			else {
-				clb(new Error('publication with id: ' + id + ', is already in library'));
+				clb(new Error('Publication with id: ' + id + ' does not exist'));
 			}
 		}).error(function(er) {
 			clb(er);
 		});
+		
 		
 	}
 
