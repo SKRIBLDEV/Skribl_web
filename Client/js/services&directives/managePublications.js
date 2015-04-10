@@ -64,17 +64,21 @@ webapp.service('managePublications', function($location, appData, $http) {
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = appData.Authorization;
-        var addPublicationsRequest = $http.put(url, authorization);
+        var addPublicationsRequest = $http.put(url, {}, authorization);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(appData.data.currentLibraryName))
+            console.log('done');
+            console.log(libraryName === appData.data.currentLibraryName);
+            if(libraryName === appData.data.currentLibraryName)
             {getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication added to library.", 4000);
         });
         addPublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
-            toast("Failed to add library, try again later.", 4000);
+            if(status == 500)
+            {toast("Publication is already in the library.", 4000);}
+            else {toast("Failed to add library, try again later.", 4000)};
         });
     }
 
@@ -82,16 +86,18 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.deletePublication = function(libraryName, publicationID) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
-        var deletePublicationsRequest = $http.put(url, config);
+        var authorization = appData.Authorization;
+        console.log(authorization);
+        var deletePublicationsRequest = $http.delete(url, {}, authorization);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(appData.data.currentLibraryName))
+            if(libraryName === appData.data.currentLibraryName)
             {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             toast("Publication removed from library.", 4000);
         });
         deletePublicationsRequest.error(function(data, status, headers, config) {
-           upToDate();
+            upToDate();
             toast("Failed to remove publication, try again later.", 4000);
         });
     }
