@@ -491,7 +491,8 @@ function Publication(db) {
 					trx.let('publication2', function(s) {
 						s.update(id)
 						.set({
-							year: metObject.booktitle,
+							title: metObject.title,
+							year: metObject.year,
 							abstract: metObject.abstract,
 							citations: metObject.citations,
 							url: metObject.url,
