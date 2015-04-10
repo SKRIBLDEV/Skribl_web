@@ -75,7 +75,8 @@ webapp.service('managePublications', function($location, appData, $http) {
             if(libraryName === appData.data.currentLibraryName)
             {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
-            toast("Publication added to library.", 4000);
+            var toToast ="Publication added to library ".concat(libraryName).concat(".");
+            toast(toToast, 4000);
         });
         addPublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
@@ -98,12 +99,19 @@ webapp.service('managePublications', function($location, appData, $http) {
             if(libraryName === appData.data.currentLibraryName)
             {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
-            toast("Publication removed from library.", 4000);
+            var toToast ="Publication removed from library ".concat(libraryName).concat(".");
+            toast(toToast, 4000);
         });
         deletePublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to remove publication, try again later.", 4000);
         });
+    }
+    
+    //change publication from a library to an other
+    this.switchFromLib = function(oldLibName, newLibName, publicationID){
+        self.addPublications(newLibName, publicationID);
+        self.deletePublication(oldLibName, publicationID);
     }
 
     //Create a new library for a user 
@@ -434,6 +442,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
     /*AuthorInfo ::= {  firstname: …, lastname: …, publications: <publicationArray>, profile: … }
 profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, indien dit zo is zal hier de gebruikersnaam terug te vinden zijn (en is GET /users/<username> dus mogelijk…), anders wordt dit veld niet meegegeven (maw ‘undefined’)*/
+    //Used to search an author in the db
 
     var AUTHORS_STATUS = {
         INITIAL: 0,
@@ -448,7 +457,7 @@ profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, i
 
     this.getAuthors = function(firstName, lastName, number){
         authors_status = AUTHORS_STATUS.SEARCHING;
-        var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastName=').concat(lastName).concat('&limit=').concat(number);
+        var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastname=').concat(lastName).concat('&limit=').concat(number);
         var getAuthorsRequest = $http.get(url, config);
 
         getAuthorsRequest.success(function(data, status, headers, config) {
