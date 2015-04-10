@@ -93,7 +93,6 @@ webapp.service('managePublications', function($location, appData, $http) {
         var authorization = {headers: 
                              {'Content-type' : 'application/json',
                               'Authorization': appData.Authorization}};
-        console.log(authorization);
         var deletePublicationsRequest = $http.delete(url, authorization);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
@@ -112,7 +111,10 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.createLib = function(libName) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
-        var createRequest = $http.put(url, config);
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
+        var createRequest = $http.put(url, {}, authorization);
         
         createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
@@ -128,8 +130,11 @@ webapp.service('managePublications', function($location, appData, $http) {
     //Delete a library of a user
     this.deleteLib = function(libName) {
         corrupt();
-        var url = serverApi.concat('/user/').concat(appData.currentUser).concat('/library/').concat(libName);
-        var createRequest = $http.delete(url, config);
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
+        var authorization = {headers: 
+                             {'Content-type' : 'application/json',
+                              'Authorization': appData.Authorization}};
+        var createRequest = $http.delete(url, authorization);
         
         createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
