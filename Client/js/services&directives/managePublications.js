@@ -94,7 +94,7 @@ webapp.service('managePublications', function($location, appData, $http) {
                              {'Content-type' : 'application/json',
                               'Authorization': appData.Authorization}};
         console.log(authorization);
-        var deletePublicationsRequest = $http.delete(url, {}, authorization);
+        var deletePublicationsRequest = $http.delete(url, authorization);
         
         deletePublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName)
@@ -145,18 +145,16 @@ webapp.service('managePublications', function($location, appData, $http) {
 
 //----------------------------------------------------------------------------------------------------------------------//
    //Used to download a certain file of the db
-    var ui_DOWNLOADFILE_STATUS = {
+    var DOWNLOADFILE_STATUS = {
         INITIAL: 0,
-        DOWNLOADING :1}
-    var ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;
+        DOWNLOADING: 1,
+        SUCCES_DOWNLOADING: 2}
+    var downloadFile_status = DOWNLOADFILE_STATUS.INITIAL;
     
 
-    this.ui_downloadFile = function(publicationID){getFile(publicationID);};
-    this.ui_downloadFile_getFile = function(){return currentFile;};
-    this.ui_downloadFile_deleteFile = function(){deleteCurrentFile();};
-    this.ui_downloadFile_downloading = function(){return ui_downloadFile_status == ui_DOWNLOADFILE_STATUS.DOWNLOADING;};
-    this.ui_downloadFile_succes = function(){ return ui_downloadFile_status == ui_DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;};
-    this.ui_downloadFile_reset = function(){ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.INITIAL;};
+    this.downloadFile_downloading = function(){return downloadFile_status == ui_DOWNLOADFILE_STATUS.DOWNLOADING;};
+    this.downloadFile_succes = function(){ return downloadFile_status == DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;};
+    this.downloadFile_reset = function(){downloadFile_status = DOWNLOADFILE_STATUS.INITIAL;};
 
     function getFile(publicationID) {
         ui_downloadFile_status = ui_DOWNLOADFILE_STATUS.DOWNLOADING;
