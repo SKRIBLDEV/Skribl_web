@@ -1,3 +1,4 @@
+//Every status can represent ONE 'transaction' impossible to multiple upload, ... at the same time !! Some status needs other one's be carefull with that.
 webapp.service('managePublications', function($location, appData, $http) {
 
     var self = this;
@@ -42,7 +43,6 @@ webapp.service('managePublications', function($location, appData, $http) {
 
     //get alle the publications of a certain user in a certain library
     this.getUserPublications = function(libraryName) {
-        
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = {headers: 
@@ -156,7 +156,7 @@ webapp.service('managePublications', function($location, appData, $http) {
         SUCCES_DOWNLOADING: 2}
     var downloadFile_status = DOWNLOADFILE_STATUS.INITIAL;
     
-
+    this.downloadFile_initialStatus = function() {return downloadFile_status == DOWNLOADFILE_STATUS;};
     this.downloadFile_downloading = function(){return downloadFile_status == DOWNLOADFILE_STATUS.DOWNLOADING;};
     this.downloadFile_succes = function(){ return downloadFile_status == DOWNLOADFILE_STATUS.SUCCES_DOWNLOADING;};
     this.downloadFile_reset = function(){downloadFile_status = DOWNLOADFILE_STATUS.INITIAL; appData.deleteCurrentFile();};
@@ -201,7 +201,6 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.getMeta_reset = function(){ui_getMeta_status = ui_GETMETA_STATUS.INITIAL; appData.data.currentMetaData = null;};
 
     this.getMetaData = function(publicationID) {
-        
         getMeta_status = GETMETA_STATUS.GETTING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var getMetaDataRequest = $http.get(url, config);
@@ -219,7 +218,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 
 //----------------------------------------------------------------------------------------------------------------------//
     //Used to modify the meta data of a certain publication
-    //@Pieter wordt gebruikt in de edit mode. 
+    //@Pieter wordt gebruikt in de edit mode + werkt (geen errors ) maar ik zie geen verandering aan de meta data als ik nog is get oproep op dezelfde publicatie... 
     var MODIFYMETA_STATUS = {
         UNACTIVE: -1,
         INITIAL: 0,
@@ -235,7 +234,6 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.modifyMeta_succes = function(){return modifyMeta_status == MODIFYMETA_STATUS.SUCCES_MODIFYING;}
 
     this.modifyMeta = function(publicationID, meta) {
-        
         modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
         var url = serverApi.concat('/publications/').concat(publicationID);
         var authorization = {headers: 
@@ -269,7 +267,6 @@ webapp.service('managePublications', function($location, appData, $http) {
     this.scraping_reset = function(){scraping_status = SCRAPING_STATUS.INITIAL; appData.data.currentMetaData = null;};
 
     this.scrape = function(publicationID) {
-        
         scraping_status = SCRAPING_STATUS.SCRAPING;
         var url = serverApi.concat('/publications/').concat(publicationID).concat('?extract=true');
         var scrapingRequest = $http.get(url, config);
@@ -290,6 +287,7 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
+    //Used to search a certain publication in the db or external source
     var SEARCH_STATUS = {
         UNACTIVE: -1,
         INITIAL: 0,
@@ -323,10 +321,11 @@ webapp.service('managePublications', function($location, appData, $http) {
         var requestSearchPublication = $http.get(url,config);
 
         requestSearchPublication.success(function(data, status, headers, config) {
-           appData.data.searchResult = data;
-           console.log(data); 
-           succes();
-           if (data.internal.length === 0) {toast("No results found for your search")};
+            appData.data.searchResult = data;
+            console.log(data); 
+            succes();
+            if (data.internal.length === 0) {toast("No results found in our database.")};
+            if (data.external) {toast("No results found from external sources.")};
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
@@ -344,7 +343,8 @@ webapp.service('managePublications', function($location, appData, $http) {
             appData.data.searchResult = data;
             console.log(data);
             succes();
-            if (data.internal.length === 0) {toast("No results found for your search")};
+            if (data.internal.length === 0) {toast("No results found in our database.")};
+            if (data.external) {toast("No results found from external sources.")};
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
@@ -354,14 +354,12 @@ webapp.service('managePublications', function($location, appData, $http) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
-    //@Pieter je moet eerste checken dat scraping niet gebruikt word voor upload mag beginnen anders conflicten met de statussen !!
-    // ?? -> ik denk dat je dat zelf moet resolven door een melding te geven via "toast"
-    
     /*@Pieter stappen : 
     -User vult titel en journal of proceeding aan en de file INITIAL
     -Gebruik de search en de titel om aan de gebruiker te vragen of publicatie al niet bestaat (met external op false) EXISTS
     -Indien niet bestaat upload de file adhv ui_upload -> gaat scrapen en in WAITING_EDITING belanden
     -Gebruik MODIFYMETA om de meta data door te sturen en gebruik SUCCES_EDITING EN SUCCES_UPLOADING STATUSSEN om juiste elementen te tonen
+    -Gebruik ook authors om te zien of autheur al in onze db bestaat
     -done
     */
     var UPLOAD_STATUS = {
@@ -375,23 +373,23 @@ webapp.service('managePublications', function($location, appData, $http) {
         SUCCES_UPLOADING: 6}
     var upload_status = UPLOAD_STATUS.INITIAL; //change this to unactive
 
-    this.ui_upload_active = function() {return upload_status != UPLOAD_STATUS.UNACTIVE;}
-    this.ui_upload_initialStatus = function() {return upload_status == UPLOAD_STATUS.INITIAL;}
-    this.ui_upload_checkForExisting = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
-    this.ui_upload_uploading = function(){return upload_status == UPLOAD_STATUS.UPLOADING;}
-    this.ui_upload_waitingScraping = function() {return upload_status == UPLOAD_STATUS.WAITING_SCRAPING;}
-    this.ui_upload_succesScraping = function() {return upload_status == UPLOAD_STATUS.SUCCES_SCRAPING;}
-    this.ui_upload_waitingEditing = function() {return upload_status == UPLOAD_STATUS.WAITING_EDITING;}
-    this.ui_upload_succesEditing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
-    this.ui_upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
-    this.ui_upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
-    this.ui_upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
+    this.upload_active = function() {return upload_status != UPLOAD_STATUS.UNACTIVE;}
+    this.upload_initialStatus = function() {return upload_status == UPLOAD_STATUS.INITIAL;}
+    this.upload_checkForExisting = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
+    this.upload_uploading = function(){return upload_status == UPLOAD_STATUS.UPLOADING;}
+    this.upload_waitingScraping = function() {return upload_status == UPLOAD_STATUS.WAITING_SCRAPING;}
+    this.upload_succesScraping = function() {return upload_status == UPLOAD_STATUS.SUCCES_SCRAPING;}
+    this.upload_waitingEditing = function() {return upload_status == UPLOAD_STATUS.WAITING_EDITING;}
+    this.upload_succesEditing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
+    this.upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
+    this.upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
+    this.upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
     
-    this.ui_upload_set_exists = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
-    this.ui_upload_set_succes_editing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
-    this.ui_upload_set_succes_uploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;} 
+    this.upload_set_exists = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
+    this.upload_set_succes_editing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
+    this.upload_set_succes_uploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;} 
 
-    this.ui_upload_searchExcisting = function(){
+    this.upload_searchExcisting = function(){
         search(appData.uploadData.title, false);
         upload_status = UPLOAD_STATUS.EXISTS;
         // make sure you can select
@@ -437,28 +435,31 @@ webapp.service('managePublications', function($location, appData, $http) {
     /*AuthorInfo ::= {  firstname: …, lastname: …, publications: <publicationArray>, profile: … }
 profile duidt hierbij op het feit of de auteur ook een gebruiker is op SKRIBL, indien dit zo is zal hier de gebruikersnaam terug te vinden zijn (en is GET /users/<username> dus mogelijk…), anders wordt dit veld niet meegegeven (maw ‘undefined’)*/
 
-    var ui_AUTHORS_STATUS = {
+    var AUTHORS_STATUS = {
         INITIAL: 0,
         SEARCHING: 1,
         SUCCES_SEARCHING: 2}
-    var ui_authors_status = ui_AUTHORS_STATUS.INITIAL;
+    var authors_status = AUTHORS_STATUS.INITIAL;
+    
+    this.authors_initialStatus = function() {return authors_status == AUTHORS_STATUS.INITIAL;};
+    this.authors_getting = function(){return authors_status == AUTHORS_STATUS.SCRAPING;};
+    this.authors_succes = function(){ return authors_status == AUTHORS_STATUS.SUCCES_GETTING;};
+    this.authors_reset = function(){authors_status = AUTHORS_STATUS.INITIAL; appData.data.searchAuthorsResult = null;};
 
     this.getAuthors = function(firstName, lastName, number){
-        ui_authors_status = ui_AUTHORS_STATUS.SEARCHING;
+        authors_status = AUTHORS_STATUS.SEARCHING;
         var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastName=').concat(lastName).concat('&limit=').concat(number);
         var getAuthorsRequest = $http.get(url, config);
 
         getAuthorsRequest.success(function(data, status, headers, config) {
-            ui_authors_status = ui_AUTHORS_STATUS.SUCCES_SEARCHING;
+            authors_status = AUTHORS_STATUS.SUCCES_SEARCHING;
             appData.searchAuthorsResult = data;
+            console.log(appData.searchAuthorsResult);
         })
         getAuthorsRequest.error(function(data, status, headers, config) {
-            ui_authors_status = ui_AUTHORS_STATUS.INITIAL
+            authors_status = AUTHORS_STATUS.INITIAL
 
         })
     }
-
-
-
 //----------------------------------------------------------------------------------------------------------------------//
 });
