@@ -55,15 +55,16 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
         });
     };
 
+    //add a publication to a certan library of a user
     this.addPublications = function(libraryName, publicationID) {
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var addPublicationsRequest = $http.put(url, config);
         
         addPublicationsRequest.success(function(data, status, headers, config) {
-            if(libraryName.equals(libName))
-            {getUserPublications(libName);}
-            else{ui_publication_status = ui_PUBLICATIONS_STATUS.UPTODATE;};
+            if(libraryName.equals(appData.data.currentLibraryName))
+            {getUserPublications(appData.data.currentLibraryName);}
+            else{upToDate();};
             toast("Publication added to library.", 4000);
         });
         getUserPublicationsRequest.error(function(data, status, headers, config) {
@@ -110,7 +111,7 @@ webapp.service('managePublications', function($location, appData, $http, $rootSc
     //Delete a library of a user
     this.deleteLib = function(libName) {
         corrupt();
-        var url = serverApi.concat('/user/').concat($scope.username).concat('/library/').concat(libName);
+        var url = serverApi.concat('/user/').concat(appData.currentUser).concat('/library/').concat(libName);
         var createRequest = $http.delete(url, config);
         
         createRequest.success(function(data, status, headers, config) {
