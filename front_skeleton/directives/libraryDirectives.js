@@ -3,11 +3,23 @@
  */
 var webApp = angular.module('webApp');
 
-//clickable publication title that is connected to the metadata-preview functionality
-webApp.directive("pubItem", ['pubListFac', function (pubListFac){
+
+webApp.directive("removeFromLib", ["libListingFac", function(libListingFac){
+
     return {
-        restrict: 'E',
-        template: '<p> a publication title here </p>'
+        restrict: "A",
+        scope : true,
+        link: function (scope, element, attrs) {
+            element.bind("click", function(){
+                scope.$apply(function() {
+                    var pubIdToRemove = scope.item.ID;
+                    console.log("id to remove " + pubIdToRemove);
+                    console.log("from: " + scope.currentListingType);
+                    libListingFac.removePublication(scope.currentListingType, pubIdToRemove);
+                });
+            })
+
+        }
     }
 
 }]);
