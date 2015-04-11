@@ -1,0 +1,12 @@
+
+
+<a class="fa fa-user" ng-click="currentListingType = 'portfolio' "> Portfolio </a>
+<a class="fa fa-star" ng-click="currentListingType = 'favourites' "> Favourites</a>
+
+<h4> This is the listing for {{currentListingType}} </h4>
+
+<ul class="list-unstyled">
+    <li ng-repeat="item in currentListing">
+        <a class="fa fa-book">{{item.title}}</a>
+    </li>
+</ul>

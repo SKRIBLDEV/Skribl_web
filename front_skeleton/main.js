@@ -46,24 +46,29 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/library',
             views:{
 
-                //main view
+                //main view (relatively named)
                 '': {
-                    controller: 'libCtrl',
-                    templateUrl: 'views/library.html'
+                    templateUrl: 'views/library-main.html'
                 },
 
                 // child view (absolutely named)
-                'columnOne@dashboard.library': { template: 'Look I am a column' },
+                'library-listing@dashboard.library': {
+                    controller: 'libListingCtrl',
+                    templateUrl: 'views/library-listing.html' },
 
                 // child view (absolutely named)
-                'columnTwo@dashboard.library': {
-                    template: 'Look I am the second column'
+                'metadataPrev@dashboard.library': {
+                    template: 'I am the metadata preview'
+                },
+
+                // child view (absolutely named)
+                'library-search@dashboard.library': {
+                    template: 'And here you can search.'
                 }
 
             }
 
         });
-
 
 });
 

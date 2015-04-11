@@ -4,15 +4,22 @@
 
 var webApp = angular.module('webApp');
 
-webApp.factory("libFac", ['$rootScope', function($rootScope) {
+webApp.factory("libListingFac", ['$rootScope', function($rootScope) {
 
-    var libItems = [
+    var portfolioListing = [
         {"title": "port_pub1", "ID": 0},
         {"title": "port_pub2", "ID": 1}
     ];
 
+    var favouritesListing = [
+        {"title": "fav_pub1", "ID": 2},
+        {"title": "fav_pub2", "ID": 3}
+
+    ]
+
     var factory = {
-        libItems: libItems
+        portfolioListing: portfolioListing,
+        favouritesListing: favouritesListing
     };
     return factory;
 
