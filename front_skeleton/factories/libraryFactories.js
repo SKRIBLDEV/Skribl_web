@@ -4,7 +4,7 @@
 
 var webApp = angular.module('webApp');
 
-webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
+webApp.factory("libListingFac", function( ) {
 
 
     // in this factory, a consistent model of the 'portfolio' and 'favourite' listings is kept
@@ -105,7 +105,7 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
      * @param argObject : optional arguments
      * @return the resulting listing array
      */
-    
+
 
     /*
      * adds a publication to the current library (server side) and updates the current listing model
@@ -159,4 +159,4 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
     };
     return factory;
 
-}]);
+});

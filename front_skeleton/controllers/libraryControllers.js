@@ -4,13 +4,24 @@
 var webApp = angular.module('webApp');
 
 
-webApp.controller('libCtrl', ['$scope', 'libListingFac', function($scope, libListingFac) {
+webApp.controller('libCtrl', ['$scope', 'libListingFac', 'metadataFac', function($scope, libListingFac, metadataFac) {
 
 
     //=========== init
 
-    $scope.currentListing = libListingFac.currentListing;
-    // changes in currentListing will automatically be watched by the controller -> view update upon change
+
+    $scope.currentListing = libListingFac.currentListing; // this is automatically watched -> changes will be reflected in the view
+    $scope.currentMetadata = metadataFac.currentMetadata;
+
+
+
+    /*$scope.$watch("currentMetadata", function(newValue){
+        console.log('noticed!');
+        console.log(newValue);
+        console.log(newValue.year);
+        $scope.currentMetadata = newValue;
+    });*/
+
 
 
 }]);

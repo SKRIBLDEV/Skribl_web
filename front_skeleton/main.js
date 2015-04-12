@@ -63,7 +63,7 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
 
                 // child view (absolutely named)
                 'metadata-preview@dashboard.library.listing': {
-                    template: 'I am a standalone metadata preview'
+                    templateUrl: 'views/metadata-preview.html'
                 }
 
             }
@@ -84,7 +84,7 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
 
                 // child view (absolutely named)
                 'metadata-preview@dashboard.library.search': {
-                    template: 'I am a standalone metadata preview'
+                    templateUrl: 'views/metadata-preview.html'
                 }
 
             }
