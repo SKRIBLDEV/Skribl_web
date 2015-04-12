@@ -224,10 +224,10 @@ function Publication(db) {
 
 //change this to one big query for pagination and sorting
 	this.querySimple = function(keyword, limit, clb) {
-		function getTitle(id, clb2) {
-			db.select('title').from(id).all()
+		function getInfo(id, clb2) {
+			db.select('title, @class, in(\'AuthorOf\') as authors').from(id).all()
 			.then(function(res) {
-				clb2(null, res[0].title);
+				clb2(null, res[0]);
 			}).error(function(er) {
 				clb(er);
 			});
@@ -237,8 +237,8 @@ function Publication(db) {
 			if(array.length) {
 				var ctr = 0;
 				for (var i = 0; i < array.length; i++) {
-					getTitle(array[i], function(error, res) {
-						array[ctr] = {id: array[ctr], title: res};
+					getInfo(array[i], function(error, res) {
+						array[ctr] = {id: array[ctr], title: res.title, type: res.class, authors: RID.transformRids(res.authors)};
 						ctr++
 						if(ctr == array.length) {
 							callB(null, array);
@@ -410,14 +410,14 @@ function Publication(db) {
 			}
 			if(tempQuery == '') {
 				//console.log(query);
-				db.query('select @rid, title from (' + query + ') limit ' + limit).all()
+				db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from (' + query + ') limit ' + limit).all()
 				.then(function(res) {
 					callBack(null, res);
 				});
 			}
 			else {
 				if(query == '') {
-					db.query('select @rid, title from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -425,7 +425,7 @@ function Publication(db) {
 					});
 				}
 				else {
-					db.query('select @rid, title from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -444,7 +444,10 @@ function Publication(db) {
 							for (var i = 0; i < res.length; i++) {
 								delete res[i]['@rid'];
 								delete res[i]['@type'];
-								res[i].id = res[i].rid;
+								res[i].authors = RID.transformRids(res[i]['authors']);
+								res[i].type = res[i]['class'];
+								delete res[i]['class'];
+								res[i].id = RID.transformRid(res[i].rid);
 								delete res[i]['rid'];
 								ctr++;
 								if(ctr == res.length) {

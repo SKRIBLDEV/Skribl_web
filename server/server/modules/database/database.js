@@ -439,8 +439,8 @@ exports.Database = Database;
 
 //TESTCODE
 /*
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -491,13 +491,17 @@ var criteria = {
 	authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Gar', lastName: 'Vakar'}, {firstName: 'M', lastName: 'Braem'}]
 };
 
+var criteria2 = {
+	number: 19
+};
+
 var d = new Date();
 var t = d.getTime();
 
 
 
 //database.testError(callBack);
-//database.queryAdvanced(criteria, 10, callBack);
+//database.queryAdvanced(criteria2, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
 //database.loadLibrary('test3', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
@@ -544,9 +548,9 @@ UM.createUser(userInfo, function(error, res) {
 })
 */
 
-
-
 /*
+
+
 
 function callBack(error, result){
 	var nd = new Date();
@@ -567,7 +571,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
 
+*/
 
 

@@ -159,7 +159,7 @@ function Library(db) {
 		function prepResults(array, callB) {
 			var ctr = 0;
 			for (var i = 0; i < array.length; i++) {
-				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title']};
+				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class'], authors: RID.transformRids(array[ctr]['authors'])};
 				ctr++
 				if(ctr == array.length) {
 					callB(null, array);
@@ -169,7 +169,7 @@ function Library(db) {
 		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
 		.then(function(res) {
 			if(res.length) {
-				db.query('select title, @rid from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
+				db.query('select title, @rid, @class, in(\'AuthorOf\') as authors from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
 				.then(function(publications) {
 					if(publications.length) {
 						prepResults(publications, function(error, res) {

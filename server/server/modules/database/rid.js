@@ -51,6 +51,18 @@ var Oriento = require('oriento');
 		};
 	}
 
+	exports.transformRids = function(array) {
+		var resArray = [];
+		var counter = 0;
+		for (var i = 0; i < array.length; i++) {
+			resArray.push(transformRid(array[i]));
+			counter++
+			if(counter == array.length) {
+				return resArray;
+			}
+		};
+	}
+
 	exports.getFieldRids = function(array) {
 		var resArray = [];
 		var counter = 0;
