@@ -1,14 +1,16 @@
 
+<h4> This works with a factory, a controller, and directives: </h4>
 
-<a class="fa fa-user" ng-click="currentListingType = 'portfolio' "> Portfolio </a>
-<a class="fa fa-star" ng-click="currentListingType = 'favourites' "> Favourites</a>
+<a class="fa fa-user" lib-name = "portfolio" switch-lib> Portfolio</a>
+<a class="fa fa-star" lib-name = "favourites" switch-lib> Favourites</a>
 
-<h4> This is the listing for {{currentListingType}} </h4>
 
+
+<h4> Currently: {{currentListing.type}} </h4>
 
 <ul class="list-unstyled">
-    <li ng-repeat="item in currentListing" >
+    <li ng-repeat="item in currentListing.items" >
         <a class="fa fa-book"  >{{item.title}}</a>
-        <a class="btn btn-primary"  remove-from-lib> remove</a>
+        <remove-from-lib></remove-from-lib>
     </li>
 </ul>

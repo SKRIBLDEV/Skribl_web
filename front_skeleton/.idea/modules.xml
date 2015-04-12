@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/Documents/vub/software_engineering/development/implementations/front_skeleton/.idea/library_test.iml" filepath="$USER_HOME$/Documents/vub/software_engineering/development/implementations/front_skeleton/.idea/library_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/front_skeleton.iml" filepath="$PROJECT_DIR$/.idea/front_skeleton.iml" />
     </modules>
   </component>
 </project>
