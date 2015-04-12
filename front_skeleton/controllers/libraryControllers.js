@@ -4,7 +4,7 @@
 var webApp = angular.module('webApp');
 
 
-webApp.controller('libListingCtrl', ['$scope', 'libListingFac', function($scope, libListingFac) {
+webApp.controller('libCtrl', ['$scope', 'libListingFac', function($scope, libListingFac) {
 
 
     //=========== init

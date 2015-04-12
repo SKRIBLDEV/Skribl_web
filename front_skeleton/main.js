@@ -44,6 +44,7 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
         //library has nested views =======
         .state('dashboard.library', {
             url: '/library',
+            controller: 'libCtrl',
             templateUrl: 'views/library-main.html'
         })
 
@@ -58,7 +59,6 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
 
                 // child view (absolutely named)
                 'library-listing@dashboard.library.listing': {
-                    controller: 'libListingCtrl',
                     templateUrl: 'views/library-listing.html' },
 
                 // child view (absolutely named)

@@ -20,6 +20,26 @@ webApp.directive("switchLib", ["libListingFac", function(libListingFac){
 }]);
 
 
+webApp.directive("addToLib", ["libListingFac", function(libListingFac){
+    return {
+        restrict: "E",
+        scope : true,
+        template : '<a class="btn btn-primary"> add a_new_pub.pdf </a>',
+        replace: true,
+        link: function (scope, element, attrs) {
+            element.bind("click", function(){
+                scope.$apply(function() {
+                    //stub
+                    var stubPub = {"title": "a_new_pub.pdf", "ID": 100};
+                    console.log(stubPub);
+                    libListingFac.addPublication(stubPub);
+                });
+            })
+        }
+    }
+}]);
+
+
 
 webApp.directive("removeFromLib", ["libListingFac", function(libListingFac){
     return {
@@ -39,4 +59,6 @@ webApp.directive("removeFromLib", ["libListingFac", function(libListingFac){
         }
     }
 }]);
+
+//======= upload
 

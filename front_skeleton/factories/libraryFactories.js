@@ -84,14 +84,13 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
         if (currentListing.type == "portfolio"){
             portfolioListing = updateFunc(argObject); //update the local model
             currentListing.items = portfolioListing; // update the current listing, which is watched by the controller
-            console.log("portfolio is now: " + portfolioListing);
-            console.log("currentListing is now: " + currentListing.items);
-            console.log("removed a publication from the model");
+            console.log("changed the model");
         }
 
         else if (currentListing.type == "favourites") {
             favouritesListing = updateFunc(argObject); //update the local model
             currentListing.items = favouritesListing; // update the current listing, which is watched by the controller
+            console.log("changed the model");
         }
         else
             console.log("updateListing: currentListing type not recognised "); // TO DO : error handling
@@ -106,8 +105,7 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
      * @param argObject : optional arguments
      * @return the resulting listing array
      */
-
-
+    
 
     /*
      * adds a publication to the current library (server side) and updates the current listing model
@@ -120,8 +118,9 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
             // -save a server request by adding a publication with the new ID and known title to the local listing model
 
             //stub:
-            //currentListing.push(...)
-            console.log("added a publication");
+            currentListing.items.push(pubToAdd); //returns an index, not an array!
+            return currentListing.items;
+
         });
     };
 
@@ -135,14 +134,12 @@ webApp.factory("libListingFac", ['$rootScope', function( $rootScope ) {
             // -fetch the publications anew, which renews the local model
             // -save a server request by removing the new publication from the local listing model
 
-            console.log("before: " + currentListing.items);
 
             //stub:
             var changedArray = currentListing.items.filter(function (element) {
                 return element.ID !== pubIdToRemove;
             });
 
-            console.log("after: " + changedArray);
 
             return changedArray;
         });
