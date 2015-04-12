@@ -41,33 +41,59 @@ webApp.config(function($stateProvider, $urlRouterProvider) {
             template: 'Here comes the network.'
         })
 
-        //library has multiple views
+        //library has nested views =======
         .state('dashboard.library', {
             url: '/library',
-            views:{
+            templateUrl: 'views/library-main.html'
+        })
 
+        //listing part has multiple views
+        .state('dashboard.library.listing', {
+            url: '/listing',
+            views: {
                 //main view (relatively named)
                 '': {
-                    templateUrl: 'views/library-main.html'
+                    templateUrl: 'views/library-listing-main.html'
                 },
 
                 // child view (absolutely named)
-                'library-listing@dashboard.library': {
+                'library-listing@dashboard.library.listing': {
                     controller: 'libListingCtrl',
                     templateUrl: 'views/library-listing.html' },
 
                 // child view (absolutely named)
-                'metadataPrev@dashboard.library': {
-                    template: 'I am the metadata preview'
-                },
-
-                // child view (absolutely named)
-                'library-search@dashboard.library': {
-                    template: 'And here you can search.'
+                'metadata-preview@dashboard.library.listing': {
+                    template: 'I am a standalone metadata preview'
                 }
 
             }
+        })
 
+        //search part has multiple views
+        .state('dashboard.library.search', {
+            url: '/search',
+            views: {
+                //main view (relatively named)
+                '': {
+                    templateUrl: 'views/library-search-main.html'
+                },
+
+                // child view (absolutely named)
+                'library-search@dashboard.library.search': {
+                    template: 'I am the search window' },
+
+                // child view (absolutely named)
+                'metadata-preview@dashboard.library.search': {
+                    template: 'I am a standalone metadata preview'
+                }
+
+            }
+        })
+
+        //upload
+        .state('dashboard.library.upload', {
+            url: '/upload',
+            templateUrl: 'views/library-upload.html'
         });
 
 });
