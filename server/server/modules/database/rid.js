@@ -16,7 +16,12 @@ var Oriento = require('oriento');
 	}
 
 	exports.getORid = getORid;
-
+	/**
+	 * returns the record id of an object as an oriento rid object.
+	 * @private
+	 * @param  {Object} object
+	 * @return {String}
+	 */
 	function getORid(object) {
 		var rid = object['@rid'];
 		var cluster = rid.cluster;
@@ -27,7 +32,6 @@ var Oriento = require('oriento');
 
 	/**
 	 * gets rid in object form and transforms it into stringform
-	 * @private
 	 * @param  {Object} data
 	 * @return {String}
 	 */
@@ -39,6 +43,11 @@ var Oriento = require('oriento');
 		return result;
 	}
 
+	/**
+	 * takes an array of objects and uses getRid to make an array of string rid's
+	 * @param  {Array<Object>} array of objects
+	 * @return {Array<String>}
+	 */
 	exports.getRids = function(array) {
 		var resArray = [];
 		var counter = 0;
@@ -51,6 +60,28 @@ var Oriento = require('oriento');
 		};
 	}
 
+	/**
+	 * takes an array of object rid's an gives back an array of string rid's
+	 * @param  {Array<Object>} array object rid's
+	 * @return {Array<String>}       result
+	 */
+	exports.transformRids = function(array) {
+		var resArray = [];
+		var counter = 0;
+		for (var i = 0; i < array.length; i++) {
+			resArray.push(transformRid(array[i]));
+			counter++
+			if(counter == array.length) {
+				return resArray;
+			}
+		};
+	}
+
+	/**
+	 * takes an array of objects which hava a field with name: 'rid' and gives back an array of string rid's
+	 * @param  {Array<Objec>} array 
+	 * @return {Array<String>}       
+	 */
 	exports.getFieldRids = function(array) {
 		var resArray = [];
 		var counter = 0;
@@ -63,6 +94,11 @@ var Oriento = require('oriento');
 		};
 	}
 
+	/**
+	 * given an array of objects, will return an array of oriento rid objects
+	 * @param  {Array<object>} array 
+	 * @return {Array<Object>}       
+	 */
 	exports.getORids = function(array) {
 		var resArray = [];
 		var counter = 0;
@@ -75,6 +111,12 @@ var Oriento = require('oriento');
 		};
 	}
 
+	/**
+	 * function to compare rids
+	 * @param  {String} rid1 
+	 * @param  {String} rid2 
+	 * @return {Int}     
+	 */
 	exports.compareRid = function(rid1, rid2) {
 		rid1 = rid1.replace('#', '');
 		rid2 = rid2.replace('#', '');

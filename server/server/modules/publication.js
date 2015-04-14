@@ -23,14 +23,14 @@ function setUndefinedProperties(metadataGUI, metadataGS){
 function setToType(type, metadataGS){
   if (type == "journal"){
     metadataGS.journal = metadataGS.journalOrBookTitle;
-    metadataGS.publisher = metadataGS.publisherOrOrganization;
+    metadataGS.publisher = metadataGS.publisherOrOrganisation;
   };
   if (type == "proceeding"){
     metadataGS.booktitle = metadataGS.journalOrBookTitle;
-    metadataGS.organisation = metadataGS.publisherOrOrganization;
+    metadataGS.organisation = metadataGS.publisherOrOrganisation;
   };
   delete metadataGS.journalOrBookTitle;
-  delete metadataGS.publisherOrOrganization;
+  delete metadataGS.publisherOrOrganisation;
 };
 
 /**
@@ -39,7 +39,7 @@ function setToType(type, metadataGS){
 
 function makeGeneric(metadataGS){
   delete metadataGS.journalOrBookTitle;
-  delete metadataGS.publisherOrOrganization;
+  delete metadataGS.publisherOrOrganisation;
 };
 
 
@@ -130,11 +130,12 @@ extract(testInfo, function(err, res){
   else
     console.log(testInfo);
 });
+*/
 
 
 
 
-
+/*
 var withWrongUrl = "Module superimposition: a composition technique for rule-based model transformation languages";
 
 

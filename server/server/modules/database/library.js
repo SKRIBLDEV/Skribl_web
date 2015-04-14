@@ -1,8 +1,11 @@
 
 
 var RID = require('./rid.js');
+var Author = require('./author.js');
 
 function Library(db) {
+
+	var AUT = new Author.Author(db);
 
 	 function createLibrary(user, name, trx, clb) { 
 	 	trx.let(name, function(s) {
@@ -46,35 +49,46 @@ function Library(db) {
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
-		db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
-		.then(function(pubs) {
-			if(pubs.length === 0) {
-				db.select().from('Library').where({username: user, name: library}).all()
-				.then(function (libraries) {
-					if(libraries.length) {
-						var libRid = RID.getRid(libraries[0]);
-						db.create('edge', 'HasPublication')
-						.from(libRid)
-						.to(id).one()
-						.then(function() {
-							clb(null, true);
+		db.select('@rid').from('Publication').where('@rid = ' + id).all()
+		.then(function(res) {
+			if(res.length) {
+				db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
+				.then(function(pubs) {
+					if(pubs.length === 0) {
+						db.select().from('Library').where({username: user, name: library}).all()
+						.then(function (libraries) {
+							if(libraries.length) {
+								var libRid = RID.getRid(libraries[0]);
+								db.create('edge', 'HasPublication')
+								.from(libRid)
+								.to(id).one()
+								.then(function() {
+									clb(null, true);
+								}).error(function(er) {
+									clb(er);
+								});
+							}
+							else {
+								clb(new Error('Library does not exist'));
+							}
 						}).error(function(er) {
 							clb(er);
 						});
 					}
 					else {
-						clb(new Error('Library does not exist'));
+						clb(new Error('publication with id: ' + id + ', is already in library'));
 					}
 				}).error(function(er) {
 					clb(er);
 				});
 			}
 			else {
-				clb(new Error('publication with id: ' + id + ', is already in library'));
+				clb(new Error('Publication with id: ' + id + ' does not exist'));
 			}
 		}).error(function(er) {
 			clb(er);
 		});
+		
 		
 	}
 
@@ -148,17 +162,20 @@ function Library(db) {
 		function prepResults(array, callB) {
 			var ctr = 0;
 			for (var i = 0; i < array.length; i++) {
-				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title']};
-				ctr++
-				if(ctr == array.length) {
-					callB(null, array);
-				} 
+				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class'], authors: RID.transformRids(array[ctr]['authors'])};
+				AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
+					ctr++
+					if(ctr == array.length) {
+						callB(null, array);
+					} 
+				});
 			};
 		}
+
 		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
 		.then(function(res) {
 			if(res.length) {
-				db.query('select title, @rid from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
+				db.query('select title, @rid, @class, in(\'AuthorOf\') as authors from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
 				.then(function(publications) {
 					if(publications.length) {
 						prepResults(publications, function(error, res) {

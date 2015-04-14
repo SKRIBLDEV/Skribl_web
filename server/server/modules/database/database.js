@@ -5,11 +5,6 @@
 *exports one constructor: Database(serverConfig, dbConfig)
 *with methods to interact this database */
 
-/* ---- TODO -------- *
-* test with jasmine
-* write function to add connection researchgroup-->researchdomain
-* write function to delete affiliatins (low priority)
-* ----- END TODO ---- */
 
 /**
  * This callback is displayed as a global member.
@@ -31,7 +26,6 @@ var library = require('./library.js');
 var keyword = require('./keyword.js');
 var authors = require('./author.js');
 var path = require('path');
-var fs = require('fs');
 
  /** 
    *Create a new database object.
@@ -66,7 +60,7 @@ function Database(serverConfig, dbConfig) {
 	var Kw = new keyword.Keyword(db);
 	var AUT = new authors.Author(db);
 
-
+	/* provides functions */
 	this.addJournal = PUB.addJournal;
 	this.queryAdvanced = PUB.queryAdvanced;
 	this.addProceeding = PUB.addProceeding;
@@ -84,6 +78,7 @@ function Database(serverConfig, dbConfig) {
 	this.removeFromLibrary = Lib.removeFromLibrary;
 	this.addDefaults = Lib.addDefaults;
 	this.searchAuthor = AUT.searchAuthor;
+
 	/**
 	*Will give the subdivisions of a given division.
 	*@param {callBack} callback - handles response
@@ -241,7 +236,6 @@ function Database(serverConfig, dbConfig) {
 		}
 	};
 
-///WITH TRANSACTIONS
 	/**
 	 * Deletes user with given username from database, throws error if user doesn't exist.
 	 * @param  {string}   username
@@ -303,8 +297,7 @@ function Database(serverConfig, dbConfig) {
 			});
 	};
 
-///WITH TRANSACTIONS
-	//find a way to make a transaction out of this, at the moment eventual causes for errors are caught in user.js validation.
+
 	/**
 	 * adds user with given data to database
 	 * @private
@@ -491,13 +484,17 @@ var criteria = {
 	authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Gar', lastName: 'Vakar'}, {firstName: 'M', lastName: 'Braem'}]
 };
 
+var criteria2 = {
+	number: 19
+};
+
 var d = new Date();
 var t = d.getTime();
 
 
 
 //database.testError(callBack);
-//database.queryAdvanced(criteria, 10, callBack);
+//database.queryAdvanced(criteria2, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
 //database.loadLibrary('test3', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
@@ -545,8 +542,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
 /*
+
 
 function callBack(error, result){
 	var nd = new Date();
@@ -567,7 +564,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
+
+
 */
-
-
 
