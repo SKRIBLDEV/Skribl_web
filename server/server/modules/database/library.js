@@ -162,13 +162,22 @@ function Library(db) {
 		function prepResults(array, callB) {
 			var ctr = 0;
 			for (var i = 0; i < array.length; i++) {
-				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class'], authors: RID.transformRids(array[ctr]['authors'])};
-				AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
+				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class']};
+				if(array[ctr]['authors']) {
+					array[ctr].authors = RID.transformRids(array[ctr]['authors']);
+						AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
+						ctr++
+						if(ctr == array.length) {
+							callB(null, array);
+						} 
+					});
+				}
+				else {
 					ctr++
 					if(ctr == array.length) {
 						callB(null, array);
 					} 
-				});
+				}
 			};
 		}
 
