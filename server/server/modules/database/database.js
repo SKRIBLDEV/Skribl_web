@@ -432,7 +432,7 @@ function Database(serverConfig, dbConfig) {
 exports.Database = Database;
 
 //TESTCODE
-
+/*
 var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 //var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
@@ -497,7 +497,7 @@ var t = d.getTime();
 //database.testError(callBack);
 //database.queryAdvanced(criteria2, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
-database.loadLibrary('brol', 'Uploaded', callBack);
+//database.loadLibrary('brol', 'Uploaded', callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
 //database.addLibrary('test2', 'newlib', callBack);
 //database.testTransaction('jshep', callBack);
@@ -529,7 +529,7 @@ faculty: "Exact sciences",
 department: "DINF",
 researchDomains: ["Computer and Information Science"],
 researchGroup: "none" }
-
+*/
 /*
 UM.createUser(userInfo, function(error, res) {
 	if(error) {
@@ -543,7 +543,7 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-
+/*
 
 
 function callBack(error, result){
@@ -567,5 +567,5 @@ function stop(){
 }
 
 
-
+*/
 
