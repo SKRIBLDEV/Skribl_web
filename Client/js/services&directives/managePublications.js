@@ -212,11 +212,11 @@ webapp.service('managePublications', function($location, appData, $http) {
     };
     this.publicationViewerEnabled = function(){ return self.showPublicationViewer;};
     
-    // this.displayPDF = false;
+    this.displayPDF = false;
 
-    // this.toggleDisplayPDF = function(){
-    //     self.displayPDF = !self.displayPDF;
-    // }
+    this.toggleDisplayPDF = function(){
+        self.displayPDF = !self.displayPDF;
+    }
 
 
     this.loadPublicationInViewer = function(publicationID){
@@ -257,6 +257,7 @@ webapp.service('managePublications', function($location, appData, $http) {
             data.id = publicationID;
             //this can be simplified when we are finished
             data.download = (typeof data.download !== 'undefined') ? data.download : "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
+            data.download = "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
             appData.data.currentMetaData = data;
         });
          getMetaDataRequest.error(function(data, status, headers, config) {
