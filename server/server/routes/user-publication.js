@@ -62,10 +62,10 @@ function getPublication(req, res, context) {
 			if(err) {
 				serverError(res, err.toString());
 			} else {
-				mt.download = req.protocol + '://'
-							+ req.hostname + '/'
-							+ id.substring(1)
-							+ '?download=true';
+				metadata.download = req.protocol + '://'
+								+ req.hostname + '/'
+								+ id.substring(1)
+								+ '?download=true';
 				if (req.query['extract'] === 'true') {	
 					PUB.extract(metadata, function(err, mt) {
 						if(err)
