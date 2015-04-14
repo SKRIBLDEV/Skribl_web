@@ -22,9 +22,8 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         managePublications.getUserLibraries();
     })();
 
-    
 
-    $scope.ddSelectSelected = {}; // Must be an object
+    
 
 
     
