@@ -1,10 +1,10 @@
 <!--inner card :: upload publication -->
-<div class="card" ng-show="ui_upload_active()">
+<div class="card" ng-show="publications.upload_active()">
 	<div class="card-content">
 		<span class="card-title grey-text text-darken-4">
 			<a> Upload Publication </a>
 			<a> 
-				<i class="mdi-content-clear right" ng-click="ui_upload_deActivate()"></i>
+				<i class="mdi-content-clear right" ng-click="publications.upload_deActivate()"></i>
 			</a>
 		</span>
 	</div>
@@ -12,16 +12,22 @@
 		<div class="animated fadeInDown col s12">
 			<div class="section">
 
+			<!-- general waiting -->
+				<div ng-show="publications.upload_waiting()">
+					<h5> {{publications.upload_waitingmsg}} </h5>
+					<spinner ng-show="publications.upload_waiting()"></spinner>
+				</div>
+
 				<!-- start initial status -->
 				<!-- titel, journal/proceeding, file -->
-				<div ng-show="ui_upload_initialStatus()">
+				<div ng-show="publications.upload_initialStatus()">
 
 					<div class="row center">
-						<input name="group1" type="radio" id="test1" ng-model="publications.uploadData.type" value="journal"/>
+						<input name="group1" type="radio" id="test1" ng-model="appData.uploadData.type" value="journal"/>
 						<label for="test1">Journal</label>
 						
 						
-						<input name="group1" type="radio" id="test2" ng-model="publications.uploadData.type" value="proceeding"/>
+						<input name="group1" type="radio" id="test2" ng-model="appData.uploadData.type" value="proceeding"/>
 						<label for="test2">Proceeding</label>
 					</div>
 					
@@ -29,23 +35,23 @@
 					<div class="row">
 						<div class="input-field col s10 offset-s1">
 							<i class="mdi-content-text-format prefix"></i>
-							<input id="upload_title" type="text" class="validate" ng-model="publications.uploadData.title" required>
+							<input id="upload_title" type="text" class="validate" ng-model="appData.uploadData.title" required>
 							<label for="upload_title">Title</label>
 						</div>
 					</div>
 
 					<!-- check button -->
 					<div class="row center">
-						<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.ui_upload_searchExcisting()">
+						<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.upload_searchExcisting()">
 							<i class="mdi-content-send left"></i>
-							check for excisting
+							upload
 						</a>
 					</div>
 				</div>
 				<!-- stop initial status -->
 
 				<!-- start checking status -->
-				<div ng-show="publications.ui_upload_checkForExisting()">
+				<div ng-show="publications.upload_checkForExisting()">
 					<!-- check for searching -->
 					<div ng-show="publications.ui_search_searching()" class="row center">
 					<h5> Searching for excisting publications </h5>
@@ -84,16 +90,7 @@
 				</div>
 
 				<!-- stop waiting page for scraping -->
-				<!-- waiting page for manual -->
-				<div ng-show="ui_upload_waitingManual()">
-					<h5 class="row center"> Oldschool manual metadata, eh?</h5>
-					<div class="row center">
-						<spinner></spinner>
-						<!-- 2DO remove this if works -->
-						do you c spinner? 
-					</div>
-				</div>
-				<!-- stop waiting page for manual -->
+				
 				<!-- succes for all -->
 				<div class="row center" ng-show="ui_upload_success()"> 
 					<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">

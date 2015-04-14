@@ -374,7 +374,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             return toReplace.replace(/ /g, "+");
         }
 
-        this.search = function(keyword, external) {
+        this.search = function(keyword, external, handler) {
             searching();
             var url;
             var keywordMod = replaceSpace(keyword);
@@ -389,12 +389,18 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 appData.data.searchResult = data;
                 console.log(data); 
                 succes();
+                if (handler){
+                    handler(true, data);
+                }
                 if (data.internal.length === 0) {toast("No results found in our database.")};
                 if(external){
                     if (data.external.length === 0) {toast("No results found from external sources.")};
                 };
             });
             requestSearchPublication.error(function(data, status, headers, config) {
+                if (handler){
+                    handler(false, null);
+                }
                 toast("Failed to search publication, try again later.", 4000);
                 self.search_activate();
             });
@@ -407,6 +413,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         var requestSearchPublication = $http.post(url, searchData, config);
 
         requestSearchPublication.success(function(data, status, headers, config) {
+            data.
             appData.data.searchResult = data;
             console.log(data);
             succes();
@@ -432,22 +439,26 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         UNACTIVE: -1,
         INITIAL: 0,
         EXISTS:1,
-        UPLOADING: 2,
         WAITING_SCRAPING: 3,
         WAITING_EDITING: 4,
         SUCCES_EDITING: 5,
-        SUCCES_UPLOADING: 6}
+        SUCCES_UPLOADING: 6,
+        WAITING: 7
+    }
     var upload_status = UPLOAD_STATUS.INITIAL; //change this to unactive
+    this.upload_waitingmsg = "";
 
     this.upload_active = function() {return upload_status != UPLOAD_STATUS.UNACTIVE;}
     this.upload_initialStatus = function() {return upload_status == UPLOAD_STATUS.INITIAL;}
-    this.upload_checkForExisting = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
+    this.upload_pubExcist = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
     this.upload_uploading = function(){return upload_status == UPLOAD_STATUS.UPLOADING;}
     this.upload_waitingScraping = function() {return upload_status == UPLOAD_STATUS.WAITING_SCRAPING;}
     this.upload_succesScraping = function() {return upload_status == UPLOAD_STATUS.SUCCES_SCRAPING;}
     this.upload_waitingEditing = function() {return upload_status == UPLOAD_STATUS.WAITING_EDITING;}
     this.upload_succesEditing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
     this.upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
+    this.upload_waiting = function() { return upload_status == UPLOAD_STATUS.WAITING;}
+
     this.upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
     this.upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
     
@@ -455,9 +466,35 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     this.upload_set_succes_editing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
     this.upload_set_succes_uploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;} 
 
+    this.upload_reset = function(){
+        self.upload_deActivate();
+        appData.uploadData = { file: null, title: "", type: "", currentPublicationID: null };
+        self.upload_waitingmsg = "";
+    }
+
+    function enableWaiting(msg){
+        self.upload_waitingmsg = msg;
+        upload_status = UPLOAD_STATUS.WAITING;
+    }
+
     this.upload_searchExcisting = function(){
-        search(appData.uploadData.title, false);
+        enableWaiting("Searching for excisting publications");
+
+        function handler(succes, data){
+            if (succes) {
+                if (data.internal.length === 0) {
+                    self.uploadFile();
+                } else {
+                    upload_status = UPLOAD_STATUS.EXISTS;
+                }
+            } else {
+                self.upload_reset();
+                toast("error encouter while uploading, try again later", 4000)
+            }
+        }
+        self.search(appData.uploadData.title, false, handler);
         upload_status = UPLOAD_STATUS.EXISTS;
+        console.log(appData.uploadData);
         // make sure you can select
     }
 
@@ -489,11 +526,11 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
     //preparation for the uploadPublication function
     this.uploadFile = function() {
-
-        upload_status = UPLOAD_STATUS.UPLOADING;
+        //add handler
+        enableWaiting("Uploading file");
         var url = serverApi.concat('/publications?title=').concat(appData.uploadData.title).concat('&type=').concat(appData.uploadData.type);
         var authorization = appData.Authorization.headers.Authorization;
-        uploadPublication(appData.uploadData.file, url, authorization);
+        uploadPublication(appData.uploadData.file, url, authorization, handler);
     };
 //----------------------------------------------------------------------------------------------------------------------//
 
@@ -513,7 +550,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         this.authors_succes = function(){ return authors_status == AUTHORS_STATUS.SUCCES_GETTING;};
         this.authors_reset = function(){authors_status = AUTHORS_STATUS.INITIAL; appData.data.searchAuthorsResult = null;};
 
-        this.getAuthors = function(firstName, lastName, number){
+        this.getAuthors = function(firstName, lastName, number, handler){
             authors_status = AUTHORS_STATUS.SEARCHING;
             var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastname=').concat(lastName).concat('&limit=').concat(number);
             var getAuthorsRequest = $http.get(url, config);

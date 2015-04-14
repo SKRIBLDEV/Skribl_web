@@ -74,10 +74,7 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     
     
     // //------------------------------------------------Upload-----------------------------------------------//
-    $scope.ui_upload_active = function() {return managePublications.ui_upload_active();};
-    $scope.ui_upload_initialStatus = function() {return managePublications.ui_upload_initialStatus();};
-    $scope.ui_upload_waitingScraping = function() {return managePublications.ui_upload_waitingScraping();};
-    $scope.ui_upload_succesScraping = function() {return managePublications.ui_upload_succesScraping();};
+    
     $scope.ui_upload_activate = function() {managePublications.ui_upload_activate();};
     $scope.ui_upload_deActivate = function() {managePublications.ui_upload_deActivate();};
     $scope.ui_upload_uploading = function(){return managePublications.ui_upload_uploading();}
