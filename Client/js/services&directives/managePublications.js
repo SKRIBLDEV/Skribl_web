@@ -26,20 +26,20 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var getUserLibrariesRequest = $http.get(url, authorization);
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var getUserLibrariesRequest = $http.get(url, authorization);
 
-           getUserLibrariesRequest.success(function(data, status, headers, config) {
+         getUserLibrariesRequest.success(function(data, status, headers, config) {
             appData.data.userLibrariesNames = data;
             upToDate();
             console.log(data);
         });
-           getUserLibrariesRequest.error(function(data, status, headers, config) {
+         getUserLibrariesRequest.error(function(data, status, headers, config) {
             self.getUserLibraries();
             toast("Failed to get your libraries, try again later.", 4000);
         });
-       };
+     };
 
     //get alle the publications of a certain user in a certain library
     this.getUserPublications = function(libraryName, displayToast) {
@@ -48,10 +48,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var getUserPublicationsRequest = $http.get(url, authorization);
-           getUserPublicationsRequest.success(function(data, status, headers, config) {
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var getUserPublicationsRequest = $http.get(url, authorization);
+         getUserPublicationsRequest.success(function(data, status, headers, config) {
             appData.data.publications = data;
             console.log(data);
 
@@ -64,11 +64,11 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 toast("Sucesfully Loaded \"" + libraryName + "\" library", 4000);    
             }
         });
-           getUserPublicationsRequest.error(function(data, status, headers, config) {
+         getUserPublicationsRequest.error(function(data, status, headers, config) {
             self.getUserPublications(libraryName);
             toast("Failed to get your publications, try again later.", 4000);
         });
-       };
+     };
 
     //add a publication to a certan library of a user
     this.addPublications = function(libraryName, publicationID) {
@@ -77,26 +77,26 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var addPublicationsRequest = $http.put(url, {}, authorization);
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var addPublicationsRequest = $http.put(url, {}, authorization);
 
-           addPublicationsRequest.success(function(data, status, headers, config) {
+         addPublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName)
                 {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             var toToast ="Publication added to library ".concat(libraryName).concat(".");
             toast(toToast, 4000);
         });
-           addPublicationsRequest.error(function(data, status, headers, config) {
+         addPublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             if(status == 500)
                 {toast("Publication is already in the library.", 4000);}
             else {toast("Failed to add library, try again later.", 4000)};
         });
-       }
+     }
 
-       this.canLibBeDeleted = function(libraryName){
+     this.canLibBeDeleted = function(libraryName){
         return ["Uploaded", "Portfolio", "Favorites"].indexOf(libraryName) !== -1;
     }
 
@@ -105,22 +105,22 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var deletePublicationsRequest = $http.delete(url, authorization);
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var deletePublicationsRequest = $http.delete(url, authorization);
 
-           deletePublicationsRequest.success(function(data, status, headers, config) {
+         deletePublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName)
                 {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             var toToast ="Publication removed from library ".concat(libraryName).concat(".");
             toast(toToast, 4000);
         });
-           deletePublicationsRequest.error(function(data, status, headers, config) {
+         deletePublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to remove publication, try again later.", 4000);
         });
-       }
+     }
 
     //change publication from a library to an other
     this.switchFromLib = function(oldLibName, newLibName, publicationID){
@@ -133,40 +133,40 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var createRequest = $http.put(url, {}, authorization);
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var createRequest = $http.put(url, {}, authorization);
 
-           createRequest.success(function(data, status, headers, config) {
+         createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" created.");
             toast(messageToToast, 4000);
         });
-           createRequest.error(function(data, status, headers, config) {
+         createRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to create library, try again later.", 4000);
         });
-       }
+     }
 
     //Delete a library of a user
     this.deleteLib = function(libName) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
-           var createRequest = $http.delete(url, authorization);
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         var createRequest = $http.delete(url, authorization);
 
-           createRequest.success(function(data, status, headers, config) {
+         createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" deleted.");
             toast(messageToToast, 4000);
         });
-           createRequest.error(function(data, status, headers, config) {
-             upToDate();
-             toast("Failed to delete library, try again later.", 4000);
-         });
-       }
+         createRequest.error(function(data, status, headers, config) {
+           upToDate();
+           toast("Failed to delete library, try again later.", 4000);
+       });
+     }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
@@ -194,9 +194,9 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 console.log(appData.data.currentFile);
             });
             getFileRequest.error(function(data, status, headers, config) {
-             self.downloadFile_reset();
-             toast("Failed to download file, please try again later.", 4000);
-         });
+               self.downloadFile_reset();
+               toast("Failed to download file, please try again later.", 4000);
+           });
         }
 //----------------------------------------------------------------------------------------------------------------------//
 
@@ -256,12 +256,12 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         var url = serverApi.concat('/publications/').concat(publicationID);
 
         var authorization = {headers: 
-           {'Content-type' : 'application/json',
-           'Authorization': appData.Authorization}};
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
 
-           var getMetaDataRequest = $http.get(url, authorization);
+         var getMetaDataRequest = $http.get(url, authorization);
 
-           getMetaDataRequest.success(function(data, status, headers, config) {
+         getMetaDataRequest.success(function(data, status, headers, config) {
             getMeta_status = GETMETA_STATUS.SUCCES_GETTING;
             data.id = publicationID;
             //this can be simplified when we are finished
@@ -271,10 +271,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
             appData.data.currentMetaData = data;
         });
-           getMetaDataRequest.error(function(data, status, headers, config) {
+         getMetaDataRequest.error(function(data, status, headers, config) {
             getMeta_status = GETMETA_STATUS.INITIAL;
         });
-       }
+     }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
@@ -300,19 +300,19 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
             var url = serverApi.concat('/publications/').concat(publicationID);
             var authorization = {headers: 
-               {'Content-type' : 'application/json',
-               'Authorization': appData.Authorization}};
-               var setMetaDataRequest = $http.post(url, meta, authorization);
+             {'Content-type' : 'application/json',
+             'Authorization': appData.Authorization}};
+             var setMetaDataRequest = $http.post(url, meta, authorization);
 
-               setMetaDataRequest.success(function(data, status, headers, config) {
+             setMetaDataRequest.success(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.SUCCES_MODIFYING;
                 toast("The meta data of the publication has been changed.",4000);
             });
-               setMetaDataRequest.error(function(data, status, headers, config) {
+             setMetaDataRequest.error(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.INITIAL;
                 toast("Failed to change the informations about the publication, try again later.", 4000);
             });
-           }
+         }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
@@ -482,7 +482,7 @@ this.scrape = function(publicationID, handler) {
         // make sure you can select
     }
 
-    function uploadPublication(file, url, authorization) {
+    function uploadPublication(file, url, authorization, handler) {
 
         var fd = new FormData();
         fd.append('inputFile', file); //link the file to the name 'inputFile'
@@ -495,25 +495,16 @@ this.scrape = function(publicationID, handler) {
         })
         .success(function(data, status, headers, config) {
             appData.uploadData.currentPublicationID = stripHashtag(data.id);
-            enableWaiting("Scraping for metadata");
 
-            function handler(succes){
-                if (succes) {
-                    upload_status = UPLOAD_STATUS.EDIT;
-                } else {
-                    self.upload_reset();
-                    toast("error encouter while uploading, try again later", 4000)
-                }
+            if(handler){
+                handler(true);
             }
-
-            //when publication is added to database 
-            //metadata of publication needs to be send/updated (currently empty)
-            console.log(currentPublicationID);
-            scrape(appData.uploadData.currentPublicationID, handler);
+            
         })
         .error(function() {
-            upload_status = UPLOAD_STATUS.INITIAL;
-            toast("Failed to upload file, try again later", 4000)
+            if (handler){
+                handler(false);
+            }
         });
     }
 
@@ -522,10 +513,25 @@ this.scrape = function(publicationID, handler) {
         function handler(succes){
             if (succes) {
 
-            } else {
-
+            function nexthandler(succes){
+                if (succes) {
+                    upload_status = UPLOAD_STATUS.EDIT;
+                } else {
+                    self.upload_reset();
+                    toast("error encouter while uploading, try again later", 4000)
+                }
             }
+
+                //when publication is added to database 
+            //metadata of publication needs to be send/updated (currently empty)
+            enableWaiting("Scraping for metadata");
+            scrape(appData.uploadData.currentPublicationID, nexthandler);
+
+        } else {
+            self.upload_reset();
+            toast("Failed to upload file, try again later", 4000)
         }
+    }
 
         //add handler
         enableWaiting("Uploading file");
