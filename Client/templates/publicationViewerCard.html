@@ -44,13 +44,6 @@
 								<li> {{getCurrentViewerPublication().publisher}} </li>
 								<li> {{getCurrentViewerPublication().keywords}} </li> -->
 							</div>
-							
-							
-
-							
-
-
-
 						</div>
 						<div class="center">
 							<div class="activator col s12 waves-effect waves-light btn-large ">
@@ -81,13 +74,13 @@
 				<span class="grey-text text-darken-4" ng-show="publications.displayPDF">
 					<div class="animated fadeInDown col s12">
 						<div class="section">
-							<div class="row s12">
-							{{data.currentMetaData.download}}
-								<span>
-								<object data="data.currentMetaData.download" width="100%" height="100%">
-										<embed src="data.currentMetaData.download" type="application/pdf" class="s12" />
-									</object>
-								</span>
+							<div class="row s10 offset-s1 center">
+								<pdf-viewer
+								delegate-handle="my-pdf-container"
+								url="data.currentMetaData.download"
+								scale="1"
+								show-toolbar="true"</pdf-viewer>
+
 							</div>
 						</div>
 						<div class="center">

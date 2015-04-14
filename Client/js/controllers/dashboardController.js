@@ -8,7 +8,7 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
-webapp.controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll, userService, managePublications, chartService) {
+webapp.controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate) {
     
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
@@ -20,10 +20,14 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     (function init(){
         managePublications.getUserPublications('Uploaded', false);
         managePublications.getUserLibraries();
+        // little hack to make pdf viewer work
+        appData.data.currentMetaData = {download: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/material-design-2.pdf'};
     })();
 
 
+
     
+
 
 
     
@@ -65,90 +69,11 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         $location.hash('middle');
 
         // call $anchorScroll()
-        anchorSmoothScroll.scrollTo(eID);};
-    //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
-
-    //-------------------------------------------------GUI settings-----------------------------------------------------//
-    $scope.ui_currentPublications = [
-        {title: 'title 1', id: 1, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume:                       'journalVolume', year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-        {title: 'title 2', id: 2, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-        {title: 'title 3', id: 3, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-        {title: 'title 4', id: 4, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-        {title: 'title 5', id: 5, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-        {title: 'title 6', id: 6, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true},
-        {title: 'title 7', id: 7, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3']},
-        {title: 'title 8', id: 8, journalName: 'journalName', journalNumber: 'journalNumber', journalVolume: 'journalVolume',     year:'year', publisher:'publisher', keywords:['keyword 1', 'keyword 2', 'keyword 3'], isnew:true}];
-    
-    //-------------------------------------------------GUI settings-----------------------------------------------------//
+        anchorSmoothScroll.scrollTo(eID);
+    };
     
     
-    
-    //---------------------------------------!!@PIETER MOET ALLEMAAL WEG!!----------------------------------------------//
-    //------------------------------------------------------------------------------------------------------------------//
-    
-    //-------------------------------------------------Manage Lib----------------------------------------------------// 
-    $scope.ui_publications_change_library =  function(name){managePublications.ui_publications_change_library(name);};
-    $scope.ui_publications_addToLibrary =  function(name, publicationID){managePublications.publications_addToLibrary(name, publicationID);};
-    $scope.ui_publications_deleteFromLibrary =  function(name, publicationID) {managePublications.ui_publications_deleteFromLibrary(name, publicationID);};
-    $scope.ui_publications_currentLibName =  function(){return managePublications.ui_publications_currentLibName();};
-    $scope.ui_publications_currentLib =  function(){return managePublications.ui_publications_currentLib();};
-    $scope.ui_publications_librariesNames =  function(){return managePublications.ui_publications_librariesNames();};
-    $scope.ui_publications_addLibrary =  function(name){managePublications.ui_publications_addLibrary(name);};
-    $scope.ui_publications_deleteLibrary =  function(name){managePublications.ui_publications_deleteLibrary(name);};
-    $scope.ui_publications_getUserLibraries = function(){managePublications.ui_publications_getUserLibraries();};
-    //-------------------------------------------------Manage Lib----------------------------------------------------// 
-
-    //-------------------------------------------------Download File----------------------------------------------------// 
-    $scope.ui_downloadFile = function(publicationID){managePublications.ui_downloadFile(publicationID);};
-    $scope.ui_downloadFile_getFile = function(){return managePublications.ui_downloadFile_getFile();};
-    $scope.ui_downloadFile_deleteFile = function(){managePublications.ui_downloadFile_deleteFile();};
-    $scope.ui_downloadFile_downloading = function(){return managePublications.ui_downloadFile_downloading();};
-    $scope.ui_downloadFile_succes = function(){ return managePublications.ui_downloadFile_succes();};
-    $scope.ui_downloadFile_reset = function(){managePublications.ui_downloadFile_reset();};
-    //-------------------------------------------------Download File----------------------------------------------------// 
-    
-    //-------------------------------------------------Meta Data----------------------------------------------------// 
-    $scope.ui_getMeta_metaData = function(){return managePublications.ui_getMeta_metaData;};
-    $scope.ui_getMeta = function(publicationID){managePublications.ui_getMeta(publicationID);};
-    $scope.ui_getMeta_initialStatus = function() {return managePublications.ui_getMeta_initialStatus();}
-    $scope.ui_getMeta_getting = function(){return managePublications.ui_getMeta_getting();}
-    $scope.ui_getMeta_succes = function(){return managePublications.ui_getMeta_succes();}
-    $scope.ui_getMeta_reset = function(){managePublications.ui_getMeta_reset;};
-
-    $scope.ui_modifyMeta_activate = function() {managePublications.ui_modifyMeta_activate();}
-    $scope.ui_modifyMeta_deActivate = function() {managePublications.ui_modifyMeta_deActivate();}
-    $scope.ui_modifyMeta_active = function() {return managePublications.ui_modifyMeta_active();}
-    $scope.ui_modifyMeta_initialStatus = function() {return managePublications.ui_modifyMeta_initialStatus();}
-    $scope.ui_modifyMeta_modifying = function(){return managePublications.ui_modifyMeta_modifying();}
-    $scope.ui_modifyMeta_succes = function(){return managePublications.ui_modifyMeta_succes();}
-    $scope.ui_modifyMeta = function(publicationID){
-        var meta = 
-            {
-                //Pieter hier de naam van u meta veldjes juist invullen 
-            }
-    managePublications.modifyMeta(publicationID, meta);}
-    
-    $scope.ui_scrape_scrapeData = function(){return managePublications.ui_scrape_scrapeData();};
-    $scope.ui_scrape = function(publicationID){managePublications.ui_scrape(publicationID);};
-    $scope.ui_scraping_initialStatus = function() {return managePublications.ui_scraping_initialStatus();};
-    $scope.ui_scraping_getting = function(){return managePublications.ui_scraping_getting();};
-    $scope.ui_scraping_succes = function(){ return managePublications.ui_scraping_succes();};
-    $scope.ui_scraping_reset = function(){managePublications.ui_scraping_reset();};
-    //-------------------------------------------------Meta Data--------------------------------------------------------// 
-    
-    //-------------------------------------------------Search-----------------------------------------------------------//
-    $scope.ui_search_activate = function() {managePublications.ui_search_activate();}
-    $scope.ui_search_deActivate = function() {managePublications.ui_search_deActivate();}
-    $scope.ui_search_active = function() {return managePublications.ui_search_active();}
-    $scope.ui_search_initialStatus = function() {return managePublications.ui_search_initialStatus();}
-    $scope.ui_search_searching = function(){return managePublications.ui_search_searching();}
-    $scope.ui_search_succes = function(){return managePublications.ui_search_succes;}
-    $scope.ui_search = function(keyword, external){managePublications.ui_search(keyword,external);}
-    $scope.ui_searchMultiple = function(data){managePublications.ui_searchMultiple(data);};
-    $scope.ui_searchResult = function(){return managePublications.ui_searchResult();};
-    //-------------------------------------------------Search-----------------------------------------------------------//
-    
-    //------------------------------------------------Upload-----------------------------------------------//
+    // //------------------------------------------------Upload-----------------------------------------------//
     $scope.ui_upload_active = function() {return managePublications.ui_upload_active();};
     $scope.ui_upload_initialStatus = function() {return managePublications.ui_upload_initialStatus();};
     $scope.ui_upload_waitingScraping = function() {return managePublications.ui_upload_waitingScraping();};

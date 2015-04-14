@@ -1,5 +1,5 @@
 //Every status can represent ONE 'transaction' impossible to multiple upload, ... at the same time !! Some status needs other one's be carefull with that.
-webapp.service('managePublications', function($location, appData, $http) {
+webapp.service('managePublications', function($location, appData, $http, pdfDelegate) {
 
     var self = this;
 //----------------------------------------------------------------------------------------------------------------------//
@@ -54,6 +54,10 @@ webapp.service('managePublications', function($location, appData, $http) {
          getUserPublicationsRequest.success(function(data, status, headers, config) {
             appData.data.publications = data;
             console.log(data);
+
+            self.pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
+            appData.pdf.url = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf';    
+
             appData.data.currentLibraryName = libraryName;
             upToDate();
             if (displayToast){
@@ -238,6 +242,11 @@ webapp.service('managePublications', function($location, appData, $http) {
         return publicationID;        
     }
 
+    function changePDFURL(newURL){
+        pdfDelegate.$getByHandle('my-pdf-container').load(newURL);
+
+    }
+
     this.getMetaData = function(publicationID) {
 
         publicationID = stripHashtag(publicationID);
@@ -257,7 +266,9 @@ webapp.service('managePublications', function($location, appData, $http) {
             data.id = publicationID;
             //this can be simplified when we are finished
             data.download = (typeof data.download !== 'undefined') ? data.download : "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
-            data.download = "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
+            
+            changePDFURL(data.download);
+
             appData.data.currentMetaData = data;
         });
          getMetaDataRequest.error(function(data, status, headers, config) {
