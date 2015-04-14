@@ -27,10 +27,12 @@
 						<div class="animated fadeInDown col s12">
 							<!-- begin library content -->
 							<ul class="collection">
-								<div ng:repeat="publication in publications.ui_publications_currentLib()">
-								<!-- <div ng:repeat="publication in ui_currentPublications"> -->
+								<div ng:repeat="publication in data.publications">
+									<!-- <div ng:repeat="publication in ui_currentPublications"> -->
 									<li class="collection-item avatar">
-										<i class="mdi-content-content-paste circle"></i>
+										<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
+										<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
+										
 										<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
 											<span class="title">{{publication.title}}</span>
 											<p> author!! </p>
@@ -39,11 +41,11 @@
 										<a class="secondary-content">
 											<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
 											<code class="titip-left">
-											<i class="mdi-action-grade" ng-click="publications.ui_publications_addToLibrary('Favorites', publication.id)"></i>&nbsp;
-											<span class="titip-content">
-												add to favorites
-											</span>
-										</code>
+												<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+												<span class="titip-content">
+													add to favorites
+												</span>
+											</code>
 										</a>
 
 										<hr>
@@ -80,22 +82,33 @@
 							Available Libraries
 						</h6>
 						
-						<div ng:repeat="lib in publications.ui_publications_librariesNames()">
+						<div ng:repeat="lib in data.userLibrariesNames">
 							<div class="col s4">
-								<div class="card-panel skribl-primary-color" ng-click="publications.ui_publications_change_library(lib)">
+								<div class="card-panel skribl-primary-color" >
 									
-									<h5 class="selectable-white">
-										<code class="titip-down">
-											<i class="mdi-maps-local-library circle">
-											</i>
-											<span class="titip-content">
-												Click me to load "{{lib}}" publications
-											</span>
-										</code>
-										&nbsp;{{lib}}
-									</h5>
-
+									<div ng-click="publications.getUserPublications(lib)">
+										<h5 class="selectable-white">
+											<code class="titip-down">
+												<i class="mdi-maps-local-library circle">
+												</i>
+												<span class="titip-content">
+													&nbsp;&nbsp;Click me to load "{{lib}}" publications
+												</span>
+											</code>
+											&nbsp;{{lib}}
+										</h5>
+									</div>
+									<hr>
+									<div class="selectable-white center">
+										<a class="btn-floating disabled z-depth-2" ng-show="publications.canLibBeDeleted(lib)">
+											<i class="mdi-action-delete"></i>
+										</a>
+										<a class="btn-floating skribl-primary-color darken-4 z-depth-2" ng-hide="publications.canLibBeDeleted(lib)" ng-click="publications.deleteLib(lib)">
+											<i class="mdi-action-delete"></i>
+										</a>
+									</div>
 								</div>
+								
 							</div>
 						</div>
 
@@ -115,11 +128,11 @@
 					<div class="row">
 						<div class="input-field col s6">
 							<i class="mdi-content-text-format prefix"></i>
-							<input id="newlib-title" type="text" class="validate" ng-model="publications.uploadData.title" required>
+							<input id="newlib-title" type="text" class="validate" ng-model="data.addLibName" required>
 							<label for="newlib-title">new library name</label>
-							</div>
-							<div class="input-field col s6">
-							<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.ui_upload_searchExcisting()">
+						</div>
+						<div class="input-field col s6">
+							<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.createLib(data.addLibName)">
 								<i class="mdi-content-send left"></i>
 								add
 							</a>

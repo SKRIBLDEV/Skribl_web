@@ -9,13 +9,16 @@
 			<div class="card">
 				<div class="card-content">
 					<span class="card-title grey-text text-darken-4" ng-click="ui_toggleDisplayPublication()">
-						<a> {{getCurrentViewerPublication().title}} </a>
+						<a> {{data.currentMetaData.title}} </a>
 						<i class="mdi-navigation-more-vert right"></i>
 					</span>
 				</div>
 				<span class="grey-text text-darken-4">
 					<div class="animated fadeInDown col s12">
 						<div class="section">
+							
+
+
 							<div class="row center">
 								<code class="titip-bottom">
 									<a class="waves-effect waves-light btn" style="color:white;" ng-click="getFile(getCurrentViewerPublication().id)"> <!-- change this -->
@@ -27,8 +30,13 @@
 									</span>
 								</code>
 							</div>
+							<div class  "row">
+
+
+
+							</div>
 							<div class="row">
-								{{publications.ui_getMeta_metaData()}}
+								{{data.currentMetaData}}
 								<!-- <li> {{getCurrentViewerPublication().journalName}} </li>
 								<li> {{getCurrentViewerPublication().journalNumber}} </li>
 								<li> {{getCurrentViewerPublication().journalVolume}} </li>
@@ -37,12 +45,25 @@
 								<li> {{getCurrentViewerPublication().keywords}} </li> -->
 							</div>
 
+
+
 						</div>
 						<div class="center">
+							<div class="activator col s12 waves-effect waves-light btn-large ">
+								<h5 class="activator center-align" style="color:white">Edit card</h5>
+							</div>
 							<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_toggleDisplayPublication()"></i>
 						</div>
 					</div>
 				</span>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">
+						Library Settings
+						<i class="mdi-navigation-close right"></i>
+					</span>
+					<edit-meta-data></edit-meta-data>
+				</div>
+
 			</div>
 			<!-- stop inner card -->
 		</div>

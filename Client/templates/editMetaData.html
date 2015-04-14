@@ -1,0 +1,14 @@
+<div class="row center">
+
+	<dropUl>
+		<dropLi class="skribl-background z-depth-2">
+			Add Publication to library
+			<dropUl>
+				<div ng:repeat="lib in data.userLibrariesNames">
+				<dropLi class="skribl-background animated pulse" ng-click="publications.addPublications(lib, data.currentMetaData.id)">{{lib}}</dropLi>
+				</div>
+			</dropUl>
+		</dropLi>
+	</dropUl>
+
+</div>

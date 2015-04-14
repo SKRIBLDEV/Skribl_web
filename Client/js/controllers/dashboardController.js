@@ -16,8 +16,18 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         $location.path('/home');
         return;
     }
-    managePublications.getUserPublications('Uploaded');
-    managePublications.getUserLibraries();
+
+    (function init(){
+        managePublications.getUserPublications('Uploaded', false);
+        managePublications.getUserLibraries();
+    })();
+
+    
+
+    $scope.ddSelectSelected = {}; // Must be an object
+
+
+    
     //----------------------------------------------------INIT----------------------------------------------------------//
     
     //------------------------------------------------GUI settings------------------------------------------------------//
@@ -36,6 +46,9 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
     $scope.publications = managePublications;
+    $scope.data = appData.data;
+    $scope.appData = appData;
+
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
 
     //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//

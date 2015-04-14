@@ -1,33 +1,33 @@
 webapp.directive('globalMenu',function(){
-return {
+	return {
 		restrict: 'E',
 		scope: false,
 		templateUrl: 'templates/globalMenu.html'
 	}
 
 }).directive('fixedMenu',function(){
-return {
+	return {
 		restrict: 'E',
 		scope: false,
 		templateUrl: 'templates/fixedMenu.html'
 	}
 
 }).directive('userCard',function(){
-return {
+	return {
 		restrict: 'E',
 		scope: false,
 		templateUrl: 'templates/userCard.html'
 	}
 
 }).directive('publicationsCard',function(){
-return {
+	return {
 		restrict: 'E',
 		scope: false,
 		templateUrl: 'templates/publicationsCard.html'
 	}
 
 }).directive('uploadCard',function(){
-return {
+	return {
 		restrict: 'E',
 		scope: false,
 		templateUrl: 'templates/uploadCard.html'
@@ -45,6 +45,13 @@ return {
 		restrict: 'E',
 		scope:false,
 		templateUrl: 'templates/interactiveGraphCard.html'
+	}
+
+}).directive('editMetaData',function(){
+	return {
+		restrict: 'E',
+		scope:false,
+		templateUrl: 'templates/editMetaData.html'
 	}
 
 }).directive('spinner',function(){
