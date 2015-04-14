@@ -125,21 +125,26 @@ function Author(db) {
 	}
 
 		this.getAuthorObjects = function(authors, clb) {
-			var ctr = 0;
-			for (var i = 0; i < authors.length; i++) {
-				getAuthor(authors[i], function(error, res) {
-					if(error) {
-						clb(error);
-					}
-					else {
-						authors[ctr] = {firstName: res.firstName, lastName: res.lastName, rid: RID.getRid(res)};
-						ctr++;
-						if(ctr == authors.length) {
-							clb(null, authors);
+			if(authors && authors.length) {
+				var ctr = 0;
+				for (var i = 0; i < authors.length; i++) {
+					getAuthor(authors[i], function(error, res) {
+						if(error) {
+							clb(error);
 						}
-					}
-				});
-			};
+						else {
+							authors[ctr] = {firstName: res.firstName, lastName: res.lastName, rid: RID.getRid(res)};
+							ctr++;
+							if(ctr == authors.length) {
+								clb(null, authors);
+							}
+						}
+					});
+				};
+			}
+			else {
+				clb(null, []);
+			}
 		}
 
 	/**
