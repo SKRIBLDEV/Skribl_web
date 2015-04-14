@@ -25,7 +25,7 @@ var Publication = require('./publication.js');
 var library = require('./library.js');
 var keyword = require('./keyword.js');
 var authors = require('./author.js');
-var graph = require('./graph.js');
+var Graph = require('./graph.js');
 var path = require('path');
 
  /** 
@@ -60,6 +60,8 @@ function Database(serverConfig, dbConfig) {
 	var Lib = new library.Library(db);
 	var Kw = new keyword.Keyword(db);
 	var AUT = new authors.Author(db);
+	var graph = new Graph.Graph(db);
+
 
 	/* provides functions */
 	this.addJournal = PUB.addJournal;
@@ -79,6 +81,7 @@ function Database(serverConfig, dbConfig) {
 	this.removeFromLibrary = Lib.removeFromLibrary;
 	this.addDefaults = Lib.addDefaults;
 	this.searchAuthor = AUT.searchAuthor;
+	this.getAuthorGraph = graph.getAuthorGraph;
 
 	/**
 	*Will give the subdivisions of a given division.
@@ -493,7 +496,7 @@ var d = new Date();
 var t = d.getTime();
 
 
-
+database.getAuthorGraph(callBack);
 //database.testError(callBack);
 //database.queryAdvanced(criteria2, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
@@ -543,8 +546,8 @@ UM.createUser(userInfo, function(error, res) {
 */
 
 
-/*
 
+/*
 
 function callBack(error, result){
 	var nd = new Date();
@@ -565,7 +568,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
-
 */
+
+
 
