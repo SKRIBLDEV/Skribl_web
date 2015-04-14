@@ -439,10 +439,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         UNACTIVE: -1,
         INITIAL: 0,
         EXISTS:1,
-        WAITING_SCRAPING: 3,
-        WAITING_EDITING: 4,
-        SUCCES_EDITING: 5,
-        SUCCES_UPLOADING: 6,
+        EDIT:2,
         WAITING: 7
     }
     var upload_status = UPLOAD_STATUS.INITIAL; //change this to unactive
@@ -452,10 +449,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     this.upload_initialStatus = function() {return upload_status == UPLOAD_STATUS.INITIAL;}
     this.upload_pubExcist = function() {return upload_status == UPLOAD_STATUS.EXISTS;}
     this.upload_uploading = function(){return upload_status == UPLOAD_STATUS.UPLOADING;}
-    this.upload_waitingScraping = function() {return upload_status == UPLOAD_STATUS.WAITING_SCRAPING;}
-    this.upload_succesScraping = function() {return upload_status == UPLOAD_STATUS.SUCCES_SCRAPING;}
-    this.upload_waitingEditing = function() {return upload_status == UPLOAD_STATUS.WAITING_EDITING;}
-    this.upload_succesEditing = function() {return upload_status == UPLOAD_STATUS.SUCCES_EDITING;}
+    this.upload_edit = function() {return upload_status == UPLOAD_STATUS.EDIT;}
     this.upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
     this.upload_waiting = function() { return upload_status == UPLOAD_STATUS.WAITING;}
 
@@ -510,11 +504,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             }
         })
         .success(function(data, status, headers, config) {
-            appData.uploadData.currentPublicationID = data.id.substring(1);
+            appData.uploadData.currentPublicationID = stripHashtag(data.id);
+
             //when publication is added to database 
             //metadata of publication needs to be send/updated (currently empty)
-            
-            upload_status = UPLOAD_STATUS.WAITING_SCRAPING;
             console.log(currentPublicationID);
             scrape(appData.uploadData.currentPublicationID);
         })
@@ -526,6 +519,14 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
     //preparation for the uploadPublication function
     this.uploadFile = function() {
+        function handler(succes){
+            if (succes) {
+                
+            } else {
+                
+            }
+        }
+
         //add handler
         enableWaiting("Uploading file");
         var url = serverApi.concat('/publications?title=').concat(appData.uploadData.title).concat('&type=').concat(appData.uploadData.type);
