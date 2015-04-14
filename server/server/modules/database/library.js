@@ -46,7 +46,7 @@ function Library(db) {
 	}
 
 	this.addToLibrary = function(user, library, id, clb) {
-		db.select('@rid').from('Pulication').where('@rid = ' + id).all()
+		db.select('@rid').from('Publication').where('@rid = ' + id).all()
 		.then(function(res) {
 			if(res.length) {
 				db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
@@ -168,7 +168,7 @@ function Library(db) {
 				});
 			};
 		}
-		
+
 		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
 		.then(function(res) {
 			if(res.length) {
