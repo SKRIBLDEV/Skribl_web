@@ -65,6 +65,7 @@ function getPublication(req, res, context) {
 				metadata.download = req.protocol + '://'
 								+ req.hostname + ':'
 								+ context.port + '/'
+								+ 'publications' + '/'
 								+ id.substring(1)
 								+ '?download=true';
 				if (req.query['extract'] === 'true') {	
