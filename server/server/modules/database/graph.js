@@ -3,15 +3,40 @@
 function Graph(db) {
 
 	function parsePath(path, clb) {
-		var p = path;
-		clb(null, true);
+		var resArray = [];
+		var txt = path;
+		var newTxt = txt.split('(');
+		for (var i = 1; i < newTxt.length; i++) {
+    		resArray[i-1] = {rid: newTxt[i].split(')')[0]};
+		}
+		clb(null, resArray);
 	}
 
 	this.getAuthorGraph = function(clb) {
 		db.query('select $path, traversedVertex(-3).firstName as firstName1, traversedVertex(-3).lastName as lastName1, traversedVertex(-1).firstName as firstName2, traversedVertex(-1).lastName as lastName2, traversedVertex(-2).title as title, traversedVertex(-2).@class as class from (traverse in(\'AuthorOf\'), out(\'AuthorOf\')  from Author) where $depth = 2').all()
 		.then(function(res) {
-			console.log(res[0].$path);
-			clb(null, true);
+			var ctr = 0;
+			for (var i = 0; i < res.length; i++) {
+				parsePath(res[i].$path, function(error, newPath) {
+					res[ctr].connection = newPath;
+
+					res[ctr].connection[0].firstName = res[ctr].firstName1;
+					res[ctr].connection[0].lastName = res[ctr].lastName1;
+
+					res[ctr].connection[2].firstName = res[ctr].firstName2;
+					res[ctr].connection[2].lastName = res[ctr].lastName2;
+
+					res[ctr].connection[1].title = res[ctr].title;
+					res[ctr].connection[1].type = res[ctr].class;
+
+					res[ctr] = res[ctr].connection;
+
+					ctr++
+					if(ctr == res.length) {
+						clb(null, res);
+					}
+				});
+			};
 		});
 	}
 

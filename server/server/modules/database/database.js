@@ -496,7 +496,7 @@ var d = new Date();
 var t = d.getTime();
 
 
-database.getAuthorGraph(callBack);
+//database.getAuthorGraph(callBack);
 //database.testError(callBack);
 //database.queryAdvanced(criteria2, 10, callBack);
 //database.searchAuthor('Heli', 'Copter', 10, callBack);
@@ -504,7 +504,7 @@ database.getAuthorGraph(callBack);
 //database.removeLibrary('test2', 'newlib', callBack);
 //database.addLibrary('test2', 'newlib', callBack);
 //database.testTransaction('jshep', callBack);
-//database.loadLibraries('test2', callBack);
+//database.loadLibraries('hcopter', callBack);
 //database.loadUser('test3', callBack);
 //database.deleteUser('test1', callBack);
 //database.querySimple(19, 10, callBack);
@@ -547,8 +547,8 @@ UM.createUser(userInfo, function(error, res) {
 
 
 
-/*
 
+/*
 function callBack(error, result){
 	var nd = new Date();
 	var nt = nd.getTime();
@@ -568,7 +568,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-*/
 
+*/
 
 
