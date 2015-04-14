@@ -12,10 +12,12 @@
 		<div class="animated fadeInDown col s12">
 			<div class="section">
 
-			<!-- general waiting -->
+				<!-- general waiting -->
+				<div class="row center">
 				<div ng-show="publications.upload_waiting()">
 					<h5> {{publications.upload_waitingmsg}} </h5>
 					<spinner ng-show="publications.upload_waiting()"></spinner>
+				</div>
 				</div>
 
 				<!-- start initial status -->
@@ -50,20 +52,41 @@
 				</div>
 				<!-- stop initial status -->
 
-				<!-- start checking status -->
-				<div ng-show="publications.upload_checkForExisting()">
-					<!-- check for searching -->
-					<div ng-show="publications.ui_search_searching()" class="row center">
-					<h5> Searching for excisting publications </h5>
-					<br>
-						<spinner></spinner>	
-					</div> 
+				<!-- start EXIST status -->
+				<div ng-show="publications.upload_pubExcist()">
+					<div class="row center">
+						We found some publications that seem similar, do you wish to add any of these?
+					</div>
 
-					<div ng-hide="publications.ui_search_searching()">
+					<ul class="collection">
+						<div ng:repeat="publication in data.searchResult">
+							<li class="collection-item avatar">
+								<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
+								<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
+
+								<div class="selectable-black" ng-click="publications.upload_excisting(publication.id)">
+									<span class="title">{{publication.title}}</span>
+									<p> author!! </p>
+								</div>
+
+								<hr>
+							</li>
+						</div>
+					</ul>
+
+					<div class="progress">
+							<div class="determinate" style="width: 0%">
+							</div>
+						</div>
+
 					<!-- actual file -->
 					<div class="row center">
-						<input type="file" file-to-upload="publications.uploadData.file"></input>
+						Or do you want to continue uploading your own file?
 					</div>
+					<div class="row center">
+						<input type="file" file-to-upload="appData.uploadData.file"></input>
+					</div>
+
 					<!-- upload button -->
 					<div class="row center">
 						<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.uploadFile()">
@@ -71,9 +94,11 @@
 							send
 						</a>
 					</div>
+
 				</div>
-				</div>
-				<!-- stop checking status -->
+
+				
+				<!-- stop EXIST status -->
 
 				<!-- waiting page for uploading -->
 				<div class="row center" ng-show="publications.ui_upload_uploading()">

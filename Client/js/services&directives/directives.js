@@ -40,6 +40,13 @@ webapp.directive('globalMenu',function(){
 		templateUrl: 'templates/publicationViewerCard.html'
 	}
 
+}).directive('publicationList',function(){
+	return {
+		restrict: 'E',
+		scope: false,
+		templateUrl: 'templates/publicationList.html'
+	}
+
 }).directive('interactiveGraphCard',function(){
 	return {
 		restrict: 'E',

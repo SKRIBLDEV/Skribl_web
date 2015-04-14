@@ -28,7 +28,7 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
 
     
 
-
+$scope.naomi = "lolo";
 
     
     //----------------------------------------------------INIT----------------------------------------------------------//
@@ -48,6 +48,11 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
     //-------------------------------------------------USER settings----------------------------------------------------//
     
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
+    
+    $scope.testt =function(){
+        toast("lolo");
+    }
+
     $scope.publications = managePublications;
     $scope.data = appData.data;
     $scope.appData = appData;
