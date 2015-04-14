@@ -115,6 +115,33 @@ function Author(db) {
 		});
 	}
 
+	 function getAuthor(authorId, clb) {
+		db.record.get(authorId)
+		.then(function(author) {
+			clb(null, author);
+		}).error(function(er) {
+			clb(er);
+		});
+	}
+
+		this.getAuthorObjects = function(authors, clb) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				getAuthor(authors[i], function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						authors[ctr] = {firstName: res.firstName, lastName: res.lastName, rid: RID.getRid(res)};
+						ctr++;
+						if(ctr == authors.length) {
+							clb(null, authors);
+						}
+					}
+				});
+			};
+		}
+
 	/**
 	 * will return an object with author info.	
 	 * @param  {String}   fName    firstname

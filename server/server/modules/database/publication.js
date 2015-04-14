@@ -41,6 +41,14 @@ function Publication(db) {
 			});
 		}
 
+		/**
+		 * adds a publication as a journal type, and creates the necessary links.
+		 * @param {string}   title    title of publication
+		 * @param {Object}   fileObj  object which contains fileName and path.
+		 * @param {String}   uploader username of uploader
+		 * @param {callBack} callback
+		 * @return {string} id of publication
+		 */
 	 this.addJournal = function(title, fileObj, uploader, callback) {
 		var fileName = fileObj.originalname;
 	/**
@@ -82,11 +90,13 @@ function Publication(db) {
 	};
 
 	/**
-	 * Will add a publication and link it with the proper uploader and author.
-	 * @param {Object}   pubRecord object which contains information about the publication.
-	 * @param {callBack} callback 
-	 * @return {String}	 callback called with publicationRid
-	 */
+		 * adds a publication as a journal type, and creates the necessary links.
+		 * @param {string}   title    title of publication
+		 * @param {Object}   fileObj  object which contains fileName and path.
+		 * @param {String}   uploader username of uploader
+		 * @param {callBack} callback
+		 * @return {string} id of publication
+		 */
 	 this.addProceeding = function(title, fileObj, uploader, callback) {
 		var fileName = fileObj.originalname;	
 	/**
@@ -129,8 +139,9 @@ function Publication(db) {
 
 
 	/**
-	 * constructs a function that takes a path and a callback, to load a file from database to a given location.
+	 * Loads a file from database to given path.
 	 * @param  {String}   id       record id of publication
+	 * @param {String} path path where file must be written to.
 	 * @param  {callBack} callback
 	 * @return {Object}   a function is returned.
 	 */
@@ -150,8 +161,14 @@ function Publication(db) {
 		});
 	}
 
+	/**
+	 * will return all metadata of givn publication.
+	 * @param  {String} id  id of publication
+	 * @param  {callBack} clb 
+	 * @return {Object}     object with publication metadata.
+	 */
 	this.getPublication = function(id, clb) {
-		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation').from(id).all()
+		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation, lastUpdated').from(id).all()
 		.then(function(pubs) {
 			if(pubs.length) {
 				var res = pubs[0];
@@ -184,6 +201,12 @@ function Publication(db) {
 		});
 	}
 
+	/**
+	 * deletes a publication.
+	 * @param  {String}   id       publication id
+	 * @param  {callBack} callback 
+	 * @return {Bool}            returns true (regardless if a pub was deleted or not)
+	 */
 	this.removePublication = function(id, callback) {
 		db.delete('vertex').where('@rid = ' + id).one()
 		.then(function(nr) {
@@ -193,6 +216,12 @@ function Publication(db) {
 		});
 	};
 
+	/**
+	 * returns username of user who uploaded the publication with given id.		
+	 * @param  {string} id  id of publication
+	 * @param  {callBack} clb
+	 * @return {String}     username of uploader
+	 */
 	this.uploadedBy = function(id, clb) {
 		//
 		//db.query('traverse V.in, E.out from ' + id + ' while $depth < 2 and (@class = \'Library\' and name = \'Uploaded\')')
@@ -210,6 +239,10 @@ function Publication(db) {
 			});
 	}
 
+	/**
+	 * adds additional functionality to array, removes any duplicates from array
+	 * @return {void} 
+	 */
 	Array.prototype.unique = function() {
     	var a = this.concat();
     	for(var i=0; i<a.length; ++i) {
@@ -223,22 +256,44 @@ function Publication(db) {
 
 
 //change this to one big query for pagination and sorting
+	/**
+	 * given a word will search in database for publications that match (fully or partially)
+	 * @param  {String} keyword word to search for
+	 * @param  {Int} limit   number of results
+	 * @param  {callBack} clb    
+	 * @return {Array<Object>}         array of result objects 
+	 */
 	this.querySimple = function(keyword, limit, clb) {
+		/**
+		 * given publication id, returns an object with certain info about pulication
+		 * @param  {String} id   publication id
+		 * @param  {callBack} clb2 
+		 * @return {Object}      result object
+		 */
 		function getInfo(id, clb2) {
-			db.select('title, @class, in(\'AuthorOf\') as authors').from(id).all()
+			db.select('title, @class, lastUpdated, in(\'AuthorOf\') as authors').from(id).all()
 			.then(function(res) {
-				clb2(null, res[0]);
+				res[0].authors = RID.transformRids(res[0].authors);
+				AUT.getAuthorObjects(res[0].authors, function(error, dummy) {
+					clb2(null, res[0]);
+				});
 			}).error(function(er) {
 				clb(er);
 			});
 		}
 
+		/**
+		 * iterates over array of publication id's and (with getInfo) replaces said id's with result objects.
+		 * @param  {Array<String>} array array of id's
+		 * @param  {callBack} callB 
+		 * @return {Array<Object>}       results array
+		 */
 		function prepResults(array, callB) {
 			if(array.length) {
 				var ctr = 0;
 				for (var i = 0; i < array.length; i++) {
 					getInfo(array[i], function(error, res) {
-						array[ctr] = {id: array[ctr], title: res.title, type: res.class, authors: RID.transformRids(res.authors)};
+						array[ctr] = {id: array[ctr], title: res.title, type: res.class, authors: res.authors};
 						ctr++
 						if(ctr == array.length) {
 							callB(null, array);
@@ -305,11 +360,23 @@ function Publication(db) {
 		});
 	}
 
+	/**
+	 * wille return an array filled with metadata of that satisfy given criteria
+	 * @param  {Object} criteria contains search criteria 
+	 * @param  {Int} limit    max number of results
+	 * @param  {callBack} clb      
+	 * @return {Array<Object>}          result array
+	 */
 	this.queryAdvanced = function(criteria, limit, clb) {
 		var query = '';
 		var queryInitialized = false;
 		var tempRes = [];
 
+		/**
+		 * will create sql string to search on authors
+		 * @param {Object} criteria search criteria
+		 * @param {callBack} callBack 
+		 */
 		function AuthorQuery(criteria, callBack) {
 			if(criteria.authors === undefined) {
 				callBack(null, true);
@@ -327,6 +394,11 @@ function Publication(db) {
 			}
 		}
 
+		/**
+		 * will create sql string to search on keyword
+		 * @param {Object} criteria search criteria
+		 * @param {callBack} callBack 
+		 */
 		function keywordQuery(criteria, callBack) {
 			if(criteria.keywords === undefined) {
 				callBack(null, true);
@@ -351,6 +423,11 @@ function Publication(db) {
 			}
 		}
 
+		/**
+		 * will create sql string to search on researchDomain
+		 * @param {Object} criteria search criteria
+		 * @param {callBack} callBack 
+		 */
 		function researchDomainQuery(criteria, callBack) {
 			if(criteria.researchDomains === undefined) {
 				callBack(null, true);
@@ -373,6 +450,11 @@ function Publication(db) {
 			}
 		}
 
+		/**
+		 * will create sql string to search on publication properties
+		 * @param {Object} criteria search criteria
+		 * @param {callBack} callBack 
+		 */
 		function pubDataQuery(criteria, callBack) {
 			var tempQuery = '';
 			if(criteria.title !== undefined) {
@@ -410,14 +492,14 @@ function Publication(db) {
 			}
 			if(tempQuery == '') {
 				//console.log(query);
-				db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from (' + query + ') limit ' + limit).all()
+				db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (' + query + ') limit ' + limit).all()
 				.then(function(res) {
 					callBack(null, res);
 				});
 			}
 			else {
 				if(query == '') {
-					db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -425,7 +507,7 @@ function Publication(db) {
 					});
 				}
 				else {
-					db.query('select @rid, title, @class, in(\'AuthorOf\') as authors from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
+					db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (' + query + ') where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
 						callBack(null, res);
 					}).error(function(er) {
@@ -434,6 +516,7 @@ function Publication(db) {
 				}
 			}
 		}
+
 
 		AuthorQuery(criteria, function(error, res) {
 			keywordQuery(criteria, function(error, res) {
@@ -449,10 +532,15 @@ function Publication(db) {
 								delete res[i]['class'];
 								res[i].id = RID.transformRid(res[i].rid);
 								delete res[i]['rid'];
-								ctr++;
-								if(ctr == res.length) {
-									clb(null, res);
-								}
+								AUT.getAuthorObjects(res[i].authors, function(error, dummy) {
+									if(error) {
+										clb(error);
+									}
+									ctr++;
+									if(ctr == res.length) {
+										clb(null, res);
+									}
+								});
 							};
 						}
 						else {
@@ -462,9 +550,15 @@ function Publication(db) {
 				});
 			});
 		});
-
 	}
 
+	/**
+	 * updates metadata of publication
+	 * @param  {String} id        publication id
+	 * @param  {Object} metObject object which contains metadata to be updated
+	 * @param  {callBack} clb       
+	 * @return {Bool}    returns true when finished       
+	 */
 	this.updatePublication = function(id, metObject, clb) {
 		db.select().from(id).all()
 		.then(function(res) {
@@ -492,6 +586,7 @@ function Publication(db) {
 						});	
 					}
 					trx.let('publication2', function(s) {
+						var d = new Date();
 						s.update(id)
 						.set({
 							title: metObject.title,
@@ -499,7 +594,8 @@ function Publication(db) {
 							abstract: metObject.abstract,
 							citations: metObject.citations,
 							url: metObject.url,
-							private: metObject.private
+							private: metObject.private,
+							lastUpdated: d.toISOString()
 						});
 					});
 					trx.let('publication', function(s) {

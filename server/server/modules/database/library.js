@@ -160,12 +160,15 @@ function Library(db) {
 			var ctr = 0;
 			for (var i = 0; i < array.length; i++) {
 				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class'], authors: RID.transformRids(array[ctr]['authors'])};
-				ctr++
-				if(ctr == array.length) {
-					callB(null, array);
-				} 
+				AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
+					ctr++
+					if(ctr == array.length) {
+						callB(null, array);
+					} 
+				});
 			};
 		}
+		
 		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
 		.then(function(res) {
 			if(res.length) {
