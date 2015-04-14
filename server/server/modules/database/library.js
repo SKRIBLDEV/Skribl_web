@@ -1,8 +1,11 @@
 
 
 var RID = require('./rid.js');
+var Author = require('./author.js');
 
 function Library(db) {
+
+	var AUT = new Author.Author(db);
 
 	 function createLibrary(user, name, trx, clb) { 
 	 	trx.let(name, function(s) {

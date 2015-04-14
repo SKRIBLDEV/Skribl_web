@@ -3,11 +3,13 @@
 var RID = require('./rid.js');
 function ResearchDomain(db){
 
-		/**
-	 * adds a researchdomain with given name
-	 * @private
-	 * @param {String}   domain
+	/**
+	 * adds researchDomain with given name.
+	 * @param {String}   domain   name of domain
+	 * @param {String or Int}   varName  helps identify domain when multiple are created in same transaction
+	 * @param {Object}   trx      transaction object
 	 * @param {callBack} callback
+	 * @return {String or Int} returns varName
 	 */
 	function addResearchDomain(domain, varName, trx, callback) {
 		var domName = domain;
