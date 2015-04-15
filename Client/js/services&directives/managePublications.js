@@ -272,6 +272,18 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                     {firstName:"fn1-pot1", lastName:"ln1-pot1", id:0},
                     {firstName:"fn2-pot1", lastName:"ln2-pot2", id:0}
                 ]},
+                {firstName:"lange naam 1", lastName:"lange achternaam 1", potential:[
+                    {firstName:"fn1-pot1", lastName:"ln1-pot1", id:0},
+                    {firstName:"fn2-pot1", lastName:"ln2-pot2", id:0}
+                ]},
+                {firstName:"lange naam 1", lastName:"lange achternaam 1", potential:[
+                    {firstName:"fn1-pot1", lastName:"ln1-pot1", id:0},
+                    {firstName:"fn2-pot1", lastName:"ln2-pot2", id:0}
+                ]},
+                {firstName:"lange naam 1", lastName:"lange achternaam 1", potential:[
+                    {firstName:"fn1-pot1", lastName:"ln1-pot1", id:0},
+                    {firstName:"fn2-pot1", lastName:"ln2-pot2", id:0}
+                ]},
                 {firstName:"fn2", lastName:"ln2", potential:[]}
 
             ];
