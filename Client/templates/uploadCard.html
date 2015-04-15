@@ -14,10 +14,10 @@
 
 				<!-- general waiting -->
 				<div class="row center">
-				<div ng-show="publications.upload_waiting()">
-					<h5> {{publications.upload_waitingmsg}} </h5>
-					<spinner ng-show="publications.upload_waiting()"></spinner>
-				</div>
+					<div ng-show="publications.upload_waiting()">
+						<h5> {{publications.upload_waitingmsg}} </h5>
+						<spinner ng-show="publications.upload_waiting()"></spinner>
+					</div>
 				</div>
 
 				<!-- start initial status -->
@@ -54,34 +54,36 @@
 
 				<!-- start EXIST status -->
 				<div ng-show="publications.upload_pubExcist()">
-					<div class="row center">
-						We found some publications that seem similar, do you wish to add any of these?
-					</div>
-
-					<ul class="collection">
-						<div ng:repeat="publication in data.searchResult">
-							<li class="collection-item avatar">
-								<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
-								<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
-
-								<div class="selectable-black" ng-click="publications.upload_excisting(publication.id)">
-									<span class="title">{{publication.title}}</span>
-									<p> author!! </p>
-								</div>
-
-								<hr>
-							</li>
+					<div ng-show="publications.upload_content_excists">
+						<div class="row center">
+							We found some publications that seem similar, do you wish to add any of these?
 						</div>
-					</ul>
 
-					<div class="progress">
+						<ul class="collection">
+							<div ng:repeat="publication in data.searchResult">
+								<li class="collection-item avatar">
+									<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
+									<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
+
+									<div class="selectable-black" ng-click="publications.upload_excisting(publication.id)">
+										<span class="title">{{publication.title}}</span>
+										<p> author!! </p>
+									</div>
+
+									<hr>
+								</li>
+							</div>
+						</ul>
+
+						<div class="progress">
 							<div class="determinate" style="width: 0%">
 							</div>
 						</div>
 
-					<!-- actual file -->
-					<div class="row center">
-						Or do you want to continue uploading your own file?
+						<!-- actual file -->
+						<div class="row center">
+							Or do you want to continue uploading your own file?
+						</div>
 					</div>
 					<div class="row center">
 						<input type="file" file-to-upload="appData.uploadData.file"></input>
@@ -100,38 +102,15 @@
 				
 				<!-- stop EXIST status -->
 
-				<!-- waiting page for uploading -->
-				<div class="row center" ng-show="publications.ui_upload_uploading()">
-					<h5> uploading </h5>
-					<br>
-					<spinner></spinner>
-				</div>
-
-				<!-- waiting page for scraping -->
-				<div class="row center" ng-show="publications.ui_upload_waitingScraping()">
-					<h5> scraping </h5>
-					<br>
-					<spinner></spinner>
-				</div>
-
-				<!-- stop waiting page for scraping -->
-				
-				<!-- succes for all -->
-				<div class="row center" ng-show="ui_upload_success()"> 
-					<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_deActivate()">
-						<i class="mdi-action-done left"></i>
-						done</a>
-						<a class="waves-effect waves-light btn" style="color:white;" ng-click="ui_upload_activate()">
-							<i class="mdi-file-file-upload left"></i>
-							upload another</a>
-						</div>
-						<!-- error for uploading -->
-						<div class="row">
-							<div class="col s12 alert-color" id="upload_error"></div>
-						</div>
+				<!-- start edit metadata -->
+				<div ng-show="publications.upload_edit()">
+					<div class="row center">
+						<edit-meta-data></edit-meta-data>
 					</div>
 				</div>
-				<!-- end succes -->
+
+				<!-- stop edit metadat -->
+				
 			</div>
 		</div>
 	</span>

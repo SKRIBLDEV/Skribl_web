@@ -22,13 +22,8 @@ webapp.controller('dashController', function($scope, $http, $location, appData, 
         managePublications.getUserLibraries();
         // little hack to make pdf viewer work
         appData.data.currentMetaData = {download: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/material-design-2.pdf'};
+
     })();
-
-
-
-    
-
-$scope.naomi = "lolo";
 
     
     //----------------------------------------------------INIT----------------------------------------------------------//
@@ -48,10 +43,6 @@ $scope.naomi = "lolo";
     //-------------------------------------------------USER settings----------------------------------------------------//
     
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
-    
-    $scope.testt =function(){
-        toast("lolo");
-    }
 
     $scope.publications = managePublications;
     $scope.data = appData.data;
@@ -79,6 +70,7 @@ $scope.naomi = "lolo";
     
     
     // //------------------------------------------------Upload-----------------------------------------------//
+    // 
     
     $scope.ui_upload_activate = function() {managePublications.ui_upload_activate();};
     $scope.ui_upload_deActivate = function() {managePublications.ui_upload_deActivate();};

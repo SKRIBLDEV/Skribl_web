@@ -15,7 +15,8 @@ webapp.service('appData', function() {
         currentMetaData: null,
         searchResult: null,
         searchAuthorsResult: null,
-        addLibName: null
+        addLibName: null,
+        searchTerm: null
     };
     this.uploadData = {
         file: null,

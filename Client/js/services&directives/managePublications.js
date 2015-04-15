@@ -266,10 +266,23 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             data.id = publicationID;
             //this can be simplified when we are finished
             data.download = (typeof data.download !== 'undefined') ? data.download : "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
+
+            data.authors = [
+                {firstName:"lange naam 1", lastName:"lange achternaam 1", potential:[
+                    {firstName:"fn1-pot1", lastName:"ln1-pot1", id:0},
+                    {firstName:"fn2-pot1", lastName:"ln2-pot2", id:0}
+                ]},
+                {firstName:"fn2", lastName:"ln2", potential:[]}
+
+            ];
             
             changePDFURL(data.download);
 
             appData.data.currentMetaData = data;
+
+
+
+            console.log(data);
         });
            getMetaDataRequest.error(function(data, status, headers, config) {
             getMeta_status = GETMETA_STATUS.INITIAL;
@@ -446,11 +459,13 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     this.upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
     this.upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
     
+    this.upload_content_excists = false;
 
     this.upload_reset = function(){
         self.upload_deActivate();
         appData.uploadData = { file: null, title: "", type: "", currentPublicationID: null };
         self.upload_waitingmsg = "";
+        this.upload_content_excists = false;
     }
 
     function enableWaiting(msg){
@@ -462,22 +477,16 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         enableWaiting("Searching for excisting publications");
 
         function handler(succes, data){
-            console.log("piepekoe");
-            console.log(data);
 
             if (succes) {
-                if (data.internal.length === 0) {
-                    self.uploadFile();
-                } else {
-                    upload_status = UPLOAD_STATUS.EXISTS;
-                }
+                self.upload_content_excists = (data.internal.length !== 0);
+                upload_status = UPLOAD_STATUS.EXISTS;
             } else {
                 self.upload_reset();
                 toast("error encouter while uploading, try again later", 4000)
             }
         }
         self.search(appData.uploadData.title, false, handler);
-        upload_status = UPLOAD_STATUS.EXISTS;
         console.log(appData.uploadData);
         // make sure you can select
     }
@@ -523,8 +532,8 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                     if (succes) {
                         upload_status = UPLOAD_STATUS.EDIT;
                     } else {
-                        self.upload_reset();
-                        toast("error encouter while uploading, try again later", 4000);
+                        //try to fill in metadata from post
+                        upload_status = UPLOAD_STATUS.EDIT;
                     }
                 }
 
