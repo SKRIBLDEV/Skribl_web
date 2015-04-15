@@ -26,6 +26,7 @@ var library = require('./library.js');
 var keyword = require('./keyword.js');
 var authors = require('./author.js');
 var Graph = require('./graph.js');
+var reset = require('./reset.js');
 var path = require('path');
 
  /** 
@@ -61,9 +62,11 @@ function Database(serverConfig, dbConfig) {
 	var Kw = new keyword.Keyword(db);
 	var AUT = new authors.Author(db);
 	var graph = new Graph.Graph(db);
+	var RS = new reset.ResetDB(db, self);
 
 
 	/* provides functions */
+	this.reset = RS.reset;
 	this.addJournal = PUB.addJournal;
 	this.queryAdvanced = PUB.queryAdvanced;
 	this.addProceeding = PUB.addProceeding;
@@ -193,7 +196,6 @@ function Database(serverConfig, dbConfig) {
 	*@param {callBack} callback - will be called when done with function, with 'username-taken', 'email-taken' or passed to addUser()
 	*/
 	this.createUser = function(newData, callback) {
-
 		this.userExists(newData, function(err, exists) {
 
 			// TODO: err should have seperate if-clause
@@ -436,8 +438,8 @@ exports.Database = Database;
 
 //TESTCODE
 /*
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -496,6 +498,7 @@ var d = new Date();
 var t = d.getTime();
 
 
+database.reset(callBack);
 //database.getAuthorGraph(callBack);
 //database.testError(callBack);
 //database.queryAdvanced(criteria2, 10, callBack);
@@ -544,9 +547,6 @@ UM.createUser(userInfo, function(error, res) {
 	}
 })
 */
-
-
-
 
 /*
 function callBack(error, result){
