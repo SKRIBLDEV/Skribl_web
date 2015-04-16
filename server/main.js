@@ -60,6 +60,7 @@ SKRIBLServer.installRoute(require('./server/routes/publications.js'));
 SKRIBLServer.installRoute(require('./server/routes/user-publication.js'));
 SKRIBLServer.installRoute(require('./server/routes/library-publications.js'));
 SKRIBLServer.installRoute(require('./server/routes/user-library.js'));
+SKRIBLServer.installRoute(require('./server/routes/author-publication.js'));
 SKRIBLServer.installRoute(require('./server/routes/libraries.js'));
 SKRIBLServer.installRoute(require('./server/routes/authors.js'));
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
