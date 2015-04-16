@@ -33,11 +33,18 @@
 					</span>
 				</div>
 				<span class="grey-text text-darken-4" ng-show="userService.showDataviz">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
+
+					<!--- this part has its own controller to load the graph data from the server-->
+					<!--- we could keep a local model of this data in a service/factory in increase performance--->
+					<div class="animated fadeInDown col s12" ng-controller='GraphCtrl'>
+
+						<spinner ng-show="!graphDataReady"></spinner>
+						<author-graph-directive ng-show="graphDataReady"></author-graph-directive>
+
+						<!--<div class="section">
 							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
 						</div>
-						<!-- datavisualisations -->
+						&lt;!&ndash; datavisualisations &ndash;&gt;
 						<div class="progress">
 							<div class="determinate" style="width: 0%">
 							</div>
@@ -59,7 +66,7 @@
 						<div class="section">
 							<cjs-radar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-radar>
 						</div>
-						<br><br>
+						<br><br>-->
 						<div class="col s12">
 							<div class="center">
 								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleDataviz()"></i>
