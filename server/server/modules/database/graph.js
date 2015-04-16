@@ -12,13 +12,13 @@ function Graph(db) {
 		clb(null, resArray);
 	}
 
-	this.getAuthorGraph = function(clb) {
-		db.query('select $path, traversedVertex(-3).firstName as firstName1, traversedVertex(-3).lastName as lastName1, traversedVertex(-1).firstName as firstName2, traversedVertex(-1).lastName as lastName2, traversedVertex(-2).title as title, traversedVertex(-2).@class as class from (traverse in(\'AuthorOf\'), out(\'AuthorOf\')  from Author) where $depth = 2').all()
+	this.getAuthorGraph = function(authId, depth, clb) {
+		db.query('select $path, traversedVertex(-3).firstName as firstName1, traversedVertex(-3).lastName as lastName1, traversedVertex(-1).firstName as firstName2, traversedVertex(-1).lastName as lastName2, traversedVertex(-2).title as title, traversedVertex(-2).@class as class from (traverse in(\'AuthorOf\'), out(\'AuthorOf\')  from ' + authId + ') where $depth <= ' + depth + ' and @class = \'Author\' and @rid <> ' + authId).all()
 		.then(function(res) {
 			var ctr = 0;
 			for (var i = 0; i < res.length; i++) {
 				parsePath(res[i].$path, function(error, newPath) {
-					res[ctr].connection = newPath;
+					res[ctr].connection = newPath.slice(newPath.length-3);
 
 					res[ctr].connection[0].firstName = res[ctr].firstName1;
 					res[ctr].connection[0].lastName = res[ctr].lastName1;
