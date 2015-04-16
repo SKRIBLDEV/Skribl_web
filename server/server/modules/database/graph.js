@@ -56,27 +56,37 @@ function Graph(db) {
 		var newDepth = depth + depth;
 		db.query('select $path, traversedVertex(-3).firstName as firstName1, traversedVertex(-3).lastName as lastName1, traversedVertex(-1).firstName as firstName2, traversedVertex(-1).lastName as lastName2, traversedVertex(-2).title as title, traversedVertex(-2).@class as class from (traverse in(\'AuthorOf\'), out(\'AuthorOf\')  from ' + authId + ') where $depth <= ' + newDepth + ' and @class = \'Author\' and @rid <> ' + authId).all()
 		.then(function(res) {
-			var ctr = 0;
-			var ctr2 = 0;
-			for (var i = 0; i < res.length; i++) {
-				parsePath(res[i].$path, function(error, newPath) {
-					res[ctr].connection = newPath.slice(newPath.length-3);
-
-					parseObject(res, ctr++, function(error, dummy) {
-						if(error) {
-							clb(error);
-						}
-						if(++ctr2 == res.length) {
-							clb(null, res);
-						}
+			if(res.length) {
+				var ctr = 0;
+				var ctr2 = 0;
+				for (var i = 0; i < res.length; i++) {
+					parsePath(res[i].$path, function(error, newPath) {
+						res[ctr].connection = newPath.slice(newPath.length-3);
+						parseObject(res, ctr++, function(error, dummy) {
+							if(error) {
+								clb(error);
+							}
+							if(++ctr2 == res.length) {
+								clb(null, res);
+							}
+						});
 					});
+				};
+			}
+			else {
+				db.record.get(authId)
+				.then(function(res) {
+					getUsername(authId, function(error,usrname) {
+						clb(null, {firstname: res.firstName, lastName: res.lastName, id: RID.getRid(res), username: usrname});
+					})
+				}).error(function(er) {
+					clb(er);
 				});
-			};
+			}
 		}).error(function(er) {
 			clb(er);
 		});
 	}
-
 }
 
 exports.Graph = Graph;

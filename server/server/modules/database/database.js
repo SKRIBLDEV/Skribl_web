@@ -500,7 +500,7 @@ var t = d.getTime();
 
 
 //database.authorPublications('#13:669', callBack);
-//database.getAuthorGraph(callBack);
+//database.getAuthorGraph('#13:712', 5, callBack);
 //database.reset(callBack);
 //database.getAuthorGraph(callBack);
 //database.testError(callBack);

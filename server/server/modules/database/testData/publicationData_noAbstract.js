@@ -114,6 +114,7 @@ module.exports = [
   authors: 
    [ { firstName: "Alexander", lastName: "Forster" },
      { firstName: "Gregor", lastName: "Engels" },
+     { firstName: "Wolfgang", lastName: "De Meuter" }, ////TEMP REMOVE LATER
      { firstName: "Tim", lastName: "Schattkowsky" },
      { firstName: "Ragnhild", lastName: "Van Der Straeten" } ],
   type : "proceeding",
