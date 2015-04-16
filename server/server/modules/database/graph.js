@@ -7,7 +7,7 @@ function Graph(db) {
 		var txt = path;
 		var newTxt = txt.split('(');
 		for (var i = 1; i < newTxt.length; i++) {
-    		resArray[i-1] = {rid: newTxt[i].split(')')[0]};
+    		resArray[i-1] = {id: newTxt[i].split(')')[0]};
 		}
 		clb(null, resArray);
 	}
@@ -37,12 +37,12 @@ function Graph(db) {
 		array[idx].connection[1].type = array[idx].class;
 
 		array[idx] = array[idx].connection;
-		getUsername(array[idx][0].rid, function(error, name1) {
+		getUsername(array[idx][0].id, function(error, name1) {
 			if(error) {
 				clb(error);
 			}
 			array[idx][0].username = name1;
-			getUsername(array[idx][2].rid, function(error, name2) {
+			getUsername(array[idx][2].id, function(error, name2) {
 				if(error) {
 					clb(error);
 				}
