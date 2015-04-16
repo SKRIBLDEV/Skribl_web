@@ -15,7 +15,7 @@ function parseAuthorGraph(dbdata) {
 
     function authorIdx(author) {
 
-      var rid = author.rid;
+      var rid = author.id;
       var idx = authorIndexOf[rid];
       if(idx === undefined) { //not in array yet
         idx = authorArray.length;
@@ -49,7 +49,6 @@ function parseAuthorGraph(dbdata) {
 
     var authorArray = [dbdata];
     var edges = new Array();
-
   }
 
   return {
