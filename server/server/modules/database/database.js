@@ -75,6 +75,7 @@ function Database(serverConfig, dbConfig) {
 	this.querySimple = PUB.querySimple;
 	this.updatePublication = PUB.updatePublication;
 	this.removePublication = PUB.removePublication;
+	this.authorPublications = PUB.authorPublications;
 	this.uploadedBy = PUB.uploadedBy;
 	this.loadLibrary = Lib.loadLibrary;
 	this.loadLibraries = Lib.loadLibraries;
@@ -498,7 +499,9 @@ var d = new Date();
 var t = d.getTime();
 
 
-database.reset(callBack);
+//database.authorPublications('#13:669', callBack);
+//database.getAuthorGraph(callBack);
+//database.reset(callBack);
 //database.getAuthorGraph(callBack);
 //database.testError(callBack);
 //database.queryAdvanced(criteria2, 10, callBack);
@@ -547,8 +550,8 @@ UM.createUser(userInfo, function(error, res) {
 	}
 })
 */
-
 /*
+
 function callBack(error, result){
 	var nd = new Date();
 	var nt = nd.getTime();

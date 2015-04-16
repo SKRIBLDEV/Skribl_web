@@ -647,5 +647,36 @@ function Publication(db) {
 			clb(er);
 		});
 	}
+
+	this.authorPublications = function(authId, clb) {
+		db.query('select expand(out(\'AuthorOf\').include(\'title\', \'@rid\', \'lastUpdated\')) from ' + authId).all()
+		.then(function(pubs) {
+			if(pubs.length) {
+				var ctr = 0;
+				for (var i = 0; i < pubs.length; i++) {
+					AUT.getPubAuthors(RID.getRid(pubs[i]), function(error, res) {
+						if(error) {
+							clb(error);
+						}
+						pubs[ctr].rid = RID.getRid(pubs[ctr]);
+						delete pubs[ctr]['@rid'];
+						pubs[ctr].type = pubs[ctr]['@class'];
+						delete pubs[ctr]['@class'];
+						pubs[ctr].authors = res;
+						delete pubs[ctr]['@type'];
+						if(++ctr == pubs.length) {
+							console.log(pubs[0].authors);
+							clb(null, pubs)
+						}
+					});
+				};
+			}
+			else {
+				clb(null, []);
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+	}
 }
 exports.Publication = Publication;

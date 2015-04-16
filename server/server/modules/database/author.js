@@ -98,7 +98,8 @@ function Author(db) {
 				for (var i = 0; i < authors.length; i++) {
 					var obj = {
 						firstName: authors[i].firstName,
-						lastName: authors[i].lastName
+						lastName: authors[i].lastName,
+						rid: RID.getRid(authors[i])
 					};
 					res.push(obj);
 					ctr++;
