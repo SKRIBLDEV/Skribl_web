@@ -1,5 +1,4 @@
 
-<div class="col l5 m12 s12">
 	<div class="card z-depth-4">
 		<div class="card-content" style="background:#EEEEEE">
 			<span class="card-title grey-text text-darken-4">
@@ -26,6 +25,29 @@
 			</div>
 			<!-- stop basic card -->
 
+			<!-- start library card -->
+
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleLibrary()" ui-sref="dashboard.library">
+					<a> library </a>
+					<i class="mdi-navigation-more-vert right"></i>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							Manage your publications, create a portfolio, and search for new insights.
+						</div>
+						<div class="center">
+							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
+						</div>
+					</div>
+				</span>
+			</div>
+
+			<!-- stop library card -->
+
 			<!-- start network card -->
 
 			<div class="card">
@@ -46,28 +68,10 @@
 					</div>
 				</span>
 			</div>
-
-
 			<!-- stop network card -->
 
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleLibrary()" ui-sref="dashboard.library">
-					<a> library </a>
-					<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
-							Manage your publications, create a portfolio, and search for new insights.
-						</div>
-						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
-						</div>
-					</div>
-				</span>
-			</div>
+
+
 
 			<!--&lt;!&ndash; start dataviz card &ndash;&gt;
 			<div class="card">
@@ -168,4 +172,3 @@
 
 		</div>
 	</div>
-</div>

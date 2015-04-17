@@ -9,12 +9,18 @@ webapp.directive('authorGraphDirective', function () {
 
             scope.$on("Graph_Ready", function () {
 
+
+                // @Pieter: this is some code to get the width of the parent container of the directive
+                // it could be used to scale the svg dynamically
+                // however, this returns a width = 0, which is probably due to using materialize 'col' ?
+
                 /*var selection = d3.select(element[0]);
                 width = selection[0][0].clientWidth;
                 console.log("width of the parent: " + width);*/
 
-               var width = 400,
-                   height = 1.2 * width;
+
+               var width = 700,
+                   height = 1 * width;
 
                 var circleWidth = width/100;
 

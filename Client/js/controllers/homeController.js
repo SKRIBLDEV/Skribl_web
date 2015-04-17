@@ -8,7 +8,7 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $state, appData, anchorSmoothScroll, managePublications) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $state, appData, anchorSmoothScroll, managePublications) {
     // only letters, numbers and underscores
 	$scope.RegEx_username = /^\w+$/; 
 
@@ -222,6 +222,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				//save userInformation in appData.
 				appData.currentUser = data;
 
+
+
 				// [H] with ui-router:
 				$state.go('dashboard.library');
 				/*
@@ -278,15 +280,15 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
     };
 
 
-	/*
-	[H] this can now be avoided by using the stub home controller during development
+
+
     	// temp fix for going to dashboard //FIXME
     (function developLogin() {
 		$scope.userinputLogin.username = "brol"; // RvdStraeten
 		$scope.userinputLogin.password = "Brol123!"; // keeF5gee5
 		$scope.doLogin();
 	})();
-	*/
+
 });
 
 

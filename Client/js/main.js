@@ -20,12 +20,11 @@ var config = {headers:  {
  * 		- controller
  * @param  {routeProvider} $routeProvider the ng-route provider associated with the app
  */
-webapp.config(['$routeProvider', '$stateProvider', function($routeProvider, $stateProvider) {
+webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider) {
 
 
-	/*$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });
-	$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});*/
-	$routeProvider.otherwise('/home');
+	$urlRouterProvider.otherwise('/home');
+
 
 	$stateProvider
 
