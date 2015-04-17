@@ -148,9 +148,9 @@ function ResetDB(db, database) {
 	}
 
 	function cleanDb(clb) {
-		db.query('delete vertex').all()
+		db.query('delete from v').all()
 		.then(function(res) {
-			db.query('delete edge').all()
+			db.query('delete from e').all()
 			.then(function(res) {
 				clb(null, true);
 			}).error(function(er) {

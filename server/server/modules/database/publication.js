@@ -33,7 +33,7 @@ function Publication(db) {
 			
 			fs.readFile(path, 'base64', function(error, data) {
 				if(error) {
-					callback(error);
+					clb(error);
 				}
 				else {
 					clb(null, data);
@@ -560,9 +560,9 @@ function Publication(db) {
 	 * @return {Bool}    returns true when finished       
 	 */
 	this.updatePublication = function(id, metObject, clb) {
-		db.select().from(id).all()
+		db.record.get(id)
 		.then(function(res) {
-			if(res.length) {
+			if(res) {
 				if(res[0]['@class'].toLowerCase() == metObject.type) {
 					var trx;
 					if(metObject.type == 'journal') {
@@ -665,7 +665,6 @@ function Publication(db) {
 						pubs[ctr].authors = res;
 						delete pubs[ctr]['@type'];
 						if(++ctr == pubs.length) {
-							console.log(pubs[0].authors);
 							clb(null, pubs)
 						}
 					});

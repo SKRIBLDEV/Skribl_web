@@ -343,7 +343,7 @@ function Database(serverConfig, dbConfig) {
 								else {
 									trx.commit().return('$user').all()
 									.then(function(res) {
-										callback(null, res);
+										callback(null, RID.getRid(res[0]));
 									}).error(function(er) {
 										callback(er);
 									});
@@ -490,7 +490,7 @@ var criteria = {
 	keywords: ['killing', 'reapers', 'space'],
 	authors: [{firstName: 'John', lastName: 'Shepard'}, {firstName: 'Gar', lastName: 'Vakar'}, {firstName: 'M', lastName: 'Braem'}]
 };
-
+ 
 var criteria2 = {
 	number: 19
 };
