@@ -26,12 +26,16 @@ webapp.directive('authorGraphDirective', function () {
 
             scope.$on("Graph_Ready", function () {
 
-                var width = 960,
-                    height = 600;
+                /*var selection = d3.select(element[0]);
+                width = selection[0][0].clientWidth;
+                console.log("width of the parent: " + width);*/
 
-                var circleWidth = 5;
+               var width = 400,
+                   height = 1.2 * width;
 
-                var yellowgreen = "#738A05";
+                var circleWidth = width/100;
+
+                var skriblColor =  "#4A60B6"; // skribl-primary
 
 
                 var svg = d3.select(element[0]).append("svg")
@@ -40,7 +44,7 @@ webapp.directive('authorGraphDirective', function () {
 
                 var force = d3.layout.force()
                     .charge(-1000)
-                    .linkDistance(200)
+                    .linkDistance(width/5)
                     .size([width, height]);
 
                 force
@@ -66,7 +70,7 @@ webapp.directive('authorGraphDirective', function () {
                 var nodeAttributes = node
                     .attr("class", "node")
                     .attr("r", circleWidth)
-                    .style("fill", yellowgreen)
+                    .style("fill", skriblColor)
                     .call(force.drag);
 
                 var text = svg.append("g").selectAll(".text")
@@ -88,12 +92,12 @@ webapp.directive('authorGraphDirective', function () {
                             return 8
                         }
                     })
-                    .attr("font-family", "sans-serif")
+                    .attr("font-family", "Roboto")
                     .attr("fill", function (d, i) {
-                        return yellowgreen;
+                        return skriblColor;
                     })
                     .attr("font-size", function (d, i) {
-                        return ".5em";
+                        return ".6em";
                     })
                     .attr("text-anchor", function (d, i) {
                         if (i > 0) {

@@ -1,3 +1,4 @@
+
 <div class="col l5 m12 s12">
 	<div class="card z-depth-4">
 		<div class="card-content" style="background:#EEEEEE">
@@ -34,8 +35,8 @@
 				</div>
 				<span class="grey-text text-darken-4" ng-show="userService.showDataviz">
 
-					<!--- this part has its own controller to load the graph data from the server-->
-					<!--- we could keep a local model of this data in a service/factory in increase performance--->
+					<!--- [H] this part has its own controller to load the graph data from the server-->
+					<!--- [H] we could keep a local model of this data in a service/factory to increase performance--->
 					<div class="animated fadeInDown col s12" ng-controller='GraphCtrl'>
 
 						<spinner ng-show="!graphDataReady"></spinner>
