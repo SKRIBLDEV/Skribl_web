@@ -116,6 +116,20 @@ function Author(db) {
 		});
 	}
 
+	this.getAuthorId = function(userId, clb) {
+		db.select('expand(in(\'IsAuthor\')) from ' + userId).all()
+		.then(function(res) {
+			if(res.length) {
+				clb(null, RID.getRid(res[0]));
+			}
+			else {
+				clb(null, undefined);
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+	}
+
 	 function getAuthor(authorId, clb) {
 		db.record.get(authorId)
 		.then(function(author) {
