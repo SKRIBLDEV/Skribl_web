@@ -95,14 +95,16 @@
 	<script src="js/main.js">						 	</script>
 
 
-	<!-- !!!! development controllers -->
+<!--	 !!!! development controllers
 	<script src="js/dev_controllers/homeController.js"> 	</script>
-	<script src="js/controllers/dashboardController.js"></script>
-
-
-	<!--&lt;!&ndash;////// APPLICATION/CONFIGURATION LOGIC &ndash;&gt;
-	<script src="js/controllers/homeController.js"> 	</script>
+	<script src="js/dev_controllers/graphController.js"> 	</script>
 	<script src="js/controllers/dashboardController.js"></script>-->
+
+
+	<!--////// APPLICATION/CONFIGURATION LOGIC -->
+	<script src="js/controllers/homeController.js"> 	</script>
+	<script src="js/dev_controllers/graphController.js"> 	</script>
+	<script src="js/controllers/dashboardController.js"></script>
 	
 	<!--////// AUXILIARY LOGIC /////////////// -->
 	<script src="js/services&directives/anchorSmoothScroll.js"> </script>
@@ -140,7 +142,8 @@
 </header>
 <!-- ____ [DYNAMIC CONTENT] _______________-->
 <!-- initially empty, contents will be configured using ngRoute -->
-<div ng-view> </div>
+	<!--- [H] use ui-view instead of ng-view --->
+<div ui-view> </div>
 <!-- ____ [FOOTER] ________________________-->
 </body>
 
