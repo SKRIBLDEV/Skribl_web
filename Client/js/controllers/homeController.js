@@ -206,7 +206,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 		//Initialise HTTP request
 		var loginRequest = $http.post(serverApi.concat('/login'),JSONToSend,config);
-		
+
 		
 		loginRequest.success(function(data, status, headers, config) {
 
@@ -273,12 +273,16 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
       anchorSmoothScroll.scrollTo(eID);
     };
 
+
+	/*
+	[H] this can now be avoided by using the stub home controller during development
     	// temp fix for going to dashboard //FIXME
     (function developLogin() {
-		$scope.userinputLogin.username = "brol";
-		$scope.userinputLogin.password = "Brol123!";
+		$scope.userinputLogin.username = "brol"; // RvdStraeten
+		$scope.userinputLogin.password = "Brol123!"; // keeF5gee5
 		$scope.doLogin();
 	})();
+	*/
 });
 
 
