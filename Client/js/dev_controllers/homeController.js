@@ -2,7 +2,7 @@
 // this is a stub controller
 // load this script in the index.html file to login and go to dashboard, without use of the skribl back-end
 
-angular.module('skriblApp').controller('homeController', function(appData, $location) {
+angular.module('skriblApp').controller('homeController', function(appData, $state) {
 
     appData.currentUser = {
         username: "devUser",
@@ -11,6 +11,10 @@ angular.module('skriblApp').controller('homeController', function(appData, $loca
     };
 
 
+
+    console.log($state);
+
 // change route to #/dashboard
-    $location.path('/dashboard');
+    $state.go('dashboard');
+    //$location.path('/dashboard');
 });

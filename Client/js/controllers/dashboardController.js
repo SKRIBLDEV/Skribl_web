@@ -8,12 +8,12 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
-webapp.controller('dashController', function($scope, $http, $location, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate) {
+webapp.controller('dashController', function($scope, $http, $state, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate) {
     
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
     if (!(appData.currentUser)) {
-        $location.path('/home');
+        $state.go('home');
         return;
     }
 

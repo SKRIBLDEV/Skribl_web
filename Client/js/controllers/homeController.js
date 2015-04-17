@@ -8,7 +8,7 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $location, appData, anchorSmoothScroll, managePublications) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $state, appData, anchorSmoothScroll, managePublications) {
     // only letters, numbers and underscores
 	$scope.RegEx_username = /^\w+$/; 
 
@@ -222,8 +222,12 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				//save userInformation in appData.
 				appData.currentUser = data;
 
+				// [H] with ui-router:
+				$state.go('dashboard');
+				/*
 				// change route to #/dashboard
 				$location.path('/dashboard');
+				*/
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 			//Error when getting user info --> database error

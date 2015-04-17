@@ -1,9 +1,9 @@
  /**
-  * Initialisation of a new angular app with the name 'skribApp',
+  * Initialisation of a new angular app with the name 'skriblApp',
   * Uses ng-route to start the a controller dependent on the url.
   * @type {angular module}
   */
-var webapp = angular.module('skriblApp', ['ngRoute', 'ui.materialize', 'chartjs', 'pdf']);
+var webapp = angular.module('skriblApp', ['ngRoute', 'ui.router', 'ui.materialize', 'chartjs', 'pdf']);
 
 //Adres of server API to send http requests (used in multiple controllers).
 var serverApi = 'http://wilma.vub.ac.be:8443';
@@ -20,11 +20,36 @@ var config = {headers:  {
  * 		- controller
  * @param  {routeProvider} $routeProvider the ng-route provider associated with the app
  */
-webapp.config(['$routeProvider', function($routeProvider) {
+webapp.config(['$routeProvider', '$stateProvider', function($routeProvider, $stateProvider) {
 
-	$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});
-	$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });
-	$routeProvider.otherwise({redirectTo: '/home'});
+
+	/*$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });
+	$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});*/
+	$routeProvider.otherwise('/home');
+
+	$stateProvider
+
+		// HOME STATE =============================================
+
+		.state('home', {
+			url: '/home',
+			controller: 'homeController',
+			templateUrl: 'templates/home.html'
+		})
+
+
+		// test STATE ========================================
+		.state('dashboard', {
+			url: '/dashboard',
+			controller: 'dashController',
+			templateUrl: 'templates/dashboard.html'
+		});
+
+
+
+	/*$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});
+	$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });*/
+
 
 }]);
 
