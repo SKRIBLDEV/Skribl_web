@@ -25,6 +25,7 @@ function UserRecord(info) {
 
 	this.getFirstName = function() { return info.firstName; };
 	this.getLastName = function() { return info.lastName; };
+	this.getAuthorId = function() {return info.authorId};
 	this.getLanguage = function() { return info.language; };
 	this.getEmail = function() { return info.email; };
 	this.getUsername = function() { return info.username; };
