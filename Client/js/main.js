@@ -29,7 +29,7 @@ webapp.config(['$routeProvider', '$stateProvider', function($routeProvider, $sta
 
 	$stateProvider
 
-		// HOME STATE =============================================
+		//=========== HOME STATE ====================================
 
 		.state('home', {
 			url: '/home',
@@ -38,17 +38,30 @@ webapp.config(['$routeProvider', '$stateProvider', function($routeProvider, $sta
 		})
 
 
-		// test STATE ========================================
+		// =========== DASHBOARD STATE ==============================
 		.state('dashboard', {
 			url: '/dashboard',
 			controller: 'dashController',
 			templateUrl: 'templates/dashboard.html'
+		})
+
+		// states nested in dashboard ==============================
+		// accessed in 'userCard' directive
+
+		.state('dashboard.network', {
+			url: '/network',
+			controller: 'GraphCtrl',
+			templateUrl : 'templates/dash-network.html'
+		})
+
+
+		.state('dashboard.library', {
+			// library hasn't got a separate controller at the moment -> use of parent controller
+			url: '/library',
+			templateUrl: "templates/dash-library.html"
 		});
 
 
-
-	/*$routeProvider.when('/dashboard', 		{ templateUrl: 'templates/dashboard.html', 		controller: 'dashController'});
-	$routeProvider.when('/home', 			{ templateUrl: 'templates/home.html', 			controller: 'homeController' });*/
 
 
 }]);

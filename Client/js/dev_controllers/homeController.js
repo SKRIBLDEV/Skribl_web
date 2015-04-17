@@ -11,10 +11,7 @@ angular.module('skriblApp').controller('homeController', function(appData, $stat
     };
 
 
-
-    console.log($state);
-
 // change route to #/dashboard
-    $state.go('dashboard');
+    $state.go('dashboard.library');
     //$location.path('/dashboard');
 });

@@ -25,7 +25,51 @@
 				</span>
 			</div>
 			<!-- stop basic card -->
-			<!-- start dataviz card -->
+
+			<!-- start network card -->
+
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleNetwork()" ui-sref="dashboard.network">
+						<a> network </a>
+						<i class="mdi-navigation-more-vert right"></i>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4" ng-show="userService.showNetwork">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							Explore your scientific network.
+						</div>
+						<div class="center">
+							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleNetwork()"></i>
+						</div>
+					</div>
+				</span>
+			</div>
+
+
+			<!-- stop network card -->
+
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleLibrary()" ui-sref="dashboard.library">
+					<a> library </a>
+					<i class="mdi-navigation-more-vert right"></i>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							Manage your publications, create a portfolio, and search for new insights.
+						</div>
+						<div class="center">
+							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
+						</div>
+					</div>
+				</span>
+			</div>
+
+			<!--&lt;!&ndash; start dataviz card &ndash;&gt;
 			<div class="card">
 				<div class="card-content">
 					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleDataviz()">
@@ -35,14 +79,14 @@
 				</div>
 				<span class="grey-text text-darken-4" ng-show="userService.showDataviz">
 
-					<!--- [H] this part has its own controller to load the graph data from the server-->
-					<!--- [H] we could keep a local model of this data in a service/factory to increase performance--->
+					&lt;!&ndash;- [H] this part has its own controller to load the graph data from the server&ndash;&gt;
+					&lt;!&ndash;- [H] we could keep a local model of this data in a service/factory to increase performance-&ndash;&gt;
 					<div class="animated fadeInDown col s12" ng-controller='GraphCtrl'>
 
 						<spinner ng-show="!graphDataReady"></spinner>
 						<author-graph-directive ng-show="graphDataReady"></author-graph-directive>
 
-						<!--<div class="section">
+						&lt;!&ndash;<div class="section">
 							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
 						</div>
 						&lt;!&ndash; datavisualisations &ndash;&gt;
@@ -67,7 +111,7 @@
 						<div class="section">
 							<cjs-radar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-radar>
 						</div>
-						<br><br>-->
+						<br><br>&ndash;&gt;
 						<div class="col s12">
 							<div class="center">
 								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleDataviz()"></i>
@@ -75,7 +119,7 @@
 						</div>
 					</div>
 				</span>
-			</div>
+			</div>-->
 			<!-- stop dataviz card -->
 			<!-- start Settings card -->
 			<div class="card">
