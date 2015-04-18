@@ -1,5 +1,5 @@
 
-
+var RID = require('./rid.js');
 function Graph(db) {
 
 	function parsePath(path, clb) {
@@ -52,11 +52,30 @@ function Graph(db) {
 		});
 	}
 
+	function constructResObject(array, idx, clb) {
+		var resObj = array[idx];
+		array[idx] = [{id: RID.transformRid(resObj.fromAuthor), firstName: resObj.fromFirstName, lastName: resObj.fromLastName}, 
+					{id: RID.transformRid(resObj.pub), title: resObj.title, type: resObj.type}, 
+					{id: RID.transformRid(resObj.toAuthor), firstName: resObj.toFirstName, lastName: resObj.toLastName}];
+
+		clb(null, true);
+	}
+
 	this.getAuthorGraph = function(authId, depth, clb) {
 		var newDepth = depth + depth;
-		db.query('select $path, traversedVertex(-3).firstName as firstName1, traversedVertex(-3).lastName as lastName1, traversedVertex(-1).firstName as firstName2, traversedVertex(-1).lastName as lastName2, traversedVertex(-2).title as title, traversedVertex(-2).@class as class from (traverse in(\'AuthorOf\'), out(\'AuthorOf\')  from ' + authId + ') where $depth <= ' + newDepth + ' and @class = \'Author\' and @rid <> ' + authId).all()
+		db.query('select $path, traversedEdge(-1).out.firstName as toFirstName, traversedEdge(-1).out.lastName as toLastName, traversedEdge(-1).out as toAuthor, traversedEdge(-1).in as pub, traversedEdge(-1).in.title as title, traversedEdge(-1).in.@class as type, traversedEdge(-2).out as fromAuthor, traversedEdge(-2).out.firstName as fromFirstName, traversedEdge(-2).out.lastName as fromLastName from (traverse out_AuthorOf, in, in_AuthorOf, out from ' + authId + ') where $depth <= ' + newDepth + ' and @class = \'AuthorOf\' and out <> ' + authId).all()
 		.then(function(res) {
 			if(res.length) {
+				var ctr = 0;
+				for (var i = 0; i < res.length; i++) {
+					constructResObject(res, i, function(error, bool) {
+						if(++ctr == res.length) {
+							clb(null, res);
+						}
+					});
+				};
+
+/*
 				var ctr = 0;
 				var ctr2 = 0;
 				for (var i = 0; i < res.length; i++) {
@@ -72,6 +91,7 @@ function Graph(db) {
 						});
 					});
 				};
+*/
 			}
 			else {
 				db.record.get(authId)

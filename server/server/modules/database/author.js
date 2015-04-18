@@ -21,7 +21,10 @@ function Author(db) {
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
 			.from('$' + trx_id)
-			.to('$publication');
+			.to('$publication')
+			.set({
+				dummy: 'dummy'
+			});
 		});
 		callback(null, true);
 	};
@@ -66,7 +69,10 @@ function Author(db) {
 		.let('authorEdge', function(s) {
 			s.create('edge', 'AuthorOf')
 			.from('$' + trx_id)
-			.to('$publication');
+			.to('$publication')
+			.set({
+				dummy: 'dummy'
+			});
 		});
 		callback(null, true);
 	};
