@@ -1,8 +1,10 @@
+
+// this is a stub controller to develop basic GUI stuff, independent of the Skribl server
 webapp.controller('GraphCtrl', function GraphCtrl($scope, $http) {
 
     $scope.graphDataReady = false;
 
-    $http.get('temp_json/graph_data.json')
+    $http.get('temp_json/graph_data_clean.json')
         .success(function (data) {
             $scope.graphData = data;
             $scope.graphDataReady = true; //ugly fix! -> after installment of router-UI, this could be fixed with 'resolving'

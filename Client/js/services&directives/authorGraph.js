@@ -1,6 +1,5 @@
 
 
-
 webapp.directive('authorGraphDirective', function () {
     return {
         restrict: 'E',
