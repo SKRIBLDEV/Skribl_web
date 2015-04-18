@@ -9,8 +9,9 @@ function ResetDB(db, database) {
 
 	function addUsers(clb) {
 		var ctr = 0;
-		for (var i = 0; i < userData.length; i++) {
-			UM.createUser(userData[i], function(error, res) {
+		function myLoop(i) {
+			setTimeout(function() {
+			UM.createUser(userData[ctr], function(error, res) {
 				if(error) {
 					clb(error);
 				}
@@ -28,7 +29,10 @@ function ResetDB(db, database) {
 					});
 				}		
 			});
-		};
+				if (--i) myLoop(i);
+			}, 400);
+		}
+		myLoop(userData.length);
 	}
 
 	function getId(authorObj, clb) {
@@ -142,7 +146,7 @@ function ResetDB(db, database) {
 					clb(new Error('type:' + pubData[i-1].type + 'not recognized'));
 				}
 				if (--i) myLoop(i);
-			}, 150);
+			}, 400);
 		}
 		myLoop(pubData.length);
 	}

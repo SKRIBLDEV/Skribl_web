@@ -563,7 +563,7 @@ function Publication(db) {
 		db.record.get(id)
 		.then(function(res) {
 			if(res) {
-				if(res[0]['@class'].toLowerCase() == metObject.type) {
+				if(res['@class'].toLowerCase() == metObject.type) {
 					var trx;
 					if(metObject.type == 'journal') {
 						var trx = db.let('publication1', function(s) {
