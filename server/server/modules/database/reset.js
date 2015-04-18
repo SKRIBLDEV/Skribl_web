@@ -146,7 +146,7 @@ function ResetDB(db, database) {
 					clb(new Error('type:' + pubData[i-1].type + 'not recognized'));
 				}
 				if (--i) myLoop(i);
-			}, 400);
+			}, 2500);
 		}
 		myLoop(pubData.length);
 	}
