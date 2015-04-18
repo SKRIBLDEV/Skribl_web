@@ -1,13 +1,14 @@
 /**
  * Created by Hannah_Pinson on 18/04/15.
  */
-webapp.controller('GraphCtrl', function GraphCtrl($scope, $http) {
+webapp.controller('GraphCtrl', function GraphCtrl(appData, $scope, $http) {
+
+    console.log("userId: " + appData.currentUser.authorId);
 
     var currentId = '13:205';
     var url = serverApi.concat('/authors/').concat(currentId).concat('/graph?limit=6');
-    var authorization = {headers:
-    {'Content-type' : '',
-        'Authorization': undefined}};
+    var authorization = {}; // no auth necessary
+
 
     $scope.graphDataReady = false;
 

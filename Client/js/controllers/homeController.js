@@ -198,6 +198,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	 */
 	$scope.doLogin = function() {
 
+
 		//Create JSON to send in a HTTPrequest.
 		var JSONToSend = {
 				"username" : $scope.userinputLogin.username,
@@ -221,7 +222,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			loadUserInfoRequest.success(function(data, status, headers, config) {
 				//save userInformation in appData.
 				appData.currentUser = data;
-
 
 
 				// [H] with ui-router:

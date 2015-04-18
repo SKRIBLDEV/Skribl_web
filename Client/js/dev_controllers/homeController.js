@@ -6,6 +6,7 @@ angular.module('skriblApp').controller('homeController', function(appData, $stat
 
     appData.currentUser = {
         username: "devUser",
+        authorId: "13:205",
         firstName: "Dev",
         lastName: "Elopuser"
     };
