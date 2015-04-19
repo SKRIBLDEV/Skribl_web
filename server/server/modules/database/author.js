@@ -154,7 +154,7 @@ function Author(db) {
 							clb(error);
 						}
 						else {
-							authors[ctr] = {firstName: res.firstName, lastName: res.lastName, rid: RID.getRid(res)};
+							authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res)};
 							ctr++;
 							if(ctr == authors.length) {
 								clb(null, authors);

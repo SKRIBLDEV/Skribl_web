@@ -1,6 +1,6 @@
 
 var RID = require('./rid.js');
-function Graph(db) {
+function Graph(db, AUT) {
 
 	function parsePath(path, clb) {
 		var resArray = [];
@@ -52,46 +52,54 @@ function Graph(db) {
 		});
 	}
 
-	function constructResObject(array, idx, clb) {
-		var resObj = array[idx];
-		array[idx] = [{id: RID.transformRid(resObj.fromAuthor), firstName: resObj.fromFirstName, lastName: resObj.fromLastName}, 
-					{id: RID.transformRid(resObj.pub), title: resObj.title, type: resObj.type}, 
-					{id: RID.transformRid(resObj.toAuthor), firstName: resObj.toFirstName, lastName: resObj.toLastName}];
+	function authorsIterate(authors, idx, resArray, pubObj, clb) {
+		var author1 = authors[idx];
+		var ctr = idx+1;
+		if(ctr == authors.length) {
+			clb(null, true);
+		}
+		for (var i = idx+1; i < authors.length; i++) {
+			resArray.push([author1, pubObj, authors[i]]);
+			if(++ctr == authors.length) {
+				clb(null, true);
+			}
+		};
+	}
 
-		clb(null, true);
+	function constructResObjects(array, idx, resArray, clb) {
+		var resObj = array[idx];
+		var pubObj = {id: RID.transformRid(resObj.rid), title: resObj.title, type: resObj.class};
+		AUT.getAuthorObjects(resObj.authors, function(error, autObjects) {
+			if(error) {
+				clb(error);
+			}
+			else {
+				var ctr = 0;
+				for (var i = 0; i < autObjects.length; i++) {
+					authorsIterate(autObjects, i, resArray, pubObj, function(error, res) {
+						if(++ctr == autObjects.length) {
+							clb(null, true);
+						}
+					});
+				};
+			}
+		});
 	}
 
 	this.getAuthorGraph = function(authId, depth, clb) {
 		var newDepth = depth + depth;
-		db.query('select $path, traversedEdge(-1).out.firstName as toFirstName, traversedEdge(-1).out.lastName as toLastName, traversedEdge(-1).out as toAuthor, traversedEdge(-1).in as pub, traversedEdge(-1).in.title as title, traversedEdge(-1).in.@class as type, traversedEdge(-2).out as fromAuthor, traversedEdge(-2).out.firstName as fromFirstName, traversedEdge(-2).out.lastName as fromLastName from (traverse out_AuthorOf, in, in_AuthorOf, out from ' + authId + ') where $depth <= ' + newDepth + ' and @class = \'AuthorOf\' and out <> ' + authId).all()
+		db.query('select $path, @rid, @class, title, in_AuthorOf.out as authors from (traverse out_AuthorOf, in, in_AuthorOf, out from ' + authId + ' while $depth <= ' + newDepth + ' strategy BREADTH_FIRST) where @class = \'Proceeding\' or @class = \'Journal\'').all()
 		.then(function(res) {
 			if(res.length) {
+				var resArray = [];
 				var ctr = 0;
 				for (var i = 0; i < res.length; i++) {
-					constructResObject(res, i, function(error, bool) {
+					constructResObjects(res, i, resArray, function(error, bool) {
 						if(++ctr == res.length) {
-							clb(null, res);
+							clb(null, resArray);
 						}
 					});
 				};
-
-/*
-				var ctr = 0;
-				var ctr2 = 0;
-				for (var i = 0; i < res.length; i++) {
-					parsePath(res[i].$path, function(error, newPath) {
-						res[ctr].connection = newPath.slice(newPath.length-3);
-						parseObject(res, ctr++, function(error, dummy) {
-							if(error) {
-								clb(error);
-							}
-							if(++ctr2 == res.length) {
-								clb(null, res);
-							}
-						});
-					});
-				};
-*/
 			}
 			else {
 				db.record.get(authId)

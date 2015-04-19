@@ -61,8 +61,8 @@ function Database(serverConfig, dbConfig) {
 	var Lib = new library.Library(db);
 	var Kw = new keyword.Keyword(db);
 	var AUT = new authors.Author(db);
-	var graph = new Graph.Graph(db);
 	var RS = new reset.ResetDB(db, self);
+	var graph = new Graph.Graph(db, AUT);
 
 
 	/* provides functions */
@@ -508,7 +508,7 @@ var t = d.getTime();
 
 
 //database.authorPublications('#13:669', callBack);
-//database.getAuthorGraph('#13:712', 5, callBack);
+//database.getAuthorGraph('#13:888', 5, callBack);
 //database.reset(callBack);
 //database.getAuthorGraph(callBack);
 //database.testError(callBack);
@@ -558,8 +558,8 @@ UM.createUser(userInfo, function(error, res) {
 	}
 })
 */
-/*
 
+/*
 function callBack(error, result){
 	var nd = new Date();
 	var nt = nd.getTime();
@@ -579,7 +579,7 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
-
 */
+
 
 
