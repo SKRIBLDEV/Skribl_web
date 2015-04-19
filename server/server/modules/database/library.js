@@ -1,0 +1,346 @@
+
+
+var RID = require('./rid.js');
+var Author = require('./author.js');
+
+function Library(db) {
+
+	var AUT = new Author.Author(db);
+
+	/**
+	 * creates a library and connects it to given user
+	 * @param  {String} user username
+	 * @param  {String} name libraryname
+	 * @param  {Object} trx  transaction
+	 * @param  {callBack} clb  
+	 */
+	 function createLibrary(user, name, trx, clb) { 
+	 	trx.let(name, function(s) {
+			s.create('vertex', 'Library')
+			.set({
+				username: user,
+				name: name
+			});
+		})
+		.let(name + 'Edge', function(s) {
+			s.create('edge', 'HasLibrary')
+			.from('$user')
+			.to('$' + name);
+		});
+		clb(null, true);
+	}
+
+	/**
+	 * uses createLibrary to add library to user if user doesn't have library with same name
+	 * @param {String} user username
+	 * @param {String} name libraryname
+	 * @param {callBack} clb  
+	 */
+	 this.addLibrary = function(user, name, clb) {
+	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
+	 	.then(function(res) {
+	 		if(res.length === 0) {
+		 		var trx = db.let('user', function(s) {
+					s.select().from('User').where('username = \'' + user + '\'');
+				});
+				createLibrary(user, name, trx, function(error, res) {
+					trx.commit().return('$user').all()
+					.then(function(user) {
+						clb(null, true);
+					}).error(function(er) {
+						clb(er);
+					});
+				});	
+	 		}
+	 		else {
+	 			clb(new Error('library of user: ' + user + ' with name: ' + name + ', already exists'));
+	 		}
+	 	}).error(function(er) {
+			clb(er);
+		});
+
+	}
+
+	/**
+	 * adds a publication to a library if library doesn't already contain publication
+	 * @param {String} user    username of library owner
+	 * @param {String} library library name
+	 * @param {String} id      publication id
+	 * @param {callBack} clb    
+	 */
+	this.addToLibrary = function(user, library, id, clb) {
+		db.select('@rid').from('Publication').where('@rid = ' + id).all()
+		.then(function(res) {
+			if(res.length) {
+				db.query('select * from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\') where @rid = \'' + id + '\'')
+				.then(function(pubs) {
+					if(pubs.length === 0) {
+						db.select().from('Library').where({username: user, name: library}).all()
+						.then(function (libraries) {
+							if(libraries.length) {
+								var libRid = RID.getRid(libraries[0]);
+								db.create('edge', 'HasPublication')
+								.from(libRid)
+								.to(id).one()
+								.then(function() {
+									clb(null, true);
+								}).error(function(er) {
+									clb(er);
+								});
+							}
+							else {
+								clb(new Error('Library does not exist'));
+							}
+						}).error(function(er) {
+							clb(er);
+						});
+					}
+					else {
+						clb(new Error('publication with id: ' + id + ', is already in library'));
+					}
+				}).error(function(er) {
+					clb(er);
+				});
+			}
+			else {
+				clb(new Error('Publication with id: ' + id + ' does not exist'));
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+		
+		
+	}
+
+	/**
+	 * removes a publication from a library
+	 * @param  {String} user    username of library owner
+	 * @param  {String} library library name
+	 * @param  {String} id      publication id
+	 * @param  {callBack} clb     
+	 */
+	this.removeFromLibrary = function(user, library, id, clb) {
+		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'').all()
+		.then(function(res) {
+			if(res.length) {
+				db.select().from(id).all()
+				.then(function(res) {
+					if(res.length) {
+						db.let('library', function(s) {
+							s.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'');
+						})
+						.let('delEdge', function(s) {
+							s.delete('edge', 'HasPublication')
+							.from('$library')
+							.to(id)
+						})
+						.commit().return('$library').all()
+						.then(function(res) {
+							clb(null, true);
+						}).error(function(er) {
+							clb(er);
+						});
+					}
+					else {
+						clb(new Error('Publication does not exist'));
+					}
+				}).error(function(er) {
+					clb(er);
+				});
+			}
+			else {
+				clb(new Error('library does not exist'));
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+		
+
+	}
+
+	/**
+	 * returns an array with all library names of given user
+	 * @param  {String} user username
+	 * @param  {callBack} clb  
+	 * @return {Array<String>}      array of library names
+	 */
+	this.loadLibraries = function(user, clb) {
+		function getName(array, callB) {
+			var ctr = 0;
+			for (var i = 0; i < array.length; i++) {
+				array[ctr] = array[ctr].name;
+				ctr++;
+				if(ctr == array.length) {
+					callB(null, array);
+				}
+			};
+		}
+
+		db.query('select name from (select expand(out(\'HasLibrary\')) from User where username = \'' + user + '\')')
+		.then(function(res) {
+			if(res.length) {
+				getName(res, clb);
+			}
+			else {
+				clb(new Error('no libraries found'));
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+	}
+
+	/**
+	 * returns all publications in given library
+	 * @param  {String} user    username of library owner
+	 * @param  {String} library name of library
+	 * @param  {callBack} clb     
+	 * @return {Array<Object>}         publication array
+	 */
+	 this.loadLibrary = function(user, library, clb) {
+
+		function prepResults(array, callB) {
+			var ctr = 0;
+			for (var i = 0; i < array.length; i++) {
+				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class']};
+				if(array[ctr]['authors']) {
+					array[ctr].authors = RID.transformRids(array[ctr]['authors']);
+						AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
+						ctr++
+						if(ctr == array.length) {
+							callB(null, array);
+						} 
+					});
+				}
+				else {
+					ctr++
+					if(ctr == array.length) {
+						callB(null, array);
+					} 
+				}
+			};
+		}
+
+		db.query('select from Library where username = \'' + user + '\' and name = \'' + library + '\'')
+		.then(function(res) {
+			if(res.length) {
+				db.query('select title, @rid, @class, in(\'AuthorOf\') as authors from (select expand(out(\'HasPublication\')) from Library where username = \'' + user + '\' and name = \'' + library + '\')')
+				.then(function(publications) {
+					if(publications.length) {
+						prepResults(publications, function(error, res) {
+							clb(null, res);
+						})
+					}
+					else{
+						clb(null, []);
+					}
+				}).error(function(er) {
+					clb(er);
+				});
+			}
+			else {
+				clb(new Error('library: ' + library + ' of user: ' + user + 'does not exist'));
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+	 	
+	}
+
+	/**
+	 * add default libraries (Uploaded, Favorites, Portfolio) to user
+	 * @param {String} username 
+	 * @param {Object} trx      transaction
+	 * @param {callBack} clb      
+	 */
+	this.addDefaults = function(username, trx, clb) {
+		createLibrary(username, 'Uploaded', trx, function(error, res) {
+			if(error) {
+				clb(error);
+			}
+			else {
+				createLibrary(username, 'Favorites', trx, function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						createLibrary(username, 'Portfolio', trx, function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							else {
+								clb(null, true);
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+
+	/**
+	 * removes a given library from given user. (will not destroy publications in library)
+	 * @param  {String} user username
+	 * @param  {String} name name of library
+	 * @param  {callBack} clb  
+	 */
+	this.removeLibrary = function(user, name, clb) {
+		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
+		.then(function(res) {
+			if(res.length) {
+				if(res[0].name == 'Uploaded' || res[0].name == 'Favorites' || res[0].name == 'Portfolio') {
+					clb(new Error('removing library: ' + name + ' not allowed'));
+				}
+				else {
+					var trx = db.let('temp', function(s) {
+						s.select().from('#1:1');
+					});
+					deleteLibrary(user, name, trx, function(error, res) {
+						trx.commit().return().all()
+						.then(function() {
+							clb(null, true);
+						}).error(function(er) {
+							clb(er);
+						});
+					});
+				}
+			}
+			else {
+				clb(new Error('user: ' + user + ' has no library with name: ' + name));
+			}
+		}).error(function(er) {
+			clb(er);
+		});
+	}
+
+	/**
+	 * deletes library
+	 * @param  {String} username 
+	 * @param  {String} name     name of library
+	 * @param  {Object} trx      transaction
+	 * @param  {callBack} clb      
+	 */
+	function deleteLibrary(username, name, trx, clb) {
+		trx.let(name, function(s) {							///!!!!name will cause troubles if it is more than 1 word!!!!!
+			s.delete('vertex', 'Library')
+			.where('username = \'' + username + '\' and name = \'' + name + '\'');
+		});
+		clb(null, true);
+	}
+
+	/**
+	 * delete the defaultLibraries from a user
+	 * @param  {String} username 
+	 * @param  {Object} trx      transaction
+	 * @param  {callBack} clb      
+	 */
+	this.deleteDefaults = function(username, trx, clb) {
+		deleteLibrary(username, 'Uploaded', trx, function(error, res) {
+			deleteLibrary(username, 'Favorites', trx, function(error, res) {
+				deleteLibrary(username, 'Portfolio', trx, function(error, res) {
+					clb(null, true);
+				});
+			});
+		});
+	}
+}
+exports.Library = Library;
