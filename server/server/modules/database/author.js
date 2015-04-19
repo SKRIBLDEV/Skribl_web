@@ -123,7 +123,7 @@ function Author(db) {
 	}
 
 	this.getAuthorId = function(userId, clb) {
-		db.select('expand(in(\'IsAuthor\')) from ' + userId).all()
+		db.select('expand(out(\'IsAuthor\')) from ' + userId).all()
 		.then(function(res) {
 			if(res.length) {
 				clb(null, RID.getRid(res[0]));
