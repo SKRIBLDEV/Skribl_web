@@ -292,12 +292,12 @@ function Database(serverConfig, dbConfig) {
 				aff.getAffiliation(dbRec, function(error, user) {
 					self.getResearchDomains(user.username, function(error, resdomains) {
 						user.researchDomains = resdomains;
-						AUT.getAuthorId(RID.getRid(user), function(error, res) {
+						AUT.getAuthorId(RID.getRid(user), function(error, autId) {
 							if(error) {
 								clb(error);
 							}
 							else {
-								user.authorId = RID.getRid(user);
+								user.authorId = autId;
 								callback(error, new UM.UserRecord(user));
 							}
 						});
