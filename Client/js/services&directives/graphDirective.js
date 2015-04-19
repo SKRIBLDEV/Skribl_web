@@ -1,11 +1,23 @@
 
 
-webapp.directive('authorGraphDirective', function () {
+webapp.directive('graphDirective', function () {
     return {
         restrict: 'E',
         replace: true,
         link: function (scope, element) {
 
+
+            //show textual replacement for the graph
+            scope.$on("Graph_Failed", function(){
+
+                d3.select(element[0]).append("p")
+                    .text('No network to display.')
+                    .attr("font-family", "Roboto");
+
+            });
+
+
+            // create a visualisation of the graph
             scope.$on("Graph_Ready", function () {
 
 
@@ -14,21 +26,22 @@ webapp.directive('authorGraphDirective', function () {
                 // however, this returns a width = 0, which is probably due to using materialize 'col' ?
 
                 /*var selection = d3.select(element[0]);
-                width = selection[0][0].clientWidth;
-                console.log("width of the parent: " + width);*/
+                 width = selection[0][0].clientWidth;
+                 console.log("width of the parent: " + width);*/
 
 
-               var width = 700,
-                   height = 1 * width;
+                var width = 700,
+                    height = 1 * width;
 
                 var circleWidth = width/100;
-
-                var skriblColor =  "#4A60B6"; // skribl-primary
-
 
                 var svg = d3.select(element[0]).append("svg")
                     .attr("width", width)
                     .attr("height", height);
+
+
+                var skriblColor =  "#4A60B6"; // skribl-primary
+
 
                 var force = d3.layout.force()
                     .charge(-1000)

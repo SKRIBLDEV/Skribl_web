@@ -9,7 +9,7 @@
 
  */
 webapp.controller('dashController', function($scope, $http, $state, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate) {
-    
+
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
     if (!(appData.currentUser)) {
