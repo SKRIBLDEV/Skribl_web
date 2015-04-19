@@ -10,6 +10,13 @@ var RID = require('./rid.js');
  */
 function Author(db) {
 
+	/**
+	 * adds an author to database and connects it to a publication.
+	 * @param {String}   fName    firstname of author
+	 * @param {String}   lName    lastname of author
+	 * @param {Integer}   trx_id   nr to help identify new author in the transaction
+	 * @param {Object}   trx      transaction
+	 */
 	function addAuthor(fName, lName, trx_id, trx, callback) {
 		trx.let(trx_id, function(s) {
 			s.create('vertex', 'Author')
@@ -29,6 +36,13 @@ function Author(db) {
 		callback(null, true);
 	};
 
+	/**
+	 * adds an author to the database and connects it to a user
+	 * @param  {String}   fName    firstname of author
+	 * @param  {String}   lName    lastname of author
+	 * @param  {Object}   trx      transaction
+	 * @param  {callBack} callback 
+	 */
 	this.createAuthor = function(fName, lName, trx, callback) {
 		trx.let('author', function(s) {
 			s.create('vertex', 'Author')
@@ -45,6 +59,12 @@ function Author(db) {
 		callback(null, true);
 	};
 
+	/**
+	 * uses addAuthor to add given authors to database
+	 * @param {Array<String>}   authors  
+	 * @param {transaction}   trx      transaction
+	 * @param {callBack} callback 
+	 */
 	this.addAuthors = function(authors, trx, callback) {
 		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
@@ -62,6 +82,13 @@ function Author(db) {
 		}
 	};
 
+	/**
+	 * connects existing author to a publication
+	 * @param  {String}   id       author id
+	 * @param  {Integer}   trx_id   nr to help distinguish author in transaction
+	 * @param  {Object}   trx      transaction
+	 * @param  {callBack} callback 
+	 */
 	function connectAuthor(id, trx_id, trx, callback) {
 		trx.let(trx_id, function(s) {
 			s.select().from(id);
@@ -77,6 +104,12 @@ function Author(db) {
 		callback(null, true);
 	};
 
+	/**
+	 * uses connectAuthor to connect multiple authors to a publication
+	 * @param  {Array<String>}   authors  
+	 * @param  {Object}   trx      transaction
+	 * @param  {callBack} callback 
+	 */
 	this.connectAuthors = function(authors, trx, callback) {
 		if(typeof authors !== 'undefined' && authors.length) {
 			var ctr = 0;
@@ -94,7 +127,12 @@ function Author(db) {
 		}
 	};
 
-	
+	/**
+	 * gets all authors of a publication
+	 * @param  {String} pubId publication id
+	 * @param  {callBack} clb   
+	 * @return {Array<Object>}       returns an array with objects that contain firstname, lastname and author id
+	 */
 	this.getPubAuthors = function(pubId, clb) {
 		db.query('select expand(in(\'AuthorOf\')) from ' + pubId)
 		.then(function(authors) {
@@ -122,6 +160,12 @@ function Author(db) {
 		});
 	}
 
+	/**
+	 * given userId  retrieves id of connected author profile 
+	 * @param  {String} userId 
+	 * @param  {callBack} clb    
+	 * @return {String}        author id
+	 */
 	this.getAuthorId = function(userId, clb) {
 		db.select('expand(out(\'IsAuthor\')) from ' + userId).all()
 		.then(function(res) {
@@ -136,6 +180,12 @@ function Author(db) {
 		});
 	}
 
+	/**
+	 * given id retrieves author data
+	 * @param  {String} authorId 
+	 * @param  {callBack} clb      
+	 * @return {Object}          object containing author data
+	 */
 	 function getAuthor(authorId, clb) {
 		db.record.get(authorId)
 		.then(function(author) {
@@ -145,28 +195,34 @@ function Author(db) {
 		});
 	}
 
-		this.getAuthorObjects = function(authors, clb) {
-			if(authors && authors.length) {
-				var ctr = 0;
-				for (var i = 0; i < authors.length; i++) {
-					getAuthor(authors[i], function(error, res) {
-						if(error) {
-							clb(error);
+	/**
+	 * iterates over given author array and returns an array of objects containing firstnam, lastname and author id
+	 * @param  {Array<String>} authors 
+	 * @param  {callBack} clb     
+	 * @return {Array<Object>}         array of objects containing firstnam, lastname and author id
+	 */
+	this.getAuthorObjects = function(authors, clb) {
+		if(authors && authors.length) {
+			var ctr = 0;
+			for (var i = 0; i < authors.length; i++) {
+				getAuthor(authors[i], function(error, res) {
+					if(error) {
+						clb(error);
+					}
+					else {
+						authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res)};
+						ctr++;
+						if(ctr == authors.length) {
+							clb(null, authors);
 						}
-						else {
-							authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res)};
-							ctr++;
-							if(ctr == authors.length) {
-								clb(null, authors);
-							}
-						}
-					});
-				};
-			}
-			else {
-				clb(null, []);
-			}
+					}
+				});
+			};
 		}
+		else {
+			clb(null, []);
+		}
+	}
 
 	/**
 	 * will return an object with author info.	
@@ -189,6 +245,14 @@ function Author(db) {
 		});
 	};
 
+	/**
+	 * searches for an author with given name
+	 * @param  {String} fName firstname
+	 * @param  {String} lName lastname
+	 * @param  {Integer} limit maximum number of results
+	 * @param  {callBack} clb   
+	 * @return {Array<Object>}       array of objects containing firstnam, lastname,  author id and user id if author is connected to a user profile
+	 */
 	this.searchAuthor = function(fName, lName, limit, clb) {
 		function addPubs(authors, i, clb2) {
 			function cleanup(arr, clb1) {

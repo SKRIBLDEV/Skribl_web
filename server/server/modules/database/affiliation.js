@@ -221,7 +221,12 @@ function Affiliation(db) {
 		checkInstitution();
 	};
 
-
+	/**
+	 * adds affiliation fields to given object
+	 * @param  {Object}   user     user object
+	 * @param  {callBack} callback 
+	 * @return {Object}            user object
+	 */
 	this.getAffiliation = function(user, callback) {
 		db.query('select expand(out(\'InResearchGroup\')) from ' + RID.getRid(user)).all()
 		.then(function(res) {

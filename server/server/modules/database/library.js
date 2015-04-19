@@ -7,6 +7,13 @@ function Library(db) {
 
 	var AUT = new Author.Author(db);
 
+	/**
+	 * creates a library and connects it to given user
+	 * @param  {String} user username
+	 * @param  {String} name libraryname
+	 * @param  {Object} trx  transaction
+	 * @param  {callBack} clb  
+	 */
 	 function createLibrary(user, name, trx, clb) { 
 	 	trx.let(name, function(s) {
 			s.create('vertex', 'Library')
@@ -23,6 +30,12 @@ function Library(db) {
 		clb(null, true);
 	}
 
+	/**
+	 * uses createLibrary to add library to user if user doesn't have library with same name
+	 * @param {String} user username
+	 * @param {String} name libraryname
+	 * @param {callBack} clb  
+	 */
 	 this.addLibrary = function(user, name, clb) {
 	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 	 	.then(function(res) {
@@ -48,6 +61,13 @@ function Library(db) {
 
 	}
 
+	/**
+	 * adds a publication to a library if library doesn't already contain publication
+	 * @param {String} user    username of library owner
+	 * @param {String} library library name
+	 * @param {String} id      publication id
+	 * @param {callBack} clb    
+	 */
 	this.addToLibrary = function(user, library, id, clb) {
 		db.select('@rid').from('Publication').where('@rid = ' + id).all()
 		.then(function(res) {
@@ -92,6 +112,13 @@ function Library(db) {
 		
 	}
 
+	/**
+	 * removes a publication from a library
+	 * @param  {String} user    username of library owner
+	 * @param  {String} library library name
+	 * @param  {String} id      publication id
+	 * @param  {callBack} clb     
+	 */
 	this.removeFromLibrary = function(user, library, id, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'').all()
 		.then(function(res) {
@@ -131,7 +158,12 @@ function Library(db) {
 
 	}
 
-
+	/**
+	 * returns an array with all library names of given user
+	 * @param  {String} user username
+	 * @param  {callBack} clb  
+	 * @return {Array<String>}      array of library names
+	 */
 	this.loadLibraries = function(user, clb) {
 		function getName(array, callB) {
 			var ctr = 0;
@@ -157,6 +189,13 @@ function Library(db) {
 		});
 	}
 
+	/**
+	 * returns all publications in given library
+	 * @param  {String} user    username of library owner
+	 * @param  {String} library name of library
+	 * @param  {callBack} clb     
+	 * @return {Array<Object>}         publication array
+	 */
 	 this.loadLibrary = function(user, library, clb) {
 
 		function prepResults(array, callB) {
@@ -207,6 +246,12 @@ function Library(db) {
 	 	
 	}
 
+	/**
+	 * add default libraries (Uploaded, Favorites, Portfolio) to user
+	 * @param {String} username 
+	 * @param {Object} trx      transaction
+	 * @param {callBack} clb      
+	 */
 	this.addDefaults = function(username, trx, clb) {
 		createLibrary(username, 'Uploaded', trx, function(error, res) {
 			if(error) {
@@ -232,6 +277,12 @@ function Library(db) {
 		});
 	}
 
+	/**
+	 * removes a given library from given user. (will not destroy publications in library)
+	 * @param  {String} user username
+	 * @param  {String} name name of library
+	 * @param  {callBack} clb  
+	 */
 	this.removeLibrary = function(user, name, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 		.then(function(res) {
@@ -261,6 +312,13 @@ function Library(db) {
 		});
 	}
 
+	/**
+	 * deletes library
+	 * @param  {String} username 
+	 * @param  {String} name     name of library
+	 * @param  {Object} trx      transaction
+	 * @param  {callBack} clb      
+	 */
 	function deleteLibrary(username, name, trx, clb) {
 		trx.let(name, function(s) {							///!!!!name will cause troubles if it is more than 1 word!!!!!
 			s.delete('vertex', 'Library')
@@ -269,6 +327,12 @@ function Library(db) {
 		clb(null, true);
 	}
 
+	/**
+	 * delete the defaultLibraries from a user
+	 * @param  {String} username 
+	 * @param  {Object} trx      transaction
+	 * @param  {callBack} clb      
+	 */
 	this.deleteDefaults = function(username, trx, clb) {
 		deleteLibrary(username, 'Uploaded', trx, function(error, res) {
 			deleteLibrary(username, 'Favorites', trx, function(error, res) {

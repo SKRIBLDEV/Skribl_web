@@ -648,6 +648,12 @@ function Publication(db) {
 		});
 	}
 
+	/**
+	 * returns all publications from given author
+	 * @param  {String} authId 
+	 * @param  {callBack} clb    
+	 * @return {Array<Object>}        returns a publication array.
+	 */
 	this.authorPublications = function(authId, clb) {
 		db.query('select expand(out(\'AuthorOf\').include(\'title\', \'@rid\', \'lastUpdated\')) from ' + authId).all()
 		.then(function(pubs) {

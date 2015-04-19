@@ -2,16 +2,12 @@
 var RID = require('./rid.js');
 function Graph(db, AUT) {
 
-	function parsePath(path, clb) {
-		var resArray = [];
-		var txt = path;
-		var newTxt = txt.split('(');
-		for (var i = 1; i < newTxt.length; i++) {
-    		resArray[i-1] = {id: newTxt[i].split(')')[0]};
-		}
-		clb(null, resArray);
-	}
-
+	/**
+	 * gets username of userprofile connected to given author profile
+	 * @param  {String} id  author id
+	 * @param  {callBack} clb 
+	 * @return {String}     username
+	 */
 	function getUsername(id, clb) {
 		db.query('select expand(in(\'IsAuthor\')) from ' + id).all()
 		.then(function(res) {
@@ -23,32 +19,6 @@ function Graph(db, AUT) {
 			}
 		}).error(function(er) {
 			clb(er);
-		});
-	}
-
-	function parseObject(array, idx, clb) {
-		array[idx].connection[0].firstName = array[idx].firstName1;
-		array[idx].connection[0].lastName = array[idx].lastName1;
-
-		array[idx].connection[2].firstName = array[idx].firstName2;
-		array[idx].connection[2].lastName = array[idx].lastName2;
-
-		array[idx].connection[1].title = array[idx].title;
-		array[idx].connection[1].type = array[idx].class;
-
-		array[idx] = array[idx].connection;
-		getUsername(array[idx][0].id, function(error, name1) {
-			if(error) {
-				clb(error);
-			}
-			array[idx][0].username = name1;
-			getUsername(array[idx][2].id, function(error, name2) {
-				if(error) {
-					clb(error);
-				}
-				array[idx][2].username = name2;
-				clb(null, true);
-			});	
 		});
 	}
 
@@ -86,6 +56,13 @@ function Graph(db, AUT) {
 		});
 	}
 
+	/**
+	 * will return edges of graph in form: [{fromAuthorObject,  publicationObject, toAuthorObject}, {...}, ...]		
+	 * @param  {String} authId author id 
+	 * @param  {Integer} depth  depth of search in database
+	 * @param  {callBack} clb    
+	 * @return {Array<Array<Object>>}        edges of graph in form: [{fromAuthorObject,  publicationObject, toAuthorObject}, {...}, ...]	
+	 */
 	this.getAuthorGraph = function(authId, depth, clb) {
 		var newDepth = depth + depth;
 		db.query('select $path, @rid, @class, title, in_AuthorOf.out as authors from (traverse out_AuthorOf, in, in_AuthorOf, out from ' + authId + ' while $depth <= ' + newDepth + ' strategy BREADTH_FIRST) where @class = \'Proceeding\' or @class = \'Journal\'').all()

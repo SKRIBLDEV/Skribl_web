@@ -68,6 +68,12 @@ function ResearchDomain(db){
 		}
 	};
 
+	/**
+	 * creates researchdomains and connects them to a publication
+	 * @param {Array<String>}   domains  array of domains to be added/connected
+	 * @param {Object}   trx      transaction
+	 * @param {callBack} callback 
+	 */
 	this.addPubResearchDomains = function(domains, trx, callback) {
 		var ctr = 0;
 		function forClb(error, varName) {
@@ -96,6 +102,12 @@ function ResearchDomain(db){
 		}
 	};
 
+	/**
+	 * gets all connected researchdomains of a publication
+	 * @param  {String} pubId id of publication
+	 * @param  {callBack} clb   
+	 * @return {Array<String>}       array of researchdomains
+	 */
 	this.getPubResearchDomains = function(pubId, clb) {
 		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
 		.then(function(resDomains) {

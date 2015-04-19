@@ -2,6 +2,13 @@ var Oriento = require('oriento');
 
 function Keyword(db) {
 
+	/**
+	 * adds a keyword to database
+	 * @param {String} keyword name of keyword
+	 * @param {Integer} trx_id  nr to help distinguish keyword in database
+	 * @param {Object} trx     transaction
+	 * @param {callBack} clb     
+	 */
 	function addKeyword(keyword, trx_id, trx, clb) {
 		db.select().from('Keyword').where('keyword = \'' + keyword + '\'').all()
 		.then(function(res) {
@@ -29,6 +36,12 @@ function Keyword(db) {
 		});
 	}
 
+	/**
+	 * uses addkeyword to add multiple keywords to database
+	 * @param {Array<String>}   keywords array of keywords
+	 * @param {Object}   trx      transaction
+	 * @param {callback} callback 
+	 */				
 	this.addKeywords = function(keywords, trx, callback) {
 		if(typeof keywords !== 'undefined' && keywords.length) {
  			var ctr = 0;
@@ -46,6 +59,12 @@ function Keyword(db) {
 		}
 	}
 
+	/**
+	 * returns all keywords connected to given publication
+	 * @param  {String} pubId publication id
+	 * @param  {callBack} clb  
+	 * @return {Array<String>}       array of keyword names
+	 */
 	this.getPubKeywords = function(pubId, clb) {
 		db.select('expand( out(\'HasKeyword\') )').from(pubId).all()
 		.then(function(resKeys) {
