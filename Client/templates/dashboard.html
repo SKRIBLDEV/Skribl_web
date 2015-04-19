@@ -1,0 +1,64 @@
+<global-menu></global-menu>
+<fixed-menu></fixed-menu>
+
+
+<!-- start overall container -->
+<div class="section animated pulse row">
+        <div class="col l4 m12 s12">
+                <!-- start user card -->
+                <user-card></user-card>
+                <!-- stop user card -->
+        </div>
+
+
+        <!-- inject the views belonging to the nested states -->
+        <!--- [H] @Pieter: m and s should be changed, it's up to you to define the best width for mobile etc. -->
+        <div class="col l8 m12 s12" ui-view ></div>
+
+
+       <!-- <div>
+
+                <input type="text" ng-model="brol">
+                <input type="text" ng-model="brol2">
+
+                <button ng-click="publications.getUserLibraries()">getUserLibraries</button>
+                <button ng-click="publications.getUserPublications(brol)">getUserPublications</button>
+                <button ng-click="publications.addPublications(brol, brol2)">addPublications</button>
+                <button ng-click="publications.deletePublication(brol, brol2)">deletePublication</button>
+                <button ng-click="publications.switchFromLib(brol, 'Favorites', brol2)">switch to Favorites</button>
+                <button ng-click="publications.createLib(brol)">createLib</button>
+                <button ng-click="publications.deleteLib(brol)">deleteLib</button>
+                <button ng-click="publications.getFile(brol2)">downloadFile</button>
+                <button ng-click="publications.getMetaData(brol2)">getMetaData</button>
+                <button ng-click="publications.modifyMeta(brol2,
+                          {title: 'brol', fileName: 'Efficient Java RMI for parallel programming.pdf', private: false, type: 'journal'})">setMetaData</button>
+                <button ng-click="publications.scrape(brol2)">scrape</button>
+                <button ng-click="publications.search(brol, false)">search word without external</button>
+                <button ng-click="publications.search(brol, true)">search word with external</button>
+                <button ng-click="publications.getAuthors(brol, brol2, 5)">search author with first en lastname</button>
+
+                &lt;!&ndash; testing &ndash;&gt;
+
+        </div>-->
+</div>
+
+<!-- stop overall container -->
+<div id="id_viewer"></div>
+
+<!-- other cards -->
+<interactive-graph-card></interactive-graph-card>
+
+
+
+
+<!--<hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>-->
+
+
+
+
+
+
+
+
+
+

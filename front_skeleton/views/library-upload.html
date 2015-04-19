@@ -1,0 +1,18 @@
+<div class="jumbotron text-center">
+    <h3>Upload</h3>
+
+    <h5>This view is accessible from different locations</h5>
+
+    <h4> Add a publication to:</h4>
+
+    <a class="fa fa-user" lib-name = "portfolio" switch-lib> Portfolio</a>
+    <a class="fa fa-star" lib-name = "favourites" switch-lib> Favourites</a>
+
+    <h5> The current library is: {{currentListing.type}}</h5>
+
+    <h5> (Now the listings view has changed as well! That's because the custom directives are linked to the listings factory, and that one is watched by the library controller.)</h5>
+
+    <add-to-lib></add-to-lib>
+
+    <h5> (go check the listings view)</h5>
+</div>

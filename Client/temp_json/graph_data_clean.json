@@ -1,0 +1,48 @@
+
+
+{
+  "authors": [ 	{ "firstName": "Eline", "lastName": "Philips" },
+    { "firstName": "Andoni Lombide", "lastName": "Carreton" },
+    { "firstName": "Niels", "lastName": "Jonckheere" },
+    { "firstName": "Viviane", "lastName": "Jonckers" },
+    { "firstName": "Wolfgang", "lastName": "De Meuter" },
+    { "firstName": "Jens", "lastName": "Nicolay" },
+    { "firstName": "Coen", "lastName": "De Roover" },
+    { "firstName": "Ragnhild", "lastName": "Van Der Straeten" },
+    { "firstName": "Tom", "lastName": "Mens" },
+    { "firstName": "Carlos", "lastName": "Noguera" }
+  ],
+  "coAuthors": [
+    { "source": 0, "target": 1 , "pubId" : 0 },
+    { "source": 0, "target": 2 , "pubId" : 0 },
+    { "source": 0, "target": 3 , "pubId" : 0 },
+    { "source": 0, "target": 4 , "pubId" : 0 },
+    { "source": 1, "target": 2 , "pubId" : 0 },
+    { "source": 1, "target": 3 , "pubId" : 0 },
+    { "source": 1, "target": 4 , "pubId" : 0 },
+    { "source": 2, "target": 3 , "pubId" : 0 },
+    { "source": 2, "target": 4 , "pubId" : 0 },
+    { "source": 3, "target": 4 , "pubId" : 0 },
+    { "source": 5, "target": 6, "pubId" : 1},
+    { "source": 5, "target": 3, "pubId" : 1},
+    { "source": 5, "target": 4, "pubId" : 1},
+    { "source": 3, "target": 4, "pubId" : 1},
+    { "source": 6, "target": 3, "pubId" : 1},
+    { "source": 6, "target": 4, "pubId" : 1},
+    { "source": 7, "target": 3, "pubId" : 2},
+    { "source": 7, "target": 8, "pubId" : 2},
+    { "source": 3, "target": 8, "pubId" : 2},
+    { "source": 7, "target": 3, "pubId" : 3},
+    { "source": 7, "target": 8, "pubId" : 3},
+    { "source": 3, "target": 8, "pubId" : 3},
+    { "source": 7, "target": 8, "pubId" : 4},
+    { "source": 5, "target": 6, "pubId" : 5},
+    { "source": 5, "target": 4, "pubId" : 5},
+    { "source": 5, "target": 9, "pubId" : 5},
+    { "source": 6, "target": 4, "pubId" : 5},
+    { "source": 6, "target": 9, "pubId" : 5},
+    { "source": 4, "target": 9, "pubId" : 5}
+
+  ]
+}
+

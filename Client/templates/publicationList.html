@@ -1,0 +1,27 @@
+<ul class="collection">
+	<div ng:repeat="publication in loadpublications">
+		<!-- <div ng:repeat="publication in ui_currentPublications"> -->
+		<li class="collection-item avatar">
+			<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
+			<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
+
+			<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
+				<span class="title">{{publication.title}}</span>
+				<p> author!! </p>
+				{{customerInfo}}
+			</div>
+
+			<a class="secondary-content" ng-show="forlibrary">
+				<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
+				<code class="titip-left">
+					<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+					<span class="titip-content">
+						add to favorites
+					</span>
+				</code>
+			</a>
+
+			<hr>
+		</li>
+	</div>
+</ul>

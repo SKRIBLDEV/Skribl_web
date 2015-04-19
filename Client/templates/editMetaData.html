@@ -1,0 +1,173 @@
+<div class="row center">
+	<dropUl>
+		<dropLi class="skribl-background z-depth-2">
+			Add Publication to library
+			<dropUl>
+				<div ng:repeat="lib in data.userLibrariesNames">
+					<dropLi class="skribl-background animated pulse" ng-click="publications.addPublications(lib, data.currentMetaData.id)">{{lib}}</dropLi>
+				</div>
+			</dropUl>
+		</dropLi>
+	</dropUl>
+</div>
+
+
+<div class="row center">
+
+	<div class="row">
+		<form class="col s12">
+
+			<!-- authors -->
+			<h5 class="row center">
+				Authors
+			</h5>
+
+			<div ng:repeat="author in data.currentMetaData.authors">
+
+				<div class="col s6">
+					<div class="card-panel skribl-primary-color" >
+
+
+						<h5 class="selectable-white">
+							{{author.lastName}}, {{author.firstName}}
+						</h5>
+						<br>
+						<hr>
+						
+						<!-- dearch -->
+						<div class="row">
+							<div class="input-field col s12">
+								<i class="mdi-action-search prefix"></i>
+								<input id="author" type="text" class="validate" ng-model="data.searchTerm" required>
+								<label class="active" for="author">
+									Search
+								</label>
+							</div>
+						</div>
+
+						
+						<hr>
+						
+						<div class="row">
+							<label>Select new author</label>
+							<select class="browser-default">
+								<div ng:repeat="potential in author.potential">
+									<option value="potential" ng-click="">{{potential}}</option>
+								</div>
+							</select>
+						</div>
+
+<!-- 						<body ng-app ng-controller="AppCtrl">
+<div>Operator is: {{filterCondition.operator}}</div>
+<select ng-model="filterCondition.operator" ng-options="operator.value as operator.displayName for operator in operators">
+</select>
+</body> -->
+
+						
+						
+
+
+					</div>
+
+				</div>
+
+
+			</div>
+
+			<div class="progress">
+				<div class="determinate" style="width: 0%">
+				</div>
+			</div>
+
+			<!-- Title -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_title" type="text" class="validate" ng-model="data.currentMetaData.title" required>
+					<label class="active" for="upload_title">Title</label>
+				</div>
+			</div>
+
+
+			<!-- abstract -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<textarea id="upload_abstract" length="120"ng-model="data.currentMetaData.abstract" required class="materialize-textarea"></textarea>
+					<label class="active" for="upload_abstract">Abstract</label>
+				</div>
+			</div>
+
+			<!-- year -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_year" type="number" class="validate" ng-model="data.currentMetaData.year" required>
+					<label class="active" for="upload_year">Publication Year</label>
+				</div>
+			</div>
+
+			<!-- journal -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_journal" type="text" class="validate" ng-model="data.currentMetaData.journal" required>
+					<label class="active" for="upload_journal">Journal</label>
+				</div>
+			</div>
+
+			<!-- publisher -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
+					<label class="active" for="upload_publisher">Journal name</label>
+				</div>
+			</div>
+
+
+			<!-- type -->
+			<div class="row s10 offset-s1">
+				<div class="row">
+					<label>Type :{{data.currentMetaData.type}}</label>
+					<select class="browser-default">
+						<option value="Journal" ng-click="data.currentMetaData.type='Journal'">Journal</option>
+						<option value="Proceeding" ng-click="data.currentMetaData.type='Proceeding'">Proceeding</option>
+					</select>
+				</div>
+				<!-- <div class="row">
+					<label>Private: {{data.currentMetaData.private}}</label>
+					<select class="browser-default">
+						<option  ng-click="data.currentMetaData.private=true">true</option>
+						<option  ng-click="data.currentMetaData.type=false">false</option>
+					</select>
+				</div> -->
+			</div>
+
+			<!-- Private -->
+			Private
+			<div class="switch">
+				<label>
+					Off
+					<input type="checkbox" ng-model="data.currentMetaData.private">
+					<span class="lever"></span>
+					On
+				</label>
+			</div>
+
+			<br>
+			
+			<!-- delete button -->
+			<!-- not yet implemented -->
+			<div class="row center">
+				<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.deletePublication('Uploaded', data.currentMetaData.id)">
+					<i class="mdi-action-delete left"></i>
+					delete
+				</a>
+			</div>
+			
+
+		</form>
+
+	</div>
+</div>
