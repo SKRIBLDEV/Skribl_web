@@ -43,6 +43,7 @@ function getAuthorInfo(req, res, context) {
 				if (err) {
 					serverError(res, err.toString());
 				} else {
+					console.log(graph);
 					res.status(200);
 					res.json(GRAPH.parseAuthorGraph(graph));
 				}
