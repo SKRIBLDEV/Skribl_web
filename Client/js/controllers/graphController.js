@@ -5,7 +5,7 @@ webapp.controller('GraphCtrl', function GraphCtrl(appData, $scope, $http) {
 
     console.log("userId: " + appData.currentUser.authorId);
 
-    var currentId = '13:205';
+    var currentId = appData.currentUser.authorId;
     var url = serverApi.concat('/authors/').concat(currentId).concat('/graph?limit=6');
     var authorization = {}; // no auth necessary
 
