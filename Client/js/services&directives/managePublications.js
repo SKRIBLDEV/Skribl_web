@@ -1,5 +1,5 @@
 //Every status can represent ONE 'transaction' impossible to multiple upload, ... at the same time !! Some status needs other one's be carefull with that.
-webapp.service('managePublications', function($location, appData, $http, pdfDelegate) {
+webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService) {
 
     var self = this;
 //----------------------------------------------------------------------------------------------------------------------//
@@ -22,6 +22,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         this.toggleLibraryCard = function(){ self.showLibraryCard = !self.showLibraryCard;};
 
     //Get all the libraries of the current user
+    var error_ctr_userLib = 0;
     this.getUserLibraries = function() {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
@@ -31,17 +32,22 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
            var getUserLibrariesRequest = $http.get(url, authorization);
 
            getUserLibrariesRequest.success(function(data, status, headers, config) {
+            error_ctr_userLib = 0;
             appData.data.userLibrariesNames = data;
             upToDate();
             console.log(data);
         });
            getUserLibrariesRequest.error(function(data, status, headers, config) {
-            self.getUserLibraries();
-            toast("Failed to get your libraries, try again later.", 4000);
-        });
+               if(error_ctr_userLib < 4){error_ctr_userLib = error_ctr_userLib + 1;
+                                         self.getUserLibraries()}
+               else{toast("SKRIBL encoutered a problem please try again later.", 4000);
+                    userService.logout();
+                    self.getUserLibraries();};
+            });
        };
 
     //get alle the publications of a certain user in a certain library
+    var error_ctr_userPub = 0;
     this.getUserPublications = function(libraryName, displayToast) {
 
         displayToast = (typeof displayToast !== 'undefined') ? displayToast : true;
@@ -52,6 +58,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
            'Authorization': appData.Authorization}};
            var getUserPublicationsRequest = $http.get(url, authorization);
            getUserPublicationsRequest.success(function(data, status, headers, config) {
+            error_ctr_userPub = 0;
             appData.data.publications = data;
             console.log(data);
 
@@ -65,8 +72,11 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             }
         });
            getUserPublicationsRequest.error(function(data, status, headers, config) {
-            self.getUserPublications(libraryName);
-            toast("Failed to get your publications, try again later.", 4000);
+               if(error_ctr_userPub < 4){error_ctr_userPub = error_ctr_userPub + 1;
+                                         self.getUserPublications()}
+               else{toast("SKRIBL encoutered a problem please try again later.", 4000);
+                    userService.logout();
+                    self.getUserPublications();};
         });
        };
 
