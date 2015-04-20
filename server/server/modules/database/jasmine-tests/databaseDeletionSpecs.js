@@ -1,7 +1,17 @@
 var d = require('./testRandomData.js');
 
 function deletion(clb) {
-	xdescribe('verwijderen van data tests', function() {
+	describe('verwijderen van data tests', function() {
+
+		var ctr = 0
+		afterEach(function() {
+			if(++ctr == 5) {
+				d.ODB.query('delete from Author where firstName like \'%random%\'').all()
+				.then(function(res) {
+					clb(null, true);
+				});
+			}
+  		});	
 
 		it('verwijder publicatie uit bibliotheek', function(done) {
 			d.db.removeFromLibrary(d.nUser.username, 'randomLib', d.tempJournalId, function(error, res) {
@@ -24,7 +34,7 @@ function deletion(clb) {
 				expect(res).toBe(true);
 				d.ODB.query('select from Library where username = \'' + d.nUser.username + '\' and name = \'randomLib\'').all()
 				.then(function(libs) {
-					expect(res.length).toBe(0);
+					expect(libs.length).toBe(0);
 					d.db.removeLibrary(d.nUser.username, 'Favorites', function(error1, res1) {
 						expect(error).toBeDefined();
 						done();
@@ -42,10 +52,10 @@ function deletion(clb) {
 				expect(res).toBe(true);
 				d.ODB.record.get(d.tempJournalId)
 				.then(function(res) {
-					expect(res).toBeUndefined();
+					expect(false).toBe(true);
 					done();
 				}).error(function(er) {
-					expect(er).toBeNull();
+					expect(er).toBeDefined();
 					done();
 				});
 			});
@@ -57,10 +67,10 @@ function deletion(clb) {
 				expect(res).toBe(true);
 				d.ODB.record.get(d.tempProceedingId)
 				.then(function(res) {
-					expect(res).toBeUndefined();
+					expect(false).toBe(true);
 					done();
 				}).error(function(er) {
-					expect(er).toBeNull();
+					expect(er).toBeDefined();
 					done();
 				});
 			});
@@ -72,10 +82,10 @@ function deletion(clb) {
 				expect(res).toBe(true);
 				d.ODB.record.get(d.tempUserId)
 				.then(function(res) {
-					expect(res).toBeUndefined();
+					expect(false).toBe(true);
 					done();
 				}).error(function(er) {
-					expect(er).toBeNull();
+					expect(er).toBeDefined();
 					done();
 				});
 			});

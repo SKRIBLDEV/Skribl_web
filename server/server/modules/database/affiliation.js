@@ -239,7 +239,7 @@ function Affiliation(db) {
 					user.faculty = res[0].Name;
 					db.query('select expand(in(\'HasFaculty\')) from ' + RID.getRid(res[0])).all()
 					.then(function(res) {
-						user.university = res[0].Name;
+						user.institution = res[0].Name;
 						callback(null, user);
 					}).error(function(er) {
 						callback(er);

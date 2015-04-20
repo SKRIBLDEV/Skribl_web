@@ -18,7 +18,7 @@ module.exports = [
   keywords: ['computer', 'API', 'VUB'],
   article_url: "http://soft.vub.ac.be/~njonchee/publications/Mashups2009.pdf" },
 
-
+/*
 { ID: 2,
   title: "Automatic parallelization of side-effecting higher-order scheme programs",
   fileName: 'Automatic_parallelization_of_side-effecting_higher-order_scheme_programs.pdf',
@@ -36,7 +36,7 @@ module.exports = [
   private: false,
   keywords: ['computer', 'IEEE', 'VUB'],
   article_url: "http://soft.vub.ac.be/~njonchee/publications/Mashups2009.pdf" },
-
+*/
 
 { ID: 3,
   title: "A formal approach to model refactoring and model refinement",
