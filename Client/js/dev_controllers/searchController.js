@@ -1,6 +1,6 @@
 // this is a stub controller for implementing the GUI without depending on an external server
 
-webapp.controller('searchCtrl', function GraphCtrl($scope, $http) {
+webapp.controller('searchCtrl', function searchCtrl($scope, $http) {
 
     console.log("controller instantiated");
 

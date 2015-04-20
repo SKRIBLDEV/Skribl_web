@@ -2,7 +2,9 @@
  * Created by Hannah_Pinson on 20/04/15.
  */
 
-webapp.factory('searchService', function(){
+webapp.factory('searchService', function($http){
+
+    console.log("factory instantiated");
 
     var internalResults = [];
     var externalResults = [];
