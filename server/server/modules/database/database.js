@@ -298,8 +298,8 @@ function Database(serverConfig, dbConfig) {
 							}
 							else {
 								user.authorId = autId;
-								console.log(autId);
-								callback(error, new UM.UserRecord(user));
+								var ret = new UM.UserRecord(user);
+								callback(error, ret);
 							}
 						});
 					});

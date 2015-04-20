@@ -208,7 +208,7 @@ function Publication(db) {
 	 * @return {Bool}            returns true (regardless if a pub was deleted or not)
 	 */
 	this.removePublication = function(id, callback) {
-		db.delete('vertex').where('@rid = ' + id).one()
+		db.delete('vertex').where('@rid = \'' + id + '\'').one()
 		.then(function(nr) {
 			callback(null, true);
 		}).error(function(er) {
@@ -293,7 +293,7 @@ function Publication(db) {
 				var ctr = 0;
 				for (var i = 0; i < array.length; i++) {
 					getInfo(array[i], function(error, res) {
-						array[ctr] = {id: array[ctr], title: res.title, type: res.class, authors: res.authors};
+						array[ctr] = {id: array[ctr], title: res.title, type: res.class.toLowerCase(), authors: res.authors};
 						ctr++
 						if(ctr == array.length) {
 							callB(null, array);
@@ -666,7 +666,7 @@ function Publication(db) {
 						}
 						pubs[ctr].rid = RID.getRid(pubs[ctr]);
 						delete pubs[ctr]['@rid'];
-						pubs[ctr].type = pubs[ctr]['@class'];
+						pubs[ctr].type = pubs[ctr]['@class'].toLowerCase();
 						delete pubs[ctr]['@class'];
 						pubs[ctr].authors = res;
 						delete pubs[ctr]['@type'];

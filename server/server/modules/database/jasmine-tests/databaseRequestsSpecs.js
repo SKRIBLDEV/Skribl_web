@@ -1,12 +1,17 @@
 var d = require('./testRandomData.js');
 
 function requests(clb) {
-	xdescribe('opvraging van data tests:', function() {
+	describe('opvraging van data tests:', function() {
+
+		var ctr = 0
+		afterEach(function() {
+			if(++ctr == 9) clb(null, true);
+  		});	
 
 		it('opvragen van gebruiker', function(done) {
-			d.db.loadUser(d.nUser.username, function(error, res) {
+			d.db.loadUser(d.nUser.username, function(error, usr) {
 				expect(error).toBeNull();
-
+				expect(usr).toBeDefined();
 				expect(usr.getFirstName()).toBe(d.nUser.firstName);
 				expect(usr.getLastName()).toBe(d.nUser.lastName);
 				expect(usr.getUsername()).toBe(d.nUser.username);
@@ -54,7 +59,11 @@ function requests(clb) {
 		it('opvragen bibliotheken van gebruiker', function(done) {
 			d.db.loadLibraries(d.nUser.username, function(error, res) {
 				expect(error).toBeNull();
-				expect(res).toEqual(jasmine.arrayContaining(['Uploaded', 'Favorites', 'Portfolio', 'randomLib']));
+				expect(res.indexOf('Uploaded')).not.toBe(-1);
+				expect(res.indexOf('Favorites')).not.toBe(-1);
+				expect(res.indexOf('Portfolio')).not.toBe(-1);
+				expect(res.indexOf('randomLib')).not.toBe(-1);
+
 				done();
 			});
 		});
@@ -65,7 +74,7 @@ function requests(clb) {
 				expect(res.length).toBe(2);
 				d.db.loadLibrary(d.nUser.username, 'randomLib', function(error2, res2) {
 					expect(error2).toBeNull();
-					expect(res.length).toBe(1);
+					expect(res2.length).toBe(1);
 					done();
 				});
 			});
@@ -77,10 +86,10 @@ function requests(clb) {
 				expect(res.length).toBe(2);
 				d.db.querySimple('random', 1, function(error1, res1) {
 					expect(error).toBeNull();
-					expect(res.length).toBe(1);
+					expect(res1.length).toBe(1);
 					d.db.querySimple('woordkomtnietvoor', 10, function(error2, res2) {
 						expect(error).toBeNull();
-						expect(res.length).toBe(0);
+						expect(res2.length).toBe(0);
 						done();
 					});
 				});
@@ -93,20 +102,20 @@ function requests(clb) {
 				expect(res.length).toBe(1);
 				d.db.queryAdvanced(d.incorrectCriteria, 10, function(error1, res1) {
 					expect(error).toBeNull();
-					expect(res.length).toBe(0);
+					expect(res1.length).toBe(0);
 					done();
 				});
 			});
-		});
+		}, 5500);
 
 		it('vind alle publicaties van een auteur', function(done) {
 			d.ODB.query('select from Author where firstName = \'random\' and lastName = \'random\'').all()
 			.then(function(res) {
 				expect(res.length).toBe(1);
-				d.db.authorPublication(d.RID.getRid(res[0]), function(error1, res1) {
+				d.db.authorPublications(d.RID.getRid(res[0]), function(error1, res1) {
 					expect(error1).toBeNull();
 					expect(res1.length).toBe(1);
-					expect(res1[0].type).toBe('proceeding');
+					expect(res1[0].type).toBe('journal');
 					done();
 				});
 			}).error(function(er) {
@@ -117,9 +126,9 @@ function requests(clb) {
 		});
 
 		it('vind alle auteurs met gegeven naam', function(done) {
-			d.db.searchAuthors('random', 'random', 10, function(error, res) {
+			d.db.searchAuthor('random', 'random', 10, function(error, res) {
 				expect(error).toBeNull();
-				expect(res.length).toBe(2);
+				expect(res.length).toBe(3);
 				done();
 			});
 		});

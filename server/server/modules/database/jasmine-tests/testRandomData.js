@@ -39,8 +39,8 @@
 				type: 'journal',
 				journal: 'random Journal',
 				publisher: 'random Publisher',
-				volume: '666',
-				number: '666',
+				volume: 666,
+				number: 666,
 				year: 666,
 				abstract: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rhoncus massa quam, sed iaculis nibh semper et. Cras sit amet efficitur risus, et pellentesque lorem.',
 				citations: 25,
@@ -75,6 +75,7 @@
 				researchDomains: this.pubJournal.researchDomains,
 				keywords: this.pubJournal.keywords,
 				authors: this.pubJournal.authors};
+
 		module.exports.incorrectCriteria = {
 				title: 'foutieve titel',
 				journal: this.pubJournal.journal,
@@ -83,9 +84,7 @@
 				volume: this.pubJournal.volume,
 				number: this.pubJournal.number,
 				url: this.pubJournal.url,
-				researchDomains: this.pubJournal.researchDomains,
-				keywords: this.pubJournal.keywords,
-				authors: this.pubJournal.authors};
+				researchDomains: this.pubJournal.researchDomains};
 
 		module.exports.fObject = {
 			path: './testfile2.pdf',
