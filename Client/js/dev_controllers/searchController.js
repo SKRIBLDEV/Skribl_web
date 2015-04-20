@@ -4,9 +4,12 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService
 
     console.log("controller instantiated");
 
+    $scope.internalResults = searchService.internalResults;
+    $scope.externalResults = searchService.externalResults;
+
     searchService.basicSearch();
 
-    $scope.searchService = searchService;
+
 
     /*$http.get('temp_json/basic_search_data.json')
         .success(function (data) {

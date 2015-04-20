@@ -5,18 +5,17 @@ webapp.directive('basicPubList', function (searchService) {
         replace: true,
         link: function (scope, element, attrs) {
 
-            if (attrs.pubarray == "internal"){
-                console.log("here: " + searchService.internalResults);
+            scope.$on("search completed", function(){
 
-                element.html(
-                    '<div ng-repeat="publicationArray in searchService.internalResults"> <p>{{publicationArray[0].title}}</p> </div>'
+                if (attrs.pubarray == "internal") {
+                    console.log("here: " + searchService.internalResults[0].title);
+                    element.html(
+                        '<div ng-repeat="publicationArray in searchService.internalResults"> <p>{{publicationarray[0].title}}</p> </div>'
+                    );
+                }
 
-                );
-            }
-            console.log(scope.searchResults);
-            console.log(attrs);
-            console.log(attrs.pubarray);
-            console.log(searchService.internalResults);
+            });
+
         }
     }
 });
