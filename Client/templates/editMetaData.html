@@ -24,7 +24,7 @@
 
 			<div ng:repeat="author in data.currentMetaData.authors">
 
-				<div class="col s6">
+				<div class="col s4">
 					<div class="card-panel skribl-primary-color" >
 
 
@@ -40,27 +40,57 @@
 						
 						
 						<!-- search -->
-						<div class="card-panel white">
+						<div class="selectable-white center" ng-click="publications.togglePotential(author)">
+							<a class="btn-floating z-depth-2" ng-hide="author.potentialEnabled">
+								<i class="mdi-action-search"></i>
+							</a>
+						</div>
+						
+
+						<div class="card-panel white" ng-show="author.potentialEnabled">
+
+							<i class="mdi-content-clear right" ng-click="publications.togglePotential(author)"></i>
+							
+
 							<div class="row">
 								<div class="input-field col s12">
-									<i class="mdi-action-search prefix"></i>
-									<input id="author" type="text" class="validate" ng-model="data.searchTerm" required>
+									<input id="author" type="text" class="validate" ng-model="author.searchFirst" required>
 									<label class="active" for="author">
-										Search
+										first name
 									</label>
 								</div>
 							</div>
 
-
-							<div class="progress">
-								<div class="determinate" style="width: 0%"></div>
+							<div class="row">
+								<div class="input-field col s12">
+									<input id="author" type="text" class="validate" ng-model="author.searchLast" required>
+									<label class="active" for="author">
+										last name
+									</label>
+								</div>
 							</div>
+
+							<!-- search button -->
+							<div class="selectable-white center">
+								<a class="btn-floating z-depth-2" ng-click="publications.searchAuthors(author)">
+									<i class="mdi-action-search"></i>
+								</a>
+								
+								<a class="btn-floating z-depth-2" ng-show="author.allowSet" ng-click="publications.setAuthor(author)">
+									<i class="mdi-content-send"></i>
+								</a>
+
+							</div>
+
 							
+
+							<div class="small-spacer"></div>
+
 							
 							<ul class="">
 								<div ng:repeat="potential in author.potential">
 
-									<li class="selectable-black">
+									<li class="selectable-black" ng-click="publications.setPotentialAsSearch(author, potential)">
 										<p>{{potential.firstName}} &nbsp;
 											{{potential.lastName}}
 										</p>

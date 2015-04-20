@@ -18,7 +18,8 @@ webapp.service('appData', function() {
         searchResult: null,
         searchAuthorsResult: null,
         addLibName: null,
-        searchTerm: null
+        searchTerm: null,
+        searchTerm2: null
     };
     this.uploadData = {
         file: null,
@@ -28,5 +29,10 @@ webapp.service('appData', function() {
     };
 
     this.deleteCurrentFile = function(){self.data.currentFile = null;};
+
+    this.clearSearch = function(){
+        data.searchTerm = null;
+        data.searchTerm2 = null;
+    }
     
 });
