@@ -12,6 +12,7 @@ webapp.factory('searchService', function($http){
     var basicSearch = function(){
         $http.get('temp_json/basic_search_data.json')
             .success(function (data) {
+                console.log("data.internal:" + data.internal);
                 internalResults = data.internal;
                 externalResults = data.external;
                 console.log("****searchdata: "+ data );
@@ -19,6 +20,8 @@ webapp.factory('searchService', function($http){
                 console.log('Error: ' + status);
             });
     };
+
+    //basicSearch();
 
     var service = {
         basicSearch : basicSearch,
