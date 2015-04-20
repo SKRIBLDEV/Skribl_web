@@ -58,7 +58,14 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 			// library hasn't got a separate controller at the moment -> use of parent controller
 			url: '/library',
 			templateUrl: "templates/dash-library.html"
-		});
+		})
+
+		// temp fix for quick development
+		.state('search', {
+			url: '/search',
+			controller: 'searchCtrl',
+			templateUrl: "templates/search.html"
+		})
 
 
 

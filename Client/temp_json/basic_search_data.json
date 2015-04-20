@@ -1,0 +1,18 @@
+{
+  "internal":
+  [
+    {"id": 0, "title" : "some_internal_publication_with_a_long_title"},
+    {"id": 0, "title" : "some_internal_publication_with_a_long_title"},
+    {"id": 0, "title" : "some_internal_publication_with_a_long_title"},
+    {"id": 0, "title" : "some_internal_publication_with_a_long_title"},
+    {"id": 0, "title" : "some_internal_publication_with_a_long_title"}
+  ],
+  "external":
+  [
+    {"title" : "some_external_publication_with_an_even_longer_title", "year": 0},
+    {"title" : "some_external_publication_with_an_even_longer_title", "year": 0},
+    {"title" : "some_external_publication_with_an_even_longer_title", "year": 0},
+    {"title" : "some_external_publication_with_an_even_longer_title", "year": 0},
+    {"title" : "some_external_publication_with_an_even_longer_title", "year": 0}
+  ]
+}
