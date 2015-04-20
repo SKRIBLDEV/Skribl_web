@@ -1,6 +1,11 @@
 var d = require('./testRandomData.js');
 
 function setup(clb) {
+	var ctr = 0
+	afterEach(function() {
+		if(++ctr == 7) clb(null, true);
+  	});	
+
 		it('connecting to database', function(done){
 			expect(d.db).toBeDefined();
 			done();
@@ -66,5 +71,6 @@ function setup(clb) {
 				});
 			});
 		});
+
 }
 exports.setup = setup;

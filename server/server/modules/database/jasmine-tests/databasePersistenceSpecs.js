@@ -1,7 +1,15 @@
 var d = require('./testRandomData.js');
 
 	function persistence(clb) {
-		xdescribe('persistentie tests:', function() {
+
+
+		describe('persistentie tests:', function() {
+
+			var ctr = 0
+			afterEach(function() {
+				if(++ctr == 8) clb(null, true);
+  			});	
+
 			it('test user data', function(done) {
 				d.ODB.query('select from User where username = \'randomUsername\'').all()
 				.then(function(users) {
@@ -12,7 +20,6 @@ var d = require('./testRandomData.js');
 					//password check? how?
 					expect(usr.username).toBe('randomUsername');
 					expect(usr.email).toBe('randomName@vub.ac.be');
-					expect(usr.researchDomains[0]).toBe('Biological Sciences');   //need custom matcher for arrays
 					expect(usr.language).toBe('ENG');
 					done();
 				}).error(function(er) {
@@ -22,7 +29,7 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test author data', function(done) {
-				d.ODB.query('select from Author where firstName = \'random\' and lastName = \'random\'').all()
+				d.ODB.query('select from Author where (firstName = \'random\' and lastName = \'random\') or (firstName = \'random1\' and lastName = \'random1\')').all()
 				.then(function(authors) {
 					expect(authors.length).toBe(2);
 					d.ODB.query('select from Author where firstName = \'randomName\' and lastName = \'randomOtherName\'').all()
@@ -51,11 +58,11 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test journal data', function(done) {
-				d.ODB.query('select from Publication where id = \'' + d.tempJournalId + '\'').all()
+				d.ODB.query('select from Publication where @rid = \'' + d.tempJournalId + '\'').all()
 				.then(function(journals) {
 					expect(journals.length).toBe(1);
 					var journal = journals[0];
-					expect(journal.type).toBe(d.pubJournal.type);
+					expect(journal['@class'].toLowerCase()).toBe(d.pubJournal.type);
 					expect(journal.journal).toBe(d.pubJournal.journal);
 					expect(journal.publisher).toBe(d.pubJournal.publisher);
 					expect(journal.volume).toBe(d.pubJournal.volume);
@@ -73,18 +80,18 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test proceeding data', function(done) {
-				d.ODB.query('select from Publication where id = \'' + d.tempProceedingId + '\'').all()
+				d.ODB.query('select from Publication where @rid = \'' + d.tempProceedingId + '\'').all()
 				.then(function(proceedings) {
 					expect(proceedings.length).toBe(1);
 					var proceeding = proceedings[0];
-					expect(proceeding.type).toBe(proceeding.type);
-					expect(proceeding.booktitle).toBe(proceeding.booktitle);
-					expect(proceeding.organisation).toBe(proceeding.organisation);
-					expect(proceeding.year).toBe(proceeding.year);
-					expect(proceeding.abstract).toBe(proceeding.abstract);
-					expect(proceeding.citations).toBe(proceeding.citations);
-					expect(proceeding.url).toBe(proceeding.url);
-					expect(proceeding.private).toBe(proceeding.private);
+					expect(proceeding['@class'].toLowerCase()).toBe(d.pubProceeding.type);
+					expect(proceeding.booktitle).toBe(d.pubProceeding.booktitle);
+					expect(proceeding.organisation).toBe(d.pubProceeding.organisation);
+					expect(proceeding.year).toBe(d.pubProceeding.year);
+					expect(proceeding.abstract).toBe(d.pubProceeding.abstract);
+					expect(proceeding.citations).toBe(d.pubProceeding.citations);
+					expect(proceeding.url).toBe(d.pubProceeding.url);
+					expect(proceeding.private).toBe(d.pubProceeding.private);
 					done();
 				}).error(function(er) {
 					expect(er).toBeNull();
@@ -93,10 +100,31 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test affiliation data', function(done) {
-				d.ODB.query('select expand(out(\'HasResearchGroup\')) from (select expand(out(\'HasDepartment\')) from (select expand(out(\'HasFaculty\')) from (select from Institution where Name = \'' + d.nUser.institution + '\') where Name = \'' + d.nUser.faculty + '\') where Name = \'' + d.nUser.department + '\') where Name = \'' + d.nUser.researchGroup + '\'').all()
-				.then(function(rsGroup) {
-					expect(rsGroup.length).toBe(1);
-					done();
+				d.ODB.select().from('Institution').where('Name = \'' + d.nUser.institution +'\'').all()
+				.then(function(inst) {
+					expect(inst.length).toBe(1);
+					d.ODB.query('select from (select expand(out(\'HasFaculty\')) from ' + d.RID.getRid(inst[0]) + ') where Name = \'RandomFaculty\'').all()
+					.then(function(fac) {
+						expect(fac.length).toBe(1);
+						d.ODB.query('select from (select expand(out(\'HasDepartment\')) from ' + d.RID.getRid(fac[0]) + ') where Name = \'RandomDepartment\'').all()
+						.then(function(dep) {
+							expect(dep.length).toBe(1);
+							d.ODB.query('select from (select expand(out(\'HasResearchGroup\')) from ' + d.RID.getRid(dep[0]) + ') where Name = \'RandomResearchGroup\'').all()
+							.then(function(rsGroup) {
+								expect(rsGroup.length).toBe(1);
+								done();
+							}).error(function(er) {
+								expect(er).toBeNull();
+								done();
+							});
+						}).error(function(er) {
+							expect(er).toBeNull();
+							done();
+						});
+					}).error(function(er) {
+						expect(er).toBeNull();
+						done();
+					});
 				}).error(function(er) {
 					expect(er).toBeNull();
 					done();
@@ -107,6 +135,7 @@ var d = require('./testRandomData.js');
 				d.ODB.query('select from ResearchDomain where Name = \'Biological Sciences\' or Name = \'Computer Sciences\' or Name = \'Languages\'').all()
 				.then(function(researchDomains) {
 					expect(researchDomains.length).toBe(3);
+					done();
 				}).error(function(er) {
 					expect(er).toBeNull();
 					done();
@@ -114,9 +143,10 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test keywords data', function(done) {
-				d.ODB.query('select from Keyword where Name = \'Biological Sciences\' or Name = \'Computer Sciences\' or Name = \'Languages\'').all()
+				d.ODB.query('select from Keyword where keyword = \'random1\' or keyword = \'random2\'').all()
 				.then(function(researchDomains) {
-					expect(researchDomains.length).toBe(3);
+					expect(researchDomains.length).toBe(2);
+					done();
 				}).error(function(er) {
 					expect(er).toBeNull();
 					done();
