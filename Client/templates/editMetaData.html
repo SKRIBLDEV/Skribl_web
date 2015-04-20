@@ -13,7 +13,7 @@
 
 
 <div class="row center">
-
+	
 	<div class="row">
 		<form class="col s12">
 
@@ -32,30 +32,48 @@
 							{{author.lastName}}, {{author.firstName}}
 						</h5>
 						<br>
-						<hr>
-						
-						<!-- dearch -->
 						<div class="row">
-							<div class="input-field col s12">
-								<i class="mdi-action-search prefix"></i>
-								<input id="author" type="text" class="validate" ng-model="data.searchTerm" required>
-								<label class="active" for="author">
-									Search
-								</label>
+							<div class="col s8 offset-s2">
+								<img src="img/avatar.jpg" alt="" class="circle" style="width:100%">
 							</div>
+						</div>
+						
+						
+						<!-- search -->
+						<div class="card-panel white">
+							<div class="row">
+								<div class="input-field col s12">
+									<i class="mdi-action-search prefix"></i>
+									<input id="author" type="text" class="validate" ng-model="data.searchTerm" required>
+									<label class="active" for="author">
+										Search
+									</label>
+								</div>
+							</div>
+
+
+							<div class="progress">
+								<div class="determinate" style="width: 0%"></div>
+							</div>
+							
+							
+							<ul class="">
+								<div ng:repeat="potential in author.potential">
+
+									<li class="selectable-black">
+										<p>{{potential.firstName}} &nbsp;
+											{{potential.lastName}}
+										</p>
+									</li>
+									<hr>
+								</div>
+							</ul>
+
+							
+
 						</div>
 
 						
-						<hr>
-						
-						<div class="row">
-							<label>Select new author</label>
-							<select class="browser-default">
-								<div ng:repeat="potential in author.potential">
-									<option value="potential" ng-click="">{{potential}}</option>
-								</div>
-							</select>
-						</div>
 
 <!-- 						<body ng-app ng-controller="AppCtrl">
 <div>Operator is: {{filterCondition.operator}}</div>
@@ -63,78 +81,78 @@
 </select>
 </body> -->
 
-						
-						
 
 
-					</div>
-
-				</div>
 
 
-			</div>
+</div>
 
-			<div class="progress">
-				<div class="determinate" style="width: 0%">
-				</div>
-			</div>
-
-			<!-- Title -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<input id="upload_title" type="text" class="validate" ng-model="data.currentMetaData.title" required>
-					<label class="active" for="upload_title">Title</label>
-				</div>
-			</div>
+</div>
 
 
-			<!-- abstract -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<textarea id="upload_abstract" length="120"ng-model="data.currentMetaData.abstract" required class="materialize-textarea"></textarea>
-					<label class="active" for="upload_abstract">Abstract</label>
-				</div>
-			</div>
+</div>
 
-			<!-- year -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<input id="upload_year" type="number" class="validate" ng-model="data.currentMetaData.year" required>
-					<label class="active" for="upload_year">Publication Year</label>
-				</div>
-			</div>
+<div class="progress">
+	<div class="determinate" style="width: 0%">
+	</div>
+</div>
 
-			<!-- journal -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<input id="upload_journal" type="text" class="validate" ng-model="data.currentMetaData.journal" required>
-					<label class="active" for="upload_journal">Journal</label>
-				</div>
-			</div>
-
-			<!-- publisher -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
-					<label class="active" for="upload_publisher">Journal name</label>
-				</div>
-			</div>
+<!-- Title -->
+<div class="row">
+	<div class="input-field col s12">
+		<i class="mdi-action-label-outline prefix"></i>
+		<input id="upload_title" type="text" class="validate" ng-model="data.currentMetaData.title" required>
+		<label class="active" for="upload_title">Title</label>
+	</div>
+</div>
 
 
-			<!-- type -->
-			<div class="row s10 offset-s1">
-				<div class="row">
-					<label>Type :{{data.currentMetaData.type}}</label>
-					<select class="browser-default">
-						<option value="Journal" ng-click="data.currentMetaData.type='Journal'">Journal</option>
-						<option value="Proceeding" ng-click="data.currentMetaData.type='Proceeding'">Proceeding</option>
-					</select>
-				</div>
+<!-- abstract -->
+<div class="row">
+	<div class="input-field col s12">
+		<i class="mdi-action-label-outline prefix"></i>
+		<textarea id="upload_abstract" length="120"ng-model="data.currentMetaData.abstract" required class="materialize-textarea"></textarea>
+		<label class="active" for="upload_abstract">Abstract</label>
+	</div>
+</div>
+
+<!-- year -->
+<div class="row">
+	<div class="input-field col s12">
+		<i class="mdi-action-label-outline prefix"></i>
+		<input id="upload_year" type="number" class="validate" ng-model="data.currentMetaData.year" required>
+		<label class="active" for="upload_year">Publication Year</label>
+	</div>
+</div>
+
+<!-- journal -->
+<div class="row">
+	<div class="input-field col s12">
+		<i class="mdi-action-label-outline prefix"></i>
+		<input id="upload_journal" type="text" class="validate" ng-model="data.currentMetaData.journal" required>
+		<label class="active" for="upload_journal">Journal</label>
+	</div>
+</div>
+
+<!-- publisher -->
+<div class="row">
+	<div class="input-field col s12">
+		<i class="mdi-action-label-outline prefix"></i>
+		<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
+		<label class="active" for="upload_publisher">Journal name</label>
+	</div>
+</div>
+
+
+<!-- type -->
+<div class="row s10 offset-s1">
+	<div class="row">
+		<label>Type :{{data.currentMetaData.type}}</label>
+		<select class="browser-default">
+			<option value="Journal" ng-click="data.currentMetaData.type='Journal'">Journal</option>
+			<option value="Proceeding" ng-click="data.currentMetaData.type='Proceeding'">Proceeding</option>
+		</select>
+	</div>
 				<!-- <div class="row">
 					<label>Private: {{data.currentMetaData.private}}</label>
 					<select class="browser-default">
