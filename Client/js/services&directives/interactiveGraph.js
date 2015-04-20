@@ -1,3 +1,6 @@
+
+// [H] @Pieter, what to do with this code?
+
 var voronoi =  new Voronoi();
 var sites = generateBeeHivePoints(view.size / 200, true);
 var bbox, diagram;
