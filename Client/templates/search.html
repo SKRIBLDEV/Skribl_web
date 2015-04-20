@@ -1,3 +1,5 @@
 <a ui-sref="dashboard.library" class="btn-large"> Go back to dashboard </a>
 
 <basic-pub-list pubArray="internal"> hi there, I'm supposed to display the results found in the Skribl system. Later on. </basic-pub-list>
+
+<div ng-repeat="publicationArray in $scope.internalResults"> <p>{{publicationarray[0].title}}</p> </div>

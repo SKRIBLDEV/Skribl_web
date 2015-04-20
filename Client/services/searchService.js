@@ -2,7 +2,7 @@
  * Created by Hannah_Pinson on 20/04/15.
  */
 
-webapp.factory('searchService', function($http){
+webapp.factory('searchService', function($http, $rootScope){
 
     console.log("factory instantiated");
 
@@ -12,13 +12,17 @@ webapp.factory('searchService', function($http){
     var basicSearch = function(){
         $http.get('temp_json/basic_search_data.json')
             .success(function (data) {
+                console.log("data.internal:" + data.internal[0].title);
                 internalResults = data.internal;
                 externalResults = data.external;
-                console.log("****searchdata: "+ data );
+                console.log("****searchdata internal: " + internalResults);
+                $rootScope.$broadcast("search completed");
             }).error(function (data, status) {
                 console.log('Error: ' + status);
             });
     };
+
+    //basicSearch();
 
     var service = {
         basicSearch : basicSearch,
