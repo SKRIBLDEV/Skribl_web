@@ -118,7 +118,8 @@ var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
         clb(new Error("Failed to scrape results"), null);
       }
 	  } else
-      clb(new Error("Request to Google Scholar failed"), null);
+      //clb(new Error("Request to Google Scholar failed"), null);
+      clb(err, null);
   });
 };
 
