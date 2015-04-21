@@ -2,30 +2,32 @@
  * Created by Hannah_Pinson on 20/04/15.
  */
 
-webapp.factory('searchService', function($http, $rootScope){
+webapp.factory('searchService', function($http){
 
-
-    /*var internalResults = [];
-    var externalResults = [];*/
-
+    /*
     var basicSearch = function(){
        return $http.get('temp_json/basic_search_data.json')
-            /*.success(function (data) {
-                internalResults = data.internal;
-                externalResults = data.external;
-            }).error(function (data, status) {
-                console.log('Error: ' + status);
-            });*/
+    };
+    */
+
+    var basicSearch = function(searchTerms){
+
+        searchTerms = 'refactoring';
+
+        var urlTerms = searchTerms.replace("\s","+");
+        var url = serverApi.concat('/publications?q=').concat(urlTerms).concat('&external=true');
+        return $http.get(url,config);
+
     };
 
-    //basicSearch();
 
     var service = {
         basicSearch : basicSearch
-        //internalResults : internalResults,
-        //externalResults : externalResults
+
     };
 
     return service;
 
 });
+
+
