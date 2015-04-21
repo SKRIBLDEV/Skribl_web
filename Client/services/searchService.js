@@ -2,7 +2,7 @@
  * Created by Hannah_Pinson on 20/04/15.
  */
 
-webapp.factory('searchService', function($http){
+webapp.factory('searchService', function($http, appData){
 
 /*
     var basicSearch = function(searchTerms){
@@ -13,20 +13,28 @@ webapp.factory('searchService', function($http){
     var basicSearch = function(searchTerms){
 
         var urlTerms = encodeURIComponent(searchTerms);
-        var url = serverApi.concat('/publications?q=').concat(urlTerms).concat('&external=true');
+        var url = serverApi.concat('/publications?q=').concat(urlTerms);//.concat('&external=true');
         return $http.get(url,config);
 
     };
 
-
-
     var advancedSearch = function(searchQuery){
-        searchQuery = {
-            title: 'model refactoring',
-            year: '2007'
-        };
         var url = serverApi.concat('/publications');
         return $http.post(url, searchQuery, config);
+    };
+
+    var setMetadata = function(pubId){
+
+        if (pubId.charAt(0) === '#'){
+            pubId = pubId.substr(1);
+        }
+        console.log(pubId);
+        var url = serverApi.concat('/publications/').concat(pubId);
+        var authorization = {headers:
+        {'Content-type' : 'application/json',
+            'Authorization': appData.Authorization}};
+
+        return getMetaDataRequest = $http.get(url, authorization);
 
     };
 
@@ -35,7 +43,8 @@ webapp.factory('searchService', function($http){
 
     var service = {
         basicSearch : basicSearch,
-        advancedSearch : advancedSearch
+        advancedSearch : advancedSearch,
+        setMetadata : setMetadata
     };
 
     return service;

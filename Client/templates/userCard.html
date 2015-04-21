@@ -2,10 +2,10 @@
 	<div class="card z-depth-4">
 		<div class="card-content" style="background:#EEEEEE">
 			<span class="card-title grey-text text-darken-4">
-				<i class="mdi-action-account-circle">&nbsp{{ username }}</i>
+				<i class="mdi-action-account-circle">&nbsp{{ appData.currentUser.firstName }} {{ appData.currentUser.lastName }}</i>
 			</span>
 			<!-- start basic card -->
-			<div class="card">
+			<!--<div class="card">
 				<div class="card-content">
 					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleBasic()">
 						<a> Basic </a>
@@ -22,7 +22,7 @@
 						</div>
 					</div>
 				</span>
-			</div>
+			</div>-->
 			<!-- stop basic card -->
 
 			<!-- start library card -->
@@ -37,7 +37,7 @@
 				<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
 					<div class="animated fadeInDown col s12">
 						<div class="section">
-							Manage your publications, create a portfolio, and search for new insights.
+							Manage your publications, create a portfolio, and collect your knowledge.
 						</div>
 						<div class="center">
 							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
@@ -47,6 +47,28 @@
 			</div>
 
 			<!-- stop library card -->
+
+			<!-- start network card -->
+
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSearch()" ui-sref="dashboard.search">
+						<a> search </a>
+						<i class="mdi-navigation-more-vert right"></i>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4" ng-show="userService.showSearch">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							Search for new insights.
+						</div>
+						<div class="center">
+							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSearch()"></i>
+						</div>
+					</div>
+				</span>
+			</div>
+			<!-- stop network card -->
 
 			<!-- start network card -->
 
@@ -141,12 +163,12 @@
 								<h5 class="center-align" style="color:white">Logout</h5>
 							</div>
 						</div>
-						<div class="col s12">
+					<!--	<div class="col s12">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tincidunt malesuada. Nulla placerat nulla ac leo faucibus placerat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum scelerisque sollicitudin mauris ut consectetur. Vivamus a facilisis augue. Integer bibendum tellus diam, eu ullamcorper risus rhoncus a. Vestibulum suscipit urna ipsum, sit amet venenatis odio placerat ac. Cras aliquet sapien sed elit condimentum viverra. Phasellus vitae arcu elementum neque sagittis sagittis.
 							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque. In erat tortor, imperdiet ut orci sit amet, maximus vulputate erat.
 							Phasellus fermentum rutrum purus vitae facilisis. Suspendisse malesuada lacinia maximus. Maecenas odio dolor, dignissim tincidunt ultrices quis, vestibulum vitae magna. Mauris suscipit, enim vel euismod sodales, ipsum nulla pulvinar nisi, bibendum ornare purus dolor non arcu. Ut at mi vel libero vehicula congue ut vitae mauris. Pellentesque sed dapibus nisl. Maecenas ut tristique enim. Aenean eu urna aliquet, rhoncus nunc sed, mattis ligula. Maecenas dignissim, massa sit amet bibendum aliquet, tortor quam convallis orci, at vulputate nisl justo vitae neque. Fusce volutpat metus id aliquet vehicula. Integer lacinia pulvinar ex, sed luctus sem laoreet sit amet.
 							<br><br>
-						</div>
+						</div>-->
 						<div class="row">
 							<div class="activator col s12 waves-effect waves-light btn-large ">
 								<h5 class="activator center-align" style="color:white">More</h5>

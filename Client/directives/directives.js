@@ -67,6 +67,16 @@ webapp.directive('globalMenu',function(){
 		scope:false,
 		templateUrl: 'templates/spinner.html'
 	}
+}).directive('searchCard', function(){
+	return {
+		restrict: 'E',
+		templateUrl: 'templates/searchCard.html'
+	}
+}).directive('metadataCard', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'templates/metadataCard.html'
+	}
 });
 
 

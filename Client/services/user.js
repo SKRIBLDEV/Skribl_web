@@ -9,29 +9,29 @@ webapp.service('userService', function($location, appData, $http) {
     //[H]: I admit, this is gruesome code -> TO REFACTOR.
 
     this.showLibrary = true;
-    this.showBasic = false;
+    this.showSearch = false;
     this.showNetwork = false;
     this.showSettings = false;
 
 
-    this.toggleBasic = function() {
-        this.showBasic = !this.showBasic;
+    this.toggleLibrary = function() {
+        this.showLibrary = !this.showLibrary;
+        this.showSearch = false;
         this.showNetwork = false;
-        this.showLibrary = false;
         this.showSettings = false;
     };
 
-    this.toggleLibrary = function() {
-        this.showLibrary = !this.showLibrary;
-        this.showBasic = false;
+    this.toggleSearch = function() {
+        this.showSearch = !this.showSearch;
         this.showNetwork = false;
+        this.showLibrary = false;
         this.showSettings = false;
     };
 
     this.toggleNetwork = function() {
         this.showNetwork = !this.showNetwork;
         this.showLibrary = false;
-        this.showBasic = false;
+        this.showSearch = false;
         this.showSettings = false;
     };
 
@@ -39,7 +39,7 @@ webapp.service('userService', function($location, appData, $http) {
         this.showSettings = !this.showSettings;
         this.showNetwork = false;
         this.showLibrary = false;
-        this.showBasic = false;
+        this.showSearch = false;
     };
     
     function logout(){

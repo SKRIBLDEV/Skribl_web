@@ -31,7 +31,9 @@
 							<i class="mdi-navigation-more-vert right"></i>
 						</span>
         </div>
-        <spinner ng-show="graphDataLoading"></spinner>
+        <div class="row center" ng-show="graphDataLoading">
+             <spinner ></spinner>
+        </div>
         <graph-directive></graph-directive>
     </div>
 

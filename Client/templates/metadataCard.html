@@ -1,0 +1,73 @@
+<div class="card">
+    <div class="card-content">
+
+        <span class="card-title grey-text text-darken-4">
+            <a> Metadata Preview </a>
+        </span>
+
+        <div class="animated fadeInDown col s12">
+            <div class="section">
+
+                <div class="row center">
+                    <div ng-show="requestingMetadata">
+                        <spinner></spinner>
+                    </div>
+                </div>
+
+                <div class="animated fadeInDown" ng-show="!requestingMetadata && showMeta">
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <i class="mdi-social-school circle"></i>
+                            <span class="title">Title</span>
+                            <p>{{currentMeta.title}}</p>
+                        </li>
+                        <li class="collection-item">
+                            <i class="mdi-image-timelapse circle"></i>
+                            <span class="title">Year</span>
+                            <p>{{currentMeta.year}}</p>
+                        </li>
+                        <li class="collection-item">
+                            <i class="mdi-social-people circle"></i>
+                            <span class="title">Authors</span>
+                            <div ng-repeat="author in currentMeta.authors">
+                                <p>{{author.firstName}} {{author.lastName}}</p>
+                                </div>
+
+                        </li>
+                        <li class="collection-item">
+                            <i class="mdi-image-style circle"></i>
+                            <span class="title">Type</span>
+                            <p>{{currentMeta.type}}</p>
+                        </li>
+                        <!--- proceeding -->
+                        <li class="collection-item" ng-show = "currentMeta.type=='proceeding'">
+                            <i class="mdi-action-bookmark circle"></i>
+                            <span class="title">Booktitle</span>
+                            <p>{{currentMeta.Booktitle}}</p>
+                        </li>
+                        <li class="collection-item" ng-show = "currentMeta.type=='proceeding'">
+                            <i class="mdi-action-assignment-ind circle"></i>
+                            <span class="title">Organisation</span>
+                            <p>{{currentMeta.organisation}}</p>
+                        </li>
+                        <!--- journal --->
+                        <li class="collection-item" ng-show = "currentMeta.type=='journal'">
+                            <i class="mdi-action-bookmark circle"></i>
+                            <span class="title">Journal</span>
+                            <p>{{currentMeta.journal}}</p>
+                        </li>
+                        <li class="collection-item" ng-show = "currentMeta.type=='journal'">
+                            <i class="mdi-action-assignment-ind circle"></i>
+                            <span class="title">Publisher</span>
+                            <p>{{currentMeta.publisher}}</p>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

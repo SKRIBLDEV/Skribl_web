@@ -322,9 +322,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
             appData.data.currentMetaData = data;
 
-
-
-            console.log(data);
+            console.log("**** current metadata: " + data);
         });
 getMetaDataRequest.error(function(data, status, headers, config) {
     getMeta_status = GETMETA_STATUS.INITIAL;

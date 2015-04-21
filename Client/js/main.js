@@ -6,7 +6,7 @@
 var webapp = angular.module('skriblApp', ['ngRoute', 'ui.router', 'ui.materialize', 'chartjs', 'pdf']);
 
 //Adres of server API to send http requests (used in multiple controllers).
-var serverApi = 'http://wilma.vub.ac.be:8443';
+var serverApi =  'http://wilma.vub.ac.be:8443'; //'http://localhost:8443';
 
 //Configures an header for all the 'normal' requests to the server. (not 'normal' request = specific request that needs special authorization)
 var config = {headers:  {
@@ -61,10 +61,10 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 		})
 
 		// temp fix for quick development
-		.state('search', {
+		.state('dashboard.search', {
 			url: '/search',
 			controller: 'searchCtrl',
-			templateUrl: "templates/searchCard.html"
+			templateUrl: "templates/dash-search.html"
 		})
 
 

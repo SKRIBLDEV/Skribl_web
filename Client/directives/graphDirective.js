@@ -30,7 +30,7 @@ webapp.directive('graphDirective', function () {
                  console.log("width of the parent: " + width);*/
 
 
-                var width = 700,
+                var width = 600,
                     height = 1 * width;
 
                 var circleWidth = width/100;
