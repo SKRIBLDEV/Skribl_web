@@ -27,24 +27,24 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library');
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var getUserLibrariesRequest = $http.get(url, authorization);
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var getUserLibrariesRequest = $http.get(url, authorization);
 
-         getUserLibrariesRequest.success(function(data, status, headers, config) {
+           getUserLibrariesRequest.success(function(data, status, headers, config) {
             error_ctr_userLib = 0;
             appData.data.userLibrariesNames = data;
             upToDate();
             console.log(data);
         });
-         getUserLibrariesRequest.error(function(data, status, headers, config) {
-             if(error_ctr_userLib < 4){error_ctr_userLib = error_ctr_userLib + 1;
-               self.getUserLibraries()}
-               else{toast("SKRIBL encoutered a problem please try again later.", 4000);
-               userService.logout();
-               self.getUserLibraries();};
-           });
-     };
+           getUserLibrariesRequest.error(function(data, status, headers, config) {
+               if(error_ctr_userLib < 4){error_ctr_userLib = error_ctr_userLib + 1;
+                 self.getUserLibraries()}
+                 else{toast("SKRIBL encoutered a problem please try again later.", 4000);
+                 userService.logout();
+                 self.getUserLibraries();};
+             });
+       };
 
     //get alle the publications of a certain user in a certain library
     var error_ctr_userPub = 0;
@@ -54,10 +54,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName);
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var getUserPublicationsRequest = $http.get(url, authorization);
-         getUserPublicationsRequest.success(function(data, status, headers, config) {
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var getUserPublicationsRequest = $http.get(url, authorization);
+           getUserPublicationsRequest.success(function(data, status, headers, config) {
             error_ctr_userPub = 0;
             appData.data.publications = data;
             console.log(data);
@@ -71,14 +71,14 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 toast("Sucesfully Loaded \"" + libraryName + "\" library", 4000);    
             }
         });
-         getUserPublicationsRequest.error(function(data, status, headers, config) {
-             if(error_ctr_userPub < 4){error_ctr_userPub = error_ctr_userPub + 1;
-               self.getUserPublications()}
-               else{toast("SKRIBL encoutered a problem please try again later.", 4000);
-               userService.logout();
-               self.getUserPublications();};
-           });
-     };
+           getUserPublicationsRequest.error(function(data, status, headers, config) {
+               if(error_ctr_userPub < 4){error_ctr_userPub = error_ctr_userPub + 1;
+                 self.getUserPublications()}
+                 else{toast("SKRIBL encoutered a problem please try again later.", 4000);
+                 userService.logout();
+                 self.getUserPublications();};
+             });
+       };
 
     //add a publication to a certan library of a user
     this.addPublications = function(libraryName, publicationID) {
@@ -87,26 +87,26 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var addPublicationsRequest = $http.put(url, {}, authorization);
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var addPublicationsRequest = $http.put(url, {}, authorization);
 
-         addPublicationsRequest.success(function(data, status, headers, config) {
+           addPublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName)
                 {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             var toToast ="Publication added to library ".concat(libraryName).concat(".");
             toast(toToast, 4000);
         });
-         addPublicationsRequest.error(function(data, status, headers, config) {
+           addPublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             if(status == 500)
                 {toast("Publication is already in the library.", 4000);}
             else {toast("Failed to add library, try again later.", 4000)};
         });
-     }
+       }
 
-     this.canLibBeDeleted = function(libraryName){
+       this.canLibBeDeleted = function(libraryName){
         return ["Uploaded", "Portfolio", "Favorites"].indexOf(libraryName) !== -1;
     }
 
@@ -115,22 +115,22 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var deletePublicationsRequest = $http.delete(url, authorization);
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var deletePublicationsRequest = $http.delete(url, authorization);
 
-         deletePublicationsRequest.success(function(data, status, headers, config) {
+           deletePublicationsRequest.success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName)
                 {self.getUserPublications(appData.data.currentLibraryName);}
             else{upToDate();};
             var toToast ="Publication removed from library ".concat(libraryName).concat(".");
             toast(toToast, 4000);
         });
-         deletePublicationsRequest.error(function(data, status, headers, config) {
+           deletePublicationsRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to remove publication, try again later.", 4000);
         });
-     }
+       }
 
     //change publication from a library to an other
     this.switchFromLib = function(oldLibName, newLibName, publicationID){
@@ -143,40 +143,40 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var createRequest = $http.put(url, {}, authorization);
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var createRequest = $http.put(url, {}, authorization);
 
-         createRequest.success(function(data, status, headers, config) {
+           createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" created.");
             toast(messageToToast, 4000);
         });
-         createRequest.error(function(data, status, headers, config) {
+           createRequest.error(function(data, status, headers, config) {
             upToDate();
             toast("Failed to create library, try again later.", 4000);
         });
-     }
+       }
 
     //Delete a library of a user
     this.deleteLib = function(libName) {
         corrupt();
         var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libName);
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
-         var createRequest = $http.delete(url, authorization);
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
+           var createRequest = $http.delete(url, authorization);
 
-         createRequest.success(function(data, status, headers, config) {
+           createRequest.success(function(data, status, headers, config) {
             self.getUserLibraries();
             var messageToToast = "Library ".concat(libName).concat(" deleted.");
             toast(messageToToast, 4000);
         });
-         createRequest.error(function(data, status, headers, config) {
-           upToDate();
-           toast("Failed to delete library, try again later.", 4000);
-       });
-     }
+           createRequest.error(function(data, status, headers, config) {
+             upToDate();
+             toast("Failed to delete library, try again later.", 4000);
+         });
+       }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
@@ -204,9 +204,9 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 console.log(appData.data.currentFile);
             });
             getFileRequest.error(function(data, status, headers, config) {
-               self.downloadFile_reset();
-               toast("Failed to download file, please try again later.", 4000);
-           });
+             self.downloadFile_reset();
+             toast("Failed to download file, please try again later.", 4000);
+         });
         }
 //----------------------------------------------------------------------------------------------------------------------//
 
@@ -263,6 +263,23 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
 
 
+    this.addAuthorToMetaData = function(){
+        appData.data.currentMetaData.authors.push({
+            firstName: "?",
+            lastName: "?",
+            potentialEnabled : false,
+            allowSet : false,
+            potential : [],
+            searchFirst : "",
+            searchLast : ""});
+    }
+
+    this.removeAuthorFromMetaData = function(idx){
+        if (idx > -1){
+            appData.data.currentMetaData.authors.splice(idx, 1);
+            toast("author removed", 4000);
+        } 
+    }
 
 
     this.getMetaData = function(publicationID) {
@@ -274,21 +291,18 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
         var url = serverApi.concat('/publications/').concat(publicationID);
 
         var authorization = {headers: 
-         {'Content-type' : 'application/json',
-         'Authorization': appData.Authorization}};
+           {'Content-type' : 'application/json',
+           'Authorization': appData.Authorization}};
 
-         var getMetaDataRequest = $http.get(url, authorization);
+           var getMetaDataRequest = $http.get(url, authorization);
 
-         getMetaDataRequest.success(function(data, status, headers, config) {
+           getMetaDataRequest.success(function(data, status, headers, config) {
             getMeta_status = GETMETA_STATUS.SUCCES_GETTING;
             data.id = publicationID;
             //this can be simplified when we are finished
             data.download = (typeof data.download !== 'undefined') ? data.download : "http://fzs.sve-mo.ba/sites/default/files/dokumenti-vijesti/sample.pdf";
 
-            data.authors = [{firstName: "firstname1", lastName: "lastname1"},
-            {firstName: "firstname2", lastName: "lastname2"},
-            {firstName: "firstname3", lastName: "lastname3"},
-            {firstName: "firstname4", lastName: "lastname4"}];
+            data.authors = (typeof data.authors !== 'undefined') ? data.authors : [{firstName: "?", lastName: "?"}];
 
             function modifyMetaAuthors(){
                 data.authors.forEach(function(entry) {
@@ -338,19 +352,19 @@ getMetaDataRequest.error(function(data, status, headers, config) {
             modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
             var url = serverApi.concat('/publications/').concat(publicationID);
             var authorization = {headers: 
-             {'Content-type' : 'application/json',
-             'Authorization': appData.Authorization}};
-             var setMetaDataRequest = $http.post(url, meta, authorization);
+               {'Content-type' : 'application/json',
+               'Authorization': appData.Authorization}};
+               var setMetaDataRequest = $http.post(url, meta, authorization);
 
-             setMetaDataRequest.success(function(data, status, headers, config) {
+               setMetaDataRequest.success(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.SUCCES_MODIFYING;
                 toast("The meta data of the publication has been changed.",4000);
             });
-             setMetaDataRequest.error(function(data, status, headers, config) {
+               setMetaDataRequest.error(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.INITIAL;
                 toast("Failed to change the informations about the publication, try again later.", 4000);
             });
-         }
+           }
 //----------------------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------------------//
@@ -603,52 +617,52 @@ function scrape(publicationID, handler) {
 
                 if (data.length == 0){
                     toast("no authors were found", 4000);
-                    author.potential = [{firstName:"pot-first1", lastName:"pot-lat1"},
-                    {firstName:"pot-first2", lastName:"pot-lat2"},
-                    {firstName:"pot-first3", lastName:"pot-lat3"}];
+                    // author.potential = [{firstName:"pot-first1", lastName:"pot-lat1"},
+                    // {firstName:"pot-first2", lastName:"pot-lat2"},
+                    // {firstName:"pot-first3", lastName:"pot-lat3"}];
                     
                 } else {
                     toast("we found some authors", 4000);
                     author.potential = data;
+                }
+
+                var idx = 0;
+                author.potential.forEach(function(entry) {
+                    entry.id = idx++;
+                });
+
+                console.log(author);
+
+                author.allowSet = true;
             }
 
-            var idx = 0;
-            author.potential.forEach(function(entry) {
-                entry.id = idx++;
-            });
-
-            console.log(author);
-
-            author.allowSet = true;
+            self.getAuthors(author.searchFirst, author.searchLast, 10, handler);
         }
 
-        self.getAuthors(author.searchFirst, author.searchLast, 10, handler);
-    }
+        this.setAuthor = function(author){
+            author.firstName = author.searchFirst;
+            author.lastName = author.searchLast;
+        }
 
-    this.setAuthor = function(author){
-        author.firstName = author.searchFirst;
-        author.lastName = author.searchLast;
-    }
+        this.setPotentialAsSearch = function(author, potential){
+            author.searchFirst = potential.firstName;
+            author.searchLast = potential.lastName;
+        }
 
-    this.setPotentialAsSearch = function(author, potential){
-        author.searchFirst = potential.firstName;
-        author.searchLast = potential.lastName;
-    }
+        this.getAuthors = function(firstName, lastName, number, handler){
+            authors_status = AUTHORS_STATUS.SEARCHING;
+            var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastname=').concat(lastName).concat('&limit=').concat(number);
+            var getAuthorsRequest = $http.get(url, config);
 
-    this.getAuthors = function(firstName, lastName, number, handler){
-        authors_status = AUTHORS_STATUS.SEARCHING;
-        var url = serverApi.concat('/authors?firstname=').concat(firstName).concat('&lastname=').concat(lastName).concat('&limit=').concat(number);
-        var getAuthorsRequest = $http.get(url, config);
+            getAuthorsRequest.success(function(data, status, headers, config) {
+                handler(data);
+                authors_status = AUTHORS_STATUS.SUCCES_SEARCHING;
+                appData.searchAuthorsResult = data;
+            })
+            getAuthorsRequest.error(function(data, status, headers, config) {
+                authors_status = AUTHORS_STATUS.INITIAL
 
-        getAuthorsRequest.success(function(data, status, headers, config) {
-            handler(data);
-            authors_status = AUTHORS_STATUS.SUCCES_SEARCHING;
-            appData.searchAuthorsResult = data;
-        })
-        getAuthorsRequest.error(function(data, status, headers, config) {
-            authors_status = AUTHORS_STATUS.INITIAL
-
-        })
-    }
+            })
+        }
 //----------------------------------------------------------------------------------------------------------------------//
 });

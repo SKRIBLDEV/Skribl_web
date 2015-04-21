@@ -21,7 +21,8 @@
 			<h5 class="row center">
 				Authors
 			</h5>
-
+			
+			<!-- begin authors -->
 			<div ng:repeat="author in data.currentMetaData.authors">
 
 				<div class="col s4">
@@ -29,7 +30,7 @@
 
 
 						<h5 class="selectable-white">
-							{{author.lastName}}, {{author.firstName}}
+							{{author.lastName}}, {{author.firstName}} 
 						</h5>
 						<br>
 						<div class="row">
@@ -80,6 +81,13 @@
 									<i class="mdi-content-send"></i>
 								</a>
 
+								<br><br>
+
+								<a class="btn-floating z-depth-2" ng-click="publications.removeAuthorFromMetaData($index)">
+									<i class="mdi-action-delete"></i>
+								</a>
+
+								
 							</div>
 
 							
@@ -98,91 +106,87 @@
 									<hr>
 								</div>
 							</ul>
-
-							
-
 						</div>
+					</div>
 
-						
-
-<!-- 						<body ng-app ng-controller="AppCtrl">
-<div>Operator is: {{filterCondition.operator}}</div>
-<select ng-model="filterCondition.operator" ng-options="operator.value as operator.displayName for operator in operators">
-</select>
-</body> -->
-
-
-
-
-
-</div>
-
-</div>
+				</div>
+			</div>
+			<!-- end authors -->
+			<!-- begin add author -->
+			<div class="col s4">
+				<div class="card-panel skribl-primary-color" >
+				<div class="selectable-white" ng-click="publications.addAuthorToMetaData()">
+						<i class="mdi-content-add-circle large"></i>
+					</div>
+				</div>
+			</div>
 
 
-</div>
 
-<div class="progress">
-	<div class="determinate" style="width: 0%">
-	</div>
-</div>
-
-<!-- Title -->
-<div class="row">
-	<div class="input-field col s12">
-		<i class="mdi-action-label-outline prefix"></i>
-		<input id="upload_title" type="text" class="validate" ng-model="data.currentMetaData.title" required>
-		<label class="active" for="upload_title">Title</label>
-	</div>
-</div>
+			<!-- end add author -->
 
 
-<!-- abstract -->
-<div class="row">
-	<div class="input-field col s12">
-		<i class="mdi-action-label-outline prefix"></i>
-		<textarea id="upload_abstract" length="120"ng-model="data.currentMetaData.abstract" required class="materialize-textarea"></textarea>
-		<label class="active" for="upload_abstract">Abstract</label>
-	</div>
-</div>
+			<div class="progress">
+				<div class="determinate" style="width: 0%">
+				</div>
+			</div>
 
-<!-- year -->
-<div class="row">
-	<div class="input-field col s12">
-		<i class="mdi-action-label-outline prefix"></i>
-		<input id="upload_year" type="number" class="validate" ng-model="data.currentMetaData.year" required>
-		<label class="active" for="upload_year">Publication Year</label>
-	</div>
-</div>
-
-<!-- journal -->
-<div class="row">
-	<div class="input-field col s12">
-		<i class="mdi-action-label-outline prefix"></i>
-		<input id="upload_journal" type="text" class="validate" ng-model="data.currentMetaData.journal" required>
-		<label class="active" for="upload_journal">Journal</label>
-	</div>
-</div>
-
-<!-- publisher -->
-<div class="row">
-	<div class="input-field col s12">
-		<i class="mdi-action-label-outline prefix"></i>
-		<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
-		<label class="active" for="upload_publisher">Journal name</label>
-	</div>
-</div>
+			<!-- Title -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_title" type="text" class="validate" ng-model="data.currentMetaData.title" required>
+					<label class="active" for="upload_title">Title</label>
+				</div>
+			</div>
 
 
-<!-- type -->
-<div class="row s10 offset-s1">
-	<div class="row">
-		<label>Type :{{data.currentMetaData.type}}</label>
-		<select class="browser-default">
-			<option value="Journal" ng-click="data.currentMetaData.type='Journal'">Journal</option>
-			<option value="Proceeding" ng-click="data.currentMetaData.type='Proceeding'">Proceeding</option>
-		</select>
-	</div>
+			<!-- abstract -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<textarea id="upload_abstract" length="120"ng-model="data.currentMetaData.abstract" required class="materialize-textarea"></textarea>
+					<label class="active" for="upload_abstract">Abstract</label>
+				</div>
+			</div>
+
+			<!-- year -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_year" type="number" class="validate" ng-model="data.currentMetaData.year" required>
+					<label class="active" for="upload_year">Publication Year</label>
+				</div>
+			</div>
+
+			<!-- journal -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_journal" type="text" class="validate" ng-model="data.currentMetaData.journal" required>
+					<label class="active" for="upload_journal">Journal</label>
+				</div>
+			</div>
+
+			<!-- publisher -->
+			<div class="row">
+				<div class="input-field col s12">
+					<i class="mdi-action-label-outline prefix"></i>
+					<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
+					<label class="active" for="upload_publisher">Journal name</label>
+				</div>
+			</div>
+
+
+			<!-- type -->
+			<div class="row s10 offset-s1">
+				<div class="row">
+					<label>Type :{{data.currentMetaData.type}}</label>
+					<select class="browser-default">
+						<option value="Journal" ng-click="data.currentMetaData.type='Journal'">Journal</option>
+						<option value="Proceeding" ng-click="data.currentMetaData.type='Proceeding'">Proceeding</option>
+					</select>
+				</div>
 				<!-- <div class="row">
 					<label>Private: {{data.currentMetaData.private}}</label>
 					<select class="browser-default">
