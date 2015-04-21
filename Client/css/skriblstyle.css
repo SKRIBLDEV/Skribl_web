@@ -8056,6 +8056,11 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 body {
   background-color: #4A60B6; }
 
+.imgopac {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  /* For IE8 and earlier */ }
+
 .white-text-color {
   color: white; }
   .white-text-color a {

@@ -34,5 +34,13 @@ webapp.service('appData', function() {
         data.searchTerm = null;
         data.searchTerm2 = null;
     }
+
+    //keep information from toggles here
+    this.ui = {
+        metaAddLib : {value:false}
+    };
     
+    this.toggleUI = function(element){
+        element.value = !element.value;
+    }
 });

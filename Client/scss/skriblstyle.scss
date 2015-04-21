@@ -21,6 +21,12 @@ body {
   background-color: $primary-color;
 }
 
+
+.imgopac {
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
+
 //text
 .white-text-color {
   color: white;
