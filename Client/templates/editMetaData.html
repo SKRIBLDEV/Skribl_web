@@ -128,10 +128,74 @@
 					</div>
 				</div>
 			</div>
-
-
-
 			<!-- end add author -->
+
+
+			<div class="progress">
+				<div class="determinate" style="width: 0%">
+				</div>
+			</div>
+
+			<!-- authors -->
+			<h5 class="row center">
+				researchDomains
+			</h5>
+
+
+			<!-- begin add author -->
+			<div class="col s12">
+				<div class="card-panel skribl-primary-color" >
+
+					<h5 class="white-text"> current research domains :  </h5>
+					
+					<div ng:repeat="domain in data.currentMetaData.researchDomains" class="selectable-white">
+					<div class="row" ng-click="appData.removeResearchDomain($index)">
+						<i class="mdi-action-delete left">
+							{{appData.getMajorName(domain.majorID)}} :: 
+							{{appData.getMinorName(domain.majorID, domain.minorID)}}
+						</i>
+						<br>
+						<hr>
+						</div>
+						
+					</div>
+
+					<br>
+					
+					<div class="row">
+					<div class="selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddResearchDomain)">
+						<i class="mdi-content-add-circle large" ng-hide="appData.ui.metaAddResearchDomain.value" ></i>
+						<i class="mdi-navigation-close large" ng-show="appData.ui.metaAddResearchDomain.value"></i>
+					</div>
+				</div>
+				</div>
+			</div>
+			<!-- end add author -->
+			
+			
+
+
+
+
+			<div ng:repeat="domain in appData.researchDomains" ng-show="appData.ui.metaAddResearchDomain.value">
+
+				<div class="col s4">
+					<div class="card-panel skribl-primary-color" >
+						<h5 class="selectable-white" ng-click="domain.toggle()">
+							{{domain.major.name}}
+						</h5>
+
+						<div ng-show="domain.selected">
+							<div ng:repeat="minor in domain.minor">
+								<div class="selectable-white" ng-click="appData.addResearchDomain(domain.major.ID, minor.ID)">
+									{{minor.name}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 
 
 			<div class="progress">

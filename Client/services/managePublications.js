@@ -314,6 +314,8 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 });
             }
 
+            data.researchDomains = (typeof data.researchDomains !== 'undefined') ? data.researchDomains : [];
+
             modifyMetaAuthors(data);
             changePDFURL(data.download);
 
