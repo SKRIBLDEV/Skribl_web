@@ -4,7 +4,6 @@
 
 webapp.factory('searchService', function($http, $rootScope){
 
-    console.log("factory instantiated");
 
     /*var internalResults = [];
     var externalResults = [];*/
