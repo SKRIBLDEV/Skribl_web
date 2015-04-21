@@ -1,6 +1,6 @@
 
-<div class="row center">
-	<div class="col s6 offset-s3" >
+<div>
+	<div class="col s6" >
 		<div class="card-panel skribl-primary-color" >
 
 			<i class="mdi-content-clear right selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddLib)"></i>
@@ -10,12 +10,60 @@
 			</h5>
 			<ul ng-show="appData.ui.metaAddLib.value">
 				<div ng:repeat="lib in data.userLibrariesNames">
-					<li class="selectable-white" ng-click="publications.addPublications(lib, data.currentMetaData.id)">
-						{{lib}}
-					</li>
+					<div class="row" ng-click="appData.removeKeyWord($index)">
+						<i class="mdi-action-delete left">
+							{{lib}}
+						</i>
+					</div>
 					<hr>
 				</div>
 			</ul>
+		</div>
+	</div>
+</div>
+
+
+<!-- keywords -->
+<div>
+	<div class="col s6" >
+		<div class="card-panel skribl-primary-color" >
+
+			<i class="mdi-content-clear right selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddKeyword)"></i>
+
+			<h5 class="selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddKeyword)">
+				Keywords
+			</h5>
+			
+			<div ng-show="appData.ui.metaAddKeyword.value">
+				<ul>
+					<div ng:repeat="keyword in data.currentMetaData.keywords">
+						<div class="row">
+							<i class="mdi-action-delete left selectable-white" ng-click="appData.removeKeyWord($index)">
+							</i>
+							<div class="white-text">
+							{{keyword}}
+							</div>
+						<hr>
+					</div>
+				</ul>
+
+				<!-- input field add -->
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="nkeyword" type="text" class="validate" ng-model="data.searchTerm" required>
+						<label class="active" for="nkeyword">
+							new keyword
+						</label>
+					</div>
+				</div>
+
+				<!-- add button -->
+				<div class="selectable-white center">
+					<a class="btn-floating z-depth-2" ng-click="appData.addKeyWord(data.searchTerm)">
+						<i class="mdi-content-send"></i>
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -54,7 +102,6 @@
 								<i class="mdi-action-search"></i>
 							</a>
 						</div>
-						
 
 						<div class="card-panel white" ng-show="author.potentialEnabled">
 
@@ -98,10 +145,7 @@
 								
 							</div>
 
-							
-
 							<div class="small-spacer"></div>
-
 							
 							<ul>
 								<div ng:repeat="potential in author.potential">
@@ -136,26 +180,26 @@
 				</div>
 			</div>
 
-			<!-- authors -->
+			<!-- research domains -->
 			<h5 class="row center">
 				researchDomains
 			</h5>
 
 
-			<!-- begin add author -->
+			<!-- begin RD -->
 			<div class="col s12">
 				<div class="card-panel skribl-primary-color" >
 
 					<h5 class="white-text"> current research domains :  </h5>
 					
 					<div ng:repeat="domain in data.currentMetaData.researchDomains" class="selectable-white">
-					<div class="row" ng-click="appData.removeResearchDomain($index)">
-						<i class="mdi-action-delete left">
-							{{appData.getMajorName(domain.majorID)}} :: 
-							{{appData.getMinorName(domain.majorID, domain.minorID)}}
-						</i>
-						<br>
-						<hr>
+						<div class="row" ng-click="appData.removeResearchDomain($index)">
+							<i class="mdi-action-delete left">
+								{{appData.getMajorName(domain.majorID)}} :: 
+								{{appData.getMinorName(domain.majorID, domain.minorID)}}
+							</i>
+							<br>
+							<hr>
 						</div>
 						
 					</div>
@@ -163,18 +207,14 @@
 					<br>
 					
 					<div class="row">
-					<div class="selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddResearchDomain)">
-						<i class="mdi-content-add-circle large" ng-hide="appData.ui.metaAddResearchDomain.value" ></i>
-						<i class="mdi-navigation-close large" ng-show="appData.ui.metaAddResearchDomain.value"></i>
+						<div class="selectable-white" ng-click="appData.toggleUI(appData.ui.metaAddResearchDomain)">
+							<i class="mdi-content-add-circle large" ng-hide="appData.ui.metaAddResearchDomain.value" ></i>
+							<i class="mdi-navigation-close large" ng-show="appData.ui.metaAddResearchDomain.value"></i>
+						</div>
 					</div>
 				</div>
-				</div>
 			</div>
-			<!-- end add author -->
-			
-			
-
-
+			<!-- end RD -->
 
 
 			<div ng:repeat="domain in appData.researchDomains" ng-show="appData.ui.metaAddResearchDomain.value">
@@ -202,6 +242,8 @@
 				<div class="determinate" style="width: 0%">
 				</div>
 			</div>
+
+
 
 			<!-- Title -->
 			<div class="row">
@@ -232,16 +274,6 @@
 			</div>
 
 
-			<!-- publisher -->
-			<div class="row">
-				<div class="input-field col s12">
-					<i class="mdi-action-label-outline prefix"></i>
-					<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
-					<label class="active" for="upload_publisher">publisher name</label>
-				</div>
-			</div>
-
-
 			<!-- type -->
 			<div class="row center">
 				<input name="group2" type="radio" id="test3" ng-model="data.currentMetaData.type" value="journal"/>
@@ -261,11 +293,55 @@
 						<label class="active" for="upload_journal">Journal name</label>
 					</div>
 				</div>
+
+				<!-- publisher -->
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="mdi-action-label-outline prefix"></i>
+						<input id="upload_publisher" type="text" class="validate" ng-model="data.currentMetaData.publisher" required>
+						<label class="active" for="upload_publisher">Publisher name</label>
+					</div>
+				</div>
+
+				<!-- volume -->
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="mdi-action-label-outline prefix"></i>
+						<input id="upload_volume" type="number" class="validate" ng-model="data.currentMetaData.volume" required>
+						<label class="active" for="upload_volume">volume</label>
+					</div>
+				</div>
+
+
+				<!-- number -->
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="mdi-action-label-outline prefix"></i>
+						<input id="upload_number" type="number" class="validate" ng-model="data.currentMetaData.number" required>
+						<label class="active" for="upload_number">number</label>
+					</div>
+				</div>
 			</div>
 
 			<!-- proceeding specific -->
 			<div ng-show="data.currentMetaData.type==='proceeding'">
-				show for proceeding
+				<!-- booktitle -->
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="mdi-action-label-outline prefix"></i>
+						<input id="upload_booktitle" type="text" class="validate" ng-model="data.currentMetaData.booktitle" required>
+						<label class="active" for="upload_booktitle">Booktitle</label>
+					</div>
+				</div>
+
+				<!-- organisation -->
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="mdi-action-label-outline prefix"></i>
+						<input id="upload_organisation" type="text" class="validate" ng-model="data.currentMetaData.organisation" required>
+						<label class="active" for="upload_organisation">Organisation</label>
+					</div>
+				</div>
 			</div>
 			
 			<br>

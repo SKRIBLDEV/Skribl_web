@@ -38,7 +38,8 @@
     //keep information from toggles here
     this.ui = {
         metaAddLib : {value:false},
-        metaAddResearchDomain : {value:false}
+        metaAddResearchDomain : {value:false},
+        metaAddKeyword : {value: false}
     };
     
     this.toggleUI = function(element){
@@ -48,6 +49,17 @@
 
 
     //relocate this
+    this.addKeyWord = function(kw){
+        self.data.currentMetaData.keywords.push(kw);
+        self.data.searchTerm = null;
+    }
+
+    this.removeKeyWord = function(idx){
+        if (idx > -1){
+            self.data.currentMetaData.keywords.splice(idx, 1);
+        } 
+    }
+    
     this.addResearchDomain = function(majorID_, minorID_){
         self.data.currentMetaData.researchDomains.push({majorID: majorID_, minorID: minorID_});
     }
@@ -91,7 +103,6 @@
                 entry.selected = !entry.selected;
             }
         });
-
     }
 
 

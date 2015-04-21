@@ -315,6 +315,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             }
 
             data.researchDomains = (typeof data.researchDomains !== 'undefined') ? data.researchDomains : [];
+            data.keywords = (typeof data.keywords !== 'undefined') ? data.keywords : [];
 
             modifyMetaAuthors(data);
             changePDFURL(data.download);
