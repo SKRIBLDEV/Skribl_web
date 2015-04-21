@@ -7,11 +7,8 @@ webapp.factory('networkService', function networkService($http, appData) {
 
     function getGraphData() {
 
-        console.log(appData.currentUser);
 
         var currentId = appData.currentUser.authorId.replace('#', '');
-        console.log(currentId);
-        //'13:227'
         var url = serverApi.concat('/authors/').concat(currentId).concat('/graph?limit=6');
         var authorization = {}; // no auth necessary
 

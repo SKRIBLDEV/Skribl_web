@@ -2,41 +2,48 @@
 
 webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService) {
 
-    console.log("controller instantiated");
+    $scope.searching = false; //for showing spinner etc.
+    $scope.externalSearch = true; //for showing results from GS; default basicSearch, so results from GS collected
 
-    //$scope.internalResults = searchService.internalResults;
-    //$scope.externalResults = searchService.externalResults;
-
-    //searchService.basicSearch();
-
-    $scope.basicSearch = function(){
-        searchService.basicSearch()
+    $scope.basicSearch = function(searchTerms){
+        $scope.externalSearch = true;
+        $scope.searching = true;
+        searchService.basicSearch(searchTerms)
             .success(function(data) {
 
                 if (data.internal.length === 0) {toast("No results found in our database.", 4000)};
                 if (data.external.length === 0) {toast("No results found from searching Google Scholar.", 4000)};
 
-                console.log("data.internal:" + data.internal[0].title);
                 $scope.internalResults = data.internal;
                 $scope.externalResults = data.external;
-                console.log("****searchdata internal: " + $scope.internalResults);
-                //$scope.$broadcast("search completed");
+                $scope.searching = false;
+
             })
             .error(function(data, status){
+                $scope.searching = false;
                 console.log(status);
                 toast("Failed to search publications, try again later.", 4000);
             });
     };
 
+   $scope.advancedSearch = function(searchQuery){
+        $scope.externalSearch = false;
+        $scope.searching = true;
+
+        searchService.advancedSearch(searchQuery)
+            .success(function(data) {
+                $scope.searching = false;
+                console.log(data);
+
+            })
+            .error(function(data, status){
+                $scope.searching = false;
+                toast("Failed to search publications, try again later.", 4000);
+            });
+
+    }
+
 
 });
 
-
-/*$http.get('temp_json/basic_search_data.json')
- .success(function (data) {
- $scope.searchResults = data;
- console.log("****searchdata: "+ $scope.searchResults );
- }).error(function (data, status) {
- console.log('Error: ' + status);
- });*/
 

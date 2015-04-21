@@ -64,7 +64,7 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 		.state('search', {
 			url: '/search',
 			controller: 'searchCtrl',
-			templateUrl: "templates/search.html"
+			templateUrl: "templates/searchCard.html"
 		})
 
 
