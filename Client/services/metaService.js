@@ -2,6 +2,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 
 	var currentMeta = {};
 	var requestingMetaData = false;
+	var showMeta = false;
 
 	function changePDFURL(newURL){
         pdfDelegate.$getByHandle('my-pdf-container').load(newURL);
@@ -27,6 +28,12 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		});
 	}
 
+	var forceMetaData = function(data){
+		currentMeta = data;
+		console.log(data);
+		console.log("lolo");
+	}
+
 	var resetMetadata = function(){
 		currentMeta.value = {};
 	}
@@ -34,8 +41,11 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 	var service = {
 		currentMeta : function() { return currentMeta},
 		requestingMetaData : function() {return requestingMetaData},
+		showMeta : function() {return showMeta},
+		toggleMeta : function(enable) {showMeta = enable},
 		setMetadata : setMetadata,
-		resetMetadata : resetMetadata
+		resetMetadata : resetMetadata,
+		forceMetaData : forceMetaData
 	}
 	
 	return service;

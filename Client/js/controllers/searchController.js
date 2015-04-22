@@ -6,7 +6,11 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
     $scope.externalSearch = false;///true; //for showing results from GS; default basicSearch, so results from GS collected
     $scope.basicSearchView = true; //default basic search
     $scope.showresults = false;
-    $scope.showMeta = false;
+
+    $scope.showMeta =  metaService.showMeta;
+    $scope.requestingMetadata = metaService.requestingMetaData;
+    $scope.getMetadata = metaService.currentMeta;
+    
 
     $scope.basicSearch = function(searchTerms){
         metaService.resetMetadata();
@@ -70,20 +74,13 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
         function handler(succes){
             if (succes){
-                $scope.showMeta = true;
+                metaService.toggleMeta(true);
             } 
         }
 
         metaService.setMetadata(pubId, handler);
     }
 
-    $scope.getMetadata = function(){
-        return metaService.currentMeta();
-    }
-
-    $scope.requestingMetadata = function(){
-        return metaService.requestingMetaData();
-    }
 
     $scope.addPublication = function(publicationID){
         publicationsService.addPublication("Favorites", publicationID);
