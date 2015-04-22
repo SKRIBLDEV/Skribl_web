@@ -14,14 +14,14 @@
 			</div>
 		</div>
 		<!-- incorrupt publication status -->
-		<div ng-hide="publications.ui_publications_corrupt()">
-			<!-- upload card -->
-			<upload-card></upload-card>
-			<library-card></library-card>
+
+		<!-- upload card -->
+		<upload-card></upload-card>
+		<library-card></library-card>
+		<div ng-show="getMetadata().download">
+		<pdfviewer-card></pdfviewer-card>
 		</div>
-			
-			
-			
+
 	</div>
 </div>
 <!--</div> -- >

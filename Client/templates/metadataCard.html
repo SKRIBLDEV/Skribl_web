@@ -33,7 +33,7 @@
                             <span class="title">Authors</span>
                             <div ng-repeat="author in getMetadata().authors">
                                 <p>{{author.firstName}} {{author.lastName}}</p>
-                                </div>
+                            </div>
 
                         </li>
                         <li class="collection-item">
@@ -79,6 +79,46 @@
 
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row container">
+        <div class="activator col s12 waves-effect waves-light btn-large ">
+            <h5 class="activator center-align" style="color:white">Additional</h5>
+        </div>
+    </div>
+    <!-- end content -->
+    
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4" >
+            additional metadata
+            <i class="mdi-navigation-close right"></i>
+        </span>
+
+        <br>
+
+        <div class="row center s12">
+            <code class="titip-bottom">
+            <a class="waves-effect waves-light btn" style="color:white;" href="{{getMetadata().download}}"> 
+                    <i class="mdi-file-file-download left"></i>
+                    Download publication
+                </a>
+                <span class="titip-content">
+                    Download the pdf to your device
+                </span>
+            </code>
+        </div>
+
+        <div class="row center s12">
+            <code class="titip-bottom">
+            <a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.showPublicationViewer=true;"> 
+                    <i class="mdi-editor-border-color left"></i>
+                    Edit meta data
+                </a>
+                <span class="titip-content">
+                    Edit the current meta data
+                </span>
+            </code>
         </div>
 
     </div>

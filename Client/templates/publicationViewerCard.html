@@ -2,7 +2,7 @@
 	<div class="card z-depth-4">
 		<div class="card-content" style="background:#EEEEEE">
 			<span class="card-title grey-text text-darken-4">
-				<i class="mdi-content-content-paste">&nbsp VIEWER</i>
+				<i class="mdi-content-content-paste">&nbsp; EDIT METADATA</i>
 				<i class="mdi-content-clear right" ng-click="publications.disablePublicationViewer()"></i>
 			</span>
 			<!-- start $NAME card -->
@@ -18,45 +18,19 @@
 						<div class="section">
 							
 
-							<div class="row center">
-								<code class="titip-bottom">
-									<a class="waves-effect waves-light btn" style="color:white;" ng-click="getFile(getCurrentViewerPublication().id)"> <!-- change this -->
-										<i class="mdi-file-file-download left"></i>
-										Download publication
-									</a>
-									<span class="titip-content">
-										Download the pdf to your device
-									</span>
-								</code>
-							</div>
-							<div class  "row">
-
-
-
-							</div>
+							
+							<div class  "row"></div>
 							
 							<edit-meta-data></edit-meta-data>
 						</div>
-						<div class="center">
-							<div class="activator col s12 waves-effect waves-light btn-large ">
-								<h5 class="activator center-align" style="color:white">Edit card</h5>
-							</div>
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="ui_toggleDisplayPublication()"></i>
-						</div>
+						
 					</div>
 				</span>
-				<div class="card-reveal">
-					<span class="card-title grey-text text-darken-4">
-						Library Settings
-						<i class="mdi-navigation-close right"></i>
-					</span>
-					<edit-meta-data></edit-meta-data>
-				</div>
 
 			</div>
 			<!-- stop inner card -->
 			<!-- start displayPDF card -->
-			<pdfviewer-card></pdfviewer-card>
+			
 			<!-- stop basic card -->
 		</div>
 	</div>
