@@ -3,10 +3,10 @@
     <div class="card-content">
 
         <span class="card-title grey-text text-darken-4">
-           <a> Search</a>
-       </span>
+         <a> Search</a>
+     </span>
 
-       <div class="animated fadeInDown col s12">
+     <div class="animated fadeInDown col s12">
         <div class="section">
 
             <!-- basic search -->
@@ -38,26 +38,26 @@
             <div class="section" ng-show="showResults">
                 <!---- internal results ---->
                 <span class="title grey-text text-darken-4">
-                   <a> Results from Skribl </a>
-               </span>
-                <ul class="collection">
-                    <!-- <li class="collection-item avatar"> -->
-                    <div ng-repeat="publication in internalResults">
-                        <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
-                            <i class="mdi-social-school"></i>
-                            <a class="secondary-content">
-                                <code class="titip-left">
-                                    <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
-                                    </i>
+                 <a> Results from Skribl </a>
+             </span>
+             <ul class="collection">
+                <!-- <li class="collection-item avatar"> -->
+                <div ng-repeat="publication in internalResults">
+                    <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
+                        <i class="mdi-social-school"></i>
+                        <a class="secondary-content">
+                            <code class="titip-left">
+                                <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
+                                </i>
                                 <span class="titip-content">
                                     add to favorites
                                 </span>
-                                </code>
+                            </code>
 
-                            </a>
-                            <span class="title">&nbsp;{{publication.title}}
-                            </span>
-                        </li>
+                        </a>
+                        <span class="title">&nbsp;{{publication.title}}
+                        </span>
+                    </li>
                         <!--<
                     </div>
                     <!--</li>-->
@@ -65,20 +65,20 @@
 
                 <!--- external results ---->
                 <div ng-show = "showExternalResults">
-                            <span class="title grey-text text-darken-4">
-			                    <a> Results from Google Scholar </a>
-		                    </span>
-                    <ul class="collection">
-                        <!-- <li class="collection-item avatar"> -->
-                        <div ng-repeat="publication in externalResults">
-                            <li class="collection-item selectable-black" ng-click="setExternalMetadata(publication)" >
-                                <i class="mdi-social-school"></i>
-                                <span class="title">{{publication.title}}</span>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
+                    <span class="title grey-text text-darken-4">
+                     <a> Results from Google Scholar </a>
+                 </span>
+                 <ul class="collection">
+                    <!-- <li class="collection-item avatar"> -->
+                    <div ng-repeat="publication in externalResults">
+                        <li class="collection-item selectable-black" ng-click="setExternalMetadata(publication)" >
+                            <i class="mdi-social-school"></i>
+                            <span class="title">{{publication.title}}</span>
+                        </li>
+                    </div>
+                </ul>
             </div>
+        </div>
 
     </div>
 </div>

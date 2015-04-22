@@ -18,32 +18,37 @@
 							</i>
 
 							<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
-								<span class="title">
-									{{publication.title}}
-								</span>
-								<!-- 	<div ng-repeat="author in publication.authors"> -->
-								<!-- <p> -->
-								<!-- {{author.firstName}} {{author.lastName}} -->
-								<!-- </p> -->
-								<!-- </div> -->
-								<!-- temp omdat authors nog niet werken -->
-								<br>
-								<p style="color:grey">
-									{{publication.type}}
-								</p>
+								<div class="row">
+									<div class="col s2">
+										<span class="title truncate">
+											{{publication.title}}
+										</span>
+										<!-- 	<div ng-repeat="author in publication.authors"> -->
+										<!-- <p> -->
+										<!-- {{author.firstName}} {{author.lastName}} -->
+										<!-- </p> -->
+										<!-- </div> -->
+										<!-- temp omdat authors nog niet werken -->
+										<br>
+										<p style="color:grey">
+											{{publication.type}}
+										</p>
+									</div>
+									
+										<a class="secondary-content">
+											<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
+											<code class="titip-left">
+												<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+												<span class="titip-content">
+													add to favorites
+												</span>
+											</code>
+										</a>
+									
+								</div>
 							</div>
-
-							<a class="secondary-content">
-								<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
-								<code class="titip-left">
-									<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
-									<span class="titip-content">
-										add to favorites
-									</span>
-								</code>
-							</a>
-							<hr>
 						</li>
+
 					</div>
 				</ul>
 
