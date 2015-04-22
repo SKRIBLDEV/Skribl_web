@@ -200,20 +200,23 @@ function Library(db) {
 
 		function prepResults(array, callB) {
 			var ctr = 0;
+			var ctr2 = 0;
 			for (var i = 0; i < array.length; i++) {
-				array[ctr] = {id: RID.transformRid(array[ctr]['rid']), title: array[ctr]['title'], type: array[ctr]['class']};
-				if(array[ctr]['authors']) {
-					array[ctr].authors = RID.transformRids(array[ctr]['authors']);
-						AUT.getAuthorObjects(array[ctr]['authors'], function(error, res) {
-						ctr++
-						if(ctr == array.length) {
+				if(array[i]['authors']) {
+					array[i].authors = RID.transformRids(array[i]['authors']);
+						AUT.getAuthorObjects(array[i]['authors'], function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							array[ctr2] = {id: RID.transformRid(array[ctr2]['rid']), title: array[ctr2]['title'], type: array[ctr2]['class'], authors: array[ctr2]['authors']};
+						if(++ctr2+ctr == array.length) {
 							callB(null, array);
 						} 
 					});
 				}
 				else {
-					ctr++
-					if(ctr == array.length) {
+					array[i] = {id: RID.transformRid(array[i]['rid']), title: array[i]['title'], type: array[i]['class']};
+					if(++ctr+ctr2 == array.length) {
 						callB(null, array);
 					} 
 				}
