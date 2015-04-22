@@ -75,6 +75,13 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
            getUserPublicationsRequest.success(function(data, status, headers, config) {
             error_ctr_userPub = 0;
             appData.data.publications = data;
+
+            appData.data.publications.forEach(function(entry){
+                console.log("blabla");
+            entry.authors = (typeof data.researchDomains !== 'undefined') ? data.researchDomains : [];
+            });
+            
+            console.log("joehoe");
             console.log(data);
 
             pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');

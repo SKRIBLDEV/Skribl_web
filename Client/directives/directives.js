@@ -46,6 +46,12 @@ webapp.directive('globalMenu',function(){
 		scope: false,
 		templateUrl: 'templates/publicationList.html'
 	}
+}).directive('libraryCard',function(){
+	return {
+		restrict: 'E',
+		scope: false,
+		templateUrl: 'templates/libraryCard.html'
+	}
 
 }).directive('interactiveGraphCard',function(){
 	return {
