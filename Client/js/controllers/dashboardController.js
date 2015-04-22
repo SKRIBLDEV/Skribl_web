@@ -71,6 +71,11 @@ webapp.controller('dashController', function($scope, $http, $state, appData, anc
         anchorSmoothScroll.scrollTo(eID);
     };
     
+
+    //2D0: make independent controller for metadata
+    $scope.showMeta =  managePublications.showMeta;
+    $scope.requestingMetadata = managePublications.requestingMetaData;
+    $scope.getMetadata = managePublications.getMetadata;
     
     // //------------------------------------------------Upload-----------------------------------------------//
     // 

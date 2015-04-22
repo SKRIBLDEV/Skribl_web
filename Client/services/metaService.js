@@ -2,6 +2,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 
 	var currentMeta = {};
 	var requestingMetaData = false;
+	var showMeta = false;
 
 	function changePDFURL(newURL){
         pdfDelegate.$getByHandle('my-pdf-container').load(newURL);
@@ -11,15 +12,12 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		requestingMetaData = true;
 		serverService.setMetadata(pubId)
 		.success(function (data){
-			console.log(data);
 			currentMeta = data;
 			changePDFURL(data.download);
-			console.log("***current meta: " + data);
 			requestingMetaData = false;
 			if (handler){
 				handler(true);
 			}
-			console.log(currentMeta);
 		})
 		.error(function(){
 			requestingMetaData = false;
@@ -28,27 +26,27 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 				handler(false);
 			}
 		});
-	};
+	}
 
-	//to show search results retrieved from google scholar in the preview
-	var setExternalMetadata = function(GSmetadata, handler){
-		currentMeta = GSmetadata;
-		if (handler){
-			handler(true);
-		}
-	};
+	var forceMetaData = function(data){
+		currentMeta = data;
+		console.log(data);
+		console.log("lolo");
+	}
 
 	var resetMetadata = function(){
 		currentMeta.value = {};
-	};
+	}
 
 	var service = {
 		currentMeta : function() { return currentMeta},
 		requestingMetaData : function() {return requestingMetaData},
+		showMeta : function() {return showMeta},
+		toggleMeta : function(enable) {showMeta = enable},
 		setMetadata : setMetadata,
-		setExternalMetadata : setExternalMetadata,
-		resetMetadata : resetMetadata
-	};
+		resetMetadata : resetMetadata,
+		forceMetaData : forceMetaData
+	}
 	
 	return service;
 });

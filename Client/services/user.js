@@ -1,7 +1,5 @@
-/**
- * Initialisation of the appdata with the empty object
- */
-webapp.service('userService', function($location, appData, $http) {
+
+webapp.service('userService', function($location, appData, $http, metaService) {
     
     this.logout = function(){logout();};
 
@@ -13,12 +11,18 @@ webapp.service('userService', function($location, appData, $http) {
     this.showNetwork = false;
     this.showSettings = false;
 
+    function resetMeta(){
+        metaService.resetMetadata();
+        metaService.toggleMeta(false);
+    }
+
 
     this.toggleLibrary = function() {
         this.showLibrary = !this.showLibrary;
         this.showSearch = false;
         this.showNetwork = false;
         this.showSettings = false;
+        resetMeta();
     };
 
     this.toggleSearch = function() {
@@ -26,6 +30,7 @@ webapp.service('userService', function($location, appData, $http) {
         this.showNetwork = false;
         this.showLibrary = false;
         this.showSettings = false;
+        resetMeta();
     };
 
     this.toggleNetwork = function() {

@@ -1,5 +1,5 @@
 //Every status can represent ONE 'transaction' impossible to multiple upload, ... at the same time !! Some status needs other one's be carefull with that.
-webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService) {
+webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService, metaService) {
 
     var self = this;
 
@@ -77,7 +77,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             appData.data.publications = data;
             console.log(data);
 
-            self.pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
+            pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
             appData.pdf.url = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf';    
 
             appData.data.currentLibraryName = libraryName;
@@ -259,8 +259,6 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     this.getMeta_reset = function(){ui_getMeta_status = ui_GETMETA_STATUS.INITIAL; appData.data.currentMetaData = null;};
 
     function stripHashtag(publicationID){
-        console.log(publicationID);
-        
         if (publicationID.charAt(0) === '#'){
             publicationID = publicationID.substr(1);
         }
@@ -294,9 +292,16 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             toast("author removed", 4000);
         } 
     }
+    
 
+    //2DO: make independent controller for metadata
+    this.showMeta =  metaService.showMeta;
+    this.requestingMetadata = metaService.requestingMetaData;
+    this.getMetadata = metaService.currentMeta;
 
     this.getMetaData = function(publicationID) {
+
+        metaService.toggleMeta(true);
 
         publicationID = stripHashtag(publicationID);
 
@@ -337,6 +342,11 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             appData.data.currentMetaData = data;
 
             console.log("**** current metadata: " + data);
+
+            metaService.forceMetaData(data);
+
+            console.log(metaService.currentMeta());
+
         });
 getMetaDataRequest.error(function(data, status, headers, config) {
     getMeta_status = GETMETA_STATUS.INITIAL;
