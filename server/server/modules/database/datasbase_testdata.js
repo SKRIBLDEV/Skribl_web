@@ -1,7 +1,8 @@
-//TESTCODE
 /*
-//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//TESTCODE
+
+var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new Database(serverConfig, dbConfig);
 
@@ -77,7 +78,7 @@ var t = d.getTime();
 //database.querySimple(19, 10, callBack);
 //database.createLibrary('tkrios', 'TestLib', callBack);
 //database.addToLibrary('test3', 'Favorites', '#23:13', callBack);
-//database.loadLibrary('tkrios', 'TestLib', callBack);
+//database.loadLibrary('HPinson', 'Uploaded', callBack);
 //database.addJournal('How to kill Reapers', fObject, 'jshep', callBack);
 //database.getPublication('#23:13', callBack);
 //database.uploadedBy('#21:38', callBack);
@@ -122,7 +123,7 @@ function callBack(error, result){
 	console.log(error);
 	}
 	else{
-	console.log(result.getAuthorId());
+	console.log(result);
 	//printUser(result);
 	}
 	stop();
@@ -132,4 +133,6 @@ function callBack(error, result){
 function stop(){
 	process.exit(code=0);
 }
+
 */
+
