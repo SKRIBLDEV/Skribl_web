@@ -11,15 +11,12 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		requestingMetaData = true;
 		serverService.setMetadata(pubId)
 		.success(function (data){
-			console.log(data);
 			currentMeta = data;
 			changePDFURL(data.download);
-			console.log("***current meta: " + data);
 			requestingMetaData = false;
 			if (handler){
 				handler(true);
 			}
-			console.log(currentMeta);
 		})
 		.error(function(){
 			requestingMetaData = false;

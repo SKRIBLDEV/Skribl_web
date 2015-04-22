@@ -1,5 +1,5 @@
 
-webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, pdfDelegate, metaService) {
+webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, publicationsService, pdfDelegate, metaService) {
     //**** control search card
 
     $scope.searching = false; //for showing spinner etc.
@@ -83,6 +83,10 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
     $scope.requestingMetadata = function(){
         return metaService.requestingMetaData();
+    }
+
+    $scope.addPublication = function(publicationID){
+        publicationsService.addPublication("Favorites", publicationID);
     }
 
 });
