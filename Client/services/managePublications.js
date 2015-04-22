@@ -2,6 +2,21 @@
 webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService) {
 
     var self = this;
+
+    this.publicationSettingsEnabled = false;
+    this.togglePublicationSettings = function(){
+        self.publicationSettingsEnabled = !self.publicationSettingsEnabled;
+    }
+
+    this.shouldResizeForPublicationSettings = function(){
+        if (appData.data.publications.length > 10){
+            return false;
+        } else {
+            return self.publicationSettingsEnabled;
+        }
+    }
+
+
 //----------------------------------------------------------------------------------------------------------------------//
     //CODE USED IN THE PUBLICATIONS CARD
     

@@ -54,10 +54,21 @@
 								</li>
 							</div>
 						</ul>
+
+						<!-- make it large enough -->
+						<div ng-show="publications.shouldResizeForPublicationSettings()">
+						<span ng-repeat="a in (((b=[]).length=20)&&b) track by $index">
+							<br>
+						</span>
+						
+						</div>
+
+
+
 						<!-- end library content -->
 						<div class="row">
 							<div class="activator col s12 waves-effect waves-light btn-large ">
-								<h5 class="activator center-align" style="color:white">Settings</h5>
+								<h5 class="activator center-align" style="color:white" ng-click="publications.togglePublicationSettings()">Settings</h5>
 							</div>
 
 							<div class="center">
@@ -67,7 +78,7 @@
 					</div>
 				</span>
 				<div class="card-reveal">
-					<span class="card-title grey-text text-darken-4">
+					<span class="card-title grey-text text-darken-4" ng-click="publications.togglePublicationSettings()">
 						Library Settings
 						<i class="mdi-navigation-close right"></i>
 					</span>
