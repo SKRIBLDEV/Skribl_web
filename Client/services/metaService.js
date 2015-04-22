@@ -26,17 +26,26 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 				handler(false);
 			}
 		});
-	}
+	};
+
+	//to show search results retrieved from google scholar in the preview
+	var setExternalMetadata = function(GSmetadata, handler){
+		console.log("setting external metadata");
+		currentMeta = GSmetadata;
+		if (handler){
+			handler(true);
+		}
+	};
 
 	var forceMetaData = function(data){
 		currentMeta = data;
 		console.log(data);
 		console.log("lolo");
-	}
+	};
 
 	var resetMetadata = function(){
 		currentMeta.value = {};
-	}
+	};
 
 	var service = {
 		currentMeta : function() { return currentMeta},
@@ -44,9 +53,10 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		showMeta : function() {return showMeta},
 		toggleMeta : function(enable) {showMeta = enable},
 		setMetadata : setMetadata,
+		setExternalMetadata : setExternalMetadata,
 		resetMetadata : resetMetadata,
 		forceMetaData : forceMetaData
-	}
+	};
 	
 	return service;
 });

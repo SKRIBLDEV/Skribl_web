@@ -40,28 +40,44 @@
                 <span class="title grey-text text-darken-4">
                    <a> Results from Skribl </a>
                </span>
-               <ul class="collection">
-                   <!-- <li class="collection-item avatar"> -->
-                   <div ng-repeat="publication in internalResults">
-                    <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
-                        <i class="mdi-social-school"></i>
-                        <span class="title">&nbsp;{{publication.title}}</span>
-                        <a class="secondary-content">
+                <ul class="collection">
+                    <!-- <li class="collection-item avatar"> -->
+                    <div ng-repeat="publication in internalResults">
+                        <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
+                            <i class="mdi-social-school"></i>
+                            <span class="title">&nbsp;{{publication.title}}</span>
+                            <a class="secondary-content">
 
-                            <code class="titip-left">
-                            <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
-                                </i>
-                                &nbsp;
+                                <code class="titip-left">
+                                    <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
+                                    </i>
+                                    &nbsp;
                                 <span class="titip-content">
                                     add to favorites
                                 </span>
-                            </code>
-                        </a>
-                    </li>
+                                </code>
+                            </a>
+                        </li>
+                    </div>
+                    <!--</li>-->
+                </ul>
+
+                <!--- external results ---->
+                <div ng-show = "showExternalResults">
+                            <span class="title grey-text text-darken-4">
+			                    <a> Results from Google Scholar </a>
+		                    </span>
+                    <ul class="collection">
+                        <!-- <li class="collection-item avatar"> -->
+                        <div ng-repeat="publication in externalResults">
+                            <li class="collection-item selectable-black" ng-click="setExternalMetadata(publication)" >
+                                <i class="mdi-social-school"></i>
+                                <span class="title">{{publication.title}}</span>
+                            </li>
+                        </div>
+                    </ul>
                 </div>
-                <!--</li>-->
-            </ul>
-        </div>
+            </div>
 
     </div>
 </div>
