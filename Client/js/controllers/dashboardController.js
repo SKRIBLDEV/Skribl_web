@@ -76,6 +76,7 @@ webapp.controller('dashController', function($scope, $http, $state, appData, anc
     $scope.showMeta =  managePublications.showMeta;
     $scope.requestingMetadata = managePublications.requestingMetaData;
     $scope.getMetadata = managePublications.getMetadata;
+    $scope.clearMetadata = managePublications.clearMetadata;
     
     // //------------------------------------------------Upload-----------------------------------------------//
     // 
