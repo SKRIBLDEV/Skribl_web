@@ -68,7 +68,7 @@
                             <span class="title">Abstract</span>
                             <p>{{getMetadata().abstract}}</p>
                         </li>
-                        <li class="collection-item" ng-show = "hasExternalUrl">
+                        <li class="collection-item" ng-show = "true"> <!---- should only be visible for external results--->
                             <i class="mdi-image-style circle"></i>
                             <span class="title">url</span>
                             <p> <a target="_blank" href="{{getMetadata().url}}"> External Link </a></p>

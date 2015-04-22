@@ -30,8 +30,9 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 
 	//to show search results retrieved from google scholar in the preview
 	var setExternalMetadata = function(GSmetadata, handler){
-		console.log("setting external metadata");
 		currentMeta = GSmetadata;
+		showMeta = true;
+		requestingMetaData = false;
 		if (handler){
 			handler(true);
 		}
