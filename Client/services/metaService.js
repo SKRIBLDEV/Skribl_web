@@ -28,18 +28,27 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 				handler(false);
 			}
 		});
-	}
+	};
+
+	//to show search results retrieved from google scholar in the preview
+	var setExternalMetadata = function(GSmetadata, handler){
+		currentMeta = GSmetadata;
+		if (handler){
+			handler(true);
+		}
+	};
 
 	var resetMetadata = function(){
 		currentMeta.value = {};
-	}
+	};
 
 	var service = {
 		currentMeta : function() { return currentMeta},
 		requestingMetaData : function() {return requestingMetaData},
 		setMetadata : setMetadata,
+		setExternalMetadata : setExternalMetadata,
 		resetMetadata : resetMetadata
-	}
+	};
 	
 	return service;
 });

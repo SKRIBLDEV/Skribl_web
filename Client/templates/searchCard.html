@@ -52,8 +52,22 @@
                                             <span class="title">{{publication.title}}</span>
                                         </li>
                                 </div>
-                                    <!--</li>-->
                             </ul>
+                            <!--- external results ---->
+                            <div ng-show = "showExternalResults">
+                            <span class="title grey-text text-darken-4">
+			                    <a> Results from Google Scholar </a>
+		                    </span>
+                                <ul class="collection">
+                                    <!-- <li class="collection-item avatar"> -->
+                                    <div ng-repeat="publication in externalResults">
+                                        <li class="collection-item selectable-black" ng-click="setExternalMetadata(publication)" >
+                                            <i class="mdi-social-school"></i>
+                                            <span class="title">{{publication.title}}</span>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
@@ -61,28 +75,6 @@
 
             </div>
         </div>
-
-
-
-
-
-        <!--<div class="section" ng-show="externalSearch">
-            &lt;!&ndash;&#45;&#45; external results &#45;&#45;&ndash;&gt;
-             <span class="title grey-text text-darken-4">
-                <a> Results found from Google Scholar </a>
-            </span>
-            <ul class="collection">
-                <div ng-repeat="publication in externalResults">
-                    <li class="collection-item">
-                        <div class="selectable-black" ng-click="">
-                            <p class="title">{{publication.title}}</p>
-                        </div>
-                    </li>
-                </div>
-            </ul>
-        </div>-->
-        <!-- stop results -->
-
 
 
 <!-- end search card

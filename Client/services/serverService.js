@@ -5,7 +5,7 @@ webapp.factory('serverService', function($http, appData){
 
     var basicSearch = function(searchTerms){
         var urlTerms = encodeURIComponent(searchTerms);
-        var url = serverApi.concat('/publications?q=').concat(urlTerms);//.concat('&external=true');
+        var url = serverApi.concat('/publications?q=').concat(urlTerms).concat('&external=true');
         return $http.get(url,config);
     };
 
