@@ -59,6 +59,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
         $scope.showMeta = false;
         $scope.basicSearchView = true;
         $scope.internalResults = {};
+        $scope.externalResults = {};
         $scope.showResults = false;
     };
 
@@ -69,6 +70,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
         $scope.basicSearchView = false;
         $scope.internalResults = {};
         $scope.showResults = false;
+        $scope.showExternalResults = false;
     };
 
     //**** control metadata preview card

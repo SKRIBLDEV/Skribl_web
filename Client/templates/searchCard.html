@@ -45,19 +45,20 @@
                     <div ng-repeat="publication in internalResults">
                         <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
                             <i class="mdi-social-school"></i>
-                            <span class="title">&nbsp;{{publication.title}}</span>
                             <a class="secondary-content">
-
                                 <code class="titip-left">
                                     <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
                                     </i>
-                                    &nbsp;
                                 <span class="titip-content">
                                     add to favorites
                                 </span>
                                 </code>
+
                             </a>
+                            <span class="title">&nbsp;{{publication.title}}
+                            </span>
                         </li>
+                        <!--<
                     </div>
                     <!--</li>-->
                 </ul>
