@@ -269,7 +269,6 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
     function changePDFURL(newURL){
         pdfDelegate.$getByHandle('my-pdf-container').load(newURL);
-
     }
 
     this.togglePotential = function(author){        

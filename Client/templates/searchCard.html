@@ -1,5 +1,5 @@
 <!-- Search card -->
-<!--- @Pieter ng-show...--->
+<!-- @Pieter ng-show... -->
 
 
 
@@ -13,7 +13,7 @@
                 <div class="animated fadeInDown col s12">
                     <div class="section">
 
-                        <!--- basic search --->
+                        <!-- basic search -->
                         <div class="animated fadeInDown" ng-show="basicSearchView">
                             <input class="input-field" type="text" ng-model="searchTerms" placeholder="search terms (press enter to search)" on-enter="basicSearch(searchTerms)" >
                             <a class="mdi-navigation-chevron-right" ng-click="switchToAdvancedSearch()">advanced search?  </a>
@@ -45,7 +45,7 @@
 			                    <a> Results from Skribl </a>
 		                    </span>
                             <ul class="collection">
-                                   <!--- <li class="collection-item avatar"> --->
+                                   <!-- <li class="collection-item avatar"> -->
                                 <div ng-repeat="publication in internalResults">
                                         <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
                                             <i class="mdi-social-school"></i>

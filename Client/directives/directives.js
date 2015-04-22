@@ -72,6 +72,11 @@ webapp.directive('globalMenu',function(){
 		restrict: 'E',
 		templateUrl: 'templates/searchCard.html'
 	}
+}).directive('pdfviewerCard', function(){
+	return {
+		restrict: 'E',
+		templateUrl: 'templates/pdfviewerCard.html'
+	}
 }).directive('metadataCard', function() {
 	return {
 		restrict: 'E',

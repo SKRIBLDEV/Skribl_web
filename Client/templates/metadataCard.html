@@ -9,27 +9,27 @@
             <div class="section">
 
                 <div class="row center">
-                    <div ng-show="requestingMetadata">
+                    <div ng-show="requestingMetadata()">
                         <spinner></spinner>
                     </div>
                 </div>
 
-                <div class="animated fadeInDown" ng-show="!requestingMetadata && showMeta">
+                <div class="animated fadeInDown" ng-show="!requestingMetadata() && showMeta">
                     <ul class="collection">
                         <li class="collection-item">
                             <i class="mdi-social-school circle"></i>
                             <span class="title">Title</span>
-                            <p>{{currentMeta.title}}</p>
+                            <p>{{getMetadata().title}}</p>
                         </li>
                         <li class="collection-item">
                             <i class="mdi-image-timelapse circle"></i>
                             <span class="title">Year</span>
-                            <p>{{currentMeta.year}}</p>
+                            <p>{{getMetadata().year}}</p>
                         </li>
                         <li class="collection-item">
                             <i class="mdi-social-people circle"></i>
                             <span class="title">Authors</span>
-                            <div ng-repeat="author in currentMeta.authors">
+                            <div ng-repeat="author in getMetadata().authors">
                                 <p>{{author.firstName}} {{author.lastName}}</p>
                                 </div>
 
@@ -37,29 +37,29 @@
                         <li class="collection-item">
                             <i class="mdi-image-style circle"></i>
                             <span class="title">Type</span>
-                            <p>{{currentMeta.type}}</p>
+                            <p>{{getMetadata().type}}</p>
                         </li>
                         <!--- proceeding -->
-                        <li class="collection-item" ng-show = "currentMeta.type=='proceeding'">
+                        <li class="collection-item" ng-show = "getMetadata().type=='proceeding'">
                             <i class="mdi-action-bookmark circle"></i>
                             <span class="title">Booktitle</span>
-                            <p>{{currentMeta.Booktitle}}</p>
+                            <p>{{getMetadata().Booktitle}}</p>
                         </li>
-                        <li class="collection-item" ng-show = "currentMeta.type=='proceeding'">
+                        <li class="collection-item" ng-show = "getMetadata().type=='proceeding'">
                             <i class="mdi-action-assignment-ind circle"></i>
                             <span class="title">Organisation</span>
-                            <p>{{currentMeta.organisation}}</p>
+                            <p>{{getMetadata().organisation}}</p>
                         </li>
-                        <!--- journal --->
-                        <li class="collection-item" ng-show = "currentMeta.type=='journal'">
+                        <!-- journal -->
+                        <li class="collection-item" ng-show = "getMetadata().type=='journal'">
                             <i class="mdi-action-bookmark circle"></i>
                             <span class="title">Journal</span>
-                            <p>{{currentMeta.journal}}</p>
+                            <p>{{getMetadata().journal}}</p>
                         </li>
-                        <li class="collection-item" ng-show = "currentMeta.type=='journal'">
+                        <li class="collection-item" ng-show = "getMetadata().type=='journal'">
                             <i class="mdi-action-assignment-ind circle"></i>
                             <span class="title">Publisher</span>
-                            <p>{{currentMeta.publisher}}</p>
+                            <p>{{getMetadata().publisher}}</p>
                         </li>
 
                     </ul>

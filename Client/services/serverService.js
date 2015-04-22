@@ -1,21 +1,12 @@
-/**
- * Created by Hannah_Pinson on 20/04/15.
- */
+webapp.factory('serverService', function($http, appData){
 
-webapp.factory('searchService', function($http, appData){
 
-/*
-    var basicSearch = function(searchTerms){
-       return $http.get('temp_json/basic_search_data.json')
-    };*/
 
 
     var basicSearch = function(searchTerms){
-
         var urlTerms = encodeURIComponent(searchTerms);
         var url = serverApi.concat('/publications?q=').concat(urlTerms);//.concat('&external=true');
         return $http.get(url,config);
-
     };
 
     var advancedSearch = function(searchQuery){
@@ -24,7 +15,6 @@ webapp.factory('searchService', function($http, appData){
     };
 
     var setMetadata = function(pubId){
-
         if (pubId.charAt(0) === '#'){
             pubId = pubId.substr(1);
         }
@@ -35,11 +25,7 @@ webapp.factory('searchService', function($http, appData){
             'Authorization': appData.Authorization}};
 
         return getMetaDataRequest = $http.get(url, authorization);
-
     };
-
-
-
 
     var service = {
         basicSearch : basicSearch,
@@ -50,5 +36,3 @@ webapp.factory('searchService', function($http, appData){
     return service;
 
 });
-
-

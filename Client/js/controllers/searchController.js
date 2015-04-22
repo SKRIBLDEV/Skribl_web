@@ -1,7 +1,5 @@
 
-webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService) {
-
-
+webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, pdfDelegate, metaService) {
     //**** control search card
 
     $scope.searching = false; //for showing spinner etc.
@@ -11,10 +9,10 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService
     $scope.showMeta = false;
 
     $scope.basicSearch = function(searchTerms){
-        $scope.resetMeta();
+        metaService.resetMetadata();
         $scope.externalSearch = false;
         $scope.searching = true;
-        searchService.basicSearch(searchTerms)
+        serverService.basicSearch(searchTerms)
             .success(function(data) {
 
                 if (data.internal.length === 0) {toast("No results found in our database.", 4000)};
@@ -34,11 +32,11 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService
     };
 
    $scope.advancedSearch = function(searchQuery){
-       $scope.resetMeta();
+       metaService.resetMetadata();
        $scope.externalSearch = false;
        $scope.searching = true;
 
-        searchService.advancedSearch(searchQuery)
+        serverService.advancedSearch(searchQuery)
             .success(function(data) {
                 $scope.searching = false;
                 $scope.internalResults = data;
@@ -53,45 +51,39 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, searchService
     };
 
     $scope.switchToBasicSearch = function(){
-        $scope.resetMeta();
+        metaService.resetMetadata();
         $scope.basicSearchView = true;
         $scope.internalResults = {};
         $scope.showResults = false;
     };
 
     $scope.switchToAdvancedSearch = function(){
-        $scope.resetMeta();
+        metaService.resetMetadata();
         $scope.basicSearchView = false;
         $scope.internalResults = {};
         $scope.showResults = false;
     };
 
-    $scope.resetMeta = function(){
-        $scope.currentMeta = {};
-        $scope.showMeta = false;
-    };
-
     //**** control metadata preview card
 
     $scope.setMetadata = function(pubId){
-        $scope.requestingMetadata = true;
-        searchService.setMetadata(pubId)
-            .success(function (data){
-                $scope.requestingMetadata = false;
-                 $scope.currentMeta = data;
+
+        function handler(succes){
+            if (succes){
                 $scope.showMeta = true;
-                console.log("***current meta: " + data);
-            })
-            .error(function(){
-                $scope.requestingMetadata = false;
-                toast("Failed to find metadata, try again later", 4000);
-        });
+            } 
+        }
 
-
-
+        metaService.setMetadata(pubId, handler);
     }
 
+    $scope.getMetadata = function(){
+        return metaService.currentMeta();
+    }
 
+    $scope.requestingMetadata = function(){
+        return metaService.requestingMetaData();
+    }
 
 });
 
