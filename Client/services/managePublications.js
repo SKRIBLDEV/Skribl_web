@@ -9,7 +9,9 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     }
 
     this.shouldResizeForPublicationSettings = function(){
-        if (appData.data.publications.length > 10){
+        if (appData.data.publications === null){
+            return true;
+        } else if (appData.data.publications.length > 10){
             return false;
         } else {
             return self.publicationSettingsEnabled;
@@ -77,12 +79,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
             appData.data.publications = data;
 
             appData.data.publications.forEach(function(entry){
-                console.log("blabla");
-            entry.authors = (typeof data.researchDomains !== 'undefined') ? data.researchDomains : [];
+                if (!entry.authors || (entry.authors.length === 0)){
+                    entry.authors = [{firstName: "???", lastName: "???"}];    
+                } 
             });
-            
-            console.log("joehoe");
-            console.log(data);
 
             pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
             appData.pdf.url = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf';    
@@ -305,6 +305,10 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
     this.showMeta =  metaService.showMeta;
     this.requestingMetadata = metaService.requestingMetaData;
     this.getMetadata = metaService.currentMeta;
+    this.clearMetadata = function(){
+        metaService.toggleMeta(false);
+    }
+    
 
     this.getMetaData = function(publicationID) {
 

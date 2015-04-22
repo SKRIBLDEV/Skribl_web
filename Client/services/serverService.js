@@ -33,6 +33,8 @@ webapp.factory('serverService', function($http, appData){
             return getMetaDataRequest = $http.get(url, authorization);
         };
 
+
+
     //add a publication to a certan library of a user
     var addPublication = function(libraryName, publicationID) {
         publicationID = stripHashtag(publicationID);
@@ -42,7 +44,7 @@ webapp.factory('serverService', function($http, appData){
          {'Content-type' : 'application/json',
          'Authorization': appData.Authorization}};
          return addPublicationsRequest = $http.put(url, {}, authorization);
-     }
+     };
 
 
      var getUserPublications = function(libraryName) {

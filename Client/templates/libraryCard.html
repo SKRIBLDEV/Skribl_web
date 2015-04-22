@@ -1,4 +1,4 @@
-<!-- begin library card -->
+<!--begin library card -->
 <div class="col s12">
 	<div class="card">
 		<div class="card-content">
@@ -19,9 +19,14 @@
 							
 							<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
 								<span class="title">{{publication.title}}</span>
-								<div ng-repeat="author in publication.authors">
+								<!-- <div ng-repeat="author in publication.authors">
                                 <p>{{author.firstName}} {{author.lastName}}</p>
-                                </div>
+                                </div> -->
+                                <!-- temp omdat authors nog niet werken -->
+                                <br>
+                                <p style="color:grey">
+                                {{publication.type}}
+                                </p>
 							</div>
 							
 							<a class="secondary-content">
@@ -139,4 +144,4 @@
 				</div>
 			</div>
 		</div>
-			<!-- end library card -->
+			<!-- end library card
