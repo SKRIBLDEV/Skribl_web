@@ -66,10 +66,10 @@
                             <span class="title">Abstract</span>
                             <p>{{getMetadata().abstract}}</p>
                         </li>
-                        <li class="collection-item">
+                        <li class="collection-item" ng-show = "">
                             <i class="mdi-image-style circle"></i>
                             <span class="title">url</span>
-                            <p>{{getMetadata().url}}</p>
+                            <p> <a target="_blank" href="{{getMetadata().url}}"> External Link </a></p>
                         </li>
 
                     </ul>
