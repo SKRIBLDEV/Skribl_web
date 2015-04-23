@@ -386,7 +386,7 @@ getMetaDataRequest.error(function(data, status, headers, config) {
 
             console.log(publicationID);
             console.log(meta);
-            
+
             modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
             var url = serverApi.concat('/publications/').concat(publicationID);
             var authorization = {headers: 
@@ -423,7 +423,7 @@ function scrape(publicationID, handler) {
     });
 
     scrapingRequest.error(function(data, status, headers, config) {
-        toast("Failed to find information about the given publication.");
+        toast("Failed to find information about the given publication.", 4000);
         if (handler){
             handler(false);
         }
@@ -528,7 +528,7 @@ function scrape(publicationID, handler) {
         EDIT:2,
         WAITING: 7
     }
-    var upload_status = UPLOAD_STATUS.INITIAL; //change this to unactive
+    var upload_status = UPLOAD_STATUS.UNACTIVE; //change this to unactive
     this.upload_waitingmsg = "";
 
     this.upload_active = function() {return upload_status != UPLOAD_STATUS.UNACTIVE;}
