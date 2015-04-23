@@ -16,7 +16,8 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 			changePDFURL(data.download);
 			requestingMetaData = false;
 			if (handler){
-				handler(true);
+				handler(true, currentMeta);
+				console.log(currentMeta);
 			}
 		})
 		.error(function(){
@@ -34,7 +35,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		showMeta = true;
 		requestingMetaData = false;
 		if (handler){
-			handler(true);
+			handler(true, currentMeta);
 		}
 	};
 

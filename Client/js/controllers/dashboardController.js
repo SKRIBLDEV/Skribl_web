@@ -50,6 +50,7 @@ webapp.controller('dashController', function($scope, $http, $state, appData, anc
     $scope.publications = managePublications;
     $scope.data = appData.data;
     $scope.appData = appData;
+    $scope.userService = userService;
 
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
 
@@ -62,12 +63,8 @@ webapp.controller('dashController', function($scope, $http, $state, appData, anc
     $scope.ui_interactive_graph_disable = function() {
         $scope.gotoElement("id_top")
         $scope.interactiveGraph = false;};
-    $scope.gotoElement = function(eID) {
-        // set the location.hash to the id of
-        // the element you wish to scroll to.
-        $location.hash('middle');
 
-        // call $anchorScroll()
+    $scope.gotoElement = function(eID) {
         anchorSmoothScroll.scrollTo(eID);
     };
     

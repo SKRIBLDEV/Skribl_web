@@ -68,10 +68,12 @@
                             <span class="title">Abstract</span>
                             <p>{{getMetadata().abstract}}</p>
                         </li>
-                        <li class="collection-item" ng-show = "true"> <!---- should only be visible for external results--->
+                        <li class="collection-item" ng-show ="getMetadata().external"> 
+                        
+                        <!-- should only be visible for external results -->
                             <i class="mdi-image-style circle"></i>
                             <span class="title">url</span>
-                            <p> <a target="_blank" href="{{getMetadata().url}}"> External Link </a></p>
+                            <p> <a target="_blank" href="{{getMetadata().download}}"> External Link </a></p>
                         </li>
 
                     </ul>
@@ -111,7 +113,7 @@
 
         <div class="row center s12">
             <code class="titip-bottom">
-            <a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.showPublicationViewer=true;"> 
+            <a class="waves-effect waves-light btn" style="color:white;" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
                     <i class="mdi-editor-border-color left"></i>
                     Edit meta data
                 </a>

@@ -45,7 +45,6 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
                 $scope.searching = false;
                 $scope.internalResults = data;
                 $scope.showResults = true;
-
             })
             .error(function(data, status){
                 $scope.searching = false;
@@ -79,7 +78,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
         $scope.hasExternalUrl = false;
 
-        function handler(succes){
+        function handler(succes, data){
             if (succes){
                 metaService.toggleMeta(true);
             } 
@@ -91,8 +90,9 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
     $scope.setExternalMetadata = function(GSmetadata){
         $scope.hasExternalUrl = true;
         function handler(succes){
-            if (succes){
+            if (succes, data){
                 $scope.showMeta = true;
+                data.external=true;
             }
         }
         metaService.setExternalMetadata(GSmetadata, handler);
