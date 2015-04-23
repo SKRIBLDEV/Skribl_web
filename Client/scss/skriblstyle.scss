@@ -48,6 +48,12 @@ body {
   &:hover { color: lighten($primary-color, 15%); }
 }
 
+.selectable-skribl {
+  color: $primary-color;
+  @include transition(color .3s ease);
+  &:hover { color: lighten($primary-color, 15%); }
+}
+
 
 a {
   color: $primary-color-dark;

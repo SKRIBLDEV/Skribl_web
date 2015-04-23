@@ -8086,6 +8086,16 @@ body {
   .selectable-white:hover {
     color: #8190cc; }
 
+.selectable-skribl {
+  color: #4A60B6;
+  -webkit-transition: color 0.3s ease;
+  -moz-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  -ms-transition: color 0.3s ease;
+  transition: color 0.3s ease; }
+  .selectable-skribl:hover {
+    color: #8190cc; }
+
 a {
   color: #3149A1;
   margin-right: 20px;

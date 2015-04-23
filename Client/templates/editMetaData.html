@@ -10,16 +10,27 @@
 			</h5>
 			<ul ng-show="appData.ui.metaAddLib.value">
 				<div ng:repeat="lib in data.userLibrariesNames">
-					<div class="row" ng-click="appData.removeKeyWord($index)">
-						<i class="mdi-action-delete left">
-							{{lib}}
-						</i>
+					<div class="row">
+						<hr>
+						<div class="center">
+							<a class="btn-floating z-depth-2" ng-click="publications.deletePublication(lib, data.currentMetaData.id)">
+								<i class="mdi-action-delete selectable-white "></i>
+							</a>
+							<a class="white-text">
+								{{lib}} &nbsp;
+							</a>
+							<a class="btn-floating z-depth-2" ng-click="publications.addPublications(lib, data.currentMetaData.id)">
+								<i class="mdi-content-send selectable-white"></i>
+							</a>
+							<br>
+						</div>
 					</div>
-					<hr>
 				</div>
-			</ul>
-		</div>
+				
+			</div>
+		</ul>
 	</div>
+</div>
 </div>
 
 
@@ -49,7 +60,7 @@
 
 					<!-- input field add -->
 					<div class="row">
-						<div class="input-field col s12">
+						<div class="input-field col s12 white-text">
 							<input id="nkeyword" type="text" class="validate" ng-model="data.searchTerm" required>
 							<label class="active" for="nkeyword">
 								new keyword
@@ -190,16 +201,18 @@
 				<div class="col s12">
 					<div class="card-panel skribl-primary-color" >
 
-						<h5 class="white-text"> current research domains :  </h5>
+						<h5 class="white-text"> current research domains  </h5>
+						<br>
 
-						<div ng:repeat="domain in data.currentMetaData.researchDomains" class="selectable-white">
+						<div ng:repeat="domain in data.currentMetaData.researchDomains" >
+							<hr>
 							<div class="row" ng-click="appData.removeResearchDomain($index)">
-								<i class="mdi-action-delete left">
+								<i class="mdi-action-delete selectable-white"></i>
+								<a class="white-text">
 									{{appData.getMajorName(domain.majorID)}} :: 
 									{{appData.getMinorName(domain.majorID, domain.minorID)}}
-								</i>
+								</a>
 								<br>
-								<hr>
 							</div>
 
 						</div>
@@ -234,6 +247,16 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				
+				<br><br>
+				<!-- close the add research domain -->
+				<div class="row center">
+				<div class="col s3 offset-s4">
+					<div class="selectable-skribl" ng-click="appData.toggleUI(appData.ui.metaAddResearchDomain)">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-show="appData.ui.metaAddResearchDomain.value"></i>
+					</div>
+				</div>
 				</div>
 
 
@@ -357,7 +380,7 @@
 					</label>
 				</div>
 
-				<br>
+				<br><br>
 
 				<!-- delete button -->
 				<!-- not yet implemented -->
@@ -366,15 +389,14 @@
 						<i class="mdi-action-delete left"></i>
 						delete
 					</a>
-				</div>
 
-				<!-- check button -->
-				<div class="row center">
-					<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.modifyMeta(data.currentMetadata.id, data.currentMetadata)">
+					<a class="waves-effect waves-light btn" style="color:white;" ng-click="publications.modifyMeta(data.currentMetaData.id, data.currentMetaData)">
 						<i class="mdi-content-send left"></i>
 						save
 					</a>
 				</div>
+
+			
 
 
 			</form>

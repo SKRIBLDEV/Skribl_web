@@ -383,8 +383,10 @@ getMetaDataRequest.error(function(data, status, headers, config) {
         this.modifyMeta_succes = function(){return modifyMeta_status == MODIFYMETA_STATUS.SUCCES_MODIFYING;}
 
         this.modifyMeta = function(publicationID, meta) {
-            publicationID = stripHashtag(publicationID);
 
+            console.log(publicationID);
+            console.log(meta);
+            
             modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
             var url = serverApi.concat('/publications/').concat(publicationID);
             var authorization = {headers: 
@@ -470,9 +472,13 @@ function scrape(publicationID, handler) {
                 if (handler){
                     handler(true, data);
                 }
-                if (data.internal.length === 0) {toast("No results found in our database.")};
+                if (data.internal.length === 0) {
+                    toast("No results found in our database.", 4000)
+                };
                 if(external){
-                    if (data.external.length === 0) {toast("No results found from external sources.")};
+                    if (data.external.length === 0) {
+                        toast("No results found from external sources.", 4000)
+                    };
                 };
             });
             requestSearchPublication.error(function(data, status, headers, config) {
@@ -495,7 +501,9 @@ function scrape(publicationID, handler) {
             appData.data.searchResult = data;
             console.log(data);
             succes();
-            if (data.internal.length === 0) {toast("No results found in our database.")};
+            if (data.internal.length === 0) {
+                toast("No results found in our database.",4000)
+            };
         });
         requestSearchPublication.error(function(data, status, headers, config) {
             toast("Failed to search publication, try again later.", 4000);
