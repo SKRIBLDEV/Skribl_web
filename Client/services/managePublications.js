@@ -84,8 +84,9 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
                 } 
             });
 
-            pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
-            appData.pdf.url = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf';    
+            // pdfDelegate.$getByHandle('my-pdf-container').load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf');
+            // appData.pdf.url = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/relativity.pdf';
+
 
             appData.data.currentLibraryName = libraryName;
             upToDate();

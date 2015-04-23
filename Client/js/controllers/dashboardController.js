@@ -74,6 +74,11 @@ webapp.controller('dashController', function($scope, $http, $state, appData, anc
     $scope.requestingMetadata = managePublications.requestingMetaData;
     $scope.getMetadata = managePublications.getMetadata;
     $scope.clearMetadata = managePublications.clearMetadata;
+
+    // temp
+    $scope.getCurrentLibraryName = function(){
+        return appData.data.currentLibraryName;
+    }
     
     // //------------------------------------------------Upload-----------------------------------------------//
     // 
