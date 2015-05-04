@@ -339,7 +339,7 @@ function Publication(db) {
 			clb(er);
 		});
 
-		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where Name like \'%' + keyword + '%\') where private = false')
+		db.query('select expand(distinct(@rid)) from (select expand(in(\'HasResearchDomain\')) from ResearchDomain where major like \'%' + keyword + '%\' or minor like \'%' + keyword + '%\') where private = false')
 		.then(function(res) {
 			if(res.length) {
 			result = result.concat(RID.getRids(res)).unique();
@@ -435,16 +435,16 @@ function Publication(db) {
 			else {
 				var researchDomainArray = criteria.researchDomains;
 				if(queryInitialized) {
-					query = 'select from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[0] +  '\')';
+					query = 'select from (' + query +  ') where any() traverse(0,1) (major = \'' + researchDomainArray[0].major +  '\' and minor = \'' + researchDomainArray[0].minor + '\')';
 				}
 				else {
-					query = 'select expand(in(HasResearchDomain)) from ResearchDomain where Name = \'' + researchDomainArray[0] +  '\'';
+					query = 'select expand(in(HasResearchDomain)) from ResearchDomain where (major = \'' + researchDomainArray[0].major +  '\' and minor = \'' + researchDomainArray[0].minor + '\')';
 				}
 				researchDomainArray.shift();
 				queryInitialized = true;
 
-				for (var i = 0; i < researchDomainArray.length; i++) {
-					query = 'select from (' + query +  ') where any() traverse(0,1) (Name = \'' + researchDomainArray[i] +  '\')';
+				for (var i = 1; i < researchDomainArray.length; i++) {
+					query = 'select from (' + query +  ') where any() traverse(0,1) (major = \'' + researchDomainArray[i].major +  '\' and minor = \'' + researchDomainArray[i].minor + '\')';
 				};
 				callBack(null, true);
 			}
@@ -490,6 +490,8 @@ function Publication(db) {
 			if(criteria.organisation !== undefined) {
 				tempQuery = tempQuery + ' and organisation = \'' + criteria.organisation + '\'';
 			}
+			tempQuery = tempQuery + ' and private = false';
+			//tempquery never empty, remove?
 			if(tempQuery == '') {
 				//console.log(query);
 				db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (' + query + ') limit ' + limit).all()
