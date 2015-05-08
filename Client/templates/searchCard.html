@@ -15,14 +15,19 @@
                 <a class="mdi-navigation-chevron-right" ng-click="switchToAdvancedSearch()">advanced search?  </a>
             </div>
 
-            <!--- advanced search ---->
+            <!--- advanced search -->
             <div class="animated fadeInDown" ng-show="!basicSearchView">
                 <a class="mdi-navigation-chevron-left" ng-click="switchToBasicSearch()">basic search?  </a>
-                <input name="titleInput" placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title string >
+                <input placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title >
                 <input placeholder="year" class="text-field" type="number" ng-model=advancedQuery.year >
                 <input placeholder="journal" class="text-field" type="text" ng-model=advancedQuery.journal>
                 <input placeholder="book title" class="text-field" type="text" ng-model=advancedQuery.booktitle>
-                <a class="btn" ng-click="advancedSearch(advancedQuery)"> Search</a>
+                &nbsp
+                <div appendable-listing datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
+                <div appendable-listing datasource="advancedQuery.keywords" new-placeholder="arrayPlaceholders[1]"></div>
+                <div appendable-listing datasource="advancedQuery.researchDomains" new-placeholder="arrayPlaceholders[2]"></div>
+                 &nbsp  
+                <a class="btn" ng-click="advancedSearch()"> Search</a>
 
             </div>
 
@@ -36,7 +41,7 @@
 
             <!-- results -->
             <div class="section" ng-show="showResults">
-                <!---- internal results ---->
+                <!-- internal results -->
                 <span class="title grey-text text-darken-4">
                  <a> Results from Skribl </a>
              </span>
@@ -53,17 +58,16 @@
                                     add to favorites
                                 </span>
                             </code>
-
                         </a>
                         <span class="title">&nbsp;{{publication.title}}
                         </span>
                     </li>
                         <!--<
                     </div>
-                    <!--</li>-->
+                    <!-- </li>-->
                 </ul>
 
-                <!--- external results ---->
+                <!--- external results -->
                 <div ng-show = "showExternalResults">
                     <span class="title grey-text text-darken-4">
                      <a> Results from Google Scholar </a>

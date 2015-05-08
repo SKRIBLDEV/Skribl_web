@@ -225,7 +225,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
 				// [H] with ui-router:
-				$state.go('dashboard.library');
+				//$state.go('dashboard.library');
+				$state.go('dashboard.search');
 				/*
 				// change route to #/dashboard
 				$location.path('/dashboard');

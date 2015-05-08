@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col s6">
+    <ul>
+      <input placeholder={{newPlaceholder}} class="text-field" type="text" ng-model=datasource[0] > 
+      <li ng-repeat="item in appended track by $index">
+        <input placeholder={{newPlaceholder}} class="text-field" type="text" ng-model=datasource[$index+1] >
+      </li>
+    </ul>
+  </div>
+  <div class="col s6" >
+      <a class="mdi-content-add" ng-click="addItem()"> add {{newPlaceholder}}</a> 
+  </div>
+ </div>

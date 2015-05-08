@@ -1,6 +1,8 @@
 
 webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, publicationsService, pdfDelegate, metaService) {
-    //**** control search card
+   
+
+    //************** control search card
 
     $scope.searching = false; //for showing spinner etc.
     $scope.showExternalResults = false;
@@ -10,7 +12,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
     $scope.showMeta =  metaService.showMeta;
     $scope.requestingMetadata = metaService.requestingMetaData;
     $scope.getMetadata = metaService.currentMeta;
-    
+
 
     $scope.basicSearch = function(searchTerms){
         metaService.resetMetadata();
@@ -20,7 +22,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
             .success(function(data) {
 
                 if (data.internal.length === 0) {toast("No results found in our database.", 4000)};
-                if (data.external.length === 0) {toast("No results found from searching Google Scholar.", 4000)};
+                if (data.external.length === 0) {toast("No results found from searching with Google Scholar.", 4000)};
 
                 $scope.internalResults = data.internal;
                 $scope.externalResults = data.external;
@@ -35,16 +37,70 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
             });
     };
 
-   $scope.advancedSearch = function(searchQuery){
+    //reset advanced search model (not a persistent model, only needed for temp bindings in view)
+    resetAdvancedQuery = function(){
+        $scope.advancedQuery = {
+            title : undefined,
+            /*authors : [
+                {firstName: 'Jens',
+                lastName : 'Nicolay'}
+            ],*/
+            //keywords : ['VUB', 'Software'],
+            authors: [],
+            keywords: [],
+            researchDomains : [],
+            year : undefined,
+            journal : undefined,
+            booktitle : undefined
+        }
+    }
+
+    $scope.arrayPlaceholders = ["author", "keyword", "research domain"]
+
+    resetAdvancedQuery();
+
+    // little ugly fix to bridge angular model vs. back-end demands
+    transformedForRequest = function(){
+
+        //copy
+        transQuery = {
+            title : $scope.advancedQuery.title,
+            authors : $scope.advancedQuery.authors,
+            keywords : $scope.advancedQuery.keywords,
+            researchDomains : $scope.advancedQuery.researchDomains,
+            year : $scope.advancedQuery.year,
+            journal : $scope.advancedQuery.journal,
+            booktitle :$scope.advancedQuery.booktitle
+        }
+
+        //set properties with empty arrays to undefined
+        if (transQuery.authors.length == 0)
+            transQuery.authors = undefined;
+        if (transQuery.keywords.length == 0)
+            transQuery.keywords = undefined;
+        if (transQuery.researchDomains.length == 0)
+            transQuery.researchDomains = undefined; 
+        return transQuery;
+    }
+
+   $scope.advancedSearch = function(){
        metaService.resetMetadata();
-       $scope.externalExternalResults = false;
+       $scope.showExternalResults = false;
+       $scope.internalResults = undefined;
        $scope.searching = true;
 
-        serverService.advancedSearch(searchQuery)
+       console.log(transformedForRequest);
+
+
+        serverService.advancedSearch(transformedForRequest())
             .success(function(data) {
                 $scope.searching = false;
-                $scope.internalResults = data;
-                $scope.showResults = true;
+                if (data.length == 0 ) {
+                    toast("No results found in our database.", 4000)}
+                else {
+                    $scope.internalResults = data;
+                    $scope.showResults = true;
+                }
             })
             .error(function(data, status){
                 $scope.searching = false;
@@ -65,6 +121,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
     $scope.switchToAdvancedSearch = function(){
         metaService.resetMetadata();
+        resetAdvancedQuery();
         $scope.showMeta = false;
         $scope.basicSearchView = false;
         $scope.internalResults = {};
@@ -72,7 +129,9 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
         $scope.showExternalResults = false;
     };
 
-    //**** control metadata preview card
+
+
+    //************** control metadata preview card
 
     $scope.setMetadata = function(pubId){
 
