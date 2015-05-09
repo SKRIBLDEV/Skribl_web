@@ -20,29 +20,33 @@ webapp.directive('graphDirective', function () {
             // create a visualisation of the graph
             scope.$on("Graph_Ready", function () {
 
-
-                // @Pieter: this is some code to get the width of the parent container of the directive
-                // it could be used to scale the svg dynamically
-                // however, this returns a width = 0, which is probably due to using materialize 'col' ?
-
-                /*var selection = d3.select(element[0]);
-                 width = selection[0][0].clientWidth;
-                 console.log("width of the parent: " + width);*/
-
-
-                var width = 800,
-                    height = 1 * width;
+                var cardElement = d3.select('.networkCard');
+                var width = cardElement[0][0].clientWidth;
+                var height = 1 * width;//width = 800,
 
                 var circleWidth = width/100;
+                var fontSize = width/1000;
+
+                var circleWidthSelected = circleWidth + width/200;
+                var fontSizeSelected = width/800;
+
+                var skriblColor =  "#4A60B6"; // skribl-primary
+                var selectedNodeColor = "#EF5350"; //"#e51c23"; // skribl red
+                var centerNodeColor = "#EF5350"; 
+
+                //function used to color the nodes, e.g., different for the author whom's network is displayed
+                var setColor = function(i){
+                  if(i == 1)
+                    return centerNodeColor;
+                  else 
+                    return skriblColor;
+                };
+
 
                 var svg = d3.select(element[0]).append("svg")
                     .attr("class", "stage")
                     .attr("width", width)
                     .attr("height", height);
-
-
-                var skriblColor =  "#4A60B6"; // skribl-primary
-                var selectedNodeColor = "#e51c23"; // skribl red
 
 
                 var force = d3.layout.force()
@@ -64,17 +68,19 @@ webapp.directive('graphDirective', function () {
                     .append("g")
                     .attr("class", "node")
 
-                    .on("click", function(d) { showProfile(d) } )
+                    .on("click", function(d, i) { 
+                      if (i>0)
+                        showProfile(d);
+                    })
 
                     .on("mouseover", function(d,i) {
-                        console.log("noticed");
                         if (i>0) {
                           //CIRCLE
                           d3.select(this).selectAll("circle")
                           .transition()
                           .duration(250)
                           .style("cursor", "none")     
-                          .attr("r", circleWidth+3)
+                          .attr("r", circleWidthSelected)
                           .style("fill",selectedNodeColor);
 
                           //TEXT
@@ -82,9 +88,9 @@ webapp.directive('graphDirective', function () {
                           .transition() 
                           .duration(250)
                           .style("cursor", "none")     
-                          .attr("font-size","1.5em")
+                          .attr("font-size",fontSizeSelected + "em")
                           .style("fill",selectedNodeColor)
-                          .attr("x", 15 )
+                          .attr("x", circleWidthSelected )
                           .attr("y", 5 )
                         } else {
                           //CIRCLE
@@ -111,21 +117,25 @@ webapp.directive('graphDirective', function () {
                           d3.select(this).select("text")
                           .transition()
                           .duration(250)
-                          .attr("font-size",".8em")
+                          .attr("font-size",fontSize + "em")
                           .style("fill",skriblColor)
-                          .attr("x", 8 )
-                          .attr("y", 4 )
+                          .attr("x", circleWidth )
+                          .attr("y", 5 )
                         }
                       })
 
                       .call(force.drag);
 
-                      
-                //.on("mouseout",  function(d) { highlightGraphNode(d, false); });
+  
 
                 node.append("svg:circle")
                     .attr("r", circleWidth)
-                    .style("fill", skriblColor);
+                    .style("fill", function(d,i){
+                      if(i == 1)
+                        return centerNodeColor;
+                      else 
+                        return skriblColor;
+                    });
                     
                 node.append("text")
                     .text(function (d, i) {
@@ -136,15 +146,15 @@ webapp.directive('graphDirective', function () {
                     })
                     .attr("y", function (d, i) {
                         if (i > 0) {
-                            return circleWidth + 0
+                            return  5
                         } else {
-                            return 8
+                            return 5
                         }
                     })
                     .attr("font-family", "Roboto")
                     .style("fill", skriblColor)
                     .attr("font-size", function (d, i) {
-                        return ".8em";
+                        return fontSize + "em";
                     })
                     .attr("text-anchor", function (d, i) {
                         if (i > 0) {
@@ -158,49 +168,6 @@ webapp.directive('graphDirective', function () {
                     .nodes(scope.graphData.authors)
                     .links(scope.graphData.coAuthors)
                     .start();
-
-
-
-                /*var nodeAttributes = node
-                    .attr("class", "node")
-                    .attr("r", circleWidth)
-                    .style("fill", skriblColor)
-                    .call(force.drag);
-
-                var text = svg.append("g").selectAll(".text")
-                    .data(scope.graphData.authors)
-                    .enter()
-                    .append("text");
-
-                var textLabels = text
-                    .text(function (d, i) {
-                        return d.firstName + " " + d.lastName;
-                    })
-                    .attr("x", function (d, i) {
-                        return circleWidth + 5;
-                    })
-                    .attr("y", function (d, i) {
-                        if (i > 0) {
-                            return circleWidth + 0
-                        } else {
-                            return 8
-                        }
-                    })
-                    .attr("font-family", "Roboto")
-                    .attr("fill", function (d, i) {
-                        return skriblColor;
-                    })
-                    .attr("font-size", function (d, i) {
-                        return ".6em";
-                    })
-                    .attr("text-anchor", function (d, i) {
-                        if (i > 0) {
-                            return "beginning";
-                        } else {
-                            return "end"
-                        }
-                    });*/
-
 
                 force.on("tick", function () {
                     link.attr("x1", function (d) {
@@ -216,19 +183,7 @@ webapp.directive('graphDirective', function () {
                             return d.target.y;
                         });
 
-                    /*node.attr("cx", function (d) {
-                        return d.x;
-                    })
-                        .attr("cy", function (d) {
-                            return d.y;
-                        });
-
-                    text.attr("x", function (d, i) {
-                        return d.x + circleWidth + 5;
-                    })
-                        .attr("y", function (d, i) {
-                            return d.y + circleWidth;
-                        });*/
+          
                      node.attr("transform", function(d, i) {     
                             return "translate(" + d.x + "," + d.y + ")"; 
                         });

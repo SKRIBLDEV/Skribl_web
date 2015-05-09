@@ -30,7 +30,9 @@
         <div class="row center" ng-show="graphDataLoading">
              <spinner ></spinner>
         </div>
-        <graph-directive></graph-directive>
+        <div class="networkCard"> <!-- custom class is needed to select this element with D3 in order to adjust the size of the svg to the card width-->
+            <graph-directive></graph-directive>
+        </div>
     </div>
 
 
