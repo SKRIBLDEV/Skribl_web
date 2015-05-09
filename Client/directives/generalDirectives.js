@@ -13,33 +13,3 @@ webapp.directive('onEnter', function () {
     }
 });
 
-
-webapp.directive('appendableListing', function () {
-      
-    var localCtrl = ['$scope', function ($scope) {
-
-          function init() {
-              $scope.appended = [];
-          }
-
-          init();
-
-          $scope.addItem = function () {
-              //$scope.add();
-
-              //Add new input field to directive scope
-              $scope.appended.push("");
-          };
-      }];
-        
-      return {
-          restrict: 'EA', //use as element or attribute 
-          scope: {
-              datasource: '=',
-              newPlaceholder: '='
-          },
-          controller: localCtrl,
-          //template: template
-          templateUrl : 'templates/appendableListing.html'
-      };
-  });

@@ -18,14 +18,14 @@
             <!--- advanced search -->
             <div class="animated fadeInDown" ng-show="!basicSearchView">
                 <a class="mdi-navigation-chevron-left" ng-click="switchToBasicSearch()">basic search?  </a>
+                 &nbsp
                 <input placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title >
                 <input placeholder="year" class="text-field" type="number" ng-model=advancedQuery.year >
                 <input placeholder="journal" class="text-field" type="text" ng-model=advancedQuery.journal>
                 <input placeholder="book title" class="text-field" type="text" ng-model=advancedQuery.booktitle>
-                &nbsp
-                <div appendable-listing datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
                 <div appendable-listing datasource="advancedQuery.keywords" new-placeholder="arrayPlaceholders[1]"></div>
                 <div appendable-listing datasource="advancedQuery.researchDomains" new-placeholder="arrayPlaceholders[2]"></div>
+                 <div appendable-listing-author datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
                  &nbsp  
                 <a class="btn" ng-click="advancedSearch()"> Search</a>
 
