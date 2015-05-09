@@ -378,7 +378,7 @@ function Publication(db) {
 		 * @param {callBack} callBack 
 		 */
 		function AuthorQuery(criteria, callBack) {
-			if(criteria.authors === undefined) {
+			if(!criteria.authors || !criteria.authors.length) {
 				callBack(null, true);
 			}
 			else {
@@ -400,7 +400,7 @@ function Publication(db) {
 		 * @param {callBack} callBack 
 		 */
 		function keywordQuery(criteria, callBack) {
-			if(criteria.keywords === undefined) {
+			if(!criteria.keywords || !criteria.keywords.length) {
 				callBack(null, true);
 			}
 			else {
@@ -429,7 +429,7 @@ function Publication(db) {
 		 * @param {callBack} callBack 
 		 */
 		function researchDomainQuery(criteria, callBack) {
-			if(criteria.researchDomains === undefined) {
+			if(!criteria.researchDomains || !criteria.researchDomains.length) {
 				callBack(null, true);
 			}
 			else {
