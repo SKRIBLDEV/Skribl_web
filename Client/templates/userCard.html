@@ -4,26 +4,7 @@
 			<span class="card-title grey-text text-darken-4">
 				<i class="mdi-action-account-circle">&nbsp{{ appData.currentUser.firstName }} {{ appData.currentUser.lastName }}</i>
 			</span>
-			<!-- start basic card -->
-			<!--<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleBasic()">
-						<a> Basic </a>
-						<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showBasic">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
-							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
-						</div>
-						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleBasic()"></i>
-						</div>
-					</div>
-				</span>
-			</div>-->
-			<!-- stop basic card -->
+			
 
 			<!-- start library card -->
 
@@ -96,58 +77,7 @@
 
 
 
-			<!--&lt;!&ndash; start dataviz card &ndash;&gt;
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleDataviz()">
-						<a> Dataviz </a>
-						<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showDataviz">
-
-					&lt;!&ndash;- [H] this part has its own controller to load the graph data from the server&ndash;&gt;
-					&lt;!&ndash;- [H] we could keep a local model of this data in a service/factory to increase performance-&ndash;&gt;
-					<div class="animated fadeInDown col s12" ng-controller='GraphCtrl'>
-
-						<spinner ng-show="!graphDataReady"></spinner>
-						<author-graph-directive ng-show="graphDataReady"></author-graph-directive>
-
-						&lt;!&ndash;<div class="section">
-							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque.
-						</div>
-						&lt;!&ndash; datavisualisations &ndash;&gt;
-						<div class="progress">
-							<div class="determinate" style="width: 0%">
-							</div>
-						</div>
-						<div class="section">
-							<cjs-bar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-bar>
-						</div>
-						<div class="progress">
-							<div class="determinate" style="width: 0%">
-							</div>
-						</div>
-						<div class="section">
-							<cjs-line dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-line>
-						</div>
-						<div class="progress">
-							<div class="determinate" style="width: 0%">
-							</div>
-						</div>
-						<div class="section">
-							<cjs-radar dataset="chartService.someData" options="chartService.someOptions" segement-stroke-width="5"></cjs-radar>
-						</div>
-						<br><br>&ndash;&gt;
-						<div class="col s12">
-							<div class="center">
-								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleDataviz()"></i>
-							</div>
-						</div>
-					</div>
-				</span>
-			</div>-->
-			<!-- stop dataviz card -->
+			
 			<!-- start Settings card -->
 			<div class="card">
 				<div class="card-content">
@@ -169,12 +99,7 @@
 					<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="deleteUser()">
 						<h5 class="center-align" style="color:white">Delete user</h5>
 					</div>
-					<!--	<div class="col s12">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vehicula tincidunt malesuada. Nulla placerat nulla ac leo faucibus placerat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum scelerisque sollicitudin mauris ut consectetur. Vivamus a facilisis augue. Integer bibendum tellus diam, eu ullamcorper risus rhoncus a. Vestibulum suscipit urna ipsum, sit amet venenatis odio placerat ac. Cras aliquet sapien sed elit condimentum viverra. Phasellus vitae arcu elementum neque sagittis sagittis.
-							In ante ipsum, faucibus sed fermentum vel, tempus ut turpis. Aliquam tempor hendrerit orci, at rhoncus risus finibus vestibulum. Sed elit purus, maximus id sapien et, tempor fringilla velit. Donec sit amet ullamcorper ligula. Cras scelerisque rhoncus nunc non volutpat. In in congue lectus. Nam at imperdiet eros. Proin lobortis felis eget ex auctor cursus. Sed at interdum eros. Nulla fringilla, odio at sagittis volutpat, neque sem mollis neque, id condimentum est quam viverra neque. In erat tortor, imperdiet ut orci sit amet, maximus vulputate erat.
-							Phasellus fermentum rutrum purus vitae facilisis. Suspendisse malesuada lacinia maximus. Maecenas odio dolor, dignissim tincidunt ultrices quis, vestibulum vitae magna. Mauris suscipit, enim vel euismod sodales, ipsum nulla pulvinar nisi, bibendum ornare purus dolor non arcu. Ut at mi vel libero vehicula congue ut vitae mauris. Pellentesque sed dapibus nisl. Maecenas ut tristique enim. Aenean eu urna aliquet, rhoncus nunc sed, mattis ligula. Maecenas dignissim, massa sit amet bibendum aliquet, tortor quam convallis orci, at vulputate nisl justo vitae neque. Fusce volutpat metus id aliquet vehicula. Integer lacinia pulvinar ex, sed luctus sem laoreet sit amet.
-							<br><br>
-						</div>-->
+					
 						<div class="row"></div>
 							<div class="center">
 								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSettings()"></i>
