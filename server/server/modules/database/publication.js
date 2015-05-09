@@ -65,6 +65,7 @@ function Publication(db) {
 				title: title,
 				data: data,
 				fileName: fileName,
+				viewCount: 0,
 				private: false
 			}).one()
 			.then(function(res) {
@@ -113,6 +114,7 @@ function Publication(db) {
 				title: title,
 				data: data,
 				fileName: fileName,
+				viewCount: 0,
 				private: false
 			}).one()
 			.then(function(res) {
@@ -146,16 +148,22 @@ function Publication(db) {
 	 * @return {Object}   a function is returned.
 	 */
 	this.loadPublication = function(id, path, clb) {
-		db.record.get(id)
-		.then(function(res) {
-			fs.writeFile(path, res.data, function (err) {
-  				if (err) {
-  					clb(new Error(err));
-  				}
-  				else {
-  					clb(null, res.fileName);
-  				}
+		db.query('update ' + id +' INCREMENT viewCount = 1 lock record')
+		.then(function(dummy) {
+			db.record.get(id)
+			.then(function(res) {
+				fs.writeFile(path, res.data, function (err) {
+  					if (err) {
+  						clb(new Error(err));
+  					}
+  					else {
+  						clb(null, res.fileName);
+  					}
+				});
+			}).error(function(er) {
+				clb(er);
 			});
+
 		}).error(function(er) {
 			clb(er);
 		});
@@ -168,7 +176,7 @@ function Publication(db) {
 	 * @return {Object}     object with publication metadata.
 	 */
 	this.getPublication = function(id, clb) {
-		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation, lastUpdated').from(id).all()
+		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation, lastUpdated, viewCount').from(id).all()
 		.then(function(pubs) {
 			if(pubs.length) {
 				var res = pubs[0];

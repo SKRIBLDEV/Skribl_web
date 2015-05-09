@@ -22,6 +22,7 @@ var Affil = require('./affiliation.js');
 var RDomain = require('./researchdomain.js');
 var RID = require('./rid.js');
 var Publication = require('./publication.js');
+var Classifier = require('./classifier.js');
 var library = require('./library.js');
 var keyword = require('./keyword.js');
 var authors = require('./author.js');
@@ -58,6 +59,7 @@ function Database(serverConfig, dbConfig) {
 	var aff = new Affil.Affiliation(db);
 	var RD = new RDomain.ResearchDomain(db);
 	var PUB = new Publication.Publication(db);
+	var CLS = new Classifier.Classifier(db);
 	var Lib = new library.Library(db);
 	var Kw = new keyword.Keyword(db);
 	var AUT = new authors.Author(db);
@@ -86,6 +88,8 @@ function Database(serverConfig, dbConfig) {
 	this.addDefaults = Lib.addDefaults;
 	this.searchAuthor = AUT.searchAuthor;
 	this.getAuthorGraph = graph.getAuthorGraph;
+	this.saveClassifier = CLS.saveClassifier;
+	this.loadClassifier = CLS.loadClassifier;
 
 	/**
 	*Will give the subdivisions of a given division.
@@ -387,8 +391,3 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
-
-
-
-
-
