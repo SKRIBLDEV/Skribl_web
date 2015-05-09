@@ -30,6 +30,8 @@ webapp.directive('graphDirective', function () {
                  console.log("width of the parent: " + width);*/
 
 
+                 //----------visualisation 
+
                 var width = 600,
                     height = 1 * width;
 
@@ -62,8 +64,8 @@ webapp.directive('graphDirective', function () {
                 var node = svg.append("g").selectAll(".node")
                     .data(scope.graphData.authors)
                     .enter()
-                    .append("circle");
-                    //.on("click", function(d) { showProfile(d) } )
+                    .append("circle")
+                    .on("click", function(d) { showProfile(d) } )
                     //.on("mouseover", function(d) {console.log("noticed!")});
                 //.on("mouseout",  function(d) { highlightGraphNode(d, false); });
 
@@ -138,6 +140,12 @@ webapp.directive('graphDirective', function () {
                         });
 
                 });
+
+                //----------interactivity
+
+               var showProfile = function(element){
+                console.log(element);
+               }
 
 
             })

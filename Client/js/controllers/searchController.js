@@ -65,8 +65,6 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
        $scope.internalResults = undefined;
        $scope.searching = true;
 
-       //console.log($scope.advancedQuery);
-
 
         serverService.advancedSearch($scope.advancedQuery)
             .success(function(data) {
