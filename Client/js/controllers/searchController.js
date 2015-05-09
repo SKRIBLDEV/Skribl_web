@@ -59,40 +59,16 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
     resetAdvancedQuery();
 
-    // little ugly fix to bridge angular model vs. back-end demands
-    transformedForRequest = function(){
-
-        //copy
-        transQuery = {
-            title : $scope.advancedQuery.title,
-            authors : $scope.advancedQuery.authors,
-            keywords : $scope.advancedQuery.keywords,
-            researchDomains : $scope.advancedQuery.researchDomains,
-            year : $scope.advancedQuery.year,
-            journal : $scope.advancedQuery.journal,
-            booktitle :$scope.advancedQuery.booktitle
-        }
-
-        //set properties with empty arrays to undefined
-        if (transQuery.authors.length == 0)
-            transQuery.authors = undefined;
-        if (transQuery.keywords.length == 0)
-            transQuery.keywords = undefined;
-        if (transQuery.researchDomains.length == 0)
-            transQuery.researchDomains = undefined; 
-        return transQuery;
-    }
-
    $scope.advancedSearch = function(){
        metaService.resetMetadata();
        $scope.showExternalResults = false;
        $scope.internalResults = undefined;
        $scope.searching = true;
 
-       console.log(transformedForRequest);
+       //console.log($scope.advancedQuery);
 
 
-        serverService.advancedSearch(transformedForRequest())
+        serverService.advancedSearch($scope.advancedQuery)
             .success(function(data) {
                 $scope.searching = false;
                 if (data.length == 0 ) {

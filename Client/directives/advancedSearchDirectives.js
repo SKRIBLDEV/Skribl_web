@@ -1,4 +1,3 @@
-
 webapp.directive('appendableListing', function () {
       
     var localCtrl = ['$scope', function ($scope) {
