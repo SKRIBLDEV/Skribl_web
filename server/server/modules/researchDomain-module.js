@@ -1,4 +1,4 @@
-var RDL = require("./researchDomain-list.js");
+const RDL = require("./researchDomain-list.js");
 
 /* major = major research discipline (e.g., computer science, physics)
 *  minor = more specific research discipline (e.g., artificial intelligence)
