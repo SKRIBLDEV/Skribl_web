@@ -30,17 +30,19 @@ webapp.directive('graphDirective', function () {
                  console.log("width of the parent: " + width);*/
 
 
-                var width = 600,
+                var width = 800,
                     height = 1 * width;
 
                 var circleWidth = width/100;
 
                 var svg = d3.select(element[0]).append("svg")
+                    .attr("class", "stage")
                     .attr("width", width)
                     .attr("height", height);
 
 
                 var skriblColor =  "#4A60B6"; // skribl-primary
+                var selectedNodeColor = "#e51c23"; // skribl red
 
 
                 var force = d3.layout.force()
@@ -48,10 +50,6 @@ webapp.directive('graphDirective', function () {
                     .linkDistance(width/5)
                     .size([width, height]);
 
-                force
-                    .nodes(scope.graphData.authors)
-                    .links(scope.graphData.coAuthors)
-                    .start();
 
                 var link = svg.selectAll(".link")
                     .data(scope.graphData.coAuthors)
@@ -59,16 +57,111 @@ webapp.directive('graphDirective', function () {
                     .attr("class", "link")
                     .style("stroke-width", 1);
 
-                var node = svg.append("g").selectAll(".node")
+
+                var node = svg.selectAll("circle.node")
                     .data(scope.graphData.authors)
                     .enter()
-                    .append("circle");
-                    //.on("click", function(d) { showProfile(d) } )
-                    //.on("mouseover", function(d) {console.log("noticed!")});
+                    .append("g")
+                    .attr("class", "node")
+
+                    .on("click", function(d) { showProfile(d) } )
+
+                    .on("mouseover", function(d,i) {
+                        console.log("noticed");
+                        if (i>0) {
+                          //CIRCLE
+                          d3.select(this).selectAll("circle")
+                          .transition()
+                          .duration(250)
+                          .style("cursor", "none")     
+                          .attr("r", circleWidth+3)
+                          .style("fill",selectedNodeColor);
+
+                          //TEXT
+                          d3.select(this).select("text")
+                          .transition() 
+                          .duration(250)
+                          .style("cursor", "none")     
+                          .attr("font-size","1.5em")
+                          .style("fill",selectedNodeColor)
+                          .attr("x", 15 )
+                          .attr("y", 5 )
+                        } else {
+                          //CIRCLE
+                          d3.select(this).selectAll("circle")
+                          .style("cursor", "none")     
+
+                          //TEXT
+                          d3.select(this).select("text")
+                          .style("cursor", "none")     
+                        }
+                      })
+
+                      //MOUSEOUT
+                      .on("mouseout", function(d,i) {
+                        if (i>0) {
+                          //CIRCLE
+                          d3.select(this).selectAll("circle")
+                          .transition()
+                          .duration(250)
+                          .attr("r", circleWidth)
+                          .style("fill",skriblColor);
+
+                          //TEXT
+                          d3.select(this).select("text")
+                          .transition()
+                          .duration(250)
+                          .attr("font-size",".8em")
+                          .style("fill",skriblColor)
+                          .attr("x", 8 )
+                          .attr("y", 4 )
+                        }
+                      })
+
+                      .call(force.drag);
+
+                      
                 //.on("mouseout",  function(d) { highlightGraphNode(d, false); });
 
+                node.append("svg:circle")
+                    .attr("r", circleWidth)
+                    .style("fill", skriblColor);
+                    
+                node.append("text")
+                    .text(function (d, i) {
+                        return d.firstName + " " + d.lastName;
+                    })
+                    .attr("x", function (d, i) {
+                        return circleWidth + 5;
+                    })
+                    .attr("y", function (d, i) {
+                        if (i > 0) {
+                            return circleWidth + 0
+                        } else {
+                            return 8
+                        }
+                    })
+                    .attr("font-family", "Roboto")
+                    .style("fill", skriblColor)
+                    .attr("font-size", function (d, i) {
+                        return ".8em";
+                    })
+                    .attr("text-anchor", function (d, i) {
+                        if (i > 0) {
+                            return "beginning";
+                        } else {
+                            return "end"
+                        }
+                    });
 
-                var nodeAttributes = node
+                force
+                    .nodes(scope.graphData.authors)
+                    .links(scope.graphData.coAuthors)
+                    .start();
+
+
+
+                /*var nodeAttributes = node
                     .attr("class", "node")
                     .attr("r", circleWidth)
                     .style("fill", skriblColor)
@@ -106,7 +199,7 @@ webapp.directive('graphDirective', function () {
                         } else {
                             return "end"
                         }
-                    });
+                    });*/
 
 
                 force.on("tick", function () {
@@ -123,7 +216,7 @@ webapp.directive('graphDirective', function () {
                             return d.target.y;
                         });
 
-                    node.attr("cx", function (d) {
+                    /*node.attr("cx", function (d) {
                         return d.x;
                     })
                         .attr("cy", function (d) {
@@ -135,9 +228,16 @@ webapp.directive('graphDirective', function () {
                     })
                         .attr("y", function (d, i) {
                             return d.y + circleWidth;
+                        });*/
+                     node.attr("transform", function(d, i) {     
+                            return "translate(" + d.x + "," + d.y + ")"; 
                         });
 
                 });
+
+                var showProfile = function(element){
+                    console.log(element.lastName + ", id: " + element.id)
+                }
 
 
             })
