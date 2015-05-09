@@ -1,6 +1,6 @@
 
 
-webapp.directive('graphDirective', function () {
+webapp.directive('graphDirective', function (appData) {
     return {
         restrict: 'E',
         replace: true,
@@ -22,7 +22,7 @@ webapp.directive('graphDirective', function () {
 
                 var cardElement = d3.select('.networkCard');
                 var width = cardElement[0][0].clientWidth;
-                var height = 1 * width;//width = 800,
+                var height = 0.8 * width;//width = 800,
 
                 var circleWidth = width/100;
                 var fontSize = width/1000;
@@ -32,16 +32,7 @@ webapp.directive('graphDirective', function () {
 
                 var skriblColor =  "#4A60B6"; // skribl-primary
                 var selectedNodeColor = "#EF5350"; //"#e51c23"; // skribl red
-                var centerNodeColor = "#EF5350"; 
-
-                //function used to color the nodes, e.g., different for the author whom's network is displayed
-                var setColor = function(i){
-                  if(i == 1)
-                    return centerNodeColor;
-                  else 
-                    return skriblColor;
-                };
-
+                var centerNodeColor = "#EF5350";
 
                 var svg = d3.select(element[0]).append("svg")
                     .attr("class", "stage")
@@ -111,7 +102,12 @@ webapp.directive('graphDirective', function () {
                           .transition()
                           .duration(250)
                           .attr("r", circleWidth)
-                          .style("fill",skriblColor);
+                          .style("fill",function(d,i){
+                              if(d.index == 1)
+                                return centerNodeColor;
+                              else 
+                                return skriblColor;
+                          });
 
                           //TEXT
                           d3.select(this).select("text")
@@ -184,6 +180,9 @@ webapp.directive('graphDirective', function () {
 
                 var showProfile = function(element){
                     console.log(element.lastName + ", id: " + element.id)
+                    appData.data.currentProfileData.name = element.lastName;
+                    console.log(appData.data.currentProfileData);
+                    console.log(scope.data.currentProfileData.name)
                 }
 
 

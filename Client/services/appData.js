@@ -19,7 +19,8 @@
         searchAuthorsResult: null,
         addLibName: null,
         searchTerm: null,
-        searchTerm2: null
+        searchTerm2: null, 
+        currentProfileData : {}
     };
     this.uploadData = {
         file: null,
@@ -27,6 +28,8 @@
         type: "",
         currentPublicationID: null
     };
+
+   
 
     this.deleteCurrentFile = function(){self.data.currentFile = null;};
 

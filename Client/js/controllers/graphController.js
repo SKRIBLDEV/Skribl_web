@@ -3,7 +3,6 @@
  */
 
 
-
 webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
 
 
@@ -25,6 +24,7 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
     };
 
     this.getGraphData();
+
 
 
 });
