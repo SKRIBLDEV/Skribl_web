@@ -1,4 +1,6 @@
-var Oriento = require('oriento');
+const Oriento = require('oriento');
+
+//XXX: moeten exports niet na de functiedefinitie komen? raar dat dit werkt
 
 	/**
 	 * returns the record id of an object as a string.
@@ -51,6 +53,10 @@ var Oriento = require('oriento');
 	exports.getRids = function(array) {
 		var resArray = [];
 		var counter = 0;
+		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		//XXX: of nog beter, een map
+		//XXX: zoniet, zet length in een variabele len
+		//XXX: en doe new Array(len) en resArray[i] = ... instead
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(getRid(array[i]));
 			counter++
@@ -68,6 +74,10 @@ var Oriento = require('oriento');
 	exports.transformRids = function(array) {
 		var resArray = [];
 		var counter = 0;
+		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		//XXX: of nog beter, een map
+		//XXX: zoniet, zet length in een variabele len
+		//XXX: en doe new Array(len) en resArray[i] = ... instead
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(transformRid(array[i]));
 			counter++
@@ -85,6 +95,10 @@ var Oriento = require('oriento');
 	exports.getFieldRids = function(array) {
 		var resArray = [];
 		var counter = 0;
+		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		//XXX: of nog beter, een map
+		//XXX: zoniet, zet length in een variabele len
+		//XXX: en doe new Array(len) en resArray[i] = ... instead
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(transformRid(array[i].rid));
 			counter++
@@ -102,6 +116,10 @@ var Oriento = require('oriento');
 	exports.getORids = function(array) {
 		var resArray = [];
 		var counter = 0;
+		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		//XXX: of nog beter, een map
+		//XXX: zoniet, zet length in een variabele len
+		//XXX: en doe new Array(len) en resArray[i] = ... instead
 		for (var i = 0; i < array.length; i++) {
 			resArray.push(getORid(array[i]));
 			counter++

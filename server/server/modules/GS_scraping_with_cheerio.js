@@ -3,10 +3,8 @@
 * @author Hannah
 */
 
-
-var request = require('request');
-var cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
-
+const request = require('request');
+const cheerio = require('cheerio'); //for constructing a DOM from retrieved HTML web page, and to use some kind of server side jQuery
 
 //parses the google scholar result subtitle, e.g., 
 //journal: 'P Tassin, L Zhang, R Zhao, A Jain, T Koschny… - Physical review  …, 2012 - APS' 
@@ -28,14 +26,17 @@ var parseSubTitle = function(subtitle){
     for(var i = 0; i < authorsStrings.length; ++i) {
       var nameArray = authorsStrings[i].replace(/(^\s)/, '').split(" "); //remove first whitespace and then split on whitespace
       if (nameArray.length >= 2){
+        //XXX: hier kan je al meteen nameArray[index] gebruiken, vermits length >= 2
+        //vertrek in de loop daarna van index 2
         var lastName = "";
          for (var index = 1; index < nameArray.length; index++) { //collect all parts of the last name
           lastName = lastName + nameArray[index] + " ";
          }
-        var author ={ //To Do: multiple initials?
-          firstName : nameArray[0].trim(),
-          lastName : lastName.trim()
+        var author = { //To Do: multiple initials?
+          firstName: nameArray[0].trim(),
+          lastName: lastName.trim()
         }
+        //XXX: gebruik push hiervoor
         authors[authors.length] = author;
       };
     }
@@ -62,6 +63,7 @@ var scrapeOneResult = function(result, type){
 //when searching on an name of someone who has a Google Scholar account, the first result is related to that account 
 //and should therefore be skipped
 var isProfileResult = function(result){ 
+  //XXX: haal deze constante buiten de functie met declaratie 'const' ipv 'var'
   var regex = /.*User profiles.*/i;
   return result.find( ".gs_rt" ).text().match(regex);//(results.eq(0).find( ".gs_rt" ).text().match(regex));
 };
@@ -69,6 +71,8 @@ var isProfileResult = function(result){
 //********* scrape Functions (to pass to scrapeGoogleScholar function)
 
 var scrapeFirstResult = function($){ //$ represents the DOM created from the received html
+  //XXX: vermijd duplicatie met een statement genre 'return scrapeOneResult($('.gs_r').eq(<condition>? 1:0)'
+  //XXX: waarbij je <condition> best eerst in een variabele plaatst
   if (isProfileResult($(".gs_r").eq(0)))
     return(scrapeOneResult($(".gs_r").eq(1))); //skip profile result
   else 
@@ -80,6 +84,7 @@ var scrapeAllResults = function($){ //$ represents the DOM created from the rece
   $(".gs_r").each(function(){ //for each of the google scholar search results on the page
     if (!isProfileResult($(this))){
       try{
+        //XXX: opnieuw, gebruik hier push...
         result[result.length] = scrapeOneResult($(this));
       }
       catch(error){}; //continue for-each loop
@@ -92,8 +97,10 @@ var scrapeAllResults = function($){ //$ represents the DOM created from the rece
 
 //create the URL to the webpage resulting from a basic google scholar query
 var createGoogleScholarURL = function(searchTerms){
+  //XXX: haal deze constanten buiten deze functie, en declareer ze met 'const' ipv 'var'
   var prefix = "https://scholar.google.com/scholar?q="; 
   var postfix = "&btnG=&hl=en&as_sdt=0%2C5";
+  //XXX: zoals je zelf in je comments vermeldt: split+join == replace, maar dan zonder extra array :)
   var transformedTerms = searchTerms.split(" ").join("+"); //replace all spaces with "+" for use in URL
   var url = prefix.concat(transformedTerms, postfix);
   return url;
@@ -109,6 +116,7 @@ var createGoogleScholarURL = function(searchTerms){
 var scrapeGoogleScholar = function(searchTerms, scrapeFunc, clb) {
   var url = createGoogleScholarURL(searchTerms);
   request({ encoding: 'binary', method: "GET", uri: url}, function(err, resp, body) { //http request 
+    //XXX: gebruik === ipv ==
   	if (!err && resp.statusCode == 200) { //request succeeded
       try {
         $ = cheerio.load(body); //create traversable DOM from retrieved html

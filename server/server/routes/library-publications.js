@@ -1,11 +1,14 @@
 /* IMPORTS */
 
+const recommender = require('../modules/recommender.js');
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
 
 
 /* --- ADD TO USER LIBRARY --- */
+
+const __FAV_LIB__ = 'Favorites';
 
 /**
   * Add a publication to a user's library
@@ -19,14 +22,23 @@ function addToLibrary(req, res, context) {
   var usr = req.params['username'];
   var lib = req.params['libname'];
   var pubId = req.params['id'];
+  var database = context.db;
   
   //add to library
-  context.db.addToLibrary(usr, lib, pubId, function(err) {
+  database.addToLibrary(usr, lib, pubId, function(err) {
     if(err)
       serverError(res, err.toString());
-    else
+    else {
       res.status(200).end();
+      //try to train classifier as well
+      if (lib === __FAV_LIB__)
+        database.getPublication(pubId, function(err, pub) {
+          if(!err) //don't bother with errors
+            recommender.rate(usr, pub, true, nop);
+      });
+    }
   });
+
 }
 
 /**

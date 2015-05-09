@@ -5,7 +5,7 @@
 */
 
 
-var RD = require("./researchDomain-module.js");
+const RD = require("./researchDomain-module.js");
 
 
 //********* definition of regular expressions
@@ -14,17 +14,17 @@ var RD = require("./researchDomain-module.js");
 //all regex imply that the matched string should not be empty (=solely whitespace characters) and should not contain leading or trailing whitespaces
 
 // only letters, numbers and underscores
-var RegEx_username = /^\w+$/; 
+const RegEx_username = /^\w+$/; 
 
 // common email 
-var RegEx_emailAdress = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const RegEx_emailAdress = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //at least one number, at least 6 and at most 20 characters from the set [a-zA-Z0-9!@#$%^&*]
-var RegEx_password = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/; 
+const RegEx_password = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,20}$/; 
 
 //one or more words in all languages, with apostrophes and hyphens 
 //excludes numbers and all the special (non-letter) characters commonly found on keyboards
-var RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
+const RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
 
 
 

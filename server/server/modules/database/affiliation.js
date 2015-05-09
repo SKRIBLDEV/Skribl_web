@@ -1,6 +1,27 @@
 
-var RID = require('./rid.js');
+const RID = require('./rid.js');
 function Affiliation(db) {
+
+	/* XXX: algemene opmerking voor al je modules:
+		voeg in elke modules meteen je functiedefinities toe
+		aan het db-object ipv aan 'this'. Dan moet je in 
+		de main file van de database ook niet meer
+		al die definities manueel toevoegen
+		dus bvb:
+			db.getAffiliation = function(...) ...
+			...
+				en later dan
+			Affliliation(db);
+		ipv:
+			this.getAffiliation = ...
+			...
+				gevolgd door
+			var tmp = new Affiliation(db);
+			db.getAffiliation = tmp.getAffiliation
+			...
+		wat een vorm van duplicatie vermijdt
+	*/
+
 	/**
 	 * adds a new researchgroup
 	 * @private
@@ -115,6 +136,7 @@ function Affiliation(db) {
 					});
 					checkFaculty(RID.getRid(institutions[0]));
 				}
+			//XXX: kan je hier niet rechtsreeks mijn callback meegeven?
 			}).error(function(er) {
 				callback(er);
 			});
@@ -144,9 +166,11 @@ function Affiliation(db) {
 						});
 						checkDepartment(RID.getRid(faculties[0]));
 					}
+				//XXX: zie zelfde opmerking error-callback
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: idem...
 			}).error(function(er) {
 				callback(er);
 			});
@@ -176,9 +200,11 @@ function Affiliation(db) {
 						});
 						checkResearchGroup(RID.getRid(departments[0]));
 					}
+				//XXX: idem
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: idem
 			}).error(function(er) {
 				callback(er);
 			});
@@ -210,9 +236,11 @@ function Affiliation(db) {
 
 						callback(null, true);
 					}
+				//XXX: idem
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: idem
 			}).error(function(er) {
 				callback(er);
 			});
@@ -241,18 +269,23 @@ function Affiliation(db) {
 					.then(function(res) {
 						user.institution = res[0].Name;
 						callback(null, user);
+					//XXX: idem
 					}).error(function(er) {
 						callback(er);
 					});
+				//XXX: idem
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: idem
 			}).error(function(er) {
 				callback(er);
 			});
+		//XXX: idem
 		}).error(function(er) {
 			callback(er);
 		});
+	//XXX: idem
 	};
 }
 

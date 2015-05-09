@@ -1,7 +1,7 @@
 
 
 //currently with static scraping
-var GS_scraping = require('./GS_scraping_with_cheerio.js');
+const GS_scraping = require('./GS_scraping_with_cheerio.js');
 
 
 /**
@@ -21,10 +21,12 @@ function setUndefinedProperties(metadataGUI, metadataGS){
 */
 
 function setToType(type, metadataGS){
+  //XXX: gebruik === ipv ==
   if (type == "journal"){
     metadataGS.journal = metadataGS.journalOrBookTitle;
     metadataGS.publisher = metadataGS.publisherOrOrganisation;
   };
+  //XXX: idem
   if (type == "proceeding"){
     metadataGS.booktitle = metadataGS.journalOrBookTitle;
     metadataGS.organisation = metadataGS.publisherOrOrganisation;
@@ -95,6 +97,7 @@ function search(searchTerms, limit, clb){
       }
       for(var i = 0; i < res.length; i++){
         if(! pdfUrl(res[i].url)){
+          //XXX: delete is misschien consistenter?
           res[i].url = undefined;
         }
         makeGeneric(res[i]);

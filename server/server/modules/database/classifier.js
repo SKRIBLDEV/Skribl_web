@@ -1,6 +1,7 @@
+//XXX: vermeld bron indien van toepassing, eerste deel lijkt mij niet door jezelf geschreven ;)
+//XXX: plaats het eventueel ook in een andere module
 
-
-var Base64 = {
+const Base64 = {
 
 // private property
 _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -139,7 +140,16 @@ _utf8_decode : function (utftext) {
 
 function Classifier(db) {
 
+    //XXX: zelfde opmerking over module als in affiliation.js
+
 	function stringToBytes(str, clb) {
+        //XXX: enkele opmerkingen:
+        /* 1) je kent de length al, dus gebruik new Array(len);
+           2) en doe dan array[i] = ...
+           3) gebruik dan ook len als conditie in de for-lus ipv array.length telkens op te vragen
+           4) gebruik GEEN ctr, dit is een traditionele for-lus (roep na de for de callback op)
+           5) (zie opmerking hierboven, ctr loopt parallel met i)
+        */
 		var arr=[];
 		var ctr = 0;
 		for(var i=0; i<str.length; i++) {
@@ -151,6 +161,12 @@ function Classifier(db) {
 	}
 
 	function bytesToString(arr, clb) {
+        //XXX: enkele opmerkingen
+        /* 1) zet len in een variabele (voor conditie in for lus)
+           3) gebruik 'res += ...' ipv 'res = res + ...''
+           4) gebruik GEEN ctr, dit is een traditionele for-lus (roep na de for de callback op)
+           5) (zie opmerking hierboven, ctr loopt parallel met i)
+        */
 		var res = '';
 		var ctr = 0;
 		for(var i=0; i<arr.length; i++) {
@@ -170,6 +186,7 @@ function Classifier(db) {
 			.then(function(dummy) {
 
 			}).error(function(er) {
+                //XXX: geef console.log's in de code!!!
 				console.log('database error: ' + er);
 			});
 	}
@@ -178,6 +195,7 @@ function Classifier(db) {
 		db.select().from('Classifier').where({user: usr}).all()
 		.then(function(cls) {
 			clb(null, cls[0].data.toString());
+        //XXX: geef direct callback mee
 		}).error(function(er) {
 			clb(er);
 		});

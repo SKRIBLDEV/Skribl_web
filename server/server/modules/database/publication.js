@@ -1,4 +1,5 @@
 
+//XXX: gebruik 'const' ipv 'var'
 
 var RID = require('./rid.js');
 var fs = require('fs');
@@ -17,7 +18,10 @@ var Oriento = require('oriento');
  */
 function Publication(db) {
 
-	var AUT = new Author.Author(db);
+	//XXX: zie opmerking modules
+
+	//XXX: const zou hier ook moeten werken...
+	var AUT = new Author.Author(db); //XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
 	var RD = new researchDomain.ResearchDomain(db);
 	var Kw = new keyword.Keyword(db);
 	var self = this;
@@ -80,9 +84,11 @@ function Publication(db) {
 				.commit().return('$publication').all()
 				.then(function(pub) {
 					callback(null, RID.getRid(pub[0]));
+				//XXX: geef callback meteen mee
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: geef callback meteen mee
 			}).error(function(er) {
 				callback(er);
 			});
@@ -129,9 +135,11 @@ function Publication(db) {
 				.commit().return('$publication').all()
 				.then(function(pub) {
 					callback(null, RID.getRid(pub[0]));
+				//XXX: you know the drill
 				}).error(function(er) {
 					callback(er);
 				});
+			//XXX: idem
 			}).error(function(er) {
 				callback(er);
 			});
@@ -160,10 +168,11 @@ function Publication(db) {
   						clb(null, res.fileName);
   					}
 				});
+			//XXX: idem
 			}).error(function(er) {
 				clb(er);
 			});
-
+		//XXX: idem
 		}).error(function(er) {
 			clb(er);
 		});
@@ -204,6 +213,7 @@ function Publication(db) {
 			else {
 				clb(new Error('Publication not found'));
 			}
+		//XXX: idem
 		}).error(function(er) {
 			clb(er);
 		});
@@ -219,6 +229,7 @@ function Publication(db) {
 		db.delete('vertex').where('@rid = \'' + id + '\'').one()
 		.then(function(nr) {
 			callback(null, true);
+		//XXX: idem
 		}).error(function(er) {
 			callback(er);
 		});
@@ -242,6 +253,7 @@ function Publication(db) {
 					
 					clb(new Error('library not found, error in function: uploadedBy in database->publication.js'));
 				}
+			//XXX: idem
 			}).error(function(er) {
 				clb(er);
 			});
@@ -251,6 +263,7 @@ function Publication(db) {
 	 * adds additional functionality to array, removes any duplicates from array
 	 * @return {void} 
 	 */
+	 //XXX: vermeld bron!
 	Array.prototype.unique = function() {
     	var a = this.concat();
     	for(var i=0; i<a.length; ++i) {
@@ -285,6 +298,7 @@ function Publication(db) {
 				AUT.getAuthorObjects(res[0].authors, function(error, dummy) {
 					clb2(null, res[0]);
 				});
+			//XXX: geef callback direct mee
 			}).error(function(er) {
 				clb(er);
 			});
@@ -299,9 +313,13 @@ function Publication(db) {
 		function prepResults(array, callB) {
 			if(array.length) {
 				var ctr = 0;
+				//XXX: hergebruik length in een variabele
 				for (var i = 0; i < array.length; i++) {
 					getInfo(array[i], function(error, res) {
 						array[ctr] = {id: array[ctr], title: res.title, type: res.class.toLowerCase(), authors: res.authors};
+						//XXX: gebruik ++ctr ipv {ctr++, ctr}
+						//XXX: gebruik === ipv ==
+						//XXX: gebruik length variabele
 						ctr++
 						if(ctr == array.length) {
 							callB(null, array);
@@ -318,6 +336,8 @@ function Publication(db) {
 		var nrOfQueries = 4;
 		var query = '';
 		function counter() {
+			//XXX: gebruik ++ctr
+			//XXX: gebruik === ipv ==
 			ctr++;
 			if(ctr == nrOfQueries) {
 				prepResults(result.sort(RID.compareRid), function(error, res) {
@@ -333,6 +353,7 @@ function Publication(db) {
 				result = result.concat(RID.getFieldRids(res)).unique();
 			}
 			counter();
+		//XXX: gebruik callback direct
 		}).error(function(er) {
 			clb(er);
 		});
@@ -343,6 +364,7 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		//XXX: gebruik callback direct
 		}).error(function(er) {
 			clb(er);
 		});
@@ -353,6 +375,7 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		//xXX: gebruik callback direct
 		}).error(function(er) {
 			clb(er);
 		});
@@ -363,6 +386,7 @@ function Publication(db) {
 			result = result.concat(RID.getRids(res)).unique();
 		}
 		counter();
+		//XXX: gebruik callback direct
 		}).error(function(er) {
 			clb(er);
 		});
@@ -500,6 +524,7 @@ function Publication(db) {
 			}
 			tempQuery = tempQuery + ' and private = false';
 			//tempquery never empty, remove?
+			//XXX: gebruik === ipv ==
 			if(tempQuery == '') {
 				//console.log(query);
 				db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (' + query + ') limit ' + limit).all()
@@ -508,6 +533,7 @@ function Publication(db) {
 				});
 			}
 			else {
+				//XXX: gebruik === ipv ==
 				if(query == '') {
 					db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from Publication where ' + tempQuery.slice(5) + ' limit ' + limit).all()
 					.then(function(res) {
@@ -532,8 +558,10 @@ function Publication(db) {
 			keywordQuery(criteria, function(error, res) {
 				researchDomainQuery(criteria, function(error, res) {
 					pubDataQuery(criteria, function(error, res) {
+						//XXX: gebruik length variabele
 						if(res.length) {
 							var ctr = 0;
+							//XXX: zet length in variabele
 							for (var i = 0; i < res.length; i++) {
 								delete res[i]['@rid'];
 								delete res[i]['@type'];
@@ -546,6 +574,9 @@ function Publication(db) {
 									if(error) {
 										clb(error);
 									}
+									//XXX: gebruik ++ctr
+									//XXX: gerbuik ===
+									//XXX: gebruik length variabele
 									ctr++;
 									if(ctr == res.length) {
 										clb(null, res);
@@ -575,6 +606,7 @@ function Publication(db) {
 			if(res) {
 				if(res['@class'].toLowerCase() == metObject.type) {
 					var trx;
+					//XXX: gebruik === ipv ==
 					if(metObject.type == 'journal') {
 						var trx = db.let('publication1', function(s) {
 							s.update(id)
@@ -634,6 +666,7 @@ function Publication(db) {
 												trx.commit().return('$publication').all()
 												.then(function(res) {
 													clb(null, true);
+												//XXX: callback direct
 												}).error(function(er) {
 													clb(er);
 												});	
@@ -653,6 +686,7 @@ function Publication(db) {
 			else {
 				clb(new Error('publication with id: ' + id + ' does not exist'));
 			}
+		//XXX: callback direct
 		}).error(function(er) {
 			clb(er);
 		});
@@ -667,8 +701,10 @@ function Publication(db) {
 	this.authorPublications = function(authId, clb) {
 		db.query('select expand(out(\'AuthorOf\').include(\'title\', \'@rid\', \'lastUpdated\')) from ' + authId).all()
 		.then(function(pubs) {
+			//XXX: zet length in variabele
 			if(pubs.length) {
 				var ctr = 0;
+				//XXX: hergebruik length variabele
 				for (var i = 0; i < pubs.length; i++) {
 					AUT.getPubAuthors(RID.getRid(pubs[i]), function(error, res) {
 						if(error) {
@@ -680,6 +716,8 @@ function Publication(db) {
 						delete pubs[ctr]['@class'];
 						pubs[ctr].authors = res;
 						delete pubs[ctr]['@type'];
+						//XXX: gebruik === ipv ==
+						//XXX: gebruik length variabele
 						if(++ctr == pubs.length) {
 							clb(null, pubs)
 						}
@@ -689,6 +727,7 @@ function Publication(db) {
 			else {
 				clb(null, []);
 			}
+		//XXX: idem
 		}).error(function(er) {
 			clb(er);
 		});

@@ -4,12 +4,12 @@
 * 
 */
 
-var VAL = require("./validation.js");
-var bcrypt = require('bcrypt');
-var strength = 10; //hash strength
+const VAL = require("./validation.js");
+const bcrypt = require('bcrypt');
+const strength = 10; //hash strength
 
 //array with properties for which the values should conform to generalName-RegEx
-var generalNames = ['firstName', 'lastName', 'researchGroup', 'department', 'faculty', 'institution'];
+const generalNames = ['firstName', 'lastName', 'researchGroup', 'department', 'faculty', 'institution'];
 
 /** 
 * Constructor for creating UserRecords, with public getters for account information, and a method to check credentials. UserRecords are returned from the database.
@@ -54,6 +54,8 @@ function UserRecord(info) {
 * @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
 */
 
+//XXX: eigenaardige manier van functiedeclaratie, kleine stijlbreuk...
+//XXX: doe liever function createUser(info, clb) {} voor leesbaarheid
 createUser = function(info, clb) {
 
 	function validate(info, clb) {
@@ -67,6 +69,8 @@ createUser = function(info, clb) {
 		var e = []; //array for specific error information, passed as the result to the clb if validation does not succeed
 
 		//check all 'general names'
+		//XXX: dit is een algemene opmerking: zet length liefst eerst in een variabele
+		//ipv het elke keer uit de array op te vragen (kleine optimalisatie)
 		for (var i = 0; i < generalNames.length; i++) {
 			if (! VAL.isGeneralName( info[generalNames[i]] ))
 				e.push('input ' + generalNames[i] + ' is not a valid name');
@@ -84,11 +88,14 @@ createUser = function(info, clb) {
 
 
 		//check array of researchDomains
+		//XXX: gebruik !== ipv !(... === ...)
 		if ( !info.researchDomains || !info.researchDomains.constructor === Array)
 			e.push('input ' + 'research domain' + ' is not defined or is not an array');
 		else{
+			//XXX: zelfde opmerking over length
 			for (var i = 0; i < info.researchDomains.length; i++){
 				if (! VAL.isGeneralName( info.researchDomains[i] )) // future implementation using isResearchDomain
+					//XXX: dit lijkt mij een vrij nutteloze string-append
 					e.push('input ' + 'research domain' + ' is not recognized');
 			}
 		}
