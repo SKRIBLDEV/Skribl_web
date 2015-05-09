@@ -7,6 +7,11 @@
 		</span>
 
 		<span ng-show="publications.showLibraryCard">
+			<div class="row center">
+				<div ng-hide="data.publications">
+					<spinner></spinner>
+				</div>
+			</div>
 			<div class="animated fadeInDown col s12">
 				<ul class="collection">
 					<div ng:repeat="publication in data.publications">
@@ -35,15 +40,15 @@
 										</p>
 									</div>
 									
-										<a class="secondary-content">
-											<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
-											<code class="titip-left">
-												<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
-												<span class="titip-content">
-													add to favorites
-												</span>
-											</code>
-										</a>
+									<a class="secondary-content">
+										<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
+										<code class="titip-left">
+											<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+											<span class="titip-content">
+												add to favorites
+											</span>
+										</code>
+									</a>
 									
 								</div>
 							</div>
