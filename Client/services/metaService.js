@@ -9,12 +9,14 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
     }
 
 	var setMetadata = function(pubId, handler){
+		console.log("setting metadata")
 		requestingMetaData = true;
 		serverService.setMetadata(pubId)
 		.success(function (data){
 			currentMeta = data;
 			changePDFURL(data.download);
 			requestingMetaData = false;
+			console.log("done setting")
 			if (handler){
 				handler(true, currentMeta);
 				console.log(currentMeta);

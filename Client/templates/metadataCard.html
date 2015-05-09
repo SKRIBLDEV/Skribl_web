@@ -2,7 +2,12 @@
     <div class="card-content">
 
         <span class="card-title grey-text text-darken-4">
-            <a> Metadata Preview </a>
+            <div class="col s10">
+                <div class="truncate" ng-show="requestingMetadata() !== true && showMeta()">
+                    {{getMetadata().title}}
+                </div>
+            </div>
+            
             <i class="mdi-content-clear right" ng-click="clearMetadata()"></i>
         </span>
 
@@ -10,25 +15,25 @@
             <div class="section">
 
                 <div class="row center">
-                    <div ng-show="requestingMetadata()">
+                    <div ng-hide="requestingMetadata() !== true && showMeta() && getMetadata().title">
                         <spinner></spinner>
                     </div>
                 </div>
 
-                <div class="animated fadeInDown" ng-show="!requestingMetadata() && showMeta()">
+                <div class="animated fadeInDown" ng-show="requestingMetadata() !== true && showMeta() && getMetadata().title">
 
                     <ul class="collection">
-                        <li class="collection-item">
+                        <li class="collection-item" ng-show="getMetadata().title"> 
                             <i class="mdi-social-school circle"></i>
-                            <span class="title">Title</span>
+                            <span class="title">Full Title</span>
                             <p>{{getMetadata().title}}</p>
                         </li>
-                        <li class="collection-item">
+                        <li class="collection-item" ng-show="getMetadata().year">
                             <i class="mdi-image-timelapse circle"></i>
                             <span class="title">Year</span>
                             <p>{{getMetadata().year}}</p>
                         </li>
-                        <li class="collection-item">
+                        <li class="collection-item" ng-show="getMetadata().authors">
                             <i class="mdi-social-people circle"></i>
                             <span class="title">Authors</span>
                             <div ng-repeat="author in getMetadata().authors">
@@ -36,40 +41,44 @@
                             </div>
 
                         </li>
-                        <li class="collection-item">
+                        <li class="collection-item" ng-show="getMetadata().type">
                             <i class="mdi-image-style circle"></i>
                             <span class="title">Type</span>
                             <p>{{getMetadata().type}}</p>
                         </li>
                         <!--- proceeding -->
-                        <li class="collection-item" ng-show = "getMetadata().type=='proceeding'">
-                            <i class="mdi-action-bookmark circle"></i>
-                            <span class="title">Booktitle</span>
-                            <p>{{getMetadata().Booktitle}}</p>
-                        </li>
-                        <li class="collection-item" ng-show = "getMetadata().type=='proceeding'">
-                            <i class="mdi-action-assignment-ind circle"></i>
-                            <span class="title">Organisation</span>
-                            <p>{{getMetadata().organisation}}</p>
-                        </li>
+                        <div ng-show = "getMetadata().type=='proceeding'">
+                        <li class="collection-item" ng-show="getMetadata().Booktitle">
+                                <i class="mdi-action-bookmark circle"></i>
+                                <span class="title">Booktitle</span>
+                                <p>{{getMetadata().Booktitle}}</p>
+                            </li>
+                            <li class="collection-item" ng-show="getMetadata().organisation">
+                                <i class="mdi-action-assignment-ind circle"></i>
+                                <span class="title">Organisation</span>
+                                <p>{{getMetadata().organisation}}</p>
+                            </li>
+                        </div>
                         <!-- journal -->
-                        <li class="collection-item" ng-show = "getMetadata().type=='journal'">
-                            <i class="mdi-action-bookmark circle"></i>
-                            <span class="title">Journal</span>
-                            <p>{{getMetadata().journal}}</p>
-                        </li>
-                        <li class="collection-item" ng-show = "getMetadata().type=='journal'">
-                            <i class="mdi-action-assignment-ind circle"></i>
-                            <span class="title">Publisher</span>
-                            <p>{{getMetadata().publisher}}</p>
-                        </li>
-                        <li class="collection-item">
+                        <div ng-show = "getMetadata().type=='journal'">
+                            <li class="collection-item" ng-show="getMetadata().journal">
+                                <i class="mdi-action-bookmark circle"></i>
+                                <span class="title">Journal</span>
+                                <p>{{getMetadata().journal}}</p>
+                            </li>
+                            <li class="collection-item" ng-show="getMetadata().publisher">
+                                <i class="mdi-action-assignment-ind circle"></i>
+                                <span class="title">Publisher</span>
+                                <p>{{getMetadata().publisher}}</p>
+                            </li>
+                        </div>
+                        <li class="collection-item" ng-show="getMetadata().abstract">
                             <i class="mdi-image-style circle"></i>
                             <span class="title">Abstract</span>
                             <p>{{getMetadata().abstract}}</p>
                         </li>
                         <li class="collection-item" ng-show ="getMetadata().external"> 
-                        <!-- should only be visible for external results -->
+                            <!-- should only be visible for external results -->
                             <i class="mdi-image-style circle"></i>
                             <span class="title">url</span>
                             <p> <a target="_blank" href="{{getMetadata().download}}"> External Link </a></p>
@@ -89,7 +98,7 @@
     
     <div class="card-reveal">
         <span class="card-title grey-text text-darken-4" >
-            additional metadata
+            ADDITIONAL OPTIONS
             <i class="mdi-navigation-close right"></i>
         </span>
 
@@ -97,7 +106,7 @@
 
         <div class="row center s12">
             <code class="titip-bottom">
-            <a class="waves-effect waves-light btn" style="color:white;" href="{{getMetadata().download}}"> 
+                <a class="waves-effect waves-light btn" style="color:white;" href="{{getMetadata().download}}"> 
                     <i class="mdi-file-file-download left"></i>
                     Download publication
                 </a>
@@ -109,7 +118,7 @@
 
         <div class="row center s12">
             <code class="titip-bottom">
-            <a class="waves-effect waves-light btn" style="color:white;" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
+                <a class="waves-effect waves-light btn" style="color:white;" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
                     <i class="mdi-editor-border-color left"></i>
                     Edit meta data
                 </a>
