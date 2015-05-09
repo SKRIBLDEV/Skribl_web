@@ -74,7 +74,7 @@ webapp.directive('graphDirective', function () {
                     })
 
                     .on("mouseover", function(d,i) {
-                        if (i>0) {
+                        //if (i>0) {
                           //CIRCLE
                           d3.select(this).selectAll("circle")
                           .transition()
@@ -92,7 +92,7 @@ webapp.directive('graphDirective', function () {
                           .style("fill",selectedNodeColor)
                           .attr("x", circleWidthSelected )
                           .attr("y", 5 )
-                        } else {
+                       /* } else {
                           //CIRCLE
                           d3.select(this).selectAll("circle")
                           .style("cursor", "none")     
@@ -100,12 +100,12 @@ webapp.directive('graphDirective', function () {
                           //TEXT
                           d3.select(this).select("text")
                           .style("cursor", "none")     
-                        }
+                        }*/
                       })
 
                       //MOUSEOUT
                       .on("mouseout", function(d,i) {
-                        if (i>0) {
+                        //if (i>0) {
                           //CIRCLE
                           d3.select(this).selectAll("circle")
                           .transition()
@@ -121,7 +121,7 @@ webapp.directive('graphDirective', function () {
                           .style("fill",skriblColor)
                           .attr("x", circleWidth )
                           .attr("y", 5 )
-                        }
+                        //}
                       })
 
                       .call(force.drag);
@@ -145,11 +145,7 @@ webapp.directive('graphDirective', function () {
                         return circleWidth + 5;
                     })
                     .attr("y", function (d, i) {
-                        if (i > 0) {
-                            return  5
-                        } else {
-                            return 5
-                        }
+                      return  5;
                     })
                     .attr("font-family", "Roboto")
                     .style("fill", skriblColor)
@@ -157,11 +153,7 @@ webapp.directive('graphDirective', function () {
                         return fontSize + "em";
                     })
                     .attr("text-anchor", function (d, i) {
-                        if (i > 0) {
-                            return "beginning";
-                        } else {
-                            return "end"
-                        }
+                       return "beginning";
                     });
 
                 force
