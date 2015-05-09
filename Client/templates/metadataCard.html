@@ -48,7 +48,7 @@
                         </li>
                         <!--- proceeding -->
                         <div ng-show = "getMetadata().type=='proceeding'">
-                        <li class="collection-item" ng-show="getMetadata().Booktitle">
+                            <li class="collection-item" ng-show="getMetadata().Booktitle">
                                 <i class="mdi-action-bookmark circle"></i>
                                 <span class="title">Booktitle</span>
                                 <p>{{getMetadata().Booktitle}}</p>
@@ -102,28 +102,32 @@
             <i class="mdi-navigation-close right"></i>
         </span>
 
-        <br>
+        <br><br>
 
-        <div class="row center s12">
-            <code class="titip-bottom">
-                <a class="waves-effect waves-light btn" style="color:white;" href="{{getMetadata().download}}"> 
+        <div class="row center s10 offset-s1">
+            <code class="titip-bottom" style="width:100%">
+            <div class="waves-effect waves-light btn" style="color:white; width:100%" href="{{getMetadata().download}}"> 
                     <i class="mdi-file-file-download left"></i>
-                    Download publication
-                </a>
+                    <div style="font-family: 'Roboto';">
+                        Download publication
+                    </div>
+                </div>
                 <span class="titip-content">
                     Download the pdf to your device
                 </span>
             </code>
         </div>
 
-        <div class="row center s12">
-            <code class="titip-bottom">
-                <a class="waves-effect waves-light btn" style="color:white;" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
-                    <i class="mdi-editor-border-color left"></i>
-                    Edit meta data
-                </a>
+         <div class="row center s10 offset-s1">
+            <code class="titip-bottom" style="width:100%">
+            <div class="waves-effect waves-light btn" style="color:white; width:100%" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
+                    <i class="mdi-file-file-download left"></i>
+                    <div style="font-family: 'Roboto';">
+                        Edit meta data
+                    </div>
+                </div>
                 <span class="titip-content">
-                    Edit the current meta data
+                    Edit the current meta data in a separate window
                 </span>
             </code>
         </div>
