@@ -187,6 +187,24 @@ function Author(db) {
 		}).error(clb);
 	}
 
+		/**
+	 * given id retrieves username if it exists, otherwise undefined
+	 * @param  {String} authorId 
+	 * @param  {callBack} clb      
+	 * @return {Object}          object containing author data
+	 */
+	 function getAuthorUsername(authorId, clb) {
+		db.select('expand(in(\'IsAuthor\')) from ' + authorId).all()
+		.then(function(res) {
+			if(res.length) {
+				clb(null, res[0].username);
+			}
+			else {
+				clb(null);
+			}
+		}).error(clb);
+	}
+
 	/**
 	 * iterates over given author array and returns an array of objects containing firstnam, lastname and author id
 	 * @param  {Array<String>} authors 
@@ -199,15 +217,17 @@ function Author(db) {
 			var ctr = 0;
 			for (var i = 0; i < autLength; i++) {
 				getAuthor(authors[i], function(error, res) {
-					if(error) {
-						clb(error);
-					}
-					else {
-						authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res)};
-						if(++ctr === autLength) {
-							clb(null, authors);
+					getAuthorUsername(RID.getRid(res), function(error, usrname) {
+						if(error) {
+							clb(error);
 						}
-					}
+						else {
+							authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res), username: usrname};
+							if(++ctr === autLength) {
+								clb(null, authors);
+							}
+						}
+					});
 				});
 			};
 		}
