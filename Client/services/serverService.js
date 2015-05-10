@@ -85,7 +85,8 @@ webapp.factory('serverService', function($http, appData){
         advancedSearch : advancedSearch,
         setMetadata : setMetadata,
         addPublication: addPublication,
-        getUserPublications : getUserPublications
+        getUserPublications : getUserPublications,
+        getAuthorPublications : getAuthorPublications
     };
 
     return service;

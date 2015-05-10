@@ -219,6 +219,7 @@ webapp.directive('graphDirective', function (appData) {
                     appData.data.currentProfileData.lastName = clickedNode.lastName;
                     appData.data.currentProfileData.firstName = clickedNode.firstName;
                     appData.data.currentProfileData.authorId = clickedNode.id;
+                    appData.data.currentProfileData.availableFromGraph = clickedNode; // TO BE REMOVED?
                     scope.$digest();
                 }
 
