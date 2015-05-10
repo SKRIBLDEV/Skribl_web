@@ -75,6 +75,7 @@ function Database(serverConfig, dbConfig) {
 	this.queryAdvanced = PUB.queryAdvanced;
 	this.addProceeding = PUB.addProceeding;
 	this.loadPublication = PUB.loadPublication;
+	this.nearbyPublications = PUB.nearbyPublications;
 	this.getPublication = PUB.getPublication;
 	this.querySimple = PUB.querySimple;
 	this.updatePublication = PUB.updatePublication;

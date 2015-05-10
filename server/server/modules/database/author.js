@@ -150,7 +150,7 @@ function Author(db) {
 	 * @return {Array<Object>}       returns an array with objects that contain firstname, lastname and author id
 	 */
 	this.getPubAuthors = function(pubId, clb) {
-		db.query('select expand(in(\'AuthorOf\')) from ' + pubId);
+		db.query('select expand(in(\'AuthorOf\')) from ' + pubId)
 		.then(function(authors) {
 			//XXX: if test is hier niet nodig!
 			//XXX: heel deze blok code kan in zeer kort met een map (cf. inf.)
