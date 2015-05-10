@@ -213,6 +213,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 			//Save Authorization when login to do important tasks.
 			appData.Authorization = data.Authorization;
+			console.log(data.Authorization);
                 
 			//Prepare url to get userInformation for later use.
 			var pad = serverApi.concat('/users/').concat($scope.userinputLogin.username);
@@ -279,6 +280,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
       // call $anchorScroll()
       anchorSmoothScroll.scrollTo(eID);
     };
+
 
 
 

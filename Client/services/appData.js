@@ -29,6 +29,14 @@
         currentPublicationID: null
     };
 
+    this.currentPubInCommon = { //[network] set and displayed when link between two authors is clicked (see graphDirective)
+        author1: null,
+        author2: null,
+        publications : []
+    }; 
+
+    
+
    
 
     this.deleteCurrentFile = function(){self.data.currentFile = null;};

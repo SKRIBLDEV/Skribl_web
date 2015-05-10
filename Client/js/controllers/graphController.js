@@ -24,6 +24,5 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
 
     this.getGraphData();
 
-    $scope.currentPubInCommon = networkService.currentPubInCommon; //set and displayed when link between two authors is clicked
 
 });
