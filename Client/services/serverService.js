@@ -1,6 +1,9 @@
 webapp.factory('serverService', function($http, appData){
 
 
+    /******** utilities *******/
+
+
     function stripHashtag(publicationID){
 
         if (publicationID.charAt(0) === '#'){
@@ -8,6 +11,9 @@ webapp.factory('serverService', function($http, appData){
         }
         return publicationID;        
     }
+
+
+    /******** search requests *******/
 
     var basicSearch = function(searchTerms){
         var urlTerms = encodeURIComponent(searchTerms);
@@ -20,11 +26,14 @@ webapp.factory('serverService', function($http, appData){
         return $http.post(url, searchQuery, config);
     };
 
+
+
+    /******** publication metadata requests *******/
+
     var setMetadata = function(pubId){
 
         pubId = stripHashtag(pubId);
 
-        console.log(pubId);
         var url = serverApi.concat('/publications/').concat(pubId);
         var authorization = {headers:
             {'Content-type' : 'application/json',
@@ -35,10 +44,11 @@ webapp.factory('serverService', function($http, appData){
 
 
 
-    //add a publication to a certan library of a user
+     /******** library requests *******/
+
+    //add a publication to a certain library of a user
     var addPublication = function(libraryName, publicationID) {
         publicationID = stripHashtag(publicationID);
-
         var url =  serverApi.concat('/user/').concat(appData.currentUser.username).concat('/library/').concat(libraryName).concat('/').concat(publicationID);
         var authorization = {headers: 
          {'Content-type' : 'application/json',
@@ -55,6 +65,20 @@ webapp.factory('serverService', function($http, appData){
          return getUserPublicationsRequest = $http.get(url, authorization);
 
      };
+
+
+     /******** author profile requests *******/
+
+     var getAuthorPublications = function(authorId){
+        authorId = stripHashtag(authorId); 
+        var url = serverApi.concat('/author/').concat(authorId).concat('/publications/');
+        var authorization = {headers: 
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         return getAuthorPublicationsRequest = $http.get(url, authorization);
+     }
+
+
 
      var service = {
         basicSearch : basicSearch,

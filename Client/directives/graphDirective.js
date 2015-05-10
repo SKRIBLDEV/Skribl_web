@@ -1,6 +1,6 @@
 
 
-webapp.directive('graphDirective', function (appData, networkService) {
+webapp.directive('graphDirective', function (appData) {
     return {
         restrict: 'E',
         replace: true,
@@ -216,7 +216,8 @@ webapp.directive('graphDirective', function (appData, networkService) {
               
 
                 var showProfile = function(clickedNode){
-                    appData.data.currentProfileData.name = clickedNode.lastName;
+                    appData.data.currentProfileData.lastName = clickedNode.lastName;
+                    appData.data.currentProfileData.firstName = clickedNode.firstName;
                     appData.data.currentProfileData.authorId = clickedNode.id;
                     scope.$digest();
                 }
@@ -233,8 +234,11 @@ webapp.directive('graphDirective', function (appData, networkService) {
                 }
 
                 var showPublications = function(clickedLink){
-                  networkService.currentPubInCommon = listPublications(clickedLink.target.index, clickedLink.source.index);
-                  console.log(networkService.currentPubInCommon);
+                  appData.currentPubInCommon = {
+                    author1: clickedLink.target,
+                    author2: clickedLink.source,
+                    publications: listPublications(clickedLink.target.index, clickedLink.source.index)
+                  }
                   scope.$digest();
                 }
 

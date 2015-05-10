@@ -6,7 +6,8 @@
 
      <div class="animated fadeInDown col s12">
         <div class="section">
-            <p> After node click, the author data is : {{data.currentProfileData}} </p>
+            <a> {{data.currentProfileData.firstName}} {{data.currentProfileData.lastName}} </a>
+            <p> After clicking an author, the data is : {{data.currentProfileData}} </p>
             <p> If the author is a user, we could display the affiliation, visualise the metrics, etc. <p>
             <p> for all authors (non-users included) we could display a list of their publications <p>
         </div>
