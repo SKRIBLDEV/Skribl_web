@@ -44,9 +44,15 @@ const SKRIBLServer = new HTTPSServer('./server/ssl/skribl.key',
 							  	     './server/ssl/skribl.cert', 
 							  	      modules);
 
+/* ---- SETUP RECOMMENDATION ENGINE ---- */
+
+const recommender = require('./recommender.js')
+recommender.useDatabase(SKRIBLDatabase);
+
 /* ---- CONFIGURE SERVER CONTEXT ---- */
 
 SKRIBLServer.addItem('db', SKRIBLDatabase);
+SKRIBLServer.addItem('recommender', recommender)
 SKRIBLServer.addItem('workingDir', process.cwd());
 
 /* ---- CONFIGURE AUTHENTICATION PROCEDURE ---- */
@@ -66,6 +72,7 @@ SKRIBLServer.installRoute(require('./server/routes/authors.js'));
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
 
 /* ---- SERVE STATIC FILES ---- */
+
 //SKRIBLServer.serveStatic('/static', __dirname + '/static');
 //SKRIBLServer.serveStatic('/', __dirname + '/public');
 
