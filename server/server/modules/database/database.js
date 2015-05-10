@@ -14,21 +14,19 @@
  */
 
 
-//XXX: gebruik 'const' ipv 'var'
-
-var Oriento = require('oriento');
-var UM = require('../user.js');
-var Affil = require('./affiliation.js');
-var RDomain = require('./researchdomain.js');
-var RID = require('./rid.js');
-var Publication = require('./publication.js');
-var Classifier = require('./classifier.js');
-var library = require('./library.js');
-var keyword = require('./keyword.js');
-var authors = require('./author.js');
-var Graph = require('./graph.js');
-var reset = require('./reset.js');
-var path = require('path');
+const Oriento = require('oriento');
+const UM = require('../user.js');
+const Affil = require('./affiliation.js');
+const RDomain = require('./researchdomain.js');
+const RID = require('./rid.js');
+const Publication = require('./publication.js');
+const Classifier = require('./classifier.js');
+const library = require('./library.js');
+const keyword = require('./keyword.js');
+const authors = require('./author.js');
+const Graph = require('./graph.js');
+const reset = require('./reset.js');
+const path = require('path');
 
  /** 
    *Create a new database object.

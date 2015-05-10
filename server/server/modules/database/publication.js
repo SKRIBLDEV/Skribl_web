@@ -733,8 +733,8 @@ function Publication(db) {
 		});
 	}
 
-	this.nearbyPublications = function(usr, lim, clb) {
-		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\')) where @class = \'Proceeding\' or @class = \'Journal\' limit ' + lim + ' order by viewCount').all()
+	this.nearbyPublications = function(usr, depth, clb) {
+		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' limit order by viewCount').all()
 		.then(function(pubs) {
 			var pubsLength = pubs.length;
 			if(pubsLength) {
