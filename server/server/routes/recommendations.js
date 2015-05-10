@@ -1,6 +1,5 @@
 /* --- IMPORTS --- */
 
-const recommender = require('../modules/recommender.js');
 const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
@@ -19,7 +18,9 @@ function getRecommendations(req, res, context) {
 
 	var username = req.params['username'];
 	var database = context.db;
+	var recommender = context.recommender;
 	var limit = req.query('limit');
+	
 	limit = (limit? parseInt(limit) : __DEFAULT_PUB_LIMIT__);
 
 	recommender.recommend(username, limit, function(err, recs) {

@@ -23,9 +23,9 @@ function resetCache() {
 	cache.reset();
 }
 
-process.on('exit', resetCache);
-process.on('SIGINT', resetCache);
-process.on('UncaughtException', resetCache);
+//process.on('exit', resetCache);
+//process.on('SIGINT', resetCache);
+//process.on('UncaughtException', resetCache);
 
 function saveClassifier(usr, classifier) {
 	db.saveClassifier(usr, JSON.stringify(classifier));
