@@ -51,19 +51,13 @@ const Oriento = require('oriento');
 	 * @return {Array<String>}
 	 */
 	exports.getRids = function(array) {
-		var resArray = [];
-		var counter = 0;
-		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		var arrLength = array.length;
+		var resArray = new Array(arrLength);
 		//XXX: of nog beter, een map
-		//XXX: zoniet, zet length in een variabele len
-		//XXX: en doe new Array(len) en resArray[i] = ... instead
-		for (var i = 0; i < array.length; i++) {
-			resArray.push(getRid(array[i]));
-			counter++
-			if(counter == array.length) {
-				return resArray;
-			}
+		for (var i = 0; i < arrLength; i++) {
+			resArray[i] = getRid(array[i]);
 		};
+		return resArray;
 	}
 
 	/**
@@ -72,19 +66,14 @@ const Oriento = require('oriento');
 	 * @return {Array<String>}       result
 	 */
 	exports.transformRids = function(array) {
-		var resArray = [];
-		var counter = 0;
-		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		var arrLength = array.length;
+		var resArray = new Array(arrLength);
 		//XXX: of nog beter, een map
-		//XXX: zoniet, zet length in een variabele len
-		//XXX: en doe new Array(len) en resArray[i] = ... instead
-		for (var i = 0; i < array.length; i++) {
-			resArray.push(transformRid(array[i]));
+		for (var i = 0; i < arrLength; i++) {
+			resArray[i] = transformRid(array[i]);
 			counter++
-			if(counter == array.length) {
-				return resArray;
-			}
 		};
+		return resArray;
 	}
 
 	/**
@@ -93,19 +82,14 @@ const Oriento = require('oriento');
 	 * @return {Array<String>}       
 	 */
 	exports.getFieldRids = function(array) {
-		var resArray = [];
-		var counter = 0;
-		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		var arrLength = array.length;
+		var resArray = new Array(arrLength);
 		//XXX: of nog beter, een map
-		//XXX: zoniet, zet length in een variabele len
-		//XXX: en doe new Array(len) en resArray[i] = ... instead
-		for (var i = 0; i < array.length; i++) {
-			resArray.push(transformRid(array[i].rid));
+		for (var i = 0; i < arrLength; i++) {
+			resArray[i] = transformRid(array[i].rid);
 			counter++
-			if(counter == array.length) {
-				return resArray;
-			}
 		};
+		return resArray;
 	}
 
 	/**
@@ -114,19 +98,13 @@ const Oriento = require('oriento');
 	 * @return {Array<Object>}       
 	 */
 	exports.getORids = function(array) {
-		var resArray = [];
-		var counter = 0;
-		//XXX: gebruik geen counter, gebruik traditionele for-lus met i
+		var arrLength = array.length;
+		var resArray = new Array(arrLength);
 		//XXX: of nog beter, een map
-		//XXX: zoniet, zet length in een variabele len
-		//XXX: en doe new Array(len) en resArray[i] = ... instead
-		for (var i = 0; i < array.length; i++) {
-			resArray.push(getORid(array[i]));
-			counter++
-			if(counter == array.length) {
-				return resArray;
-			}
+		for (var i = 0; i < arrLength; i++) {
+			resArray[i] = getORid(array[i]);
 		};
+		return resArray;
 	}
 
 	/**

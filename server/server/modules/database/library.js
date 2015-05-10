@@ -5,9 +5,8 @@ var Author = require('./author.js');
 
 function Library(db) {
 
-	//XXX: zie opmerking over modules
 
-	var AUT = new Author.Author(db);
+	var AUT = new Author.Author(db);//XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
 
 	/**
 	 * creates a library and connects it to given user
@@ -38,7 +37,7 @@ function Library(db) {
 	 * @param {String} name libraryname
 	 * @param {callBack} clb  
 	 */
-	 this.addLibrary = function(user, name, clb) {
+	 db.addLibrary = function(user, name, clb) {
 	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 	 	.then(function(res) {
 	 		if(res.length === 0) {
@@ -57,10 +56,7 @@ function Library(db) {
 	 		else {
 	 			clb(new Error('library of user: ' + user + ' with name: ' + name + ', already exists'));
 	 		}
-	 	//XXX: geef hier direct callback mee
-	 	}).error(function(er) {
-			clb(er);
-		});
+	 	}).error(clb);
 
 	}
 
@@ -71,7 +67,7 @@ function Library(db) {
 	 * @param {String} id      publication id
 	 * @param {callBack} clb    
 	 */
-	this.addToLibrary = function(user, library, id, clb) {
+	db.addToLibrary = function(user, library, id, clb) {
 		db.select('@rid').from('Publication').where('@rid = ' + id).all()
 		.then(function(res) {
 			if(res.length) {
@@ -94,26 +90,17 @@ function Library(db) {
 							else {
 								clb(new Error('Library does not exist'));
 							}
-						//XXX: geef callback direct mee
-						}).error(function(er) {
-							clb(er);
-						});
+						}).error(clb);
 					}
 					else {
 						clb(new Error('publication with id: ' + id + ', is already in library'));
 					}
-				//XXX: geef callback direct mee
-				}).error(function(er) {
-					clb(er);
-				});
+				}).error(clb);
 			}
 			else {
 				clb(new Error('Publication with id: ' + id + ' does not exist'));
 			}
-		//XXX: geef callback direct mee
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 		
 		
 	}
@@ -125,7 +112,7 @@ function Library(db) {
 	 * @param  {String} id      publication id
 	 * @param  {callBack} clb     
 	 */
-	this.removeFromLibrary = function(user, library, id, clb) {
+	db.removeFromLibrary = function(user, library, id, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'').all()
 		.then(function(res) {
 			if(res.length) {
@@ -150,20 +137,12 @@ function Library(db) {
 					else {
 						clb(new Error('Publication does not exist'));
 					}
-				//XXX: geef callback direct mee
-				}).error(function(er) {
-					clb(er);
-				});
+				}).error(clb);
 			}
 			else {
 				clb(new Error('library does not exist'));
 			}
-		//XXX: geef callback direct mee
-		}).error(function(er) {
-			clb(er);
-		});
-		
-
+		}).error(clb);
 	}
 
 	/**
@@ -172,19 +151,14 @@ function Library(db) {
 	 * @param  {callBack} clb  
 	 * @return {Array<String>}      array of library names
 	 */
-	this.loadLibraries = function(user, clb) {
+	db.loadLibraries = function(user, clb) {
 		function getName(array, callB) {
-			//XXX: zelfde opmerking, gebruik een traditionele for-lus hier met callback daarna
-			//XXX: i & ctr lopen hier parallel, dus redundantie...
+			var arrLength = array.length;
 			//XXX: of opnieuw, een map zou hier nog beter zijn
-			var ctr = 0;
-			for (var i = 0; i < array.length; i++) {
-				array[ctr] = array[ctr].name;
-				ctr++;
-				if(ctr == array.length) {
-					callB(null, array);
-				}
+			for (var i = 0; i < arrLength; i++) {
+				array[i] = array[i].name;
 			};
+			callB(null, array);
 		}
 
 		db.query('select name from (select expand(out(\'HasLibrary\')) from User where username = \'' + user + '\')')
@@ -195,10 +169,7 @@ function Library(db) {
 			else {
 				clb(new Error('no libraries found'));
 			}
-		//XXX: geef callback meteen mee
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 	/**
@@ -208,13 +179,13 @@ function Library(db) {
 	 * @param  {callBack} clb     
 	 * @return {Array<Object>}         publication array
 	 */
-	 this.loadLibrary = function(user, library, clb) {
+	 db.loadLibrary = function(user, library, clb) {
 
 		function prepResults(array, callB) {
+			var arrLength = array.length;
 			var ctr = 0;
 			var ctr2 = 0;
-			//XXX: zet length in een variabele
-			for (var i = 0; i < array.length; i++) {
+			for (var i = 0; i < arrLength; i++) {
 				if(array[i]['authors']) {
 					array[i].authors = RID.transformRids(array[i]['authors']);
 						AUT.getAuthorObjects(array[i]['authors'], function(error, res) {
@@ -222,18 +193,14 @@ function Library(db) {
 								clb(error);
 							}
 							array[ctr2] = {id: RID.transformRid(array[ctr2]['rid']), title: array[ctr2]['title'], type: array[ctr2]['class'], authors: array[ctr2]['authors']};
-						//XXX: gebruik === ipv ==
-						//XXX: gebruik len variabele hier opnieuw
-						if(++ctr2+ctr == array.length) {
+						if(++ctr2+ctr === arrLength) {
 							callB(null, array);
 						} 
 					});
 				}
 				else {
 					array[i] = {id: RID.transformRid(array[i]['rid']), title: array[i]['title'], type: array[i]['class']};
-					//XXX: gebruik === ipv ==
-					//xxx: gebruik opnieuw len variabele
-					if(++ctr+ctr2 == array.length) {
+					if(++ctr+ctr2 === arrLength) {
 						callB(null, array);
 					} 
 				}
@@ -253,18 +220,12 @@ function Library(db) {
 					else{
 						clb(null, []);
 					}
-				//XXX: geef callback meteen mee
-				}).error(function(er) {
-					clb(er);
-				});
+				}).error(clb);
 			}
 			else {
 				clb(new Error('library: ' + library + ' of user: ' + user + 'does not exist'));
 			}
-		//XXX: idem
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	 	
 	}
 
@@ -305,12 +266,11 @@ function Library(db) {
 	 * @param  {String} name name of library
 	 * @param  {callBack} clb  
 	 */
-	this.removeLibrary = function(user, name, clb) {
+	db.removeLibrary = function(user, name, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 		.then(function(res) {
 			if(res.length) {
-				//XXX: gebruik === ipv ==
-				if(res[0].name == 'Uploaded' || res[0].name == 'Favorites' || res[0].name == 'Portfolio') {
+				if(res[0].name === 'Uploaded' || res[0].name == 'Favorites' || res[0].name == 'Portfolio') {
 					clb(new Error('removing library: ' + name + ' not allowed'));
 				}
 				else {
@@ -321,20 +281,14 @@ function Library(db) {
 						trx.commit().return().all()
 						.then(function() {
 							clb(null, true);
-						//XXX: geef callback meteen mee
-						}).error(function(er) {
-							clb(er);
-						});
+						}).error(clb);
 					});
 				}
 			}
 			else {
 				clb(new Error('user: ' + user + ' has no library with name: ' + name));
 			}
-		//XXX: idem
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 	/**

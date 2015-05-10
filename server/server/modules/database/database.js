@@ -69,28 +69,7 @@ function Database(serverConfig, dbConfig) {
 
 	/* provides functions */
 	this.reset = RS.reset;
-	this.addJournal = PUB.addJournal;
-	this.queryAdvanced = PUB.queryAdvanced;
-	this.addProceeding = PUB.addProceeding;
-	this.loadPublication = PUB.loadPublication;
-	this.nearbyPublications = PUB.nearbyPublications;
-	this.getPublication = PUB.getPublication;
-	this.querySimple = PUB.querySimple;
-	this.updatePublication = PUB.updatePublication;
-	this.removePublication = PUB.removePublication;
-	this.authorPublications = PUB.authorPublications;
-	this.uploadedBy = PUB.uploadedBy;
-	this.loadLibrary = Lib.loadLibrary;
-	this.loadLibraries = Lib.loadLibraries;
-	this.addToLibrary = Lib.addToLibrary;
-	this.addLibrary = Lib.addLibrary;
-	this.removeLibrary = Lib.removeLibrary;
-	this.removeFromLibrary = Lib.removeFromLibrary;
-	this.addDefaults = Lib.addDefaults;
-	this.searchAuthor = AUT.searchAuthor;
 	this.getAuthorGraph = graph.getAuthorGraph;
-	this.saveClassifier = CLS.saveClassifier;
-	this.loadClassifier = CLS.loadClassifier;
 
 	/**
 	*Will give the subdivisions of a given division.
@@ -107,22 +86,17 @@ function Database(serverConfig, dbConfig) {
 			var divisionRid = RID.getRid(division);
 			db.query('select Name from ' + classSubDivisions + ' where ' + className +' = ' + divisionRid)
 			.then(function(results) {
-				//XXX: zoals je zelf voorstelt in je TODO ;)
-				//XXX: gebruik ook var len = results.length
+				var resLength = results.length;
 				//XXX: of nog beter, gebruik Array.prototype.map voor nog elegantere code!
-				var resArray = []; //TODO replace by new Array(results.length)??
-				for(var i = 0; i < results.length; i++) {
-					resArray.push(results[i].Name);
+				var resArray = new Array(resLength);
+				for(var i = 0; i < resLength; i++) {
+					resArray[i] = results[i].Name;
 				}
 				callback(null, resArray);
-			//XXX: geef gewoon mijn callback mee
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 		}
 
-		//XXX: gebruik '!institution' ipv deze check (undefined ~= false)
-		if(institution === undefined) {
+		if(!institution) {
 			callback(new Error('No path to subdivisions, give at least Institution.'));
 		} else {
 			db.query('select from Institution where Name = \'' + institution +'\'')
@@ -134,8 +108,7 @@ function Database(serverConfig, dbConfig) {
 				}
 			})
 			.then(function() {
-				//XXX: idem
-				if(faculty === undefined) {
+				if(!faculty) {
 					compileResult('Faculties', 'Faculty');
 				} else {
 					var institutionRid = RID.getRid(division);
@@ -148,8 +121,7 @@ function Database(serverConfig, dbConfig) {
 						}
 					})
 					.then(function() {
-						//XXX: idem
-						if(department === undefined) {
+						if(!department) {
 							compileResult('Departments', 'Department');
 						} else {
 							var facultiesRid = RID.getRid(division);
@@ -161,20 +133,11 @@ function Database(serverConfig, dbConfig) {
 								} else {
 									callback(new Error('Department with name: ' + department + ' does not exist'));
 								}
-							//XXX: geef meteen mijn callback mee
-							}).error(function(er) {
-								callback(er);
-							});
+							}).error(callback);
 						}
-					//XXX: idem
-					}).error(function(er) {
-						callback(er);
-					});
+					}).error(callback);
 				}
-			//XXX: idem
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 		}
 	};
 	
@@ -189,10 +152,7 @@ function Database(serverConfig, dbConfig) {
 		db.select().from('User').where({username: data.getUsername()}).all()
 			.then(function (resultUsernames) {
 				callback(null, resultUsernames.length > 0);
-			//XXX: geef meteen mijn callback mee
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 			// @ Ivo, if you want, add e-mail check here too...
 			// however, i don't think its necessary right now...
 			// I copy pasted the code down here, so you wouldn't lose it ;)
@@ -214,10 +174,10 @@ function Database(serverConfig, dbConfig) {
 	*/
 	this.createUser = function(newData, callback) {
 		this.userExists(newData, function(err, exists) {
-
-			//XXX: do TODO!
-			// TODO: err should have seperate if-clause
-			if (err || exists) {
+			if(err) {
+				callback(err);
+			}
+			else if (exists) {
 				callback(new Error('username taken!'));
 			} else {
 				addUser(newData, callback);
@@ -237,38 +197,28 @@ function Database(serverConfig, dbConfig) {
 		if(typeof username === 'string') {
 			db.query('select * from (traverse * from (select * from User where username = \'' + username + '\') while $depth < 2) where @class = \'ResearchDomain\'')
 			.then(function(researchDomains) {
-				//XXX: use len variable...
-				//XXX: use new Array(len) ipv []
-				//XXX: use len in for condition
+				var resDomLength = researchDomains.length;
 				//XXX: or again, it's even beter to use researchDomains.map here!
-				var resArray = [];
-				for (var i = 0; i < researchDomains.length; i++) {
-					//XXX: introduce temporary variable for researchDomains[i]
-					resArray.push({major: researchDomains[i].major, minor: researchDomains[i].minor});
+				var resArray = new Array(resDomLength);
+				for (var i = 0; i < resDomLength; i++) {
+					var currDomain = researchDomains[i];
+					resArray[i] = {major: currDomain.major, minor: currDomain.minor};
 				}
 				callback(null, resArray);
-			//XXX: geef callback meteen mee
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 		}
 		else {
 			db.select().from('ResearchDomain').all()
 			.then(function(domains) {
-				//XXX: use len variable...
-				//XXX: use new Array(len) ipv []
-				//XXX: use len in for condition
+				var domLength = domains.length;
 				//XXX: or again, it's even beter to use domains.map here!
-				var resArray = [];
-				for (var i = 0; i < domains.length; i++) {
-					//XXX: introduce temporary variable for domains[i]
-					resArray.push({major: domains[i].major, minor: domains[i].minor});
+				var resArray = new Array(domLength);
+				for (var i = 0; i < domLength; i++) {
+					var currDomain = domains[i];
+					resArray[i] = {major: currDomain.major, minor: currDomain.minor};
 				}
 				callback(null, resArray);
-			//XXX: geef callback meteen mee
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 		}
 	};
 
@@ -295,19 +245,13 @@ function Database(serverConfig, dbConfig) {
 					.commit().return('$delUser').all()
 					.then(function(res) {
 						callback(null, true);
-					//XXX: geef callback meteen mee
-					}).error(function(er) {
-						callback(er);
-					});
+					}).error(callback);
 				});
 			}
 			else {
 				callback(new Error('user with username: ' + username + ' does not exist'));
 			}
-		//XXX: geef callback meteen mee
-		}).error(function(er) {
-				callback(er);
-			});
+		}).error(callback);
 	};
 
 	/**
@@ -339,10 +283,7 @@ function Database(serverConfig, dbConfig) {
 			else {
 			   callback(new Error('user not found'));
 			}
-		//XXX: geef callback meteen mee
-		}).error(function(er) {
-				callback(er);
-			});
+		}).error(callback);
 	};
 
 
@@ -377,7 +318,7 @@ function Database(serverConfig, dbConfig) {
 								.from('$user')
 								.to('$researchGroup');
 							});
-							RD.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
+							this.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
 								if(error) {
 									callback(error);
 								}
@@ -385,10 +326,7 @@ function Database(serverConfig, dbConfig) {
 									trx.commit().return('$user').all()
 									.then(function(res) {
 										callback(null, RID.getRid(res[0]));
-									//XXX: geef callback meteen mee
-									}).error(function(er) {
-										callback(er);
-									});
+									}).error(callback);
 								}
 							});
 						});
@@ -410,14 +348,8 @@ function Database(serverConfig, dbConfig) {
 			db.vertex.delete(domainRid) 
 			.then(function(){
 				callback(null, true);
-			//XXX: geef callback meteen mee
-			}).error(function(er) {
-				callback(er);
-			});
-		//XXX: geef callback meteen mee
-		}).error(function(er) {
-			callback(er);
-		});
+			}).error(callback);
+		}).error(callback);
 	};
 }
 

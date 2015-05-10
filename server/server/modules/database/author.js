@@ -68,19 +68,12 @@ function Author(db) {
 	 * @param {callBack} callback 
 	 */
 	this.addAuthors = function(authors, trx, callback) {
-		//XXX: gebruik gewoon (authors) ipv die typeof ... toestand
-		//XXX: dus (authors && authors.length)
-		if(typeof authors !== 'undefined' && authors.length) {
+		var autLength = authors.length;
+		if(authors && autLength) {
 			var ctr = 0;
-			//XXX: stop length hier eerst in een variabele ipv ze telkens van authors eruit te halen
-			//XXX: dus var len = authors.length en gebruik ook dan len hieronder
-			for (var i = 0; i < authors.length; i++) {
+			for (var i = 0; i < autLength; i++) {
 				addAuthor(authors[i]['firstName'], authors[i]['lastName'], i, trx, function(error, res) {
-					//XXX: ctr++ gevolgd door ctr kan korter als '++ctr';
-					//XXX: gebruik ook === ipv ==
-					//XXX: zie ook opmerking van len hierboven
-					ctr++;
-					if(ctr == authors.length) {
+					if(++ctr === autLength) {
 						callback(null, true);
 					}
 				});
@@ -120,19 +113,12 @@ function Author(db) {
 	 * @param  {callBack} callback 
 	 */
 	this.connectAuthors = function(authors, trx, callback) {
-		//XXX: gebruik geen typeof hier (zie boven)
-		//XXX: steek len opnieuw in een variabele
-		if(typeof authors !== 'undefined' && authors.length) {
+		var autLength = authors.length;
+		if(authors && autLength) {
 			var ctr = 0;
-			//XXX: gebruik hier dan len
-			for (var i = 0; i < authors.length; i++) {
+			for (var i = 0; i < autLength; i++) {
 				connectAuthor(authors[i], i, trx, function(error, res) {
-					//XXX: zelfde 3 opmerkingen als hierboven
-					//XXX: 1) gebruik ===
-					//XXX: 2) gebruik ++ctr;
-					//XXX: 3) gebruik len
-					ctr++;
-					if(ctr == authors.length) {
+					if(++ctr === autLength) {
 						callback(null, true);
 					}
 				});
@@ -152,35 +138,22 @@ function Author(db) {
 	this.getPubAuthors = function(pubId, clb) {
 		db.query('select expand(in(\'AuthorOf\')) from ' + pubId)
 		.then(function(authors) {
-			//XXX: if test is hier niet nodig!
+			var autLength = authors.length;
 			//XXX: heel deze blok code kan in zeer kort met een map (cf. inf.)
-			if(authors.length) {
 				var res = [];
-				var ctr = 0;
-				//XXX: ctr & i lopen parallel, gebruik een gewone for lust
 				//XXX: of gebruik hier map! (nog korter en gemakkelijker!)
 				//XXX: authors.map(function(el) { return {firstName: el.firstName, ...})
 				//XXX: is denk ik genoeg voor dit hele codeblok (met de clb dan nog wel) 
-				for (var i = 0; i < authors.length; i++) {
+				for (var i = 0; i < autLength; i++) {
 					var obj = {
 						firstName: authors[i].firstName,
 						lastName: authors[i].lastName,
 						rid: RID.getRid(authors[i])
 					};
 					res.push(obj);
-					ctr++;
-					if(ctr == authors.length) {
-						clb(null, res);
-					}
 				};
-			}
-			else {
-				clb(null, []);
-			}
-		//XXX: geef meteen mijn callback mee?
-		}).error(function(er) {
-			clb(er);
-		});
+				clb(null, res);
+		}).error(clb);
 	}
 
 	/**
@@ -192,19 +165,13 @@ function Author(db) {
 	this.getAuthorId = function(userId, clb) {
 		db.select('expand(out(\'IsAuthor\')) from ' + userId).all()
 		.then(function(res) {
-			//XXX: kan korter als clb(null, res.legnth? RID.getRid(res[0]):undefined)
-			//XXX: of laat het gewoon zo staan, maar doe die undefined weg in de else-tak (is al default)
-			//XXX: (tweede is eigenlijk beter denkn ik);
 			if(res.length) {
 				clb(null, RID.getRid(res[0]));
 			}
 			else {
-				clb(null, undefined);
+				clb(null);
 			}
-		//XXX: idem
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 	/**
@@ -217,10 +184,7 @@ function Author(db) {
 		db.record.get(authorId)
 		.then(function(author) {
 			clb(null, author);
-		//XXX: geef direct mijn callback mee
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 	/**
@@ -230,23 +194,17 @@ function Author(db) {
 	 * @return {Array<Object>}         array of objects containing firstnam, lastname and author id
 	 */
 	this.getAuthorObjects = function(authors, clb) {
-		//XXX: gebruik len variabele
-		if(authors && authors.length) {
+		var autLength = authors.length;
+		if(authors && autLength) {
 			var ctr = 0;
-			//XXX: gebruik len
-			for (var i = 0; i < authors.length; i++) {
+			for (var i = 0; i < autLength; i++) {
 				getAuthor(authors[i], function(error, res) {
 					if(error) {
 						clb(error);
 					}
 					else {
 						authors[ctr] = {firstName: res.firstName, lastName: res.lastName, id: RID.getRid(res)};
-						//XXX: zelfde 3 opmerkingen als hierboven
-						//XXX: 1) gebruik ===
-						//XXX: 2) gebruik ++ctr;
-						//XXX: 3) gebruik len
-						ctr++;
-						if(ctr == authors.length) {
+						if(++ctr === autLength) {
 							clb(null, authors);
 						}
 					}
@@ -274,10 +232,7 @@ function Author(db) {
 			else {
 				callback(new Error('Author with name: ' + fName + ' ' + lName + ' does not exist.'));
 			}
-		//XXX: geef direct mijn callback mee
-		}).error(function(er) {
-			callback(er);
-		});
+		}).error(callback);
 	};
 
 	/**
@@ -288,23 +243,14 @@ function Author(db) {
 	 * @param  {callBack} clb   
 	 * @return {Array<Object>}       array of objects containing firstnam, lastname,  author id and user id if author is connected to a user profile
 	 */
-	this.searchAuthor = function(fName, lName, limit, clb) {
+	db.searchAuthor = function(fName, lName, limit, clb) {
 		function addPubs(authors, i, clb2) {
 			function cleanup(arr, clb1) {
-				var ctr = 0;
-				//XXX: gebruik length variabele
-				//XXX: ctr is hier volstrekt onnodig!
-				//XXX: doe gewoon een for-lus, gevolgd door een callback
-				//XXX: merk op dat j & ctr volledig parallel lopen...
-				//XXX: en er dus redundantie is
-				for (var j = 0; j < arr.length; j++) {
+				var arrLength = arr.length;
+				for (var j = 0; j < arrLength; j++) {
 					arr[j] = {id: RID.transformRid(arr[j].rid), title: arr[j].title};
-					ctr++;
-					if(ctr == arr.length) {
-						clb1(null, arr);
-					}
 				};
-
+				clb1(null, arr);
 			}
 
 			db.query('select @rid, title from (select expand(out(\'AuthorOf\')) from ' + RID.getRid(authors[i]) + ')').all()
@@ -319,9 +265,7 @@ function Author(db) {
 					authors[i].publications = [];
 					clb2(null, i);
 				}
-			}).error(function(er) {
-				clb(er);
-			});
+			}).error(clb);
 		}
 
 		function addProfile(authors, i, clb3) {
@@ -334,15 +278,13 @@ function Author(db) {
 				else {
 					clb3(null, authors);	
 				}
-			}).error(function(er) {
-				clb(er);
-			});
+			}).error(clb);
 		}
 
 		function prepResArray(authors, clb4) {
+			var autLength = authors.length;
 			var ctr = 0;
-			//XXX: gebruik len variabele
-			for (var i = 0; i < authors.length; i++) {
+			for (var i = 0; i < autLength; i++) {
 				addPubs(authors, i, function(error, nr) {
 					addProfile(authors, nr, function(error, res) {
 						authors[nr].authorId = RID.getRid(authors[nr]);
@@ -351,12 +293,7 @@ function Author(db) {
 						delete authors[nr]['@type'];
 						delete authors[nr]['out_AuthorOf'];
 						delete authors[nr]['in_IsAuthor'];
-						//XXX: zelfde 3 opmerkingen als hierboven
-						//XXX: 1) gebruik ===
-						//XXX: 2) gebruik ++ctr;
-						//XXX: 3) gebruik len	
-						ctr++;
-						if(ctr == authors.length) {
+						if(++ctr === autLength) {
 							clb4(null, authors);
 						}
 					});
@@ -372,10 +309,7 @@ function Author(db) {
 			else {
 				clb(null, []);
 			}
-		//XXX: geef direct mijn callback mee
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 }

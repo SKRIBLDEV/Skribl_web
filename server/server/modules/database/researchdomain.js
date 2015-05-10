@@ -3,7 +3,6 @@
 const RID = require('./rid.js');
 function ResearchDomain(db){
 
-	//XXX: zie opmerking modules
 
 	/**
 	 * adds researchDomain with given name.
@@ -32,10 +31,7 @@ function ResearchDomain(db){
 				});
 			callback(null, varName);
 			}
-		//XXX: callback direct
-		}).error(function(er) {
-			callback(er);
-		});
+		}).error(callback);
 	}
 
 	/**
@@ -44,9 +40,8 @@ function ResearchDomain(db){
 	 * @param {String}   userRid  
 	 * @param {callBack} callback
 	 */
-	this.addResearchDomains = function(domains, trx, callback) {
-		var counter = domains.length;
-		counter--; //XXX: doe hierboven -1 instead
+	db.addResearchDomains = function(domains, trx, callback) {
+		var counter = domains.length - 1;
 		function forClb(error, varName) {
 				if(error) {
 					callback(error);
@@ -77,7 +72,7 @@ function ResearchDomain(db){
 	 * @param {Object}   trx      transaction
 	 * @param {callBack} callback 
 	 */
-	this.addPubResearchDomains = function(domains, trx, callback) {
+	db.addPubResearchDomains = function(domains, trx, callback) {
 		var ctr = 0;
 		function forClb(error, varName) {
 			ctr++;
@@ -90,14 +85,12 @@ function ResearchDomain(db){
 					.from('$publication')
 					.to('$resDomain' + varName);
 				});
-				//XXX: gebruik === ipv ==
-				if(ctr == domains.length) {
+				if(ctr === domains.length) {
 					callback(null, true);
 				}
 			}
 		}
-		//XXX: gebruik niet typeof, maar doe gewoon (domains && domains.length)
-		if(typeof domains !== 'undefined' && domains.length) {
+		if(domains && domains.length) {
 			for (var i = 0; i < domains.length; i++) {
 				addResearchDomain(domains[i], i, trx, forClb);
 			}
@@ -113,31 +106,23 @@ function ResearchDomain(db){
 	 * @param  {callBack} clb   
 	 * @return {Array<String>}       array of researchdomains
 	 */
-	this.getPubResearchDomains = function(pubId, clb) {
+	db.getPubResearchDomains = function(pubId, clb) {
 		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
 		.then(function(resDomains) {
-			//XXX: zet length in een variabele
-			if(resDomains.length) {
-				var res = [];
-				var ctr = 0;
-				//XXX: doe hier een gewone for-lus, i & ctr lopen parallel
-				//XXX: dus ofwel een for met length-variabele in condition
+			var resDomLength = resDomains.length;
+			if(resDomLength) {
+				var res = new Array(resDomLength);
 				//XXX: ofwel nog beter, een map
-				for (var i = 0; i < resDomains.length; i++) {
-					res.push({major: resDomains[i].major, minor: resDomains[i].minor});
-					ctr++;
-					if(ctr == resDomains.length) {
-						clb(null, res);
-					}
+				for (var i = 0; i < resDomLength; i++) {
+					var currDom = resDomains[i];
+					res[i] = {major: currDom.major, minor: currDom.minor};
 				};	
+				clb(null, res);
 			}
 			else {
 				clb(null, []);
 			}
-		//XXX: callback direct
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 }
 
