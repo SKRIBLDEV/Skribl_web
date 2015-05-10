@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="card-content">
+        <span class="card-title grey-text text-darken-4">
+         <a> Publications in Common</a>
+         <p> should display a list of publications when a link is clicked </p>
+        </span>
+		<ul class="collection">
+			<div ng:repeat="publication in currentPubInCommon"> <!-- stored in networkservice, controlled bij graphCtrl and -directive -->
+				<li class="collection-item avatar">
+					<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'"></i>
+					<i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'"></i>
+
+					<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id)">
+						<span class="title">{{publication.title}}</span>
+					</div>
+
+					<a class="secondary-content" ng-show="forlibrary">
+						<code class="titip-left">
+							<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>
+							&nbsp;
+							<span class="titip-content">
+								add to favorites
+							</span>
+						</code>
+					</a>
+
+					<hr>
+				</li>
+			</div>
+		</ul>
+	</div>
+</div>

@@ -5,8 +5,8 @@
 
 webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
 
-
     $scope.graphDataLoading = true; //show spinner
+
 
     this.getGraphData = function() {
         networkService.getGraphData()
@@ -14,7 +14,6 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
                 $scope.graphData = graphData;
                 $scope.graphDataLoading = false; // stop showing spinner
                 $scope.$broadcast("Graph_Ready"); //notify directive to display graph
-
             })
             .error(function() {
                 $scope.graphDataLoading = false; // stop showing spinner
@@ -25,6 +24,6 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
 
     this.getGraphData();
 
-
+    $scope.currentPubInCommon = networkService.currentPubInCommon; //set and displayed when link between two authors is clicked
 
 });

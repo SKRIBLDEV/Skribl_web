@@ -1,6 +1,6 @@
 
 
-webapp.directive('graphDirective', function (appData) {
+webapp.directive('graphDirective', function (appData, networkService) {
     return {
         restrict: 'E',
         replace: true,
@@ -24,15 +24,19 @@ webapp.directive('graphDirective', function (appData) {
                 var width = cardElement[0][0].clientWidth;
                 var height = 0.8 * width;//width = 800,
 
-                var circleWidth = width/100;
+                var circleWidth = width/50;
                 var fontSize = width/1000;
 
                 var circleWidthSelected = circleWidth + width/200;
                 var fontSizeSelected = width/800;
 
                 var skriblColor =  "#4A60B6"; // skribl-primary
-                var selectedNodeColor = "#EF5350"; //"#e51c23"; // skribl red
+                
+                var selectedNodeColor = "#EF5350"; //"#e51c23" -> skribl red
                 var centerNodeColor = "#EF5350";
+
+                var linkColor = "#999";
+                var selectedLinkColor = selectedNodeColor;
 
                 var svg = d3.select(element[0]).append("svg")
                     .attr("class", "stage")
@@ -41,8 +45,8 @@ webapp.directive('graphDirective', function (appData) {
 
 
                 var force = d3.layout.force()
-                    .charge(-1000)
-                    .linkDistance(width/5)
+                    .charge(-4000)
+                    .linkDistance(width/15)
                     .size([width, height]);
 
 
@@ -50,7 +54,34 @@ webapp.directive('graphDirective', function (appData) {
                     .data(scope.graphData.coAuthors)
                     .enter().append("line")
                     .attr("class", "link")
-                    .style("stroke-width", 1);
+                    .style("stroke", linkColor)
+                    .style("stroke-width", 3)
+                    .style("stroke-opacity", .6)
+
+                    .on("mouseover", function(d,i) {
+                      d3.select(this)//.selectAll('.link')
+                          .transition()
+                          .duration(250)
+                          .style("stroke",selectedLinkColor)
+                          .style("stroke-width", 8)
+                          .style("stroke-opacity", 1)
+                    })
+
+                    .on("mouseout", function(d,i) {
+                      d3.select(this)//.selectAll('.link')
+                          .transition()
+                          .duration(250)
+                          .style("stroke",linkColor)
+                          .style("stroke-width", 3)
+                          .style("stroke-opacity", .6)
+                    })
+
+                    .on("click", function(d, i) { 
+                      showPublications(d);
+                      /*console.log("source: " + d.source);
+                      console.log("target: " + d.target);
+                      console.log("publication: " + d.publication.id);*/
+                    });
 
 
                 var node = svg.selectAll("circle.node")
@@ -71,7 +102,8 @@ webapp.directive('graphDirective', function (appData) {
                           .transition()
                           .duration(250)
                           .style("cursor", "none")     
-                          .attr("r", circleWidthSelected)
+                          .attr("r",  function(d, i){
+                            return circleWidthSelected * d.weight/10;})
                           .style("fill",selectedNodeColor);
 
                           //TEXT
@@ -101,7 +133,8 @@ webapp.directive('graphDirective', function (appData) {
                           d3.select(this).selectAll("circle")
                           .transition()
                           .duration(250)
-                          .attr("r", circleWidth)
+                          .attr("r", function(d, i){
+                            return circleWidth * d.weight/10;})
                           .style("fill",function(d,i){
                               if(d.index == 1)
                                 return centerNodeColor;
@@ -121,36 +154,6 @@ webapp.directive('graphDirective', function (appData) {
                       })
 
                       .call(force.drag);
-
-  
-
-                node.append("svg:circle")
-                    .attr("r", circleWidth)
-                    .style("fill", function(d,i){
-                      if(i == 1)
-                        return centerNodeColor;
-                      else 
-                        return skriblColor;
-                    });
-                    
-                node.append("text")
-                    .text(function (d, i) {
-                        return d.firstName + " " + d.lastName;
-                    })
-                    .attr("x", function (d, i) {
-                        return circleWidth + 5;
-                    })
-                    .attr("y", function (d, i) {
-                      return  5;
-                    })
-                    .attr("font-family", "Roboto")
-                    .style("fill", skriblColor)
-                    .attr("font-size", function (d, i) {
-                        return fontSize + "em";
-                    })
-                    .attr("text-anchor", function (d, i) {
-                       return "beginning";
-                    });
 
                 force
                     .nodes(scope.graphData.authors)
@@ -178,11 +181,61 @@ webapp.directive('graphDirective', function (appData) {
 
                 });
 
-                var showProfile = function(element){
-                    console.log(element.lastName + ", id: " + element.id)
-                    appData.data.currentProfileData.name = element.lastName;
-                    console.log(appData.data.currentProfileData);
-                    console.log(scope.data.currentProfileData.name)
+  
+
+                node.append("svg:circle")
+                    .attr("r", function(d, i){
+                      return circleWidth * d.weight/10; 
+                    })
+                    .style("fill", function(d,i){
+                      if(i == 1)
+                        return centerNodeColor;
+                      else 
+                        return skriblColor;
+                    });
+                    
+                node.append("text")
+                    .text(function (d, i) {
+                        return d.firstName + " " + d.lastName;
+                    })
+                    .attr("x", function (d, i) {
+                        return circleWidth + 5;
+                    })
+                    .attr("y", function (d, i) {
+                      return  5;
+                    })
+                    .attr("font-family", "Roboto")
+                    .style("fill", skriblColor)
+                    .attr("font-size", function (d, i) {
+                        return fontSize + "em";
+                    })
+                    .attr("text-anchor", function (d, i) {
+                       return "beginning";
+                    });
+
+              
+
+                var showProfile = function(clickedNode){
+                    appData.data.currentProfileData.name = clickedNode.lastName;
+                    appData.data.currentProfileData.authorId = clickedNode.id;
+                    scope.$digest();
+                }
+
+                var listPublications = function(authorIndex1, authorIndex2){
+                  var list = [];
+                  for (j = 0; j < scope.graphData.coAuthors.length; j++) {
+                    if (scope.graphData.coAuthors[j].target.index == authorIndex1 && scope.graphData.coAuthors[j].source.index == authorIndex2)
+                      list.push(scope.graphData.coAuthors[j].publication);
+                     if (scope.graphData.coAuthors[j].source.index == authorIndex1 && scope.graphData.coAuthors[j].target.index == authorIndex2)
+                      list.push(scope.graphData.coAuthors[j].publication);
+                  }
+                  return list;
+                }
+
+                var showPublications = function(clickedLink){
+                  networkService.currentPubInCommon = listPublications(clickedLink.target.index, clickedLink.source.index);
+                  console.log(networkService.currentPubInCommon);
+                  scope.$digest();
                 }
 
 

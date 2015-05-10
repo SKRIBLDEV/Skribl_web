@@ -91,8 +91,15 @@ webapp.directive('globalMenu',function(){
 }).directive('profileCard', function() {
 	return {
 		restrict: 'E',
+		scope : false,
 		templateUrl: 'templates/profileCard.html'
 	}
-});
+}).directive('currentPubInCommon', function() { //used only in the network view
+	return {
+		restrict: 'E',
+		scope : false,
+		templateUrl: 'templates/network-commonPublications.html'
+	}
+})
 
 
