@@ -2,6 +2,7 @@
 
 const HTTPSServer = require('./server/server.js').HTTPSServer;
 const Database = require('./server/modules/database/database.js').Database;
+const recommender = require('./server/modules/recommender.js');
 const authentication = require('./server/authentication').auth;
 const bodyParser = require('body-parser');
 const basicAuth = require('basic-auth');
@@ -46,7 +47,6 @@ const SKRIBLServer = new HTTPSServer('./server/ssl/skribl.key',
 
 /* ---- SETUP RECOMMENDATION ENGINE ---- */
 
-const recommender = require('./recommender.js')
 recommender.useDatabase(SKRIBLDatabase);
 
 /* ---- CONFIGURE SERVER CONTEXT ---- */
