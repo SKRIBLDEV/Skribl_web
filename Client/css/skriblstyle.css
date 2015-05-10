@@ -1709,10 +1709,10 @@
   color: #018dc4 !important; }
 
 .skribl-alert-color {
-  background-color: #e51c23 !important; }
+  background-color: #EF5350 !important; }
 
 .skribl-alert-color-text {
-  color: #e51c23 !important; }
+  color: #EF5350 !important; }
 
 .skribl-alert-color.darken-1 {
   background-color: #d0181e !important; }
@@ -6244,10 +6244,10 @@ label {
   .input-field input[type=number].invalid,
   .input-field input[type=search].invalid,
   .input-field textarea.materialize-textarea.invalid {
-    border-bottom: 1px solid #e51c23;
-    -webkit-box-shadow: 0 1px 0 0 #e51c23;
-    -moz-box-shadow: 0 1px 0 0 #e51c23;
-    box-shadow: 0 1px 0 0 #e51c23; }
+    border-bottom: 1px solid #EF5350;
+    -webkit-box-shadow: 0 1px 0 0 #EF5350;
+    -moz-box-shadow: 0 1px 0 0 #EF5350;
+    box-shadow: 0 1px 0 0 #EF5350; }
   .input-field .prefix {
     position: absolute;
     width: 3rem;
@@ -8066,6 +8066,15 @@ body {
   .white-text-color a {
     text-decoration: underline; }
 
+@-webkit-keyframes spacerspacer {
+  0% {
+    letter-spacing: 2px; }
+  100% {
+    letter-spacing: 20px; } }
+.Intro {
+  letter-spacing: 20px;
+  -webkit-animation: spacerspacer 5s 1      ease-in-out; }
+
 .selectable-black {
   color: black;
   -webkit-transition: color 0.3s ease;
@@ -8115,7 +8124,7 @@ a {
   color: #2c3a6e; }
 
 .alert-color {
-  color: #e51c23; }
+  color: #EF5350; }
 
 p {
   line-height: 2rem; }

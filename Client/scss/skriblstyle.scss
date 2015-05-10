@@ -35,6 +35,21 @@ body {
   }
 }
 
+@-webkit-keyframes spacerspacer {
+    0%   { 
+          letter-spacing: 2px;
+    }
+    100% { 
+          letter-spacing: 20px;
+    }
+}
+
+.Intro {
+    letter-spacing: 20px;
+    -webkit-animation: spacerspacer 5s 1      ease-in-out;;
+
+}
+
 //text
 .selectable-black {
   color: black;
