@@ -1,6 +1,6 @@
 
 const RID = require('./rid.js');
-function Graph(db, AUT) {
+function Graph(db, AUT, myDB) {
 
 	//XXX: zie opmerking over modules...
 

@@ -56,15 +56,15 @@ function Database(serverConfig, dbConfig) {
 	//XXX: zie opmerking over modules in affiliation.js
 
 	var self = this;
-	var aff = new Affil.Affiliation(db);
-	var RD = new RDomain.ResearchDomain(db);
-	var PUB = new Publication.Publication(db);
-	var CLS = new Classifier.Classifier(db);
-	var Lib = new library.Library(db);
-	var Kw = new keyword.Keyword(db);
-	var AUT = new authors.Author(db);
+	var aff = new Affil.Affiliation(db, self);
+	var RD = new RDomain.ResearchDomain(db, self);
+	var PUB = new Publication.Publication(db, self);
+	var CLS = new Classifier.Classifier(db, self);
+	var Lib = new library.Library(db, self);
+	var Kw = new keyword.Keyword(db, self);
+	var AUT = new authors.Author(db, self);
 	var RS = new reset.ResetDB(db, self);
-	var graph = new Graph.Graph(db, AUT);
+	var graph = new Graph.Graph(db, AUT, self);
 
 
 	/* provides functions */
@@ -354,3 +354,4 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
+

@@ -8,7 +8,7 @@ var RID = require('./rid.js');
    *@constructor 
  *@param {Object} db - database link
  */
-function Author(db) {
+function Author(db, myDB) {
 
 	//XXX: zie algemene opmerking in affiliation.js
 

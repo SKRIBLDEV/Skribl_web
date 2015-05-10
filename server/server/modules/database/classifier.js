@@ -138,7 +138,7 @@ _utf8_decode : function (utftext) {
 }
 
 
-function Classifier(db) {
+function Classifier(db, myDB) {
 
     //XXX: zelfde opmerking over module als in affiliation.js
 
@@ -161,7 +161,7 @@ function Classifier(db) {
         clb(null, res);
 	}
 
-	db.saveClassifier = function(usr, cls) {
+	myDB.saveClassifier = function(usr, cls) {
 			db.create('vertex', 'Classifier')
 			.set({
 				user: usr,
@@ -174,7 +174,7 @@ function Classifier(db) {
 			});
 	}
 
-	db.loadClassifier = function(usr, clb) {
+	myDB.loadClassifier = function(usr, clb) {
 		db.select().from('Classifier').where({user: usr}).all()
 		.then(function(cls) {
 			clb(null, cls[0].data.toString());

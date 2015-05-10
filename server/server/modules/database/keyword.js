@@ -1,6 +1,6 @@
 var Oriento = require('oriento');
 
-function Keyword(db) {
+function Keyword(db, myDB) {
 
 	//XXX: zie opmerking over modules
 

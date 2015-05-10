@@ -15,11 +15,11 @@ const Oriento = require('oriento');
    *@constructor 
  *@param {Object} db - database link
  */
-function Publication(db) {
+function Publication(db, myDB) {
 
-	const AUT = new Author.Author(db); //XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
-	const RD = new researchDomain.ResearchDomain(db);
-	const Kw = new keyword.Keyword(db);
+	const AUT = new Author.Author(db, myDB); //XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
+	const RD = new researchDomain.ResearchDomain(db, myDB);
+	const Kw = new keyword.Keyword(db, myDB);
 	const self = this;
 
 			/**
@@ -49,7 +49,7 @@ function Publication(db) {
 		 * @param {callBack} callback
 		 * @return {string} id of publication
 		 */
-	 db.addJournal = function(title, fileObj, uploader, callback) {
+	 myDB.addJournal = function(title, fileObj, uploader, callback) {
 		var fileName = fileObj.originalname;
 	/**
 		 * Will add vertices and links to database.
@@ -94,7 +94,7 @@ function Publication(db) {
 		 * @param {callBack} callback
 		 * @return {string} id of publication
 		 */
-	 db.addProceeding = function(title, fileObj, uploader, callback) {
+	 myDB.addProceeding = function(title, fileObj, uploader, callback) {
 		var fileName = fileObj.originalname;	
 	/**
 		 * Will add vertices and links to database.
@@ -139,7 +139,7 @@ function Publication(db) {
 	 * @param  {callBack} callback
 	 * @return {Object}   a function is returned.
 	 */
-	db.loadPublication = function(id, path, clb) {
+	myDB.loadPublication = function(id, path, clb) {
 		db.query('update ' + id +' INCREMENT viewCount = 1 lock record')
 		.then(function(dummy) {
 			db.record.get(id)
@@ -162,7 +162,7 @@ function Publication(db) {
 	 * @param  {callBack} clb 
 	 * @return {Object}     object with publication metadata.
 	 */
-	db.getPublication = function(id, clb) {
+	myDB.getPublication = function(id, clb) {
 		db.select('title, fileName, @class, journal, publisher, volume, number, year, abstract, citations, url, private, booktitle, organisation, lastUpdated, viewCount').from(id).all()
 		.then(function(pubs) {
 			if(pubs.length) {
@@ -200,7 +200,7 @@ function Publication(db) {
 	 * @param  {callBack} callback 
 	 * @return {Bool}            returns true (regardless if a pub was deleted or not)
 	 */
-	db.removePublication = function(id, callback) {
+	myDB.removePublication = function(id, callback) {
 		db.delete('vertex').where('@rid = \'' + id + '\'').one()
 		.then(function(nr) {
 			callback(null, true);
@@ -213,7 +213,7 @@ function Publication(db) {
 	 * @param  {callBack} clb
 	 * @return {String}     username of uploader
 	 */
-	db.uploadedBy = function(id, clb) {
+	myDB.uploadedBy = function(id, clb) {
 		db.query('select username from (select expand( in(\'HasPublication\')) from ' + id + ') where name = \'Uploaded\'')
 			.then(function(libraries) {
 				if(libraries.length) {
@@ -251,7 +251,7 @@ function Publication(db) {
 	 * @param  {callBack} clb    
 	 * @return {Array<Object>}         array of result objects 
 	 */
-	db.querySimple = function(keyword, limit, clb) {
+	myDB.querySimple = function(keyword, limit, clb) {
 		/**
 		 * given publication id, returns an object with certain info about pulication
 		 * @param  {String} id   publication id
@@ -344,7 +344,7 @@ function Publication(db) {
 	 * @param  {callBack} clb      
 	 * @return {Array<Object>}          result array
 	 */
-	db.queryAdvanced = function(criteria, limit, clb) {
+	myDB.queryAdvanced = function(criteria, limit, clb) {
 		var query = '';
 		var queryInitialized = false;
 		var tempRes = [];
@@ -533,7 +533,7 @@ function Publication(db) {
 	 * @param  {callBack} clb       
 	 * @return {Bool}    returns true when finished       
 	 */
-	db.updatePublication = function(id, metObject, clb) {
+	myDB.updatePublication = function(id, metObject, clb) {
 		db.record.get(id)
 		.then(function(res) {
 			if(res) {
@@ -624,7 +624,7 @@ function Publication(db) {
 	 * @param  {callBack} clb    
 	 * @return {Array<Object>}        returns a publication array.
 	 */
-	db.authorPublications = function(authId, clb) {
+	myDB.authorPublications = function(authId, clb) {
 		db.query('select expand(out(\'AuthorOf\').include(\'title\', \'@rid\', \'lastUpdated\')) from ' + authId).all()
 		.then(function(pubs) {
 			var pubLength = pubs.length;
@@ -653,7 +653,7 @@ function Publication(db) {
 		}).error(clb);	
 	}
 
-	db.nearbyPublications = function(usr, depth, clb) {
+	myDB.nearbyPublications = function(usr, depth, clb) {
 		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' limit order by viewCount').all()
 		.then(function(pubs) {
 			var pubsLength = pubs.length;

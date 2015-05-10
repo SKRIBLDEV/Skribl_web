@@ -1,6 +1,6 @@
 
 const RID = require('./rid.js');
-function Affiliation(db) {
+function Affiliation(db, myDB) {
 
 	/* XXX: algemene opmerking voor al je modules:
 		voeg in elke modules meteen je functiedefinities toe

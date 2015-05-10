@@ -1,7 +1,7 @@
 
 
 const RID = require('./rid.js');
-function ResearchDomain(db){
+function ResearchDomain(db, myDB){
 
 
 	/**
@@ -40,7 +40,7 @@ function ResearchDomain(db){
 	 * @param {String}   userRid  
 	 * @param {callBack} callback
 	 */
-	db.addResearchDomains = function(domains, trx, callback) {
+	myDB.addResearchDomains = function(domains, trx, callback) {
 		var counter = domains.length - 1;
 		function forClb(error, varName) {
 				if(error) {
@@ -72,7 +72,7 @@ function ResearchDomain(db){
 	 * @param {Object}   trx      transaction
 	 * @param {callBack} callback 
 	 */
-	db.addPubResearchDomains = function(domains, trx, callback) {
+	myDB.addPubResearchDomains = function(domains, trx, callback) {
 		var ctr = 0;
 		function forClb(error, varName) {
 			ctr++;
@@ -106,7 +106,7 @@ function ResearchDomain(db){
 	 * @param  {callBack} clb   
 	 * @return {Array<String>}       array of researchdomains
 	 */
-	db.getPubResearchDomains = function(pubId, clb) {
+	myDB.getPubResearchDomains = function(pubId, clb) {
 		db.select('expand( out(\'HasResearchDomain\') )').from(pubId).all()
 		.then(function(resDomains) {
 			var resDomLength = resDomains.length;

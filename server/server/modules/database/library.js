@@ -3,10 +3,10 @@
 var RID = require('./rid.js');
 var Author = require('./author.js');
 
-function Library(db) {
+function Library(db, myDB) {
 
 
-	var AUT = new Author.Author(db);//XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
+	var AUT = new Author.Author(db, myDB);//XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
 
 	/**
 	 * creates a library and connects it to given user
@@ -37,7 +37,7 @@ function Library(db) {
 	 * @param {String} name libraryname
 	 * @param {callBack} clb  
 	 */
-	 db.addLibrary = function(user, name, clb) {
+	 myDB.addLibrary = function(user, name, clb) {
 	 	db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 	 	.then(function(res) {
 	 		if(res.length === 0) {
@@ -67,7 +67,7 @@ function Library(db) {
 	 * @param {String} id      publication id
 	 * @param {callBack} clb    
 	 */
-	db.addToLibrary = function(user, library, id, clb) {
+	myDB.addToLibrary = function(user, library, id, clb) {
 		db.select('@rid').from('Publication').where('@rid = ' + id).all()
 		.then(function(res) {
 			if(res.length) {
@@ -112,7 +112,7 @@ function Library(db) {
 	 * @param  {String} id      publication id
 	 * @param  {callBack} clb     
 	 */
-	db.removeFromLibrary = function(user, library, id, clb) {
+	myDB.removeFromLibrary = function(user, library, id, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + library + '\'').all()
 		.then(function(res) {
 			if(res.length) {
@@ -151,7 +151,7 @@ function Library(db) {
 	 * @param  {callBack} clb  
 	 * @return {Array<String>}      array of library names
 	 */
-	db.loadLibraries = function(user, clb) {
+	myDB.loadLibraries = function(user, clb) {
 		function getName(array, callB) {
 			var arrLength = array.length;
 			//XXX: of opnieuw, een map zou hier nog beter zijn
@@ -179,7 +179,7 @@ function Library(db) {
 	 * @param  {callBack} clb     
 	 * @return {Array<Object>}         publication array
 	 */
-	 db.loadLibrary = function(user, library, clb) {
+	 myDB.loadLibrary = function(user, library, clb) {
 
 		function prepResults(array, callB) {
 			var arrLength = array.length;
@@ -266,7 +266,7 @@ function Library(db) {
 	 * @param  {String} name name of library
 	 * @param  {callBack} clb  
 	 */
-	db.removeLibrary = function(user, name, clb) {
+	myDB.removeLibrary = function(user, name, clb) {
 		db.select().from('Library').where('username = \'' + user + '\' and name = \'' + name + '\'').all()
 		.then(function(res) {
 			if(res.length) {
