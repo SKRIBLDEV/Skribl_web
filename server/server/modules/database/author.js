@@ -263,7 +263,7 @@ function Author(db, myDB) {
 	 * @param  {callBack} clb   
 	 * @return {Array<Object>}       array of objects containing firstnam, lastname,  author id and user id if author is connected to a user profile
 	 */
-	db.searchAuthor = function(fName, lName, limit, clb) {
+	myDB.searchAuthor = function(fName, lName, limit, clb) {
 		function addPubs(authors, i, clb2) {
 			function cleanup(arr, clb1) {
 				var arrLength = arr.length;

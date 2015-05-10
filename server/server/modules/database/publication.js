@@ -168,7 +168,7 @@ function Publication(db, myDB) {
 			if(pubs.length) {
 				var res = pubs[0];
 				AUT.getPubAuthors(id, function(error, authors) {
-					RD.getPubResearchDomains(id, function(error, resDomains) {
+					myDB.getPubResearchDomains(id, function(error, resDomains) {
 						Kw.getPubKeywords(id, function(error, resKeys) {
 							if(authors.length) {
 								res.authors = authors;
@@ -585,7 +585,7 @@ function Publication(db, myDB) {
 									clb(error);
 								}
 								else {
-									RD.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
+									myDB.addPubResearchDomains(metObject.researchDomains, trx, function(error, res) {
 										if(error) {
 											clb(error);
 										}
