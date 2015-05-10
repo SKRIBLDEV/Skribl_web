@@ -354,4 +354,3 @@ function Database(serverConfig, dbConfig) {
 }
 
 exports.Database = Database;
-

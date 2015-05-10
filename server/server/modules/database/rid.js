@@ -71,7 +71,6 @@ const Oriento = require('oriento');
 		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = transformRid(array[i]);
-			counter++
 		};
 		return resArray;
 	}
@@ -87,7 +86,6 @@ const Oriento = require('oriento');
 		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = transformRid(array[i].rid);
-			counter++
 		};
 		return resArray;
 	}
