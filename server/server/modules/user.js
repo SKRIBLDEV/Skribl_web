@@ -89,7 +89,7 @@ function createUser(info, clb) {
 		else{
 			var lengthRD = info.researchDomains.length
 			for (var i = 0; i < lengthRD ; i++){
-				if (! VAL.isGeneralName( info.researchDomains[i].major )) // future implementation using isResearchDomain //[I] kleine aanpassing zodat mijn module geen errors krijgt.
+				if (! VAL.isGeneralName( info.researchDomains[i].major ) || ! VAL.isGeneralName( info.researchDomains[i].minor ))
 					e.push('input research domain is not recognized');
 			}
 		}
