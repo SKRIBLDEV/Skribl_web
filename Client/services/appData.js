@@ -34,7 +34,24 @@
         currentPublicationID: null
     };
 
-    this.currentPubInCommon = { //[network] set and displayed when link between two authors is clicked (see graphDirective)
+
+    //***network data
+
+
+    this.currentNetworkAuthor = { //upon login set to current user 
+        authorId : null, 
+        firstName : null, 
+        lastName : null
+    }
+
+    this.setCurrentNetworkAuthor = function(data){
+        this.currentNetworkAuthor = {};
+        this.currentNetworkAuthor.authorId = data.authorId,
+        this.currentNetworkAuthor.firstName = data.firstName,
+        this.currentNetworkAuthor.lastName = data.lastName
+    }
+
+    this.currentPubInCommon = { // set and displayed when link between two authors is clicked (see graphDirective)
         author1: null,
         author2: null,
         publications : []

@@ -3,12 +3,12 @@
  */
 
 
-webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
-
-    $scope.graphDataLoading = true; //show spinner
+webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appData) {
 
 
-    this.getGraphData = function() {
+
+    getGraphData = function() {
+        $scope.graphDataLoading = true; //show spinner
         networkService.getGraphData()
             .success(function(graphData) {
                 $scope.graphData = graphData;
@@ -22,7 +22,24 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService) {
             });
     };
 
-    this.getGraphData();
+    //getGraphData();
+
+    
+
+    $scope.changeNetwork = function(currentProfileData){ //somehow this additional step is needed to make this scope notice the change
+        console.log("changing");
+        appData.setCurrentNetworkAuthor(currentProfileData);
+        $scope.currentNetworkAuthor = appData.currentNetworkAuthor;
+    }
+
+    $scope.$watch('currentNetworkAuthor', function(){
+        console.log("change noticed!");
+        //clear "canvas"
+        d3.select(".svg-network").remove();
+        getGraphData();
+    })
+        
+    
 
 
 });

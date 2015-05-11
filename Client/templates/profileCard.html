@@ -7,10 +7,11 @@
      <div class="animated fadeInDown col s12">
         <div class="section">
             <a> {{data.currentProfileData.firstName}} {{data.currentProfileData.lastName}} </a>
-            <p> When a node is clicked in the graph, this is the available data: {{data.currentProfileData.availableFromGraph}} </p>
-            <p> This not yet (?) encompasses the info of whether the author is a user -> I'm checking it out with back-end </p>
+            <p> Id:  {{data.currentProfileData.authorId}} </p>
+            <p> Username, if user:  {{data.currentProfileData.username}} </p>
             <p> If the author is a user, we could display the affiliation, visualise the metrics, etc. <p>
             <p> for all authors (non-users included) we could display a list of their publications <p>
+            <a class="btn" ng-click="changeNetwork(data.currentProfileData)"> Display Author's Network</a>
         </div>
     </div>
     </div>

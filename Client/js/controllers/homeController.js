@@ -223,15 +223,14 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				//save userInformation in appData.
 				appData.currentUser = data;
 
+				appData.setCurrentNetworkAuthor(data); // when opening network, own network will be displayed by default 
+
 
 				// [H] with ui-router:
-				//$state.go('dashboard.library');
-				$state.go('dashboard.search');
+				$state.go('dashboard.library');
+				//$state.go('dashboard.search');
 				routerHelperService.goDashboard();
-				/*
-				// change route to #/dashboard
-				$location.path('/dashboard');
-				*/
+			
 			});
 			loadUserInfoRequest.error(function(data, status, headers, config) {
 			//Error when getting user info --> database error

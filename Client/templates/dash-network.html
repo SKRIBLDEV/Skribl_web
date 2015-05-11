@@ -10,10 +10,14 @@
         <div class="card">
             <div class="card-content">
     						<span class="card-title grey-text text-darken-4" ng-click="publications.toggleLibraryCard()">
-    							<a> Your Network </a>
+    							<p> Currently Displaying the network of </p>
+                                <a> {{appData.currentNetworkAuthor.firstName}} {{appData.currentNetworkAuthor.lastName}} </a>
     							<i class="mdi-navigation-more-vert right"></i>
+
     						</span>
+
             </div>
+            <a class ="btn" ng-click="changeNetwork(appData.currentUser)"> Display Mine</a>
             <div class="row center" ng-show="graphDataLoading">
                  <spinner ></spinner>
             </div>

@@ -20,6 +20,8 @@ webapp.directive('graphDirective', function (appData) {
             // create a visualisation of the graph
             scope.$on("Graph_Ready", function () {
 
+              //the order of the statements (defining bahaviour, algorithm, defining attributes, ...) influences the outcome. 
+
                 var cardElement = d3.select('.networkCard');
                 var width = cardElement[0][0].clientWidth;
                 var height = 0.8 * width;//width = 800,
@@ -36,24 +38,25 @@ webapp.directive('graphDirective', function (appData) {
                 var authorColor = grey;
                 var userColor = skriblColor; 
                 
-                var selectedNodeColor = "#EF5350"; //"#e51c23" -> skribl red
+                var selectedNodeColor = "#EF5350";
                 var centerNodeColor = "#EF5350";
 
                 var linkColor = grey;
                 var selectedLinkColor = selectedNodeColor;
 
                 var svg = d3.select(element[0]).append("svg")
-                    .attr("class", "stage")
+                    .attr("class", "svg-network")
                     .attr("width", width)
                     .attr("height", height);
 
-
+                //force layout algorithm 
                 var force = d3.layout.force()
                     .charge(-4000)
                     .linkDistance(width/12)
                     .size([width, height]);
 
 
+                //add links and define interactivity -> other attributes below    
                 var link = svg.selectAll(".link")
                     .data(scope.graphData.coAuthors)
                     .enter().append("line")
@@ -81,13 +84,11 @@ webapp.directive('graphDirective', function (appData) {
                     })
 
                     .on("click", function(d, i) { 
-                      showPublications(d);
-                      /*console.log("source: " + d.source);
-                      console.log("target: " + d.target);
-                      console.log("publication: " + d.publication.id);*/
+                      showPublications(d); //defined below
                     });
 
 
+                //add nodes and define interactivity -> other attributes below  
                 var node = svg.selectAll("circle.node")
                     .data(scope.graphData.authors)
                     .enter()
@@ -140,12 +141,10 @@ webapp.directive('graphDirective', function (appData) {
                           /*.attr("r", function(d, i){
                             return circleWidth * d.weight/10;})*/
                           .style("fill",function(d,i){
-                              if(d.index == 1)
-                                return centerNodeColor;
-                               else if (d.username) // known user 
-                                  return userColor;
+                              if (d.username) // known user 
+                                return userColor;
                               else 
-                                return authorColor;
+                                return authorColor; //author but not a user 
                           });
 
                           //TEXT
@@ -163,6 +162,8 @@ webapp.directive('graphDirective', function (appData) {
 
                       .call(force.drag);
 
+
+                //feed data to fore layout algorithm       
                 force
                     .nodes(scope.graphData.authors)
                     .links(scope.graphData.coAuthors)
@@ -196,13 +197,19 @@ webapp.directive('graphDirective', function (appData) {
                       return circleWidth * d.weight/10; 
                     })
                     .style("fill", function(d,i){
-                      if(i === 1) // author whom's graph is displayed
-                        return centerNodeColor; 
-                      else if (d.username) // known user 
+                      if (d.username) // known user 
                         return userColor;
                       else 
                         return authorColor; //author but not a user 
-                    });
+                    })
+                    .style("stroke",  function(d,i){
+                      if (isNetworkOwner(d)) // known user 
+                        return "#2c3a6e";
+                    })
+                    .style("stroke-width",  function(d,i){
+                      if (isNetworkOwner(d)) // known user 
+                        return (circleWidth * d.weight/10)/3 ;
+                    })
                     
                 node.append("text")
                     .text(function (d, i) {
@@ -221,17 +228,25 @@ webapp.directive('graphDirective', function (appData) {
                     })
                     .attr("text-anchor", function (d, i) {
                        return "beginning";
-                    });
-              
+                    })
+
+
+            })
+
+                var isNetworkOwner = function(d){
+                  return d.id === appData.currentNetworkAuthor.authorId;
+                }
+
 
                 var showProfile = function(clickedNode){
                     appData.data.currentProfileData.lastName = clickedNode.lastName;
                     appData.data.currentProfileData.firstName = clickedNode.firstName;
                     appData.data.currentProfileData.authorId = clickedNode.id;
-                    //appData.data.currentProfileData.availableFromGraph = clickedNode; // TO BE REMOVED?
+                    appData.data.currentProfileData.username = clickedNode.username; // can be undefined
                     scope.$digest();
                 }
 
+                //returns a list of the publications two authors have in common 
                 var listPublications = function(authorIndex1, authorIndex2){
                   var list = [];
                   for (j = 0; j < scope.graphData.coAuthors.length; j++) {
@@ -251,9 +266,6 @@ webapp.directive('graphDirective', function (appData) {
                   }
                   scope.$digest();
                 }
-
-
-            })
 
         }
     }});
