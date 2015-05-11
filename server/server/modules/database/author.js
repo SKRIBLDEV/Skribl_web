@@ -113,8 +113,8 @@ function Author(db, myDB) {
 	 * @param  {callBack} callback 
 	 */
 	this.connectAuthors = function(authors, trx, callback) {
-		var autLength = authors.length;
-		if(authors && autLength) {
+		if(authors && authors.length) {
+			var autLength = authors.length;
 			var ctr = 0;
 			for (var i = 0; i < autLength; i++) {
 				connectAuthor(authors[i], i, trx, function(error, res) {

@@ -2,8 +2,6 @@ var Oriento = require('oriento');
 
 function Keyword(db, myDB) {
 
-	//XXX: zie opmerking over modules
-
 	/**
 	 * adds a keyword to database
 	 * @param {String} keyword name of keyword
