@@ -8,12 +8,12 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
- webapp.controller('dashController', function($scope, $http, $state, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate) {
+ webapp.controller('dashController', function($scope, $http, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate, routerHelperService) {
 
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
     if (!(appData.currentUser)) {
-        $state.go('home');
+        routerHelperService.goHome();
         return;
     }
 
@@ -23,10 +23,7 @@
         // little hack to make pdf viewer work
         appData.data.currentMetaData = {download: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/material-design-2.pdf'};        
         appData.modifyResearchDomains();
-        
-        $state.go('dashboard.library'); 
-
-
+        routerHelperService.goDashboardLibrary();
     })();
 
 
@@ -39,6 +36,8 @@
     //-----------------------------------------------dataviz settings---------------------------------------------------//
     $scope.chartService = chartService;
     //-----------------------------------------------dataviz settings---------------------------------------------------//
+    
+    $scope.router = routerHelperService;
 
     //-------------------------------------------------USER settings----------------------------------------------------//
     $scope.username = appData.currentUser.username;

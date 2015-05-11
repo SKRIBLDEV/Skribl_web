@@ -67,7 +67,12 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 			templateUrl: "templates/dash-search.html"
 		})
 
-
+		// temp fix for quick development
+		.state('about', {
+			url: '/about',
+			controller: 'aboutController',
+			templateUrl: "templates/about.html"
+		})
 
 
 }]);
