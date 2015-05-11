@@ -318,7 +318,7 @@ function Database(serverConfig, dbConfig) {
 								.from('$user')
 								.to('$researchGroup');
 							});
-							this.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
+							self.addResearchDomains(newData.getResearchDomains(), trx, function(error, res) {
 								if(error) {
 									callback(error);
 								}
