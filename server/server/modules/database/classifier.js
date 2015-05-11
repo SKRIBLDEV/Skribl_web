@@ -177,7 +177,12 @@ function Classifier(db, myDB) {
 	myDB.loadClassifier = function(usr, clb) {
 		db.select().from('Classifier').where({user: usr}).all()
 		.then(function(cls) {
-			clb(null, cls[0].data.toString());
+            if(cls.length){
+			     clb(null, cls[0].data.toString());
+            }
+            else {
+                clb(new Error("no classifier with username: " + usr));
+            }
 		}).error(clb);
 	}
 }
