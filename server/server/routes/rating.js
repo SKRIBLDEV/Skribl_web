@@ -4,42 +4,43 @@ const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
 
-/* --- RECOMMEND PUBLICATIONS --- */
-
-const __DEFAULT_PUB_DEPTH__ = 10;
+/* --- RATE PUBLICATIONS --- */
 
 /**
-  * Recommend publications to a SKRIBL-user
+  * Let a SKRIBL-user rate a publication
   * @param {Object} req - HTTP request sent to server
   * @param {Object} res - HTTP response object
   * @param {Object} context - application context
  */
-function getRecommendations(req, res, context) {
+function ratePublication(req, res, context) {
 
-	var username = req.params['username'];
-	var database = context.db;
-	var recommender = context.recommender;
-	var depth = req.query['depth'];
-	
-	depth = (depth? parseInt(depth) : __DEFAULT_PUB_DEPTH__);
+	var pubID = req.params['pubId'];
 
-	recommender.recommend(username, depth, function(err, recs) {
+	context.db.getPublication(pubId, function(err, data) {
 		if(err)
 			serverError(res, err);
 		else {
-			res.status(200);
-			res.json(recs);
+			var recommender = context.recommender;
+			var username = req.params['username'];
+			var rating = req.query['like'];
+			rating = (rating === 'true');
+			recommender.rate(username, pubId, rating, function(err) {
+				if(err)
+					serverError(res)
+				else
+					res.status(200).end()
+			})
 		}
 	});
 }
 
-/** Checks if user is authenticated to load his/her recommendations
+/** Checks if user is authenticated to rate a publication
   * @param {object} auth - result of authentication
   * @param {object} req - provides context for authentication
   * @param {Object} context - server context with extra configurations and external objects
   * @param {Function} clb - callback; to be called with boolean to indicate authentication success/failure
   */
-getRecommendations.auth = function(auth, req, context, clb) {
+ratePublication.auth = function(auth, req, context, clb) {
 
 	var requiredUsername = req.params['username'];
 	clb(null, auth && (auth.getUsername() === requiredUsername));
@@ -47,5 +48,5 @@ getRecommendations.auth = function(auth, req, context, clb) {
 
 /* --- EXPORT ROUTE --- */
 
-exports.path = '/user/:username/recommendations';
-exports.get = getRecommendations;
+exports.path = '/user/:username/publication/:pubId';
+exports.post = ratePublication;

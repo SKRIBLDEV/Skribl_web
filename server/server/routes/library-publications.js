@@ -4,6 +4,7 @@ const errors = require('./routeErrors.js');
 const serverError = errors.serverError;
 const userError = errors.userError;
 
+function nop() {}
 
 /* --- ADD TO USER LIBRARY --- */
 
@@ -30,15 +31,15 @@ function addToLibrary(req, res, context) {
     else {
       res.status(200).end();
       //try to train classifier as well
-      if (lib === __FAV_LIB__)
+      if (lib === __FAV_LIB__) {
         var recommender = context.recommender;
         database.getPublication(pubId, function(err, pub) {
           if(!err) //don't bother with errors
             recommender.rate(usr, pub, true, nop);
-      });
+        });
+      }
     }
   });
-
 }
 
 /**

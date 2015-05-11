@@ -181,7 +181,7 @@ function Classifier(db, myDB) {
 			     clb(null, cls[0].data.toString());
             }
             else {
-                clb(new Error("no classifier with username: " + usr));
+                clb(null, '');
             }
 		}).error(clb);
 	}

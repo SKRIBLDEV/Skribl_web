@@ -70,6 +70,8 @@ SKRIBLServer.installRoute(require('./server/routes/author-publication.js'));
 SKRIBLServer.installRoute(require('./server/routes/libraries.js'));
 SKRIBLServer.installRoute(require('./server/routes/authors.js'));
 SKRIBLServer.installRoute(require('./server/routes/login.js'));
+SKRIBLServer.installRoute(require('./server/routes/recommendations.js'));
+SKRIBLServer.installRoute(require('./server/routes/rating.js'));
 
 /* ---- SERVE STATIC FILES ---- */
 

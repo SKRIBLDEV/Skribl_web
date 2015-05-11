@@ -60,6 +60,9 @@ function deleteUserInfo(req, res, context) {
 			//HTTP 204 deleted
 			res.status(204); 
 			res.end();
+			//remove from recommendation engine
+			var recommender = context.recommender;
+			recommender.dropUser(username);
 		}
 	});
 }
