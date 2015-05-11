@@ -288,7 +288,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
     	// temp fix for going to dashboard //FIXME
     (function developLogin() {
 		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
-		$scope.userinputLogin.password = "keeF5gee5"; // keeF5gee5
+		$scope.userinputLogin.password = "Brol12"; // keeF5gee5
 		$scope.doLogin();
 	})();
 
