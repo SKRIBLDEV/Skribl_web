@@ -33,10 +33,7 @@ function Keyword(db, myDB) {
 				.to('$' + trx_id);
 			});
 			clb(null, true);
-		//XXX: geef direct de callback mee
-		}).error(function(er) {
-			callback(er);
-		});
+		}).error(clb);
 	}
 
 	/**
@@ -46,17 +43,12 @@ function Keyword(db, myDB) {
 	 * @param {callback} callback 
 	 */				
 	this.addKeywords = function(keywords, trx, callback) {
-		//XXX: ipv (typeof ...), gebruik gewoon (keywords && keywords.length)
-		if(typeof keywords !== 'undefined' && keywords.length) {
+		if(keywords && keywords.length) {
+			var keyLength = keywords.length;
  			var ctr = 0;
- 			//XXX: gebruik length in een variabele
-			for (var i = 0; i < keywords.length; i++) {
+			for (var i = 0; i < keyLength; i++) {
 				addKeyword(keywords[i], i, trx, function(error, res) {
-					//XXX: 1) gebruik ===
-					//XXX: 2) gebruik ++ctr;
-					//XXX: 3) gebruik len
-					ctr++;
-					if(ctr == keywords.length) {
+					if(++ctr === keyLength) {
 						callback(null, true);
 					}
 				});
@@ -79,6 +71,7 @@ function Keyword(db, myDB) {
 			//XXX: if test is hier toch niet nodig, dit wordt al in for-lust getest!
 			//XXX: zelfs als je hier map gebruikt...
 			if(resKeys.length) {
+				var keyLength = resKeys.length;
 				var res = [];
 				var ctr = 0;
 				//XXX: gebruik hier een gewone for lus, ctr & i lopen parallel
@@ -98,7 +91,7 @@ function Keyword(db, myDB) {
 
 		//XXX: geef direct callback mee
 		}).error(function(er) {
-			callback(er);
+			clb(er);
 		});
 	}
 

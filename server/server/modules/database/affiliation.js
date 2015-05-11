@@ -136,10 +136,7 @@ function Affiliation(db, myDB) {
 					});
 					checkFaculty(RID.getRid(institutions[0]));
 				}
-			//XXX: kan je hier niet rechtsreeks mijn callback meegeven?
-			}).error(function(er) {
-				callback(er);
-			});
+			}).error(callback);
 		}
 
 		/**
@@ -166,14 +163,8 @@ function Affiliation(db, myDB) {
 						});
 						checkDepartment(RID.getRid(faculties[0]));
 					}
-				//XXX: zie zelfde opmerking error-callback
-				}).error(function(er) {
-					callback(er);
-				});
-			//XXX: idem...
-			}).error(function(er) {
-				callback(er);
-			});
+				}).error(callback);
+			}).error(callback);
 		}
 
 		/**
@@ -200,21 +191,14 @@ function Affiliation(db, myDB) {
 						});
 						checkResearchGroup(RID.getRid(departments[0]));
 					}
-				//XXX: idem
-				}).error(function(er) {
-					callback(er);
-				});
-			//XXX: idem
-			}).error(function(er) {
-				callback(er);
-			});
+				}).error(callback);
+			}).error(callback);
 		}
 
 		/**
 		 * checks if an researchgroup with certain name exists, if it does it calls the callback with the rid, if it doesn't it jumps to addResearchGroup()		
 		 */
 		function checkResearchGroup(departmentRid) {
-			//db.exec('select from (select expand( out(\'HasDepartment\') ) from ' + departmentRid + ') where Name = \'' + newData.getResearchGroup() + '\'')
 			db.select('expand( out(\'HasResearchGroup\') )').from(departmentRid).all()
 			.then(function(tempResGroups) {
 				db.select().from('[' + RID.getRids(tempResGroups).toString() + ']').where({Name: newData.getResearchGroup()}).all()
@@ -236,14 +220,8 @@ function Affiliation(db, myDB) {
 
 						callback(null, true);
 					}
-				//XXX: idem
-				}).error(function(er) {
-					callback(er);
-				});
-			//XXX: idem
-			}).error(function(er) {
-				callback(er);
-			});
+				}).error(callback);
+			}).error(callback);
 		}
 
 		checkInstitution();
@@ -269,23 +247,10 @@ function Affiliation(db, myDB) {
 					.then(function(res) {
 						user.institution = res[0].Name;
 						callback(null, user);
-					//XXX: idem
-					}).error(function(er) {
-						callback(er);
-					});
-				//XXX: idem
-				}).error(function(er) {
-					callback(er);
-				});
-			//XXX: idem
-			}).error(function(er) {
-				callback(er);
-			});
-		//XXX: idem
-		}).error(function(er) {
-			callback(er);
-		});
-	//XXX: idem
+					}).error(callback);
+				}).error(callback);
+			}).error(callback);
+		}).error(callback);
 	};
 }
 
