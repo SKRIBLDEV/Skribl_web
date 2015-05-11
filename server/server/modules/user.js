@@ -54,9 +54,7 @@ function UserRecord(info) {
 * @callback : clb(err, data) called either with err = validation error and data = array containing specific error information, or with err = null and data = true. 
 */
 
-//XXX: eigenaardige manier van functiedeclaratie, kleine stijlbreuk...
-//XXX: doe liever function createUser(info, clb) {} voor leesbaarheid
-createUser = function(info, clb) {
+function createUser(info, clb) {
 
 	function validate(info, clb) {
 
@@ -68,10 +66,9 @@ createUser = function(info, clb) {
 
 		var e = []; //array for specific error information, passed as the result to the clb if validation does not succeed
 
-		//check all 'general names'
-		//XXX: dit is een algemene opmerking: zet length liefst eerst in een variabele
-		//ipv het elke keer uit de array op te vragen (kleine optimalisatie)
-		for (var i = 0; i < generalNames.length; i++) {
+		//check all general names
+		var lengthGN = generalNames.length;
+		for (var i = 0; i < lengthGN ; i++) {
 			if (! VAL.isGeneralName( info[generalNames[i]] ))
 				e.push('input ' + generalNames[i] + ' is not a valid name');
 		}
@@ -87,16 +84,13 @@ createUser = function(info, clb) {
 			e.push('input ' + 'language' + ' is not a valid language option');
 
 
-		//check array of researchDomains
-		//XXX: gebruik !== ipv !(... === ...)
-		if ( !info.researchDomains || !info.researchDomains.constructor === Array)
+		if ( !info.researchDomains || info.researchDomains.constructor !== Array)
 			e.push('input ' + 'research domain' + ' is not defined or is not an array');
 		else{
-			//XXX: zelfde opmerking over length
-			for (var i = 0; i < info.researchDomains.length; i++){
+			var lengthRD = info.researchDomains.length
+			for (var i = 0; i < lengthRD ; i++){
 				if (! VAL.isGeneralName( info.researchDomains[i] )) // future implementation using isResearchDomain
-					//XXX: dit lijkt mij een vrij nutteloze string-append
-					e.push('input ' + 'research domain' + ' is not recognized');
+					e.push('input research domain is not recognized');
 			}
 		}
 

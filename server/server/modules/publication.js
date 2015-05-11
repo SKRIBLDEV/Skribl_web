@@ -21,13 +21,11 @@ function setUndefinedProperties(metadataGUI, metadataGS){
 */
 
 function setToType(type, metadataGS){
-  //XXX: gebruik === ipv ==
-  if (type == "journal"){
+  if (type === "journal"){
     metadataGS.journal = metadataGS.journalOrBookTitle;
     metadataGS.publisher = metadataGS.publisherOrOrganisation;
   };
-  //XXX: idem
-  if (type == "proceeding"){
+  if (type === "proceeding"){
     metadataGS.booktitle = metadataGS.journalOrBookTitle;
     metadataGS.organisation = metadataGS.publisherOrOrganisation;
   };
@@ -97,7 +95,6 @@ function search(searchTerms, limit, clb){
       }
       for(var i = 0; i < res.length; i++){
         if(! pdfUrl(res[i].url)){
-          //XXX: delete is misschien consistenter?
           res[i].url = undefined;
         }
         makeGeneric(res[i]);
@@ -112,71 +109,4 @@ function search(searchTerms, limit, clb){
 
 exports.search = search;
 exports.extract = extract;
-
-
-//test code:
-
-/*
-
- var proceedingArticle = "Analytical model for the optical propagation in a nonlinear left-handed material";
- var journalArticle = "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency";
-
-var testInfo = {
-  title: journalArticle,
-  type: "journal"
-}
-
-extract(testInfo, function(err, res){
-  console.log("EXTRACT");
-  if (err)
-    console.log(err);
-  else
-    console.log(testInfo);
-});
-*/
-
-
-
-
-/*
-var withWrongUrl = "Module superimposition: a composition technique for rule-based model transformation languages";
-
-
-search(withWrongUrl, 4, function(err, res){
-  console.log("SEARCH");
-  if (err)
-    console.log(err);
-  else
-    console.log(res);
-});
-
-*/
-
-
-
-/*
-van GUI: 
-testInfo = {
-  title: "Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency"
-}
-
-na scraping:
-
-testInfo = 
-{ title: 'Low-Loss Metamaterials Based on Classical Electromagnetically Induced Transparency',
-  authors: 
-   [ { firstName: 'P', lastName: 'Tassin' },
-     { firstName: 'L', lastName: 'Zhang' },
-     { firstName: 'T', lastName: 'Koschny' },
-     { firstName: 'EN', lastName: 'Economou…' } ],
-  journal: 'Physical review  …',
-  year: '2009',
-  publisher: 'APS',
-  abstract: 'Abstract We demonstrate theoretically that electromagnetically induced transparency can be achieved in metamaterials, in which electromagnetic radiation is interacting resonantly with mesoscopic oscillators rather than with atoms. We describe novel metamaterial designs  ...',
-  citations: '318',
-  article_url: 'http://arxiv.org/pdf/0807.2478' }
-
-*/
-
-
 
