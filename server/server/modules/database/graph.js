@@ -24,19 +24,15 @@ function Graph(db, AUT, myDB) {
 
 	function authorsIterate(authors, idx, resArray, pubObj, clb) {
 		var author1 = authors[idx];
+		var autLength = authors.length;
 		var ctr = idx+1;
-		if(ctr === authors.length) {
+		if(ctr === autLength) {
 			clb(null, true);
 		}
-		//XXX: i & ctr lopen weer parallel
-		//XXX: gebruik hier een gewone for-lus, gevolgd door de callback
-		//XXX: zet de length dan ook in een variabele 'len' voor de for-conditie
-		for (var i = idx+1; i < authors.length; i++) {
+		for (var i = idx+1; i < autLength; i++) {
 			resArray.push([author1, pubObj, authors[i]]);
-			if(++ctr == authors.length) {
-				clb(null, true);
-			}
 		};
+		clb(null, true);
 	}
 
 	function constructResObjects(array, idx, resArray, clb) {
@@ -47,13 +43,11 @@ function Graph(db, AUT, myDB) {
 				clb(error);
 			}
 			else {
+				var autObjLength = autObjects.length;
 				var ctr = 0;
-				//XXX: zet de length in een variabele len
-				for (var i = 0; i < autObjects.length; i++) {
+				for (var i = 0; i < autObjLength; i++) {
 					authorsIterate(autObjects, i, resArray, pubObj, function(error, res) {
-						//XXX: gebruik === ipv ==
-						//XXX: gebruik hier dan ook len
-						if(++ctr == autObjects.length) {
+						if(++ctr === autObjLength) {
 							clb(null, true);
 						}
 					});
@@ -69,19 +63,17 @@ function Graph(db, AUT, myDB) {
 	 * @param  {callBack} clb    
 	 * @return {Array<Array<Object>>}        edges of graph in form: [{fromAuthorObject,  publicationObject, toAuthorObject}, {...}, ...]	
 	 */
-	this.getAuthorGraph = function(authId, depth, clb) {
+	myDB.getAuthorGraph = function(authId, depth, clb) {
 		var newDepth = depth + depth;
 		db.query('select $path, @rid, @class, title, in_AuthorOf.out as authors from (traverse out_AuthorOf, in, in_AuthorOf, out from ' + authId + ' while $depth <= ' + newDepth + ' strategy BREADTH_FIRST) where @class = \'Proceeding\' or @class = \'Journal\'').all()
 		.then(function(res) {
-			if(res.length) {
+			var resLength = res.length;
+			if(resLength) {
 				var resArray = [];
 				var ctr = 0;
-				//XXX: gebruik een variabele len ipv telkens de length op te vragen in de conditie
-				for (var i = 0; i < res.length; i++) {
+				for (var i = 0; i < resLength; i++) {
 					constructResObjects(res, i, resArray, function(error, bool) {
-						//XXX: gebruik === ipv ==
-						//XXX: gebruik hier dan ook len
-						if(++ctr == res.length) {
+						if(++ctr === resLength) {
 							clb(null, resArray);
 						}
 					});
@@ -93,15 +85,9 @@ function Graph(db, AUT, myDB) {
 					getUsername(authId, function(error,usrname) {
 						clb(null, {firstname: res.firstName, lastName: res.lastName, id: RID.getRid(res), username: usrname});
 					})
-				//XXX: geef mijn callback direct mee
-				}).error(function(er) {
-					clb(er);
-				});
+				}).error(clb);
 			}
-		//XXX: idem
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 }
 

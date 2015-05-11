@@ -4,7 +4,6 @@ const RID = require('./rid.js');
 const fs = require('fs');
 const Path = require('path');
 const Author = require('./author.js');
-const researchDomain = require('./researchdomain.js');
 const keyword = require('./keyword.js');
 const Oriento = require('oriento');
 
@@ -18,8 +17,7 @@ const Oriento = require('oriento');
 function Publication(db, myDB) {
 
 	const AUT = new Author.Author(db, myDB); //XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
-	const RD = new researchDomain.ResearchDomain(db, myDB);
-	const Kw = new keyword.Keyword(db, myDB);
+	const Kw = new keyword.Keyword(db, myDB); ///[I] kan ik deze 2 niet behouden? anders moet ik alle "interne" methodes van author.js aan myDB plakken (terwijl jij die nooit gebruikt/mag gebruiken)
 	const self = this;
 
 			/**

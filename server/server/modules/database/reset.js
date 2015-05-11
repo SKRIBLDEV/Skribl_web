@@ -165,7 +165,7 @@ function ResetDB(db, database) {
 		});
 	}
 
-	this.reset = function(clb) {
+	database.reset = function(clb) {
 		cleanDb(function(error, res) {
 			if(error) {
 				clb(error);

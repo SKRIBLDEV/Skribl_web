@@ -58,18 +58,13 @@ function Database(serverConfig, dbConfig) {
 	var self = this;
 	var aff = new Affil.Affiliation(db, self);
 	var RD = new RDomain.ResearchDomain(db, self);
-	var PUB = new Publication.Publication(db, self);
 	var CLS = new Classifier.Classifier(db, self);
 	var Lib = new library.Library(db, self);
 	var Kw = new keyword.Keyword(db, self);
 	var AUT = new authors.Author(db, self);
+	var PUB = new Publication.Publication(db, self);
 	var RS = new reset.ResetDB(db, self);
 	var graph = new Graph.Graph(db, AUT, self);
-
-
-	/* provides functions */
-	this.reset = RS.reset;
-	this.getAuthorGraph = graph.getAuthorGraph;
 
 	/**
 	*Will give the subdivisions of a given division.
