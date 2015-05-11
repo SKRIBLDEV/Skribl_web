@@ -652,7 +652,7 @@ function Publication(db, myDB) {
 	}
 
 	myDB.nearbyPublications = function(usr, depth, clb) {
-		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' limit order by viewCount').all()
+		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' order by viewCount').all()
 		.then(function(pubs) {
 			var pubsLength = pubs.length;
 			if(pubsLength) {
