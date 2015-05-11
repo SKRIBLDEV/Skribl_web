@@ -161,16 +161,16 @@ function Classifier(db, myDB) {
         clb(null, res);
 	}
 
-	myDB.saveClassifier = function(usr, cls) {
+	myDB.saveClassifier = function(usr, cls, clb) {
 			db.create('vertex', 'Classifier')
 			.set({
 				user: usr,
 				data: Base64.encode(cls)
 			}).one()
 			.then(function(dummy) {
-
+                clb(null);
 			}).error(function(er) {
-                //ignore errors
+                clb(er);
 			});
 	}
 
