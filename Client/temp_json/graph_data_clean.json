@@ -5,10 +5,10 @@
     { "firstName": "Andoni Lombide", "lastName": "Carreton" },
     { "firstName": "Niels", "lastName": "Jonckheere" },
     { "firstName": "Viviane", "lastName": "Jonckers" },
-    { "firstName": "Wolfgang", "lastName": "De Meuter" },
-    { "firstName": "Jens", "lastName": "Nicolay" },
+    { "firstName": "Wolfgang", "lastName": "De Meuter", "username": "WDMeuter" },
+    { "firstName": "Jens", "lastName": "Nicolay", "username": "Jnicolay" },
     { "firstName": "Coen", "lastName": "De Roover" },
-    { "firstName": "Ragnhild", "lastName": "Van Der Straeten" },
+    { "firstName": "Ragnhild", "lastName": "Van Der Straeten", "username": "RvdrStraet" },
     { "firstName": "Tom", "lastName": "Mens" },
     { "firstName": "Carlos", "lastName": "Noguera" }
   ],

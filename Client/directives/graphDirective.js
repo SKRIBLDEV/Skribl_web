@@ -31,11 +31,15 @@ webapp.directive('graphDirective', function (appData) {
                 var fontSizeSelected = width/800;
 
                 var skriblColor =  "#4A60B6"; // skribl-primary
+                var grey = "#999";
+
+                var authorColor = grey;
+                var userColor = skriblColor; 
                 
                 var selectedNodeColor = "#EF5350"; //"#e51c23" -> skribl red
                 var centerNodeColor = "#EF5350";
 
-                var linkColor = "#999";
+                var linkColor = grey;
                 var selectedLinkColor = selectedNodeColor;
 
                 var svg = d3.select(element[0]).append("svg")
@@ -46,7 +50,7 @@ webapp.directive('graphDirective', function (appData) {
 
                 var force = d3.layout.force()
                     .charge(-4000)
-                    .linkDistance(width/15)
+                    .linkDistance(width/12)
                     .size([width, height]);
 
 
@@ -91,7 +95,7 @@ webapp.directive('graphDirective', function (appData) {
                     .attr("class", "node")
 
                     .on("click", function(d, i) { 
-                      if (i>0)
+                      if (i>=0)
                         showProfile(d);
                     })
 
@@ -102,8 +106,8 @@ webapp.directive('graphDirective', function (appData) {
                           .transition()
                           .duration(250)
                           .style("cursor", "none")     
-                          .attr("r",  function(d, i){
-                            return circleWidthSelected * d.weight/10;})
+                          /*.attr("r",  function(d, i){
+                            return circleWidthSelected * d.weight/10;})*/
                           .style("fill",selectedNodeColor);
 
                           //TEXT
@@ -113,7 +117,7 @@ webapp.directive('graphDirective', function (appData) {
                           .style("cursor", "none")     
                           .attr("font-size",fontSizeSelected + "em")
                           .style("fill",selectedNodeColor)
-                          .attr("x", circleWidthSelected )
+                          //.attr("x", circleWidthSelected )
                           .attr("y", 5 )
                        /* } else {
                           //CIRCLE
@@ -133,13 +137,15 @@ webapp.directive('graphDirective', function (appData) {
                           d3.select(this).selectAll("circle")
                           .transition()
                           .duration(250)
-                          .attr("r", function(d, i){
-                            return circleWidth * d.weight/10;})
+                          /*.attr("r", function(d, i){
+                            return circleWidth * d.weight/10;})*/
                           .style("fill",function(d,i){
                               if(d.index == 1)
                                 return centerNodeColor;
+                               else if (d.username) // known user 
+                                  return userColor;
                               else 
-                                return skriblColor;
+                                return authorColor;
                           });
 
                           //TEXT
@@ -148,7 +154,9 @@ webapp.directive('graphDirective', function (appData) {
                           .duration(250)
                           .attr("font-size",fontSize + "em")
                           .style("fill",skriblColor)
-                          .attr("x", circleWidth )
+                          .attr("x", function (d, i) {
+                            return circleWidth * d.weight/10 + 5;
+                          })
                           .attr("y", 5 )
                         //}
                       })
@@ -188,10 +196,12 @@ webapp.directive('graphDirective', function (appData) {
                       return circleWidth * d.weight/10; 
                     })
                     .style("fill", function(d,i){
-                      if(i == 1)
-                        return centerNodeColor;
+                      if(i === 1) // author whom's graph is displayed
+                        return centerNodeColor; 
+                      else if (d.username) // known user 
+                        return userColor;
                       else 
-                        return skriblColor;
+                        return authorColor; //author but not a user 
                     });
                     
                 node.append("text")
@@ -199,7 +209,7 @@ webapp.directive('graphDirective', function (appData) {
                         return d.firstName + " " + d.lastName;
                     })
                     .attr("x", function (d, i) {
-                        return circleWidth + 5;
+                        return circleWidth * d.weight/10 + 5;
                     })
                     .attr("y", function (d, i) {
                       return  5;
@@ -212,14 +222,13 @@ webapp.directive('graphDirective', function (appData) {
                     .attr("text-anchor", function (d, i) {
                        return "beginning";
                     });
-
               
 
                 var showProfile = function(clickedNode){
                     appData.data.currentProfileData.lastName = clickedNode.lastName;
                     appData.data.currentProfileData.firstName = clickedNode.firstName;
                     appData.data.currentProfileData.authorId = clickedNode.id;
-                    appData.data.currentProfileData.availableFromGraph = clickedNode; // TO BE REMOVED?
+                    //appData.data.currentProfileData.availableFromGraph = clickedNode; // TO BE REMOVED?
                     scope.$digest();
                 }
 

@@ -20,7 +20,12 @@
         addLibName: null,
         searchTerm: null,
         searchTerm2: null, 
-        currentProfileData : {}
+        currentProfileData : {
+            authorId: null,
+            firstName: null, 
+            lastName: null,
+            username: null //might be undefined if author but not user
+        }
     };
     this.uploadData = {
         file: null,
