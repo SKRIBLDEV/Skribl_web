@@ -13,25 +13,19 @@ function Graph(db, AUT, myDB) {
 	function getUsername(id, clb) {
 		db.query('select expand(in(\'IsAuthor\')) from ' + id).all()
 		.then(function(res) {
-			//XXX: laat undefined weg in de else tak...
-			//XXX: of gebruik iets van de vorm clb(null, (res.length? res[0].username: undefined)
 			if(res.length) {
 				clb(null, res[0].username)
 			}
 			else {
-				clb(null, undefined);
+				clb(null);
 			}
-		//XXX: geef meteen de callback mee
-		}).error(function(er) {
-			clb(er);
-		});
+		}).error(clb);
 	}
 
 	function authorsIterate(authors, idx, resArray, pubObj, clb) {
 		var author1 = authors[idx];
 		var ctr = idx+1;
-		//XXX: gebruik === ipv == 
-		if(ctr == authors.length) {
+		if(ctr === authors.length) {
 			clb(null, true);
 		}
 		//XXX: i & ctr lopen weer parallel

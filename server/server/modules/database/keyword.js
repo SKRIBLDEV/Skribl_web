@@ -68,31 +68,14 @@ function Keyword(db, myDB) {
 	this.getPubKeywords = function(pubId, clb) {
 		db.select('expand( out(\'HasKeyword\') )').from(pubId).all()
 		.then(function(resKeys) {
-			//XXX: if test is hier toch niet nodig, dit wordt al in for-lust getest!
-			//XXX: zelfs als je hier map gebruikt...
-			if(resKeys.length) {
-				var keyLength = resKeys.length;
-				var res = [];
-				var ctr = 0;
-				//XXX: gebruik hier een gewone for lus, ctr & i lopen parallel
-				//XXX: gebruik een variabele len voor de length
-				//XXX: of gebruik hier reskeys.map(function(el) { return el.keyword }), nog beter ;)
-				for (var i = 0; i < resKeys.length; i++) {
-					res.push(resKeys[i].keyword);
-					ctr++;
-					if(ctr == resKeys.length) {
-						clb(null, res);
-					}
-				};	
-			}
-			else {
-				clb(null, []);
-			}
-
-		//XXX: geef direct callback mee
-		}).error(function(er) {
-			clb(er);
-		});
+			var keyLength = resKeys.length;
+			var res = [];
+			//XXX: of gebruik hier reskeys.map(function(el) { return el.keyword }), nog beter ;)
+			for (var i = 0; i < keyLength; i++) {
+				res.push(resKeys[i].keyword);
+			};
+			clb(null, res);
+		}).error(clb);
 	}
 
 }
