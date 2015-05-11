@@ -162,16 +162,25 @@ function Classifier(db, myDB) {
 	}
 
 	myDB.saveClassifier = function(usr, cls, clb) {
-			db.create('vertex', 'Classifier')
-			.set({
-				user: usr,
-				data: Base64.encode(cls)
-			}).one()
-			.then(function(dummy) {
-                clb(null);
-			}).error(function(er) {
-                clb(er);
-			});
+        db.select().from('Classifier').where({username: usr}).all()
+        .then(function(res) {
+            if(res.length) {
+                db.update('Classifier').set({data: Base64.encode(cls)}).where({username: usr}).scalar()
+                .then(function(opRes) {
+                    clb(null);
+                }).error(clb);
+            }
+            else {
+                db.create('vertex', 'Classifier')
+                .set({
+                    user: usr,
+                    data: Base64.encode(cls)
+                }).one()
+                .then(function(dummy) {
+                    clb(null);
+                }).error(clb);
+            }
+        }).error(clb);
 	}
 
 	myDB.loadClassifier = function(usr, clb) {
