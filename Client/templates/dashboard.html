@@ -5,16 +5,16 @@
 
 <!-- start overall container -->
 <div class="section animated pulse row">
-        <div class="col l4 m12 s12">
-                <!-- start user card -->
-                <user-card></user-card>
-                <!-- stop user card -->
-        </div>
+    <div class="col l4 m12 s12">
+        <!-- start user card -->
+        <user-card></user-card>
+        <!-- stop user card -->
+    </div>
 
 
-        <!-- inject the views belonging to the nested states -->
-        <!--- [H] @Pieter: m and s should be changed, I leave it to you to define the best width for mobile etc. -->
-        <div class="col l8 m12 s12" ui-view ></div>
+    <!-- inject the views belonging to the nested states -->
+    <!--- [H] @Pieter: m and s should be changed, I leave it to you to define the best width for mobile etc. -->
+    <div class="col l8 m12 s12" ui-view ></div>
 
 </div>
 
@@ -29,9 +29,16 @@
 <!--...... TABLET Dekstop MOBILE .......-->
 <div class="section row footer" ng-show="appData.currentUser">
   <div class="col l2 offset-l5 m4 offset-m4 s6 offset-s3 center">
+  <code class="titip-top">
     <img class="skribl-footer-logo " src="img/logo-cutout.png" ng-click="router.goAbout()"/>
-  </div>
+    <span class="titip-content">
+        Click to go to "about Skribl"
+    </span>
+    </code>
 </div>
+</div>
+
+
 
 
 
