@@ -165,7 +165,7 @@ function Classifier(db, myDB) {
         db.select().from('Classifier').where({username: usr}).all()
         .then(function(res) {
             if(res.length) {
-                db.update('Classifier').set({data: Base64.encode(cls)}).where({username: usr}).scalar()
+                db.update('Classifier').set({data: Base64.encode(cls)}).where({user: usr}).scalar()
                 .then(function(opRes) {
                     clb(null);
                 }).error(clb);
