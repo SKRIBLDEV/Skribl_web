@@ -14,30 +14,8 @@ const __CACHE_SIZE_LIMIT__ = 20; //max #classifiers
 const __CACHE_TIME_LIMIT__ = 3600 * 1000; //in ms
 const cache = new LRUcache({
 	max: __CACHE_SIZE_LIMIT__,
-	maxAge: __CACHE_TIME_LIMIT__,
-	dispose: saveClassifier
+	maxAge: __CACHE_TIME_LIMIT__
 });
-
-/** Save cache before exiting the program
-  * @private
-  */
-function resetCache() { 
-	console.log("Saving classifiers...");
-	cache.reset();
-}
-
-//process.on('exit', resetCache);
-//process.on('SIGINT', resetCache);
-//process.on('UncaughtException', resetCache);
-
-/** Save the classifier to the database
-  * @param usr {String} - username of SKRIBL-user
-  * @param classifier {Object} - classifier to be saved
-  * @private
-  */
-function saveClassifier(usr, classifier) {
-	db.saveClassifier(usr, JSON.stringify(classifier));
-}
 
 /** Load a user's classifier, either from cache or the database
   * @param usr {String} - username of SKRIBL-user
@@ -137,11 +115,11 @@ function rate(user, publication, value, clb) {
 			var pub = encode(publication);
 			cls.addDocument(pub, rating);
 			cls.train();
-			clb();
+			var str = JSON.stringify(cls);
+			db.saveClassifier(user, str, clb);
 		}
 	});
 }
-
 
 /* --- RECOMMENDATION ALGORITHM --- */
 
@@ -158,14 +136,17 @@ function recommend(user, limit, clb) {
 			clb(err);
 		else
 			//filtered by classifier
-			console.log(pubs);
 			getClassifier(user, function(err, cls) {
 				if(err)
 					clb(err);
 				else 
 					clb(null, pubs.filter(function(pub) {
 							var enc = encode(pub);
-							return (cls.classify(enc) === __LIKE_STR__);
+							try {
+								return (cls.classify(enc) === __LIKE_STR__); 
+							} catch(err) {
+								return true;
+							}
 						}));
 			});
 	});

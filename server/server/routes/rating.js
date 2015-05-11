@@ -16,7 +16,7 @@ function ratePublication(req, res, context) {
 
 	var pubID = req.params['pubId'];
 
-	context.db.getPublication(pubId, function(err, data) {
+	context.db.getPublication(pubID, function(err, pub) {
 		if(err)
 			serverError(res, err);
 		else {
@@ -24,7 +24,7 @@ function ratePublication(req, res, context) {
 			var username = req.params['username'];
 			var rating = req.query['like'];
 			rating = (rating === 'true');
-			recommender.rate(username, pubId, rating, function(err) {
+			recommender.rate(username, pub, rating, function(err) {
 				if(err)
 					serverError(res)
 				else
