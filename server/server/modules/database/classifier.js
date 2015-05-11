@@ -162,7 +162,7 @@ function Classifier(db, myDB) {
 	}
 
 	myDB.saveClassifier = function(usr, cls, clb) {
-        db.select().from('Classifier').where({username: usr}).all()
+        db.select().from('Classifier').where({user: usr}).all()
         .then(function(res) {
             if(res.length) {
                 db.update('Classifier').set({data: Base64.encode(cls)}).where({user: usr}).scalar()
