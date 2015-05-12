@@ -112,6 +112,7 @@
     <div class="card z-depth-4">
       <div class="card-content ">
         <span class="card-title grey-text text-darken-4">Register</span>
+        <p class="grey-text text-darken-4"> All fields are required. <p>
         <div class="row">
           <form class="col s12">
 
@@ -121,6 +122,7 @@
                 <i class="mdi-action-label-outline prefix"></i>
                 <input id="register_firstname" type="text" class="validate" ng-model=userinput.firstName required>
                 <label for="register_firstname">First Name</label>
+                <div class="alert-color" id="register_error_firstName"></div>
               </div>
             </div>
 
@@ -129,16 +131,20 @@
               <div class="input-field col s12">
                 <i class="mdi-action-label prefix"></i>
                 <input id="register_lastname" type="text" class="validate" ng-model=userinput.lastName required>
-                <label for="register_lastname">Name</label>
+                <label for="register_lastname">Last Name</label>
+                <div class="alert-color" id="register_error_lastName"></div>
               </div>
             </div>
+
+            <br>
 
             <!-- user name -->
             <div class="row">
               <div class="input-field col s12">
                 <i class="mdi-action-account-circle prefix"></i>
                 <input id="register_username" type="text" class="validate" ng-model=userinput.username required></input>
-                <label for="register_username">User Name</label>
+                <label for="register_username">Username</label>
+                <div class="alert-color" id="register_error_username"></div>
               </div>
             </div>
 
@@ -148,6 +154,7 @@
                 <i class="mdi-communication-email prefix"></i>
                 <input id="register_email" type="email" class="validate" ng-model=userinput.email required></input>
                 <label for="register_email">Email</label>
+                <div class="alert-color" id="register_error_email"></div>
               </div>
             </div>
 
@@ -157,8 +164,11 @@
                   <i class="mdi-communication-vpn-key prefix"></i>
                   <input id="login_password" type="password" class="validate" ng-model=userinput.password required></input>
                   <label for="login_password">Password</label>
+                  <div class="alert-color" id="register_error_password"></div>
                 </div>
               </div>
+
+            <br>
 
             <!-- institution -->
             <div class="row">
@@ -166,6 +176,7 @@
                 <i class="mdi-action-home prefix"></i>
                 <input id="register_institution" type="text" class="validate" ng-model=userinput.institution required></input>
                 <label for="register_institution">Institution</label>
+                <div class="alert-color" id="register_error_institution"></div>
               </div>
             </div>
 
@@ -175,6 +186,7 @@
                 <i class="mdi-action-group-work prefix"></i>
                 <input id="register_faculty" type="text" class="validate" ng-model=userinput.faculty required></input>
                 <label for="register_faculty">Faculty</label>
+                <div class="alert-color" id="register_error_faculty"></div>
               </div>
             </div>
 
@@ -184,8 +196,21 @@
                 <i class="mdi-action-extension prefix"></i>
                 <input id="register_department" type="text" class="validate" ng-model=userinput.department required></input>
                 <label for="register_department">Department</label>
+                <div class="alert-color" id="register_error_department"></div>
               </div>
             </div>
+
+             <!-- research group -->
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="mdi-action-dashboard prefix"></i>
+                <input id="register_researchGroup" type="text" class="validate" ng-model=userinput.researchGroup ></input>
+                <label for="register_researchGroup">Research Group</label>
+                <div class="alert-color" id="register_error_researchGroup"></div>
+              </div>
+            </div>
+
+            <br>
 
             <!-- research domain -->
             <div class="row">
@@ -193,17 +218,17 @@
                 <i class="mdi-action-class prefix"></i>
                 <input id="register_researchDomain" type="text" class="validate" ng-model=userinput.researchDomains required></input>
                 <label for="register_researchDomain">Research Domain</label>
+                <div class="alert-color" id="register_error_researchDomain"></div>
               </div>
             </div>
 
-            <!-- research group -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-dashboard prefix"></i>
-                <input id="register_researchGroup" type="text" class="validate" ng-model=userinput.researchGroup ></input>
-                <label for="register_researchGroup">Research Group</label>
-              </div>
-            </div>
+
+
+            <div class="col s12 alert-color center-align" id="register_error_general"></div>
+
+           
+
+
           </form>
         </div>
       </div>
