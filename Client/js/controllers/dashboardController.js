@@ -8,7 +8,7 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
- webapp.controller('dashController', function($scope, $http, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate, routerHelperService) {
+ webapp.controller('dashController', function($scope, $http, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate, routerHelperService, pdfViewerService, researchDomainService) {
 
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
@@ -51,6 +51,8 @@
     $scope.data = appData.data;
     $scope.appData = appData;
     $scope.userService = userService;
+    $scope.pdfViewerService = pdfViewerService;
+    $scope.researchDomainService = researchDomainService;
 
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
 

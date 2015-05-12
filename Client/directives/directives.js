@@ -94,6 +94,13 @@ webapp.directive('globalMenu',function(){
 		scope : false,
 		templateUrl: 'templates/profileCard.html'
 	}
+}).directive('researchDomain', function() {
+	return {
+		restrict: 'E',
+		scope : false,
+		templateUrl: 'templates/researchDomains.html'
+	}
+
 }).directive('currentPubInCommon', function() { //used only in the network view
 	return {
 		restrict: 'E',
