@@ -27,6 +27,15 @@ function getRecommendations(req, res, context) {
 		if(err)
 			serverError(res, err);
 		else {
+			recs.forEach(function(pub) {
+				var id = pub.id;
+				pub.download = req.protocol + '://'
+							 + req.hostname + ':'
+							 + context.port + '/'
+							 + 'publications' + '/'
+							 + id.substring(1)
+							 + '?download=true';
+			});
 			res.status(200);
 			res.json(recs);
 		}
