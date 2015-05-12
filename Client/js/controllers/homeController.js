@@ -85,65 +85,114 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		$scope.showRegister = true;
 	};
 
+
+	$scope.userinput = {}; //init
+
     //regex control for all input fields to register
     $scope.regexControl = function(){
         
         function notifyRegisterError(message){
 			 toast(message, 4000) // 4000 is the duration of the toast
-			document.getElementById("register_error").innerHTML = message;
+			document.getElementById("register_error_general").innerHTML = message;
 		}
 
-		if((!($scope.RegEx_generalName.test($scope.userinput.firstName))) || ($scope.userinput.firstName == undefined)){
-			//Error when trying to register with a "bad" first name.
-			notifyRegisterError("First name not valid.");
-			return false;
+
+		function notifyMultipleInvalid(messageArray){
+			for(var i = 0; i < messageArray.length; i++){
+				toast(messageArray[i], 4000);
+				document.getElementById("register_error_general").innerHTML = "Some fields do not have a valid input."
+			}
 		}
+
+		var registerErrors = [];
+		var generalNotValid = "This field does not have a valid input.";
+
+		if((!($scope.RegEx_generalName.test($scope.userinput.firstName))) || ($scope.userinput.firstName === undefined)){
+			//Error when trying to register with a "bad" first name.
+			registerErrors.push("First name not valid.");
+			document.getElementById("register_error_firstName").innerHTML = generalNotValid;
+		}
+		else 
+			document.getElementById("register_error_firstName").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.lastName))) || ($scope.userinput.lastName == undefined)){
 			//Error when trying to register with a "bad" last name.
-			notifyRegisterError("Name not valid.");
-			return false;
+			registerErrors.push("Last name not valid.");
+			document.getElementById("register_error_lastName").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_lastName").innerHTML = "";
+		
 		if((!($scope.RegEx_username.test($scope.userinput.username))) || ($scope.userinput.username == undefined)){
 			//Error when trying to register with a "bad" username.
-			notifyRegisterError("Username not valid.");
-			return false;
+			registerErrors.push("Username not valid.");
+			document.getElementById("register_error_username").innerHTML = "Please use only literal characters and numbers.";
 		}
+		else 
+			document.getElementById("register_error_username").innerHTML = "";
+
 		if((!($scope.RegEx_emailAdress.test($scope.userinput.email))) || ($scope.userinput.email == undefined)){
 			//Error when trying to register with a "bad" email.
-			notifyRegisterError("Email is not valid.");
-			return false;
+			registerErrors.push("Email is not valid.");
+			document.getElementById("register_error_email").innerHTML = "Please provide a valid email adress.";
 		}
+		else 
+			document.getElementById("register_error_email").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.institution))) || ($scope.userinput.institution == undefined)){
 			//Error when trying to register with a "bad" institution.
-			notifyRegisterError("Institution is not valid.");
-			return false;
+			registerErrors.push("Institution is not valid.");
+			document.getElementById("register_error_institution").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_institution").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.faculty))) || ($scope.userinput.faculty == undefined)){
 			//Error when trying to register with a "bad" faculty.
-			notifyRegisterError("Faculty is not valid.");
-			return false;
+			registerErrors.push("Faculty is not valid.");
+			document.getElementById("register_error_faculty").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_faculty").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.department))) || ($scope.userinput.department == undefined)){
 			//Error when trying to register with a "bad" department.
-			notifyRegisterError("Department is not valid.");
-			return false;
+			registerErrors.push("Department is not valid.");
+			document.getElementById("register_error_department").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_faculty").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
 			//Error when trying to register with "bad" research domains.
-			notifyRegisterError("Research domains are not valid.");
-			return false;
+			registerErrors.push("Research domains are not valid.");
+			document.getElementById("register_error_researchDomain").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_researchDomain").innerHTML = "";
+
 		if((!($scope.RegEx_generalName.test($scope.userinput.researchGroup))) || ($scope.userinput.researchGroup == undefined)){
 			//Error when trying to register with a "bad" research group.
-			notifyRegisterError("Research group is not valid.");
-			return false;
+			registerErrors.push("Research group is not valid.");
+			document.getElementById("register_error_researchGroup").innerHTML = generalNotValid;
 		}
+		else 
+			document.getElementById("register_error_researchGroup").innerHTML = "";
+
 		if((!($scope.RegEx_password.test($scope.userinput.password))) || ($scope.userinput.password == undefined)){
 			//Error when trying to register with a "bad" password.
-			notifyRegisterError("Password is not valid.");
+			registerErrors.push("Password is not valid.");
+			document.getElementById("register_error_password").innerHTML = "Please provide 6 to 20 characters with at least one number.";
+		}
+		else 
+			document.getElementById("register_error_password").innerHTML = "";
+
+		if (registerErrors.length !== 0){
+			console.log("toast!");
+			notifyMultipleInvalid(registerErrors);
 			return false;
 		}
-
+			
 		return true;
 	};
     
@@ -285,11 +334,11 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
     	// temp fix for going to dashboard //FIXME
-    (function developLogin() {
+   /* (function developLogin() {
 		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
 		$scope.userinputLogin.password = "Brol123"; // keeF5gee5
 		$scope.doLogin();
-	})();
+	})();*/
 
 });
 
