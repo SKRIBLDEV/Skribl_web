@@ -13,9 +13,11 @@
 
 
     <!-- inject the views belonging to the nested states -->
-    <!--- [H] @Pieter: m and s should be changed, I leave it to you to define the best width for mobile etc. -->
-    <div class="col l8 m12 s12" ui-view ></div>
-
+    <div class="col l8 m12 s12"     ui-view>            </div>
+    <div class="col l8 m12 s12"     ui-view="default">  </div>
+    <div class="col l4 m6 s12"      ui-view="spt1">     </div>
+    <div class="col l4 m6 s12"      ui-view="spt2">     </div>
+    <div class="col l8 m12 s12"     ui-view="lpb1">     </div>
 </div>
 
 <!-- stop overall container -->

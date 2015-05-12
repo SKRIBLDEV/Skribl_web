@@ -24,13 +24,18 @@ webapp.factory('routerHelperService', function($http, $state){
      	$state.go('dashboard.search');
      }
 
+     var goRecommender = function(){
+        $state.go('dashboard.recommender');  
+     }
+
 	  var service = {
         goHome : goHome,
         goAbout : goAbout,
         goDashboard : goDashboard,
         goDashboardLibrary : goDashboardLibrary,
         goDashboardNetwork : goDashboardNetwork,
-        goDashboardSearch : goDashboardSearch
+        goDashboardSearch : goDashboardSearch,
+        goRecommender : goRecommender
     };
 
     return service;

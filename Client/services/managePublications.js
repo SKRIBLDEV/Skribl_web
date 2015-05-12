@@ -540,7 +540,9 @@ function scrape(publicationID, handler) {
     this.upload_succesUploading = function() {return upload_status == UPLOAD_STATUS.SUCCES_UPLOADING;}
     this.upload_waiting = function() { return upload_status == UPLOAD_STATUS.WAITING;}
 
-    this.upload_activate = function() {upload_status = UPLOAD_STATUS.INITIAL;}
+    this.upload_activate = function() {
+        upload_status = UPLOAD_STATUS.INITIAL;
+    }
     this.upload_deActivate = function() {upload_status = UPLOAD_STATUS.UNACTIVE;}
     
     this.upload_content_excists = false;

@@ -68,7 +68,6 @@ webapp.factory('serverService', function($http, appData){
 
 
      /******** author profile requests *******/
-
      var getAuthorPublications = function(authorId){
         authorId = stripHashtag(authorId); 
         var url = serverApi.concat('/author/').concat(authorId).concat('/publications/');
@@ -78,6 +77,18 @@ webapp.factory('serverService', function($http, appData){
          return getAuthorPublicationsRequest = $http.get(url, authorization);
      }
 
+     /******** recommender requests *******/
+     var getRecommendations = function(amnt){
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/recommendations?depth=').concat(amnt);
+        var authorization = {headers: 
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         return getRecommendations = $http.get(url, authorization);
+     }
+
+     var test = function(){
+        console.log("succes test");
+     }
 
 
      var service = {
@@ -86,9 +97,12 @@ webapp.factory('serverService', function($http, appData){
         setMetadata : setMetadata,
         addPublication: addPublication,
         getUserPublications : getUserPublications,
-        getAuthorPublications : getAuthorPublications
+        getAuthorPublications : getAuthorPublications,
+        getRecommendations : getRecommendations,
     };
 
     return service;
 
 });
+
+

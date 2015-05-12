@@ -67,12 +67,39 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 			templateUrl: "templates/dash-search.html"
 		})
 
+		.state('dashboard.recommender', {
+			views: {
+				'spt1' : {
+					url: '/recommendations',
+					controller: 'recommenderController',
+					templateUrl: "templates/recommenderCard.html"		
+				},
+				'spt2' : {
+					url: '/recommendations',
+					controller: 'recommenderController',
+					templateUrl: "templates/metadataCard.html"		
+				},
+				'lpb1' : {
+					url: '/recommendations',
+					controller: 'recommenderController',
+					templateUrl: "templates/publicationViewerCard.html"		
+				}
+
+			}
+			
+
+		})
+
+
+
 		// temp fix for quick development
 		.state('about', {
 			url: '/about',
 			controller: 'aboutController',
 			templateUrl: "templates/about.html"
 		})
+
+
 
 
 }]);

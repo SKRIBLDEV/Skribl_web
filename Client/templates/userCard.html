@@ -1,115 +1,133 @@
 
-	<div class="card z-depth-4">
-		<div class="card-content" style="background:#EEEEEE">
-			<span class="card-title grey-text text-darken-4">
-				<i class="mdi-action-account-circle">&nbsp{{ appData.currentUser.firstName }} {{ appData.currentUser.lastName }}</i>
-			</span>
-			
+<div class="card z-depth-4">
+	<div class="card-content" style="background:#EEEEEE">
+		<span class="card-title grey-text text-darken-4">
+			<i class="mdi-action-account-circle">&nbsp{{ appData.currentUser.firstName }} {{ appData.currentUser.lastName }}</i>
+		</span>
 
-			<!-- start library card -->
 
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleLibrary()" ui-sref="dashboard.library">
+		<!-- start library card -->
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4" ng-click="userService.toggleLibrary()" ui-sref="dashboard.library">
 					<a> library </a>
 					<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
-							Manage your publications, create a portfolio, and collect your knowledge.
-						</div>
-						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
-						</div>
-					</div>
 				</span>
 			</div>
-
-			<!-- stop library card -->
-
-			<!-- start network card -->
-
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSearch()" ui-sref="dashboard.search">
-						<a> search </a>
-						<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showSearch">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
-							Search for new insights.
-						</div>
-						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSearch()"></i>
-						</div>
+			<span class="grey-text text-darken-4" ng-show="userService.showLibrary">
+				<div class="animated fadeInDown col s12">
+					<div class="section">
+						Manage your publications, create a portfolio, and collect your knowledge.
 					</div>
+					<div class="center">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleLibrary()"></i>
+					</div>
+				</div>
+			</span>
+		</div>
+
+		<!-- stop library card -->
+
+		<!-- start search card -->
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSearch()" ui-sref="dashboard.search">
+					<a> Search </a>
+					<i class="mdi-navigation-more-vert right"></i>
 				</span>
 			</div>
-			<!-- stop network card -->
-
-			<!-- start network card -->
-
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleNetwork()" ui-sref="dashboard.network">
-						<a> network </a>
-						<i class="mdi-navigation-more-vert right"></i>
-					</span>
-				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showNetwork">
-					<div class="animated fadeInDown col s12">
-						<div class="section">
-							Explore your scientific network.
-						</div>
-						<div class="center">
-							<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleNetwork()"></i>
-						</div>
+			<span class="grey-text text-darken-4" ng-show="userService.showSearch">
+				<div class="animated fadeInDown col s12">
+					<div class="section">
+						Search for new insights.
 					</div>
+					<div class="center">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSearch()"></i>
+					</div>
+				</div>
+			</span>
+		</div>
+		<!-- stop search card -->
+
+		<!-- start search card -->
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4" ng-click="userService.toggleRecommender()" ui-sref="dashboard.recommender">
+					<a> recommender </a>
+					<i class="mdi-navigation-more-vert right"></i>
 				</span>
 			</div>
-			<!-- stop network card -->
-
-
-			<!-- start Settings card -->
-			<div class="card">
-				<div class="card-content">
-					<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSettings()">
-						<a> Settings </a>
-						<i class="mdi-navigation-more-vert right"></i>
-					</span>
+			<span class="grey-text text-darken-4" ng-show="userService.showRecommender">
+				<div class="animated fadeInDown col s12">
+					<div class="section">
+						Your recommendations
+					</div>
+					<div class="center">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleRecommender()"></i>
+					</div>
 				</div>
-				<span class="grey-text text-darken-4" ng-show="userService.showSettings">
-					<div class="animated fadeInDown col s12">
-						<!-- logout button -->
-						<div class="row">
-							<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="logout()">
-								<h5 class="center-align" style="color:white">Logout</h5>
-							</div>
-						</div>
+			</span>
+		</div>
+		<!-- stop search card -->
 
-						<!-- delete button -->
+		<!-- start network card -->
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4" ng-click="userService.toggleNetwork()" ui-sref="dashboard.network">
+					<a> network </a>
+					<i class="mdi-navigation-more-vert right"></i>
+				</span>
+			</div>
+			<span class="grey-text text-darken-4" ng-show="userService.showNetwork">
+				<div class="animated fadeInDown col s12">
+					<div class="section">
+						Explore your scientific network.
+					</div>
+					<div class="center">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleNetwork()"></i>
+					</div>
+				</div>
+			</span>
+		</div>
+		<!-- stop network card -->
+
+
+		<!-- start Settings card -->
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4" ng-click="userService.toggleSettings()">
+					<a> Settings </a>
+					<i class="mdi-navigation-more-vert right"></i>
+				</span>
+			</div>
+			<span class="grey-text text-darken-4" ng-show="userService.showSettings">
+				<div class="animated fadeInDown col s12">
+					<!-- logout button -->
+					<div class="row">
+						<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="logout()">
+							<h5 class="center-align" style="color:white">Logout</h5>
+						</div>
+					</div>
+
+					<!-- delete button -->
 					<div class="col s6 offset-s3 waves-effect waves-light btn-large" ng-click="deleteUser()">
 						<h5 class="center-align" style="color:white">Delete user</h5>
 					</div>
 					
-						<div class="row"></div>
-							<div class="center">
-								<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSettings()"></i>
-							</div>
-						</div>
+					<div class="row"></div>
+					<div class="center">
+						<i class="mdi-hardware-keyboard-arrow-up" ng-click="userService.toggleSettings()"></i>
 					</div>
-				</span>
-				
+				</div>
 			</div>
-			<!-- stop settings card -->
-			
-			<div ng-show="showMeta()">
-			<metadata-card></metadata-card>
-			</div>
+		</span>
 
-		</div>
 	</div>
+	<!-- stop settings card -->
+
+	<div ng-show="showMeta()">
+		<metadata-card></metadata-card>
+	</div>
+
+</div>
+</div>

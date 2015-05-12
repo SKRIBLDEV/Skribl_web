@@ -1,0 +1,33 @@
+<!-- recommender card -->
+<div class="card">
+    <div class="card-content">
+
+        <span class="card-title grey-text text-darken-4">
+           <a> 
+               Recommendations 
+           </a>
+       </span>
+
+       <div class="animated fadeInDown col s12">
+
+        <!-- general waiting -->
+        <div class="row center">
+            <div ng-show="fetchingRecommendations">
+                <h5> Searching for recommendations </h5>
+                <spinner></spinner>
+            </div>
+        </div>
+
+        <!-- results -->
+        <div class="section" ng-show="hasRecommendations() && !fetchingRecommendations">
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- end search card

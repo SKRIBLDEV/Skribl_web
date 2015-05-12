@@ -3,49 +3,51 @@ webapp.service('userService', function($location, appData, $http, metaService) {
     
     this.logout = function(){logout();};
 
-
-    //[H]: I admit, this is gruesome code -> TO REFACTOR.
-
     this.showLibrary = true;
     this.showSearch = false;
     this.showNetwork = false;
     this.showSettings = false;
+    this.showRecommender = false;
+
+    function disbaleAll(){
+        this.showSearch = false;
+        this.showNetwork = false;
+        this.showSettings = false;
+        this.showRecommender = false;
+    }
 
     function resetMeta(){
         metaService.resetMetadata();
         metaService.toggleMeta(false);
     }
 
-
     this.toggleLibrary = function() {
+        disbaleAll();
         this.showLibrary = !this.showLibrary;
-        this.showSearch = false;
-        this.showNetwork = false;
-        this.showSettings = false;
         resetMeta();
     };
 
     this.toggleSearch = function() {
+        disbaleAll();
         this.showSearch = !this.showSearch;
-        this.showNetwork = false;
-        this.showLibrary = false;
-        this.showSettings = false;
         resetMeta();
     };
 
     this.toggleNetwork = function() {
+        disbaleAll();
         this.showNetwork = !this.showNetwork;
-        this.showLibrary = false;
-        this.showSearch = false;
-        this.showSettings = false;
     };
 
     this.toggleSettings = function() {
+        disbaleAll();
         this.showSettings = !this.showSettings;
-        this.showNetwork = false;
-        this.showLibrary = false;
-        this.showSearch = false;
     };
+
+    this.toggleRecommender = function(){
+        disbaleAll();
+        this.showRecommender = !this.showRecommender;
+    }
+
     
     function logout(){
         $location.path('/home');
