@@ -654,8 +654,6 @@ webapp.factory('researchDomainService', function($http){
         selected = [];
     }
 
-
-
     init();
 
     var service = {

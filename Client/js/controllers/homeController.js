@@ -8,7 +8,7 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $state, appData, anchorSmoothScroll, managePublications, routerHelperService) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $state, appData, anchorSmoothScroll, managePublications, routerHelperService,deviceDetector) {
     // only letters, numbers and underscores
 	$scope.RegEx_username = /^\w+$/; 
 
@@ -30,8 +30,11 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.showMenu = true;
 	$scope.showLogin = false;
 	$scope.showRegister = false;
-
 	$scope.dummyInputs = {};
+
+	 $scope.deviceDetector=deviceDetector;
+
+	 console.log(deviceDetector.isDesktop());
 
 
 	// refactor this into the variable
