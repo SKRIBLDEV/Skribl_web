@@ -39,8 +39,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfViewerS
 
 	var forceMetaData = function(data){
 		currentMeta = data;
-		console.log(data);
-		console.log("lolo");
+		pdfViewerService.changePDFURL(data.download);
 	};
 
 	var resetMetadata = function(){

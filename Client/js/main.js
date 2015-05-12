@@ -82,12 +82,10 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 				'lpb1' : {
 					url: '/recommendations',
 					controller: 'recommenderController',
-					templateUrl: "templates/publicationViewerCard.html"		
+					templateUrl: "templates/pdfViewerCard.html"		
 				}
 
 			}
-			
-
 		})
 
 

@@ -1,7 +1,10 @@
-webapp.controller('recommenderController', function($scope, serverService, appData) {
+webapp.controller('recommenderController', function($scope, serverService, appData, metaService) {
 	$scope.recommendations = {}
 
 	$scope.fetchingRecommendations = false;
+	$scope.reqestingMetadata = false;
+	$scope.showMeta = true;
+	$scope.showSpinner = false;
 
 	$scope.getRecommendations = function(){
 		if (appData.currentUser && !$scope.fetchingRecommendations){
@@ -13,7 +16,6 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 				$scope.recommendations = data;
 				console.log(data);
 				$scope.fetchingRecommendations = false;
-				toast("We found some new recommendations you might like", 4000);
 			})
 			.error(function(data, status){
 				$scope.fetchingRecommendations = false;
@@ -23,8 +25,22 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 		}
 	}
 
+	$scope.setMetaData =function(data){
+		metaService.forceMetaData(data);
+		metaService.showMeta = true;
+		console.log(metaService.currentMeta());
+	}
+
+	$scope.clearMetadata = function(){
+		metaService.forceMetaData({});
+	}
+
 	$scope.hasRecommendations = function(){
-		return ($scope.recommendations.length < 1);
+		return ($scope.recommendations.length >= 1);
+	}
+
+	$scope.getMetadata = function(){
+		return metaService.currentMeta();
 	}
 
 	if (! $scope.hasRecommendations()){
