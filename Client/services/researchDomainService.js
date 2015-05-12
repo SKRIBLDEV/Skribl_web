@@ -659,10 +659,11 @@ var toggleMinor = function(majorID, minorIDX){
         domains : researchDomains,
         toggleMajor : toggleMajor,
         toggleMinor : toggleMinor,
-        selected : selected,
+        getSelectedDomains : function(){return selected},
         removeFromSelected : removeFromSelected,
         showMajor : showMajor,
-        toggleShow : toggleShow
+        toggleShow : toggleShow,
+        resetSelected : init
 
     }
 

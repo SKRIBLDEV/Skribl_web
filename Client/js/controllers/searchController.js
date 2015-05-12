@@ -1,13 +1,13 @@
 
-webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, publicationsService, pdfDelegate, metaService) {
+webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService, publicationsService, pdfDelegate, metaService, researchDomainService) {
    
 
     //************** control search card
 
     $scope.searching = false; //for showing spinner etc.
-    $scope.showExternalResults = false;
     $scope.basicSearchView = true; //default basic search
     $scope.showresults = false;
+    $scope.showExternalResults = false;
 
     $scope.showMeta =  metaService.showMeta;
     $scope.requestingMetadata = metaService.requestingMetaData;
@@ -38,7 +38,7 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
     };
 
     //reset advanced search model (not a persistent model, only needed for temp bindings in view)
-    resetAdvancedQuery = function(){
+    resetAdvanced = function(){
         $scope.advancedQuery = {
             title : undefined,
             /*authors : [
@@ -57,7 +57,12 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
     $scope.arrayPlaceholders = ["author", "keyword", "research domain"]
 
-    resetAdvancedQuery();
+    $scope.search_showGeneral = true;
+    $scope.search_showResearchDomains = false; 
+    $scope.search_showAuthors = false;
+
+    $scope.getSelectedDomains = researchDomainService.getSelectedDomains;
+    resetAdvanced();
 
    $scope.advancedSearch = function(){
        metaService.resetMetadata();
@@ -65,7 +70,11 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
        $scope.internalResults = undefined;
        $scope.searching = true;
 
-       //console.log($scope.advancedQuery);
+       $scope.advancedQuery.researchDomains = $scope.getSelectedDomains();
+
+       console.log($scope.selectedDomains);
+
+       console.log($scope.advancedQuery);
 
 
         serverService.advancedSearch($scope.advancedQuery)
@@ -96,8 +105,9 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
 
     $scope.switchToAdvancedSearch = function(){
+        researchDomainService.resetSelected();
         metaService.resetMetadata();
-        resetAdvancedQuery();
+        resetAdvanced();
         $scope.showMeta = false;
         $scope.basicSearchView = false;
         $scope.internalResults = {};

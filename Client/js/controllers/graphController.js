@@ -33,7 +33,6 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
     }
 
     $scope.$watch('currentNetworkAuthor', function(){
-        console.log("change noticed!");
         //clear "canvas"
         d3.select(".svg-network").remove();
         getGraphData();

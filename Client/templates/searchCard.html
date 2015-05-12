@@ -18,16 +18,76 @@
             <!--- advanced search -->
             <div class="animated fadeInDown" ng-show="!basicSearchView">
                 <a class="mdi-navigation-chevron-left" ng-click="switchToBasicSearch()">basic search?  </a>
-                 &nbsp
-                <input placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title >
-                <input placeholder="year" class="text-field" type="number" ng-model=advancedQuery.year >
-                <input placeholder="journal" class="text-field" type="text" ng-model=advancedQuery.journal>
-                <input placeholder="book title" class="text-field" type="text" ng-model=advancedQuery.booktitle>
-                <div appendable-listing datasource="advancedQuery.keywords" new-placeholder="arrayPlaceholders[1]"></div>
-                <div appendable-listing datasource="advancedQuery.researchDomains" new-placeholder="arrayPlaceholders[2]"></div>
-                 <div appendable-listing-author datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
-                 &nbsp  
-                <a class="btn" ng-click="advancedSearch()"> Search</a>
+
+                <br></br>
+                        
+                <!-- general -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showGeneral=true" >
+                        <a> General </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showGeneral">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                                 <input placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title >
+                                <input placeholder="year" class="text-field" type="number" ng-model=advancedQuery.year >
+                                <input placeholder="journal" class="text-field" type="text" ng-model=advancedQuery.journal>
+                                <input placeholder="book title" class="text-field" type="text" ng-model=advancedQuery.booktitle>
+                                <div appendable-listing datasource="advancedQuery.keywords" new-placeholder="arrayPlaceholders[1]"></div>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showGeneral=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+
+                 <!-- authors -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showAuthors=true" >
+                        <a> Authors </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showAuthors">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <div appendable-listing-author datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showAuthors=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+                <!-- research domains -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showResearchDomains=true" >
+                        <a> Research Domains </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showResearchDomains">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <research-domain> </research-domain>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showResearchDomains=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+
+                 <a class="btn" ng-click="advancedSearch()"> Search</a>
 
             </div>
 
