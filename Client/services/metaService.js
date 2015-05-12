@@ -1,12 +1,8 @@
-webapp.factory('metaService', function($http, appData, serverService, pdfDelegate){
+webapp.factory('metaService', function($http, appData, serverService, pdfViewerService){
 
 	var currentMeta = {};
 	var requestingMetaData = false;
 	var showMeta = false;
-
-	function changePDFURL(newURL){
-        pdfDelegate.$getByHandle('my-pdf-container').load(newURL);
-    }
 
 	var setMetadata = function(pubId, handler){
 		console.log("setting metadata")
@@ -14,7 +10,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfDelegat
 		serverService.setMetadata(pubId)
 		.success(function (data){
 			currentMeta = data;
-			changePDFURL(data.download);
+			pdfViewerService.changePDFURL(data.download);
 			requestingMetaData = false;
 			console.log("done setting")
 			if (handler){

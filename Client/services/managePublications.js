@@ -235,11 +235,13 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
 //----------------------------------------------------------------------------------------------------------------------//
     //Used to get the meta data of a certain publication
-    //@Pieter hier moet jij reseten na dat de metaData gebruikt werd en verwijderd mag worden
+    //
+    //There is a different service for this now. 
     var GETMETA_STATUS = {
         INITIAL: 0,
         GETTING :1,
-        SUCCES_GETTING: 2}
+        SUCCES_GETTING: 2
+    }
         var getMeta_status = GETMETA_STATUS.INITIAL;
 
         this.showPublicationViewer = false;
