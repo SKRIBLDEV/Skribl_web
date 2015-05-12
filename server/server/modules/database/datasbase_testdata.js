@@ -122,7 +122,7 @@ function callBack(error, result){
 	console.log(error);
 	}
 	else{
-	console.log(result.getAuthorId());
+	console.log(result);
 	//printUser(result);
 	}
 	stop();

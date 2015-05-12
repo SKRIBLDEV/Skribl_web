@@ -652,26 +652,21 @@ function Publication(db, myDB) {
 	}
 
 	myDB.nearbyPublications = function(usr, depth, clb) {
-		db.query('select @rid, title, @class, lastUpdated, in(\'AuthorOf\') as authors from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' order by viewCount').all()
+		db.query('select @rid from (traverse * from (select @rid from User where username = \'' + usr + '\') while $depth <= ' + depth + ') where @class = \'Proceeding\' or @class = \'Journal\' order by viewCount').all()
 		.then(function(pubs) {
 			var pubsLength = pubs.length;
 			if(pubsLength) {
 				var ctr = 0;
 				for (var i = 0; i < pubsLength; i++) {
-					delete pubs[i]['@rid'];
-					delete pubs[i]['@type'];
-					pubs[i].authors = RID.transformRids(pubs[i]['authors']);
-					pubs[i].type = pubs[i]['class'];
-					delete pubs[i]['class'];
-					pubs[i].id = RID.transformRid(pubs[i].rid);
-					delete pubs[i]['rid'];
-					AUT.getAuthorObjects(pubs[i].authors, function(error, dummy) {
+					myDB.getPublication(RID.transformRid(pubs[i].rid), function(error, res) {
 						if(error) {
 							clb(error);
 						}
+						pubs[ctr] = res;
 						if(++ctr === pubsLength) {
 							clb(null, pubs);
 						}
+
 					});
 				};
 			}
