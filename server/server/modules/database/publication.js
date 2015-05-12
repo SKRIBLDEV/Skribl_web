@@ -658,16 +658,19 @@ function Publication(db, myDB) {
 			if(pubsLength) {
 				var ctr = 0;
 				for (var i = 0; i < pubsLength; i++) {
-					myDB.getPublication(RID.transformRid(pubs[i].rid), function(error, res) {
-						if(error) {
-							clb(error);
-						}
-						pubs[ctr] = res;
-						if(++ctr === pubsLength) {
-							clb(null, pubs);
-						}
-
-					});
+					(function() {
+						var rid = RID.transformRid(pubs[i].rid);
+						myDB.getPublication((rid), function(error, res) {
+							if(error) {
+								clb(error);
+							}
+							res.id = rid;
+							pubs[ctr] = res;
+							if(++ctr === pubsLength) {
+								clb(null, pubs);
+							}
+						});
+					})();
 				};
 			}
 			else {
