@@ -664,7 +664,7 @@ function Publication(db, myDB) {
 							if(error) {
 								clb(error);
 							}
-							res.rid = rid;
+							res.id = rid;
 							pubs[ctr] = res;
 							if(++ctr === pubsLength) {
 								clb(null, pubs);
