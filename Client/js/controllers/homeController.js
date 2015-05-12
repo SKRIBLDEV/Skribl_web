@@ -32,9 +32,9 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.showRegister = false;
 	$scope.dummyInputs = {};
 
-	 $scope.deviceDetector=deviceDetector;
-
-	 console.log(deviceDetector.isDesktop());
+	 $scope.notMobile = function(){
+	 	return ! deviceDetector.isMobile();
+	 }
 
 
 	// refactor this into the variable
@@ -337,11 +337,11 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
     	// temp fix for going to dashboard //FIXME
-   /* (function developLogin() {
+    (function developLogin() {
 		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
 		$scope.userinputLogin.password = "Brol123"; // keeF5gee5
 		$scope.doLogin();
-	})();*/
+	})();
 
 });
 

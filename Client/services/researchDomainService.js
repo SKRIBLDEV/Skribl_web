@@ -607,29 +607,28 @@ webapp.factory('researchDomainService', function($http){
     }
 
     var toggleMajor = function(id){
-     researchDomains[id-1].expanded = !researchDomains[id-1].expanded; 
-     console.log("lol")  ;
- }
+       researchDomains[id-1].expanded = !researchDomains[id-1].expanded; 
+   }
 
- var removeFromSelected = function(entry){
-        var idx = selected.indexOf(entry);
-        if (idx > -1){
-            selected.splice(idx, 1);
-        } else {
-            console.log("didn't find major/minor entry");
-        }
-
-        researchDomains.forEach(function(majorEntry){
-            majorEntry.minor.forEach(function(minorEntry){
-                if ((majorEntry.major.name == entry.major)&&(minorEntry.name == entry.minor)){
-                    minorEntry.selected = false;    
-                }
-            });
-        });
-
+   var removeFromSelected = function(entry){
+    var idx = selected.indexOf(entry);
+    if (idx > -1){
+        selected.splice(idx, 1);
+    } else {
+        console.log("didn't find major/minor entry");
     }
 
- var toggleMinor = function(majorID, minorIDX){
+    researchDomains.forEach(function(majorEntry){
+        majorEntry.minor.forEach(function(minorEntry){
+            if ((majorEntry.major.name == entry.major)&&(minorEntry.name == entry.minor)){
+                minorEntry.selected = false;    
+            }
+        });
+    });
+
+}
+
+var toggleMinor = function(majorID, minorIDX){
     var val = researchDomains[majorID-1].minor[minorIDX].selected
     researchDomains[majorID-1].minor[minorIDX].selected = !val;
 
