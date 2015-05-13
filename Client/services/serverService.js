@@ -86,6 +86,15 @@ webapp.factory('serverService', function($http, appData){
          return getRecommendations = $http.get(url, authorization);
      }
 
+     var likeRecommendation = function(like, pubId){
+        pubId = stripHashtag(pubId);
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/publication/').concat(pubId).concat('?like=').concat(like);
+        var authorization = {headers: 
+         {'Content-type' : 'application/json',
+         'Authorization': appData.Authorization}};
+         return likeRecommendation = $http.post(url, {}, authorization);
+     }
+
      var test = function(){
         console.log("succes test");
      }
@@ -99,6 +108,7 @@ webapp.factory('serverService', function($http, appData){
         getUserPublications : getUserPublications,
         getAuthorPublications : getAuthorPublications,
         getRecommendations : getRecommendations,
+        likeRecommendation : likeRecommendation
     };
 
     return service;

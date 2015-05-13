@@ -1,0 +1,49 @@
+<!-- recommender card -->
+<div class="card" ng-show="getMetadata().title">
+  <div class="card-content">
+  
+  <div class="row">
+    <span class="card-title grey-text text-darken-4">
+      <div class="col s6">
+       Do you like this publication? 
+     </div>
+     &nbsp;
+     &nbsp;
+     <a class="col s2" ng-click="likeRecommendation(false)">
+     <i class="mdi-navigation-close circle"></i>
+     </a>
+     &nbsp;
+     <a class="col s2" ng-click="likeRecommendation(true)">
+     <i class="mdi-navigation-check circle"></i>
+     </a>
+   </span>
+
+   <div class="animated fadeInDown col s12">
+
+    <!-- general waiting -->
+    
+
+    <!-- results -->
+</div>
+  </div>
+</div>
+
+
+
+
+<!-- end search card
+
+
+5  COMPONENT DESIGNgebruikte database, OrientDB, (onder andere) een graph-database is, kan men relatief eenvoudigdeze overlopen om dergelijk graph te construeren.Deze module zorgt voor de omzetting van de gegevens uit de database (na een traversal) naareen formaat met dat op de front-end kan worden gevisualiseerd. Zo vindt men hier een functieparseAuthorGraph(data)terug, die deze informatie zal omzetten naar een JSON-representatie metvertices & edges.5.8  RecommenderOm gemakkelijk nieuwe publicaties te ontdekken, laat SKRIBL gebruikers toe om aangerade pu-blicaties op te vragen, gebaseerd op gepersonaliseerde voorkeuren van de gebruiker.  Om dezevoorkeuren aan te leren, wordt gebruik gemaakt van een Naive Bayesian Classifier. Deze zal onderandere de titel, abstract & keywords van een publicatie analyseren voor de classificatie.Concreet kan een gebruiker, gebruik makende van de functierate, een publicatie ofwel een po-sitieve of negatieve score toekennen. Dit zal bijvoorbeeld gebeuren wanneer hij/zij op de (dis)like-knop klikt, alsook wanneer de publicatie wordt toegevoegd aan de Favorites-library. Op die manierkan de classifier per gebruiker worden getrained om later voorspellingen te maken over de beoorde-ling van ongeziene publicaties.Wanneer dan vervolgens de recommendations worden opgevraagd met de gelijknamige functie,zal er eerst beroep worden gedaan op de database. Vermits deze georganiseerd is als graph, is hetmogelijk om alle publicaties die (graphsgewijs) dicht bij de gebruiker liggen op te vragen, rekeninghoudend met hun impact/aantal views. Vervolgens wordt de classifier dan gebruikt om in dezeset van publicaties de beoordeling van de gebruiker te voorspellen. Publicaties die dan negatiefgeclassificeerd worden, worden verwijderd uit de lijst.Ten slotte kan men in deze module ook nog een cache terugvinden. Deze wordt gebruikt omperformantie te verbeteren bij het herhaaldelijk inladen en wegschrijven van de classifier. Concreetwordt er gewerkt met eenLeast-recently used(LRU) cache die wijzigingen meteen doorvoert in dedatabase(write-through)
+
+nteresting...
+
+noahves [12:55 PM]
+SKRIBL also allows for new publications to advise users on the basis of previously established preferences. As already mentioned, use is made for this purpose of a Naive Bayesian classifier that tries to predict whether a publication is or is not of interest to the user.
+
+These preferences are recorded in two different ways. On the one hand, the client can use a specific request to give a rating to a publication. Alternatively, a publication will automatically be recorded as a positive example, if it is added to his / her Favorites-library. \\
+
+The idea behind keeping classifiers was discussed in the previous section ~ \ ref {sec: components}. In order to discover new self publications, use is made of the graph-structure in the database. This will, starting from the user-node, all publications at a certain distance in the graph refer to as possible candidates for the recommended publications. This will automatically all publications accessible from the user libraries (ie including the favorites) and research areas are eligible. The results are then sorted by their impact (based on the number of views).
+
+Then, the selected publications are filtered by the classifier. This will try to publications uninteresting for the user to extract immediately include the text of the title, abstract and keywords analysis. This prevents for example, that a publication that has already been rejected by the user (or a similar publication) reappears in the list of recommendations.
+

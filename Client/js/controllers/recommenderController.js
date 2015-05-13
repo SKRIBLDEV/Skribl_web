@@ -1,4 +1,4 @@
-webapp.controller('recommenderController', function($scope, serverService, appData, metaService) {
+webapp.controller('recommenderController', function($scope, serverService, appData, metaService, publicationsService) {
 	$scope.recommendations = {}
 
 	$scope.fetchingRecommendations = false;
@@ -9,7 +9,6 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 	$scope.getRecommendations = function(){
 		if (appData.currentUser && !$scope.fetchingRecommendations){
 			$scope.fetchingRecommendations = true;
-			console.log("in recommendations");
 
 			serverService.getRecommendations(5)
 			.success(function(data) {
@@ -23,6 +22,21 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 			});	
 			
 		}
+	}
+
+	$scope.likeRecommendation = function(like){
+		var pubID = metaService.currentMeta().id;
+		serverService.likeRecommendation(like, pubID)
+		.success(function(data) {
+			if (like){
+				publicationsService.addPublication('favorites', pubID);
+			} else {
+				toast("We're sorry you didn't like that, and optimesed our algoritm", 4000);
+			}
+		})
+		.error(function(data, status){
+			toast("Failed to post recommendation, please try again later", 4000);
+		});	
 	}
 
 	$scope.setMetaData =function(data){

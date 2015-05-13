@@ -79,6 +79,12 @@ webapp.config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvid
 					controller: 'recommenderController',
 					templateUrl: "templates/metadataCard.html"		
 				},
+				'lpt1' : {
+					url: '/recommendations',
+					controller: 'recommenderController',
+					templateUrl: "templates/recommenderLikeCard.html"		
+				},
+
 				'lpb1' : {
 					url: '/recommendations',
 					controller: 'recommenderController',
