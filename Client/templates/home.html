@@ -5,7 +5,7 @@
 <!--Tablet and above: Block 1: dynamic logo-->
 <div class="white-block hide-on-small-only row" ng-show="notMobile()">
   <div class="col s4 offset-s4 center">
-    <canvas interactivelogo></canvas>
+    <canvas interactivelogo ng-attr-mobile="!notMobile()"></canvas>
   </div>
   <!-- ____ [BUTTON] ________________________-->
   <!--...... DESKTOP ........................-->
@@ -14,7 +14,7 @@
      <i class="large mdi-hardware-keyboard-arrow-down"></i>
    </a>  
  </div>
-</div>
+</div> 
 
 <div id="maincontent" class="section">
   <div class="row">
@@ -28,7 +28,6 @@
   <!--...... DESKTOP ........................-->
   <div class="row">
     <div class="col s12 center">
-      <!--<img class="autosizeImage" src="img/skribl_general_text.png" alt="skribllog">-->
       <h1 class="white-text-color Intro" style="font-family: 'Roboto', sans-serif; font-weight: medium;">SKRIBL</h1>
     </div>
   </div>
@@ -43,9 +42,22 @@
 <!-- ____ [LOGIN / REGISTER] ______________-->
 <!-- login button-->
 <div class="row" ng-hide="showLogin">
-  <a class="col offset-m5 m2 offset-s4 s4 waves-effect waves-light btn-large" ng-click="enableLogin()">
-    <h5 class="center-align" style="color:white">Login</h5>
-  </a>
+  <div class="col s12 center">
+    <!-- small/mobile -->
+    <a class="waves-effect waves-light btn-large hide-on-med-and-up" style="width:75%" ng-click="enableLogin()">
+      <h5 style="color:white;">Login</h5>
+    </a>
+    <!-- tablet/desktop -->
+    <a class="waves-effect waves-light btn-large hide-on-small-only" ng-click="enableLogin()">
+      <h5 style="color:white;">Login</h5>
+    </a>
+  </div>
+</div>
+<div class="row hide-on-small-only">
+  <div class="col s6 offset-s3 center">
+    <div class="large-header-block">
+    </div>
+  </div>
 </div>
 
 <!-- login card-->
@@ -98,11 +110,15 @@
     <a class="white-text-color hide-on-small-only" ng-click="enableRegister()">
       <h6 class="center-align">Sign up here</h6>
     </a>
+  </div>
+</div>
 
-    <!--...... MOBILE ..........................-->        
-    <div class="hide-on-med-and-up col offset-m5 m2 offset-s4 s4 waves-effect waves-light btn-large" ng-click="enableRegiser()">
-      <h5 class="center-align" style="color:white">Register</h5>
-    </div>
+<!--...... MOBILE ..........................-->   
+<div class="row hide-on-med-and-up" ng-hide="showRegister">
+  <div class="col s12 center">
+    <a class="waves-effect waves-light btn-large " style="width:75%" ng-click="enableRegiser()">
+      <h5 style="text-decoration:none">Register</h5>
+    </a>
   </div>
 </div>
 
@@ -113,52 +129,52 @@
       <div class="card-content ">
         <span class="card-title grey-text text-darken-4">Register</span>
         <p class="grey-text text-darken-4"> All fields are required. <p>
-        <div class="row">
-          <form class="col s12">
+          <div class="row">
+            <form class="col s12">
 
-            <!-- First name -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-label-outline prefix"></i>
-                <input id="register_firstname" type="text" class="validate" ng-model=userinput.firstName required>
-                <label for="register_firstname">First Name</label>
-                <div class="alert-color" id="register_error_firstName"></div>
+              <!-- First name -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-label-outline prefix"></i>
+                  <input id="register_firstname" type="text" class="validate" ng-model=userinput.firstName required>
+                  <label for="register_firstname">First Name</label>
+                  <div class="alert-color" id="register_error_firstName"></div>
+                </div>
               </div>
-            </div>
 
-            <!-- Name (last name) -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-label prefix"></i>
-                <input id="register_lastname" type="text" class="validate" ng-model=userinput.lastName required>
-                <label for="register_lastname">Last Name</label>
-                <div class="alert-color" id="register_error_lastName"></div>
+              <!-- Name (last name) -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-label prefix"></i>
+                  <input id="register_lastname" type="text" class="validate" ng-model=userinput.lastName required>
+                  <label for="register_lastname">Last Name</label>
+                  <div class="alert-color" id="register_error_lastName"></div>
+                </div>
               </div>
-            </div>
 
-            <br>
+              <br>
 
-            <!-- user name -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-account-circle prefix"></i>
-                <input id="register_username" type="text" class="validate" ng-model=userinput.username required></input>
-                <label for="register_username">Username</label>
-                <div class="alert-color" id="register_error_username"></div>
+              <!-- user name -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-account-circle prefix"></i>
+                  <input id="register_username" type="text" class="validate" ng-model=userinput.username required></input>
+                  <label for="register_username">Username</label>
+                  <div class="alert-color" id="register_error_username"></div>
+                </div>
               </div>
-            </div>
 
-            <!-- email -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-communication-email prefix"></i>
-                <input id="register_email" type="email" class="validate" ng-model=userinput.email required></input>
-                <label for="register_email">Email</label>
-                <div class="alert-color" id="register_error_email"></div>
+              <!-- email -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-communication-email prefix"></i>
+                  <input id="register_email" type="email" class="validate" ng-model=userinput.email required></input>
+                  <label for="register_email">Email</label>
+                  <div class="alert-color" id="register_error_email"></div>
+                </div>
               </div>
-            </div>
 
-            <!-- password-->
+              <!-- password-->
               <div class="row">
                 <div class="input-field col s12">
                   <i class="mdi-communication-vpn-key prefix"></i>
@@ -168,97 +184,96 @@
                 </div>
               </div>
 
-            <br>
+              <br>
 
-            <!-- institution -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-home prefix"></i>
-                <input id="register_institution" type="text" class="validate" ng-model=userinput.institution required></input>
-                <label for="register_institution">Institution</label>
-                <div class="alert-color" id="register_error_institution"></div>
+              <!-- institution -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-home prefix"></i>
+                  <input id="register_institution" type="text" class="validate" ng-model=userinput.institution required></input>
+                  <label for="register_institution">Institution</label>
+                  <div class="alert-color" id="register_error_institution"></div>
+                </div>
               </div>
-            </div>
 
-            <!-- faculty -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-group-work prefix"></i>
-                <input id="register_faculty" type="text" class="validate" ng-model=userinput.faculty required></input>
-                <label for="register_faculty">Faculty</label>
-                <div class="alert-color" id="register_error_faculty"></div>
+              <!-- faculty -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-group-work prefix"></i>
+                  <input id="register_faculty" type="text" class="validate" ng-model=userinput.faculty required></input>
+                  <label for="register_faculty">Faculty</label>
+                  <div class="alert-color" id="register_error_faculty"></div>
+                </div>
               </div>
-            </div>
 
-            <!-- Department -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-extension prefix"></i>
-                <input id="register_department" type="text" class="validate" ng-model=userinput.department required></input>
-                <label for="register_department">Department</label>
-                <div class="alert-color" id="register_error_department"></div>
+              <!-- Department -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-extension prefix"></i>
+                  <input id="register_department" type="text" class="validate" ng-model=userinput.department required></input>
+                  <label for="register_department">Department</label>
+                  <div class="alert-color" id="register_error_department"></div>
+                </div>
               </div>
-            </div>
 
-             <!-- research group -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-dashboard prefix"></i>
-                <input id="register_researchGroup" type="text" class="validate" ng-model=userinput.researchGroup ></input>
-                <label for="register_researchGroup">Research Group</label>
-                <div class="alert-color" id="register_error_researchGroup"></div>
+              <!-- research group -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-dashboard prefix"></i>
+                  <input id="register_researchGroup" type="text" class="validate" ng-model=userinput.researchGroup ></input>
+                  <label for="register_researchGroup">Research Group</label>
+                  <div class="alert-color" id="register_error_researchGroup"></div>
+                </div>
               </div>
-            </div>
 
-            <br>
+              <br>
 
-            <!-- research domain -->
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="mdi-action-class prefix"></i>
-                <input id="register_researchDomain" type="text" class="validate" ng-model=userinput.researchDomains required></input>
-                <label for="register_researchDomain">Research Domain</label>
-                <div class="alert-color" id="register_error_researchDomain"></div>
+              <!-- research domain -->
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="mdi-action-class prefix"></i>
+                  <input id="register_researchDomain" type="text" class="validate" ng-model=userinput.researchDomains required></input>
+                  <label for="register_researchDomain">Research Domain</label>
+                  <div class="alert-color" id="register_error_researchDomain"></div>
+                </div>
               </div>
-            </div>
 
 
 
-            <div class="col s12 alert-color center-align" id="register_error_general"></div>
-
-           
-
-
-          </form>
+              <div class="col s12 alert-color center-align" id="register_error_general"></div>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="card-action white-text-color">
-        <div class="col s12 waves-effect waves-light btn-large">
-          <h5 class="center-align" style="color:white" ng-click="doRegister()">Register</h5>
+        <div class="card-action white-text-color">
+          <div class="col s12 waves-effect waves-light btn-large">
+            <h5 class="center-align" style="color:white" ng-click="doRegister()">Register</h5>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="small-spacer"></div>
 
-<!-- ____ [TAGLINE] ____________________-->
-<!--...... DESKTOP TABLET MOBILE .......-->
-<div class="section row footer">
-  <div class="col s10 offset-s1 m12 white-text-color"><p class="center-align flow-text">{{copy}}</p></div>
-</div>
 
-<div class="small-spacer"></div>
+  <div class="small-spacer"></div>
 
-<!-- ____ [FOOTER] ____________________-->
-<!--...... TABLET MOBILE .......-->
-<div class="section row footer hide-on-small-only">
-  <div class="col s12 ">
-    <img style="width: 100%" src="img/diamondFront.png" />
+  <!-- ____ [TAGLINE] ____________________-->
+  <!--...... DESKTOP TABLET MOBILE .......-->
+  <div class="section row footer">
+    <div class="col s10 offset-s1 m12 white-text-color"><p class="center-align flow-text">{{copy}}</p></div>
   </div>
-</div>
+
+  <div class="small-spacer"></div>
+
+  <!-- ____ [FOOTER] ____________________-->
+  <!--...... TABLET MOBILE .......-->
+  <div class="section row footer hide-on-small-only">
+    <div class="col s12 ">
+      <img style="width: 100%" src="img/diamondFront.png" />
+    </div>
+  </div>
+
 
 
 

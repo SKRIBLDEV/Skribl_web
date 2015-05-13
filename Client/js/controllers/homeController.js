@@ -33,9 +33,10 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.dummyInputs = {};
 
 	 $scope.notMobile = function(){
-	 	return ! deviceDetector.isMobile();
+	 	return deviceDetector.isDesktop();
 	 }
 
+	 console.log(deviceDetector.isMobile());
 
 	// refactor this into the variable
 	$scope.getMotivationalQuote = function(){
@@ -338,9 +339,9 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
     	// temp fix for going to dashboard //FIXME
     (function developLogin() {
-		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
-		$scope.userinputLogin.password = "Brol123"; // keeF5gee5
-		$scope.doLogin();
+		// $scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
+		// $scope.userinputLogin.password = "Brol123"; // keeF5gee5
+		// $scope.doLogin();
 	})();
 
 });

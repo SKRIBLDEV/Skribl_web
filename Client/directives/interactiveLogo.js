@@ -5,15 +5,28 @@ this directive is used to display the interactive logo, at this moment used at t
  */
 webapp.directive('interactivelogo', ['$timeout', function(timer) {
 
-  return {
+ 
+    return {
     restrict: 'A',
-    scope: true,
-    link: function(scope, element) {
+    scope: {
+      mobile:'=mobile'
+    },
+    link: function(scope, element, mobile) {
 
       var canvas = document.querySelector('canvas');
       fitToContainer(canvas);
 
+      console.log(scope.mobile);
+
+      if (scope.mobile == true){
+        console.log(mobile);
+        return {};
+      }
+      
+
       function fitToContainer(canvas){
+      
+
         // Make it visually fill the positioned parent
         canvas.style.height='100%';
         canvas.style.width = '100%';
@@ -148,7 +161,8 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
         /**
          * Initializes the interactive logo
          */
-        var init = function(){          
+        var init = function(){    
+
           // clear all drawing items on active layer
           paper.project.activeLayer.removeChildren();  
 
