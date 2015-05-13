@@ -22,7 +22,7 @@
         managePublications.getUserLibraries();
         // little hack to make pdf viewer work
         appData.data.currentMetaData = {download: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/149125/material-design-2.pdf'};        
-        appData.modifyResearchDomains();
+        //appData.modifyResearchDomains();
         routerHelperService.goDashboardLibrary();
     })();
 

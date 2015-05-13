@@ -5,17 +5,16 @@ webapp.factory('metaService', function($http, appData, serverService, pdfViewerS
 	var showMeta = false;
 
 	var setMetadata = function(pubId, handler){
-		console.log("setting metadata")
 		requestingMetaData = true;
 		serverService.setMetadata(pubId)
 		.success(function (data){
 			currentMeta = data;
+			console.log("current metadata: ");
+			console.log(data);
 			pdfViewerService.changePDFURL(data.download);
 			requestingMetaData = false;
-			console.log("done setting")
 			if (handler){
 				handler(true, currentMeta);
-				console.log(currentMeta);
 			}
 		})
 		.error(function(){

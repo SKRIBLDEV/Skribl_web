@@ -104,7 +104,7 @@
         } 
     }
 
-    this.getMajorName = function(majorID){
+    /*this.getMajorName = function(majorID){
         var rname;
         self.researchDomains.forEach(function(entry) {
             if (entry.major.ID == majorID){
@@ -127,21 +127,23 @@
         });
 
         return rname;
-    }
+    }*/
 
     //update this
-    this.modifyResearchDomains = function(){
+   /* this.modifyResearchDomains = function(){
         self.researchDomains.forEach(function(entry) {
             entry.selected = false;
             entry.toggle = function(){
                 entry.selected = !entry.selected;
             }
         });
-    }
+    }*/
 
 
 
-    this.researchDomains = [
+
+
+    /*this.researchDomains = [
     {
         major:   {ID: "1", name: "Arts and Literature"},
         minor:   [
@@ -738,5 +740,5 @@
         {ID: "473", name: "Miscellaneous"}
         ]
     }
-    ]
+    ]*/
 });
