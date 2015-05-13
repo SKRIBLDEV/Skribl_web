@@ -1,6 +1,9 @@
-//XXX: vermeld bron indien van toepassing, eerste deel lijkt mij niet door jezelf geschreven ;)
-//XXX: plaats het eventueel ook in een andere module
-
+/**
+*
+*  Base64 encode / decode
+*  http://www.webtoolkit.info/
+*
+**/
 const Base64 = {
 
 // private property
@@ -139,8 +142,6 @@ _utf8_decode : function (utftext) {
 
 
 function Classifier(db, myDB) {
-
-    //XXX: zelfde opmerking over module als in affiliation.js
 
 	function stringToBytes(str, clb) {
 

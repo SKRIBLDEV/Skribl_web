@@ -53,7 +53,6 @@ function Database(serverConfig, dbConfig) {
 		password: dbConfig.password || 'admin'
 	});
 
-	//XXX: zie opmerking over modules in affiliation.js
 
 	var self = this;
 	var aff = new Affil.Affiliation(db, self);
@@ -82,7 +81,6 @@ function Database(serverConfig, dbConfig) {
 			db.query('select Name from ' + classSubDivisions + ' where ' + className +' = ' + divisionRid)
 			.then(function(results) {
 				var resLength = results.length;
-				//XXX: of nog beter, gebruik Array.prototype.map voor nog elegantere code!
 				var resArray = new Array(resLength);
 				for(var i = 0; i < resLength; i++) {
 					resArray[i] = results[i].Name;
@@ -193,7 +191,6 @@ function Database(serverConfig, dbConfig) {
 			db.query('select * from (traverse * from (select * from User where username = \'' + username + '\') while $depth < 2) where @class = \'ResearchDomain\'')
 			.then(function(researchDomains) {
 				var resDomLength = researchDomains.length;
-				//XXX: or again, it's even beter to use researchDomains.map here!
 				var resArray = new Array(resDomLength);
 				for (var i = 0; i < resDomLength; i++) {
 					var currDomain = researchDomains[i];
@@ -206,7 +203,6 @@ function Database(serverConfig, dbConfig) {
 			db.select().from('ResearchDomain').all()
 			.then(function(domains) {
 				var domLength = domains.length;
-				//XXX: or again, it's even beter to use domains.map here!
 				var resArray = new Array(domLength);
 				for (var i = 0; i < domLength; i++) {
 					var currDomain = domains[i];

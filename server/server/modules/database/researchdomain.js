@@ -112,7 +112,6 @@ function ResearchDomain(db, myDB){
 			var resDomLength = resDomains.length;
 			if(resDomLength) {
 				var res = new Array(resDomLength);
-				//XXX: ofwel nog beter, een map
 				for (var i = 0; i < resDomLength; i++) {
 					var currDom = resDomains[i];
 					res[i] = {major: currDom.major, minor: currDom.minor};

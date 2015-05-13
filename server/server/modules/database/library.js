@@ -6,7 +6,7 @@ var Author = require('./author.js');
 function Library(db, myDB) {
 
 
-	var AUT = new Author.Author(db, myDB);//XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
+	var AUT = new Author.Author(db, myDB);
 
 	/**
 	 * creates a library and connects it to given user
@@ -153,8 +153,7 @@ function Library(db, myDB) {
 	 */
 	myDB.loadLibraries = function(user, clb) {
 		function getName(array, callB) {
-			var arrLength = array.length;
-			//XXX: of opnieuw, een map zou hier nog beter zijn
+			var arrLength = array.length
 			for (var i = 0; i < arrLength; i++) {
 				array[i] = array[i].name;
 			};
