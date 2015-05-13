@@ -88,11 +88,11 @@ webapp.factory('serverService', function($http, appData){
 
      var likeRecommendation = function(like, pubId){
         pubId = stripHashtag(pubId);
-        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/publication/').concat(pubId).concat('?like=').concat(like);
+        var url = serverApi.concat('/user/').concat(appData.currentUser.username).concat('/publication/').concat(pubId);
         var authorization = {headers: 
          {'Content-type' : 'application/json',
          'Authorization': appData.Authorization}};
-         return likeRecommendation = $http.post(url, {}, authorization);
+         return likeRecommendation = $http.post(url, {'like':like}, authorization);
      }
 
      var test = function(){

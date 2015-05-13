@@ -33,9 +33,7 @@ webapp.factory('publicationsService', function($http, appData, serverService){
         .success(function(data, status, headers, config) {
             if(libraryName === appData.data.currentLibraryName) {
                 getUserPublications(libraryName);
-            } else {
-                upToDate();
-            };
+            } 
             var toToast ="Publication added to library ".concat(libraryName).concat(".");
             toast(toToast, 4000);
         })
