@@ -10,7 +10,7 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 		if (appData.currentUser && !$scope.fetchingRecommendations){
 			$scope.fetchingRecommendations = true;
 
-			serverService.getRecommendations(5)
+			serverService.getRecommendations(10)
 			.success(function(data) {
 				$scope.recommendations = data;
 				console.log(data);

@@ -8,7 +8,7 @@
  * @param  {object} appData  	our custom service for shared data
 
  */
- webapp.controller('dashController', function($scope, $http, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate, routerHelperService, pdfViewerService, researchDomainService) {
+ webapp.controller('dashController', function($scope, $http, appData, anchorSmoothScroll, userService, managePublications, chartService, pdfDelegate, routerHelperService, pdfViewerService, researchDomainService, deviceDetector) {
 
     //----------------------------------------------------INIT----------------------------------------------------------//
     //Control if user has already loged in, or if he tries to go the dashboard without login in.
@@ -25,6 +25,11 @@
         appData.modifyResearchDomains();
         routerHelperService.goDashboardLibrary();
     })();
+
+         $scope.test = "lololoo";
+         $scope.notMobile = function(){
+        return deviceDetector.isDesktop();
+     }
 
 
     //----------------------------------------------------INIT----------------------------------------------------------//
