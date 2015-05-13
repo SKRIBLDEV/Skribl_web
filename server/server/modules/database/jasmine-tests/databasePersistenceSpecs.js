@@ -132,9 +132,9 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test researchDomains data', function(done) {
-				d.ODB.query('select from ResearchDomain where Name = \'Biological Sciences\' or Name = \'Computer Sciences\' or Name = \'Languages\'').all()
+				d.ODB.query('select from ResearchDomain where major = \'Computer and Information Science\'').all()
 				.then(function(researchDomains) {
-					expect(researchDomains.length).toBe(3);
+					expect(researchDomains.length).toBe(1);
 					done();
 				}).error(function(er) {
 					expect(er).toBeNull();

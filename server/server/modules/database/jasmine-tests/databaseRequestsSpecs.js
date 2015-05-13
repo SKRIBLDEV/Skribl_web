@@ -20,7 +20,8 @@ function requests(clb) {
 				expect(usr.getDepartment()).toBe(d.nUser.department);
 				expect(usr.getFaculty()).toBe(d.nUser.faculty);
 				expect(usr.getInstitution()).toBe(d.nUser.institution);
-				expect(usr.getResearchDomains()[0]).toBe(d.nUser.researchDomains[0]);   //need custom matcher for arrays
+				expect(usr.getResearchDomains()[0].major).toBe(d.nUser.researchDomains[0].major);   //need custom matcher for arrays
+				expect(usr.getResearchDomains()[0].minor).toBe(d.nUser.researchDomains[0].minor);   //need custom matcher for arrays
 				expect(usr.getLanguage()).toBe(d.nUser.language);
 				//need to check password hash-->bcrypt?
 				//expect(usr.password).toBe('RandomPass123');
