@@ -32,7 +32,6 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
             })
             .error(function(data, status){
                 $scope.searching = false;
-                console.log(status);
                 toast("Failed to search publications, try again later.", 4000);
             });
     };
@@ -41,11 +40,6 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
     resetAdvanced = function(){
         $scope.advancedQuery = {
             title : undefined,
-            /*authors : [
-                {firstName: 'Jens',
-                lastName : 'Nicolay'}
-            ],*/
-            //keywords : ['VUB', 'Software'],
             authors: [],
             keywords: [],
             researchDomains : [],

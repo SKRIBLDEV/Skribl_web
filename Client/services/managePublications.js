@@ -1,5 +1,5 @@
 //Every status can represent ONE 'transaction' impossible to multiple upload, ... at the same time !! Some status needs other one's be carefull with that.
-webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService, metaService) {
+webapp.service('managePublications', function($location, appData, $http, pdfDelegate, userService, metaService, researchDomainService) {
 
     var self = this;
 
@@ -387,23 +387,39 @@ getMetaDataRequest.error(function(data, status, headers, config) {
 
         this.modifyMeta = function(publicationID, meta) {
 
-            console.log(publicationID);
-            console.log(meta);
+
+            if (!meta.researchDomains)
+                meta.researchDomains = [];
+
+            //add new research domains 
+            var allRD = meta.researchDomains.concat(researchDomainService.getSelectedDomains());
+            researchDomainService.resetSelected();
+            meta.researchDomains = allRD;
+
+
 
             modifyMeta_status = MODIFYMETA_STATUS.MODIFYING;
             var url = serverApi.concat('/publications/').concat(publicationID);
             var authorization = {headers: 
                {'Content-type' : 'application/json',
                'Authorization': appData.Authorization}};
-               var setMetaDataRequest = $http.post(url, meta, authorization);
+            var setMetaDataRequest = $http.post(url, meta, authorization);
 
-               setMetaDataRequest.success(function(data, status, headers, config) {
+            setMetaDataRequest.success(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.SUCCES_MODIFYING;
                 toast("The meta data of the publication has been changed.",4000);
             });
                setMetaDataRequest.error(function(data, status, headers, config) {
                 modifyMeta_status = MODIFYMETA_STATUS.INITIAL;
-                toast("Failed to change the informations about the publication, try again later.", 4000);
+                if(status === 401){ // not authorized (i.e., not the uploader of the publication)
+                    toast("You are not authorized to edit the metadata of this publication.", 4000);
+                } 
+                else{
+                    toast("Failed to change the informations about the publication, try again later.", 4000);
+                    console.log(data);
+
+                } 
+                    
             });
            }
 //----------------------------------------------------------------------------------------------------------------------//
@@ -411,15 +427,15 @@ getMetaDataRequest.error(function(data, status, headers, config) {
 //----------------------------------------------------------------------------------------------------------------------//
 
 
-function scrape(publicationID, handler) {
-    publicationID = stripHashtag(publicationID);
+function scrape(uploadData, handler) {
+    publicationID = stripHashtag(uploadData.currentPublicationID);
 
     var url = serverApi.concat('/publications/').concat(publicationID).concat('?extract=true');
     var scrapingRequest = $http.get(url, config);
 
     scrapingRequest.success(function(data, status, headers, config) {
         appData.data.currentMetaData = data;
-        console.log(appData.data.currentMetaData);
+        appData.data.currentMetaData.id = publicationID;
         if (handler){
             handler(true);
         }
@@ -427,6 +443,11 @@ function scrape(publicationID, handler) {
 
     scrapingRequest.error(function(data, status, headers, config) {
         toast("Failed to find information about the given publication.", 4000);
+        appData.data.currentMetaData = {
+            title : uploadData.title,
+            type : uploadData.type,
+            id : publicationID
+        };
         if (handler){
             handler(false);
         }
@@ -562,7 +583,7 @@ function scrape(publicationID, handler) {
     }
 
     this.upload_searchExcisting = function(){
-        enableWaiting("Searching for excisting publications");
+        enableWaiting("Searching for existing publications");
 
         function handler(succes, data){
 
@@ -575,7 +596,7 @@ function scrape(publicationID, handler) {
             }
         }
         self.search(appData.uploadData.title, false, handler);
-        console.log(appData.uploadData);
+        //console.log(appData.uploadData);
         // make sure you can select
     }
 
@@ -592,6 +613,8 @@ function scrape(publicationID, handler) {
         })
         .success(function(data, status, headers, config) {
             appData.uploadData.currentPublicationID = stripHashtag(data.id);
+            appData.currentMetadata = {};
+            appData.currentMetadata.id = stripHashtag(data.id);
 
             if(handler){
                 handler(true);
@@ -607,7 +630,7 @@ function scrape(publicationID, handler) {
 
     this.upload_excisting = function(publicationID){
         this.addPublications('Portfolio', publicationID);
-        toast("excisting publication added to 'Portfolio'");
+        toast("existing publication added to 'Portfolio'");
         self.upload_reset();
     }
 
@@ -628,7 +651,7 @@ function scrape(publicationID, handler) {
                 // when publication is added to database 
                 // metadata of publication needs to be send/updated (currently empty)
                 enableWaiting("Scraping for metadata");
-                scrape(appData.uploadData.currentPublicationID, scrapeHandler);
+                scrape(appData.uploadData, scrapeHandler);
 
             } else {
                 self.upload_reset();
@@ -673,7 +696,6 @@ function scrape(publicationID, handler) {
                 } else {
                     toast("we found some authors", 4000);
                     author.potential = data;
-                    console.log(data);
                 }
 
                 var idx = 0;
@@ -681,7 +703,6 @@ function scrape(publicationID, handler) {
                     entry.id = idx++;
                 });
 
-                console.log(author);
 
                 author.allowSet = true;
             }

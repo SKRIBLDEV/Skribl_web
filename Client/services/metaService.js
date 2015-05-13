@@ -1,6 +1,8 @@
 webapp.factory('metaService', function($http, appData, serverService, pdfViewerService){
 
-	var currentMeta = {};
+	var currentMeta = {
+		researchDomains : [] //init
+	};
 	var requestingMetaData = false;
 	var showMeta = false;
 

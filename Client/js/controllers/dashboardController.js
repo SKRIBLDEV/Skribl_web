@@ -26,7 +26,7 @@
         routerHelperService.goDashboardLibrary();
     })();
 
-         $scope.test = "lololoo";
+         //$scope.test = "lololoo";
          $scope.notMobile = function(){
         return deviceDetector.isDesktop();
      }
@@ -58,11 +58,12 @@
     $scope.userService = userService;
     $scope.pdfViewerService = pdfViewerService;
     $scope.researchDomainService = researchDomainService;
+    $scope.getSelectedDomains = researchDomainService.getSelectedDomains;
 
     //------------------------------------------Manage Lib&Publications etc---------------------------------------------// 
 
     //------------------------------------------------INTERACTIVE GRAPH-------------------------------------------------//
-    $scope.interactiveGraph = false;
+    /*$scope.interactiveGraph = false;
 
     $scope.ui_interactive_graph_enable = function() {
         $scope.interactiveGraph = true;
@@ -73,7 +74,7 @@
 
             $scope.gotoElement = function(eID) {
                 anchorSmoothScroll.scrollTo(eID);
-            };
+            };*/
 
 
     //2D0: make independent controller for metadata

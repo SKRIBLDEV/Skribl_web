@@ -84,6 +84,12 @@
 		<div class="row">
 			<form class="col s12">
 
+
+				<div class="progress">
+					<div class="determinate" style="width: 0%">
+					</div>
+				</div>
+
 				<!-- authors -->
 				<h5 class="row center">
 					Authors
@@ -193,7 +199,7 @@
 
 				<!-- research domains -->
 				<h5 class="row center">
-					researchDomains
+					Research Domains
 				</h5>
 
 
@@ -201,22 +207,25 @@
 				<div class="col s12">
 					<div class="card-panel skribl-primary-color" >
 
-						<h5 class="white-text"> current research domains  </h5>
-						<br>
-
+						<!--<h5 class="white-text"> current research domains  </h5>
+						<br>-->
 						<div ng:repeat="domain in data.currentMetaData.researchDomains" >
-							<hr>
+							<!--<hr>-->
 							<div class="row" ng-click="appData.removeResearchDomain($index)">
 								<i class="mdi-action-delete selectable-white"></i>
-								<a class="white-text">
+								<a class="white-text center">
 									{{domain.major}} :: 
 									{{domain.minor}}
 								</a>
 								<br>
 							</div>
-
 						</div>
 
+						<a class="grey-text center"> NEW: </a>
+						<div ng-repeat="selected in getSelectedDomains()">
+                     		<a class="white-text center">  {{selected.major}} :: {{selected.minor}} </a>
+                  		</div>
+						
 						<br>
 
 						<div class="row">
@@ -227,27 +236,22 @@
 						</div>
 					</div>
 				</div>
-				<!-- end RD -->
+				
 
 
-				<div ng:repeat="domain in appData.researchDomains" ng-show="appData.ui.metaAddResearchDomain.value">
+				<!-- RD selection -->
 
-					<div class="col s4">
-						<div class="card-panel skribl-primary-color" >
-							<h5 class="selectable-white" ng-click="domain.toggle()">
-								{{domain.major.name}}
-							</h5>
+				 <span class="grey-text text-darken-4" ng-show="appData.ui.metaAddResearchDomain.value">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <research-domain> </research-domain>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="appData.ui.metaAddResearchDomain.value=false"></i>
+                            </div>
+                        </div>
+                 </span>
 
-							<div ng-show="domain.selected">
-								<div ng:repeat="minor in domain.minor">
-									<div class="selectable-white" ng-click="appData.addResearchDomain(domain.major.ID, minor.ID)">
-										{{minor.name}}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 
 				<div class="progress">
 					<div class="determinate" style="width: 0%">
@@ -262,6 +266,15 @@
 					</div>
 				</div>
 				</div>
+
+
+
+
+				<!-- start general -->
+				<h5 class="row center">
+					General 
+				</h5>
+
 
 				<!-- Title -->
 				<div class="row">

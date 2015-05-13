@@ -14,7 +14,7 @@
         currentLibraryName: null,
         userLibrariesNames: null,
         currentFile: null,
-        currentMetaData: null,
+        currentMetaData: {},
         searchResult: null,
         searchAuthorsResult: null,
         addLibName: null,

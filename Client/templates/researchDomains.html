@@ -26,9 +26,9 @@
 									<div ng:repeat="minor in domain.minor track by $index">
 										<div ng-click="researchDomainService.toggleMinor(domain.major.ID, $index)">
 											<li class="collection-item"> 
-												<a>
+												<!--<a>
 													<i class="mdi-social-school circle left"></i>
-												</a>
+												</a>-->
 												<a ng-hide="minor.selected">
 													{{minor.name}}
 												</a>
@@ -64,7 +64,7 @@
 							<div ng:repeat="entry in getSelectedDomains()">
 								<a ng-click="researchDomainService.removeFromSelected(entry)">
 									<li class="collection-item"> 
-										<i class="mdi-social-school circle left"></i>
+										<!--<i class="mdi-social-school circle left"></i>-->
 										{{entry.major}}::{{entry.minor}}
 									</li>
 								</a>
