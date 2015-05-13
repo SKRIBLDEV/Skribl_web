@@ -4,31 +4,36 @@
     <div class="card-content" style="background:#EEEEEE">
 
         <span class="card-title grey-text text-darken-4">
-    				<i class="mdi-social-public"> Network</i>
+            <i class="mdi-social-public"> 
+                Network
+            </i>
         </span>
 
         <div class="card">
             <div class="card-content">
-    						<span class="card-title grey-text text-darken-4" ng-click="publications.toggleLibraryCard()">
-    							<p> Currently Displaying the network of </p>
-                                <a> {{appData.currentNetworkAuthor.firstName}} {{appData.currentNetworkAuthor.lastName}} </a>
-    							<i class="mdi-navigation-more-vert right"></i>
-
-    						</span>
-
-            </div>
-            <a class ="btn" ng-click="changeNetwork(appData.currentUser)"> Display Mine</a>
-            <div class="row center" ng-show="graphDataLoading">
-                 <spinner ></spinner>
-            </div>
-            <div class="networkCard"> <!-- [H] custom class is needed to select this element with D3 in order to adjust the size of the svg to the card width-->
-                <graph-directive></graph-directive>
-            </div>
-
-            <profile-card></profile-card>
-            <network-links></network-links>
-
+              <span class="card-title grey-text text-darken-4" ng-click="publications.toggleLibraryCard()">
+                 <p> 
+                     Currently Displaying the network of 
+                 </p>
+                 <span> 
+                     {{appData.currentNetworkAuthor.firstName}} {{appData.currentNetworkAuthor.lastName}} 
+                     <h6 ng-click="changeNetwork(appData.currentUser)" style="text-decoration:underline;">(display your network)</h6>
+                 </span>
+             </span>
+         </div>
+         
+         <div class="row center" ng-show="graphDataLoading">
+             <spinner></spinner>
+         </div>
+         <div class="networkCard"> 
+            <graph-directive></graph-directive>
         </div>
-
     </div>
+
+    <profile-card></profile-card>
+    <network-links></network-links>
 </div>
+</div>
+
+
+

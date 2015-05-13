@@ -48,7 +48,8 @@
         this.currentNetworkAuthor = {};
         this.currentNetworkAuthor.authorId = data.authorId,
         this.currentNetworkAuthor.firstName = data.firstName,
-        this.currentNetworkAuthor.lastName = data.lastName
+        this.currentNetworkAuthor.lastName = data.lastName,
+        this.currentNetworkAuthor.publications = []
     }
 
     this.currentPubInCommon = { // set and displayed when link between two authors is clicked (see graphDirective)

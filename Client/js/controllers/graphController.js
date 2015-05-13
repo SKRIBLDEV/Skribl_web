@@ -4,7 +4,7 @@
 
 // see also: graph directive, dash-network.html
 
-webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appData) {
+webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appData, authorProfileService) {
 
 
     getGraphData = function() {
@@ -26,6 +26,8 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
     $scope.changeNetwork = function(currentProfileData){ //somehow this additional step is needed to make this scope notice the change
         appData.setCurrentNetworkAuthor(currentProfileData);
         $scope.currentNetworkAuthor = appData.currentNetworkAuthor;
+        $scope.$digest();
+
     }
 
     $scope.$watch('currentNetworkAuthor', function(){
@@ -35,8 +37,4 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
     })
 
     $scope.linkClicked = false;
-        
-    
-
-
 });

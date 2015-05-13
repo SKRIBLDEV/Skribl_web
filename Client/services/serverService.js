@@ -5,6 +5,9 @@ webapp.factory('serverService', function($http, appData){
 
 
     function stripHashtag(publicationID){
+        if (!publicationID){
+            return 0;
+        }
 
         if (publicationID.charAt(0) === '#'){
             publicationID = publicationID.substr(1);

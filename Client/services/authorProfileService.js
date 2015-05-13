@@ -8,12 +8,18 @@ webapp.factory('authorProfileService', function authorProfileService(serverServi
 		serverService.getAuthorPublications(authorId)
 			.success(function(pubs){
 				console.log(pubs);
+				appData.data.authorPublications = data;
 			})
 			.error(function(err){
 				console.log(err);
+				appData.data.authorPublications = {};
 			})
 	}
 
-	getAuthorPublications("#13:329");
+	var service = {
+        getAuthorPublications: getAuthorPublications
+    };
+
+    return service;
 
 }); 

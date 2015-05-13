@@ -673,6 +673,7 @@ function scrape(publicationID, handler) {
                 } else {
                     toast("we found some authors", 4000);
                     author.potential = data;
+                    console.log(data);
                 }
 
                 var idx = 0;

@@ -88,6 +88,11 @@ webapp.directive('globalMenu',function(){
 		restrict: 'E',
 		templateUrl: 'templates/metadataCard.html'
 	}
+}).directive('personCard', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'templates/personCard.html'
+	}
 }).directive('profileCard', function() {
 	return {
 		restrict: 'E',

@@ -242,6 +242,8 @@ webapp.directive('graphDirective', function (appData) {
                     appData.data.currentProfileData.firstName = clickedNode.firstName;
                     appData.data.currentProfileData.authorId = clickedNode.id;
                     appData.data.currentProfileData.username = clickedNode.username; // can be undefined
+                    appData.data.currentProfileData.publications = [];
+                    // profileService.setProfile(clickedNode);
                     scope.$digest();
                 }
 

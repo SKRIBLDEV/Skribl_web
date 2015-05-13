@@ -11,9 +11,17 @@
 
         <div ng-show="linkClicked">  
 	        <p> Between </p>
-	        &nbsp <a>{{appData.currentPubInCommon.author1.firstName}} {{appData.currentPubInCommon.author1.lastName}} </a>
-	        <p> And </p>
-	        &nbsp <a>  {{appData.currentPubInCommon.author2.firstName}} {{appData.currentPubInCommon.author2.lastName}}</a>
+	        &nbsp;
+	         <a ng-clicked="getGraphData(appData.currentPubInCommon.author1)">{{appData.currentPubInCommon.author1.firstName}} {{appData.currentPubInCommon.author1.lastName}} 
+	        </a>
+	        <p>
+	         And 
+	         </p>
+	        &nbsp;
+	         <a ng-clicked="getGraphData(appData.currentPubInCommon.author2)">  
+	         {{appData.currentPubInCommon.author2.firstName}} 
+	         {{appData.currentPubInCommon.author2.lastName}}
+	         </a>
 	        <p> We found  </p>
 			<ul class="collection">
 				<div ng:repeat="publication in appData.currentPubInCommon.publications"> 
@@ -34,7 +42,7 @@
 								</span>
 							</code>
 						</a>
-						<hr>
+						<br>
 					</li>
 				</div>
 			</ul>
