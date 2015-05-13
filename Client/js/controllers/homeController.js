@@ -292,10 +292,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 				appData.setCurrentNetworkAuthor(data); // when opening network, own network will be displayed by default 
 
-
 				// [H] with ui-router:
 				$state.go('dashboard.library');
-				//$state.go('dashboard.search');
 				routerHelperService.goDashboard();
 			
 			});
