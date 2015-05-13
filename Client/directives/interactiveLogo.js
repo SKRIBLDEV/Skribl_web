@@ -16,10 +16,7 @@ webapp.directive('interactivelogo', ['$timeout', function(timer) {
       var canvas = document.querySelector('canvas');
       fitToContainer(canvas);
 
-      console.log(scope.mobile);
-
       if (scope.mobile == true){
-        console.log(mobile);
         return {};
       }
       

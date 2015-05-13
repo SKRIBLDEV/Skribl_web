@@ -36,8 +36,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	 	return deviceDetector.isDesktop();
 	 }
 
-	 console.log(deviceDetector.isMobile());
-
 	// refactor this into the variable
 	$scope.getMotivationalQuote = function(){
 		var motivationalQuotes = [
