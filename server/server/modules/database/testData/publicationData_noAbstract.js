@@ -15,7 +15,7 @@ module.exports = [
   year: "2010",
   researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}],
   citations: 3,
-  abstract:  "Middleware for mashups is currently not able to compose the services residing in a nomadic network. Its transient 
+  abstract: 'Middleware for mashups is currently not able to compose the services residing in a nomadic network. Its transient 
 connections and connection volatility result in a highly dynamic
 environment where services can appear and disappear
 at any point in time. The consequence is that these services
@@ -26,7 +26,7 @@ loosely coupled asynchronously executing services calls
 for a process-aware approach. This paper proposes the use
 of workflow patterns to enable a high level specification of
 the interactions between the mobile services constituting a
-nomadic mashup.",
+nomadic mashup.',
   private: false,
   keywords: ['computer', 'API', 'VUB'],
   article_url: "http://soft.vub.ac.be/~njonchee/publications/Mashups2009.pdf" },
@@ -77,7 +77,7 @@ from a more selective parallelization.",
   year: "2007",
   researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}, {major: "Computer and Information Science", minor: "Software Engineering"}]
   citations: 45,
-  abstract:  "Model-driven engineering is an emerging
+  abstract: "Model-driven engineering is an emerging
 software engineering approach that relies on model
 transformation. Typical kinds of model transformations
 are model refinement and model refactoring. Whenever
