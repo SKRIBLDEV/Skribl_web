@@ -349,12 +349,12 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
 
-    /*	// temp fix for going to dashboard //FIXME
+    	// temp fix for going to dashboard //FIXME
     (function developLogin() {
 		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
 		$scope.userinputLogin.password = "Brol123"; // keeF5gee5
 		$scope.doLogin();
-	})();*/
+	})();
 
 });
 

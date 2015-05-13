@@ -24,6 +24,7 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
     
 
     $scope.changeNetwork = function(currentProfileData){ //somehow this additional step is needed to make this scope notice the change
+        console.log("deeffeeek");
         appData.setCurrentNetworkAuthor(currentProfileData);
         $scope.currentNetworkAuthor = appData.currentNetworkAuthor;
         $scope.$digest();
