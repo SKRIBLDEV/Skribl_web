@@ -15,18 +15,7 @@ module.exports = [
   year: "2010",
   researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}],
   citations: 3,
-  abstract: 'Middleware for mashups is currently not able to compose the services residing in a nomadic network. Its transient 
-connections and connection volatility result in a highly dynamic
-environment where services can appear and disappear
-at any point in time. The consequence is that these services
-must be discovered at runtime in an ad hoc fashion and
-must execute asynchronously to prevent a disconnected service
-to block the execution of an entire mashup. Orchestrating
-loosely coupled asynchronously executing services calls
-for a process-aware approach. This paper proposes the use
-of workflow patterns to enable a high level specification of
-the interactions between the mobile services constituting a
-nomadic mashup.',
+  abstract: 'empty',
   private: false,
   keywords: ['computer', 'API', 'VUB'],
   article_url: "http://soft.vub.ac.be/~njonchee/publications/Mashups2009.pdf" },
@@ -77,28 +66,7 @@ from a more selective parallelization.",
   year: "2007",
   researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}, {major: "Computer and Information Science", minor: "Software Engineering"}]
   citations: 45,
-  abstract: "Model-driven engineering is an emerging
-software engineering approach that relies on model
-transformation. Typical kinds of model transformations
-are model refinement and model refactoring. Whenever
-such a transformation is applied to a consistent model,
-we would like to know whether the consistency is preserved
-by the transformation. Therefore, in this article,
-we formally define and explore the relation between
-behaviour inheritance consistency of a refined model
-with respect to the original model, and behaviour preservation
-of a refactored model with respect to the original
-model. As it turns out, there is a strong similarity
-between these notions of behaviour consistency and
-behaviour preservation. To illustrate this claim, we formalised
-the behaviour specified by UML 2.0 sequence
-and protocol state machine diagrams. We show how the
-reasoning capabilities of description logics, a decidable
-fragment of first-order logic, can be used in a natural
-way to detect behaviour inconsistencies. These reasoning
-capabilities can be used in exactly the same way to
-detect behaviour preservation violations during model
-refactoring.",
+  abstract: 'empty',
   private: false,
   keywords: ['computer', 'model', 'VUB'],
   article_url: "http://people.irisa.fr/Jean-Marc.Jezequel/enseignement/M2RI/MDE/Articles/VanDerStaeten07.pdf" },
