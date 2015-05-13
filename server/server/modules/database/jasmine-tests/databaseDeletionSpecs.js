@@ -1,5 +1,9 @@
 var d = require('./testRandomData.js');
 
+/*
+This module ensures data is correctly deleted from the database.
+ */
+
 function deletion(clb) {
 	describe('verwijderen van data tests', function() {
 

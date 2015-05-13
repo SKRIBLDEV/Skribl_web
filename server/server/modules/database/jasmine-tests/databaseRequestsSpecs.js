@@ -1,5 +1,8 @@
 var d = require('./testRandomData.js');
 
+/*
+In this module the database API is tested on requesting data from the database.
+ */
 function requests(clb) {
 	describe('opvraging van data tests:', function() {
 
@@ -20,11 +23,10 @@ function requests(clb) {
 				expect(usr.getDepartment()).toBe(d.nUser.department);
 				expect(usr.getFaculty()).toBe(d.nUser.faculty);
 				expect(usr.getInstitution()).toBe(d.nUser.institution);
-				expect(usr.getResearchDomains()[0].major).toBe(d.nUser.researchDomains[0].major);   //need custom matcher for arrays
-				expect(usr.getResearchDomains()[0].minor).toBe(d.nUser.researchDomains[0].minor);   //need custom matcher for arrays
+				expect(usr.getResearchDomains()[0].major).toBe(d.nUser.researchDomains[0].major);  
+				expect(usr.getResearchDomains()[0].minor).toBe(d.nUser.researchDomains[0].minor);   
 				expect(usr.getLanguage()).toBe(d.nUser.language);
-				//need to check password hash-->bcrypt?
-				//expect(usr.password).toBe('RandomPass123');
+				expect(usr.getPassword()).toBe(d.nUser.password);
 
 				done();
 			});

@@ -1,7 +1,7 @@
 var DB = require('./database.js');
 
-var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
-//var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+//var serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
+var serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 var dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 var database = new DB.Database(serverConfig, dbConfig);
 

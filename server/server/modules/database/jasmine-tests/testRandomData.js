@@ -3,6 +3,8 @@
 		module.exports.UM = require('../../SE repository/server/server/modules/user.js');
 		Oriento = require('oriento');
 
+		//dummy data for database API tests.
+
 		//serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 		serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
 		
