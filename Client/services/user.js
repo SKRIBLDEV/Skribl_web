@@ -58,8 +58,11 @@ webapp.service('userService', function($location, appData, $http, metaService) {
     //The delete function
     this.deleteUser = function(username){
         var path = serverApi.concat('/users/').concat(username);
-        var authorization = appData.Authorization;
-        console.log(authorization);
+        //var authorization = appData.Authorization;
+        var authorization = {headers:
+            {'Content-type' : 'application/json',
+            'Authorization': appData.Authorization}};
+        //console.log(authorization);
         var deleteRequest = $http.delete(path, authorization);
         
         deleteRequest.success(function(data, status, headers, authorization){
