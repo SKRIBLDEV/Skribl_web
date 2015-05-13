@@ -260,7 +260,7 @@ webapp.service('managePublications', function($location, appData, $http, pdfDele
 
     this.loadPublicationInViewer = function(publicationID){
         self.getMetaData(publicationID);
-        // self.showPublicationViewer = true;
+        self.showPublicationViewer = false;
     }
 
     this.getMeta_initialStatus = function() {return ui_getMeta_status == ui_GETMETA_STATUS.INITIAL;};
