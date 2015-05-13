@@ -2,7 +2,7 @@
     <div class="card-content">
         <span class="card-title grey-text text-darken-4">
             <div class="col s10">
-                <div class="truncate" ng-show="requestingMetadata() !== true && showMeta()">
+                <div class="truncate">
                     {{getMetadata().title}}
                 </div>
             </div>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
 
-                <div class="animated fadeInDown" ng-show="requestingMetadata() !== true && showMeta() && getMetadata().title">
+                <div class="animated fadeInDown">
                 
 
                     <ul class="collection">

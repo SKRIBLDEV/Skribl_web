@@ -23,7 +23,7 @@
     <div class="section" ng-show="hasRecommendations() && !fetchingRecommendations">
     
       <ul class="collection">
-        <div ng:repeat ="recommendation in recommendations">
+        <div ng:repeat ="recommendation in recommendations()">
           <li class="collection-item"> 
             <a ng-click="setMetaData(recommendation)">
             <i class="mdi-social-school circle left"></i>

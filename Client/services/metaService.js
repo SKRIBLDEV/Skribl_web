@@ -43,7 +43,7 @@ webapp.factory('metaService', function($http, appData, serverService, pdfViewerS
 	};
 
 	var resetMetadata = function(){
-		currentMeta.value = {};
+		currentMeta = {};
 	};
 
 	var service = {

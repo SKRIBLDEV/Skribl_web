@@ -1,20 +1,21 @@
-webapp.controller('recommenderController', function($scope, serverService, appData, metaService) {
-	$scope.recommendations = {}
+webapp.controller('recommenderController', function($scope, serverService, appData, metaService, publicationsService, recommendationService) {
 
 	$scope.fetchingRecommendations = false;
 	$scope.reqestingMetadata = false;
 	$scope.showMeta = true;
 	$scope.showSpinner = false;
 
+	$scope.recommendations = function(){
+		return recommendationService.getRecommendations();
+	}
+
 	$scope.getRecommendations = function(){
 		if (appData.currentUser && !$scope.fetchingRecommendations){
 			$scope.fetchingRecommendations = true;
-			console.log("in recommendations");
-
-			serverService.getRecommendations(5)
+			metaService.resetMetadata();
+			serverService.getRecommendations(10)
 			.success(function(data) {
-				$scope.recommendations = data;
-				console.log(data);
+				recommendationService.setRecommendations(data);
 				$scope.fetchingRecommendations = false;
 			})
 			.error(function(data, status){
@@ -25,10 +26,29 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 		}
 	}
 
+	$scope.likeRecommendation = function(like){
+		var pubID = metaService.currentMeta().id;
+		serverService.likeRecommendation(like, pubID)
+		.success(function(data) {
+
+			if (like){
+				publicationsService.addPublication('Favorites', pubID);
+			} else {
+				toast("Sorry you didn't like that, we optimised our algoritm", 4000);
+			}
+
+			recommendationService.deleteRecommendation(pubID);
+			metaService.resetMetadata();
+
+		})
+		.error(function(data, status){
+			toast("Failed to post recommendation, please try again later", 4000);
+		});	
+	}
+
 	$scope.setMetaData =function(data){
 		metaService.forceMetaData(data);
 		metaService.showMeta = true;
-		console.log(metaService.currentMeta());
 	}
 
 	$scope.clearMetadata = function(){
@@ -36,7 +56,7 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 	}
 
 	$scope.hasRecommendations = function(){
-		return ($scope.recommendations.length >= 1);
+		return recommendationService.hasRecommendations();
 	}
 
 	$scope.getMetadata = function(){
@@ -44,7 +64,8 @@ webapp.controller('recommenderController', function($scope, serverService, appDa
 	}
 
 	if (! $scope.hasRecommendations()){
-		$scope.getRecommendations();	
+		$scope.getRecommendations();
+		metaService.resetMetadata();
 	}
 
 });
