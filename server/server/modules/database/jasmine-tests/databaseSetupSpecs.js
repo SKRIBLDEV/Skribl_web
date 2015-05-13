@@ -1,10 +1,16 @@
 var d = require('./testRandomData.js');
 
+/*
+In this module the database API is tested on adding data to the database
+e.g. adding user, publication, libraray, etc.
+ */
 function setup(clb) {
-	var ctr = 0
-	afterEach(function() {
-		if(++ctr == 7) clb(null, true);
-  	});	
+
+
+		var ctr = 0
+		afterEach(function() {
+			if(++ctr == 7) clb(null, true);
+  		});	
 
 		it('connecting to database', function(done){
 			expect(d.db).toBeDefined();

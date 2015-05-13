@@ -10,8 +10,6 @@ var RID = require('./rid.js');
  */
 function Author(db, myDB) {
 
-	//XXX: zie algemene opmerking in affiliation.js
-
 	/**
 	 * adds an author to database and connects it to a publication.
 	 * @param {String}   fName    firstname of author
@@ -139,11 +137,7 @@ function Author(db, myDB) {
 		db.query('select expand(in(\'AuthorOf\')) from ' + pubId)
 		.then(function(authors) {
 			var autLength = authors.length;
-			//XXX: heel deze blok code kan in zeer kort met een map (cf. inf.)
 				var res = [];
-				//XXX: of gebruik hier map! (nog korter en gemakkelijker!)
-				//XXX: authors.map(function(el) { return {firstName: el.firstName, ...})
-				//XXX: is denk ik genoeg voor dit hele codeblok (met de clb dan nog wel) 
 				for (var i = 0; i < autLength; i++) {
 					var obj = {
 						firstName: authors[i].firstName,

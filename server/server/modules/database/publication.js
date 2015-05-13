@@ -16,8 +16,8 @@ const Oriento = require('oriento');
  */
 function Publication(db, myDB) {
 
-	const AUT = new Author.Author(db, myDB); //XXX: verander dit door db van zodra je aanpassingen zijn gemaakt
-	const Kw = new keyword.Keyword(db, myDB); ///[I] kan ik deze 2 niet behouden? anders moet ik alle "interne" methodes van author.js aan myDB plakken (terwijl jij die nooit gebruikt/mag gebruiken)
+	const AUT = new Author.Author(db, myDB); 
+	const Kw = new keyword.Keyword(db, myDB);
 	const self = this;
 
 			/**
@@ -228,11 +228,10 @@ function Publication(db, myDB) {
 	 * adds additional functionality to array, removes any duplicates from array
 	 * @return {void} 
 	 */
-	 //XXX: vermeld bron!
 	Array.prototype.unique = function() {
     	var a = this.concat();
-    	for(var i=0; i<a.length; ++i) {
-        	for(var j=i+1; j<a.length; ++j) {
+    	for(var i = 0; i < a.length; ++i) {
+        	for(var j = i+1; j < a.length; ++j) {
             	if(a[i] === a[j])
                		a.splice(j--, 1);
         	}

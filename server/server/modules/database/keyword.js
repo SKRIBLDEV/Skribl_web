@@ -68,7 +68,6 @@ function Keyword(db, myDB) {
 		.then(function(resKeys) {
 			var keyLength = resKeys.length;
 			var res = [];
-			//XXX: of gebruik hier reskeys.map(function(el) { return el.keyword }), nog beter ;)
 			for (var i = 0; i < keyLength; i++) {
 				res.push(resKeys[i].keyword);
 			};

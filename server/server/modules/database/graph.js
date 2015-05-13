@@ -2,8 +2,6 @@
 const RID = require('./rid.js');
 function Graph(db, AUT, myDB) {
 
-	//XXX: zie opmerking over modules...
-
 	/**
 	 * gets username of userprofile connected to given author profile
 	 * @param  {String} id  author id

@@ -3,7 +3,11 @@
 		module.exports.UM = require('../../SE repository/server/server/modules/user.js');
 		Oriento = require('oriento');
 
+		//dummy data for database API tests.
+
+		//serverConfig = {ip:'wilma.vub.ac.be', port:2424, username:'root', password:'root'};
 		serverConfig = {ip:'localhost', port:2424, username:'root', password:'root'};
+		
 		dbConfig = {dbname:'skribl', username:'admin', password:'admin'};
 		module.exports.db = new dAPI.Database(serverConfig, dbConfig);
 
@@ -32,7 +36,7 @@
 				faculty: 'RandomFaculty', 
 				department: 'RandomDepartment', 
 				researchGroup: 'RandomResearchGroup', 
-				researchDomains: ['Biological Sciences']};
+				researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}]};
 		module.exports.pubJournal = {
 				title: 'randomJournalTitle',
 				fileName: 'testfile2.pdf',
@@ -47,7 +51,7 @@
 				url: 'www.random.be',
 				private: false,
 				authors: [{firstName: 'random', lastName: 'random'}],
-				researchDomains: ['Computer Sciences', 'Biological Sciences', 'Languages'],
+				researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}],
 				keywords: ['random1']};
 		module.exports.pubProceeding = {
 				title: 'randomProceedingTitle',
@@ -61,7 +65,7 @@
 				url: 'www.random.be',
 				private: false,
 				authors: [{firstName: 'random1', lastName: 'random1'}],
-				researchDomains: ['Computer Sciences', 'Biological Sciences', 'Languages'],
+				researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}],
 				keywords: ['random2']};
 
 		module.exports.correctCriteria = {

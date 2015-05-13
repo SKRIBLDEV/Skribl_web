@@ -1,7 +1,5 @@
 const Oriento = require('oriento');
 
-//XXX: moeten exports niet na de functiedefinitie komen? raar dat dit werkt
-
 	/**
 	 * returns the record id of an object as a string.
 	 * @private
@@ -53,7 +51,6 @@ const Oriento = require('oriento');
 	exports.getRids = function(array) {
 		var arrLength = array.length;
 		var resArray = new Array(arrLength);
-		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = getRid(array[i]);
 		};
@@ -68,7 +65,6 @@ const Oriento = require('oriento');
 	exports.transformRids = function(array) {
 		var arrLength = array.length;
 		var resArray = new Array(arrLength);
-		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = transformRid(array[i]);
 		};
@@ -83,7 +79,6 @@ const Oriento = require('oriento');
 	exports.getFieldRids = function(array) {
 		var arrLength = array.length;
 		var resArray = new Array(arrLength);
-		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = transformRid(array[i].rid);
 		};
@@ -98,7 +93,6 @@ const Oriento = require('oriento');
 	exports.getORids = function(array) {
 		var arrLength = array.length;
 		var resArray = new Array(arrLength);
-		//XXX: of nog beter, een map
 		for (var i = 0; i < arrLength; i++) {
 			resArray[i] = getORid(array[i]);
 		};

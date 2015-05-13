@@ -1,7 +1,9 @@
 var d = require('./testRandomData.js');
 
+/*
+This module ensures data added to the database is correct.
+ */
 	function persistence(clb) {
-
 
 		describe('persistentie tests:', function() {
 
@@ -17,7 +19,6 @@ var d = require('./testRandomData.js');
 					var usr = users[0];
 					expect(usr.firstName).toBe('randomName');
 					expect(usr.lastName).toBe('randomOtherName');
-					//password check? how?
 					expect(usr.username).toBe('randomUsername');
 					expect(usr.email).toBe('randomName@vub.ac.be');
 					expect(usr.language).toBe('ENG');
@@ -132,9 +133,9 @@ var d = require('./testRandomData.js');
 			});
 
 			it('test researchDomains data', function(done) {
-				d.ODB.query('select from ResearchDomain where Name = \'Biological Sciences\' or Name = \'Computer Sciences\' or Name = \'Languages\'').all()
+				d.ODB.query('select from ResearchDomain where major = \'Computer and Information Science\'').all()
 				.then(function(researchDomains) {
-					expect(researchDomains.length).toBe(3);
+					expect(researchDomains.length).not.toBe(undefined);
 					done();
 				}).error(function(er) {
 					expect(er).toBeNull();
