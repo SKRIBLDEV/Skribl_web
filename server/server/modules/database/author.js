@@ -66,8 +66,8 @@ function Author(db, myDB) {
 	 * @param {callBack} callback 
 	 */
 	this.addAuthors = function(authors, trx, callback) {
-		var autLength = authors.length;
-		if(authors && autLength) {
+		if(authors && authors.length) {
+			var autLength = authors.length;
 			var ctr = 0;
 			for (var i = 0; i < autLength; i++) {
 				addAuthor(authors[i]['firstName'], authors[i]['lastName'], i, trx, function(error, res) {
