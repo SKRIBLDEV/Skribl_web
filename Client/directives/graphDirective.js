@@ -237,7 +237,6 @@ webapp.directive('graphDirective', function (appData) {
                   return d.id === appData.currentNetworkAuthor.authorId;
                 }
 
-
                 var showProfile = function(clickedNode){
                     appData.data.currentProfileData.lastName = clickedNode.lastName;
                     appData.data.currentProfileData.firstName = clickedNode.firstName;
@@ -259,6 +258,7 @@ webapp.directive('graphDirective', function (appData) {
                 }
 
                 var showPublications = function(clickedLink){
+                  scope.linkClicked = true;
                   appData.currentPubInCommon = {
                     author1: clickedLink.target,
                     author2: clickedLink.source,

@@ -101,11 +101,11 @@ webapp.directive('globalMenu',function(){
 		templateUrl: 'templates/researchDomains.html'
 	}
 
-}).directive('currentPubInCommon', function() { //used only in the network view
+}).directive('networkLinks', function() { //used only in the network view
 	return {
 		restrict: 'E',
 		scope : false,
-		templateUrl: 'templates/network-commonPublications.html'
+		templateUrl: 'templates/network-links.html'
 	}
 })
 

@@ -12,6 +12,7 @@
             <!-- basic search -->
             <div class="animated fadeInDown" ng-show="basicSearchView">
                 <input class="input-field" type="text" ng-model="searchTerms" placeholder="search terms (press enter to search)" on-enter="basicSearch(searchTerms)" >
+                <a class="btn" ng-click="basicSearch(searchTerms)"> Search</a>
                 <a class="mdi-navigation-chevron-right" ng-click="switchToAdvancedSearch()">advanced search?  </a>
             </div>
 

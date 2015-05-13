@@ -2,9 +2,9 @@
  * Created by Hannah_Pinson on 18/04/15.
  */
 
+// see also: graph directive, dash-network.html
 
 webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appData) {
-
 
 
     getGraphData = function() {
@@ -21,13 +21,9 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
                 toast("We are unable to display your network, please try again later.", 4000);
             });
     };
-
-    //getGraphData();
-
     
 
     $scope.changeNetwork = function(currentProfileData){ //somehow this additional step is needed to make this scope notice the change
-        console.log("changing");
         appData.setCurrentNetworkAuthor(currentProfileData);
         $scope.currentNetworkAuthor = appData.currentNetworkAuthor;
     }
@@ -37,6 +33,8 @@ webapp.controller('GraphCtrl', function GraphCtrl($scope, networkService, appDat
         d3.select(".svg-network").remove();
         getGraphData();
     })
+
+    $scope.linkClicked = false;
         
     
 
