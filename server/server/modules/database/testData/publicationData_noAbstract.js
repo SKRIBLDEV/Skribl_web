@@ -64,7 +64,7 @@ from a more selective parallelization.",
   journal : "Software \& Systems Modeling",
   publisher :"Springer",
   year: "2007",
-  researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}, {major: "Computer and Information Science", minor: "Software Engineering"}]
+  researchDomains: [{major: "Computer and Information Science", minor: "Programming Languages"}, {major: "Computer and Information Science", minor: "Software Engineering"}],
   citations: 45,
   abstract: 'empty',
   private: false,
