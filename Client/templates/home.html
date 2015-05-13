@@ -237,14 +237,43 @@
                   <div class="alert-color" id="register_error_researchDomain"></div>
                 </div>
               </div> -->
+
+              <div class="row">
+                <div class="col s12">
+                  <i class="small mdi-action-class"></i>
+                  
+                   <label >&nbsp Research Domain</label>
+                  <i class="mdi-hardware-keyboard-arrow-down" ng-click="register_showResearchDomains=true"></i>
+                  <i class="mdi-hardware-keyboard-arrow-up" ng-click="register_showResearchDomains=false"></i>
+                  <br> </br>
+                  <div ng-repeat="selected in getSelectedDomains()">
+                     <label> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp {{selected.major}} :: {{selected.minor}} </label>
+                  </div>
+                   <input disabled type="text"></input>
+
+                   <!--<span class="grey-text text-darken-4" ng-click="register_showResearchDomains=true" >
+                   
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>-->
+
+                   <span class="grey-text text-darken-4" ng-show="register_showResearchDomains">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <research-domain> </research-domain>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="register_showResearchDomains=false"></i>
+                            </div>
+                        </div>
+                    </span>
+
+           
+                  <div class="alert-color" id="register_error_researchDomain"></div>
+                </div>
+              </div> 
               
             </form>
 
-
-              <div>
-                <p> research domain </p>
-                <research-domain></research-domain>
-              </div>
 
               <div class="col s12 alert-color center-align" id="register_error_general"></div>
 

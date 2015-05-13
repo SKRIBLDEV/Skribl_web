@@ -33,6 +33,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 	$scope.researchDomainService = researchDomainService; 
 	$scope.getSelectedDomains = researchDomainService.getSelectedDomains;
+	$scope.register_showResearchDomains = false;
 
 	 $scope.notMobile = function(){
 	 	return deviceDetector.isDesktop();
@@ -91,16 +92,16 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
 	$scope.userinput = { //init
-		firstName :  "hannah",
+		/*firstName :  "hannah",
 		lastName : "pinson",
 		username : "hpinson99",
 		email: 'hp@vub.ac.be',
-		password : 'Brol123',
+		//password : ,
 		institution : "vub",
 		faculty : 'vub',
 		department : 'vub',
 		researchGroup : 'vub', 
-		researchDomains : {major:'testRegisterMajor', minor: 'testRegisterMinor'}
+		//researchDomains : {major:'testRegisterMajor', minor: 'testRegisterMinor'}*/
 	}; 
 
 	function notifyRegisterError(message){
@@ -178,13 +179,14 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		else 
 			document.getElementById("register_error_department").innerHTML = "";
 
-		/*if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
-			//Error when trying to register with "bad" research domains.
+
+		if ($scope.getSelectedDomains().length === 0){
 			registerErrors.push("Research domains are not valid.");
-			document.getElementById("register_error_researchDomain").innerHTML = generalNotValid;
+			document.getElementById("register_error_researchDomain").innerHTML = "Please select one or several research domains.";
 		}
 		else 
-			document.getElementById("register_error_researchDomain").innerHTML = "";*/
+			document.getElementById("register_error_researchDomain").innerHTML = "";
+	
 
 		if((!($scope.RegEx_generalName.test($scope.userinput.researchGroup))) || ($scope.userinput.researchGroup == undefined)){
 			//Error when trying to register with a "bad" research group.
@@ -225,7 +227,7 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				"institution": $scope.userinput.institution,
 				"faculty": $scope.userinput.faculty, 
 				"department": $scope.userinput.department, 
-				"researchDomains": [$scope.userinput.researchDomains],
+				"researchDomains": $scope.getSelectedDomains(),
 				"researchGroup": $scope.userinput.researchGroup };
 
 			//Prepare url to add user.
@@ -239,6 +241,8 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				$scope.enableLogin();
 	            toast("Successfully registered. Please log in", 4000) // 4000 is the duration of the toast
 	            document.getElementById("register_error_general").innerHTML = ""; //remove errors
+	            researchDomainService.resetSelected(); //clear selected research domains and view
+
 			});
 
 			registerRequest.error(function(data, status, headers, config) {
@@ -250,7 +254,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 				}
 					//Error when trying to register --> database error
 				else{
-					console.log(data);
 					notifyRegisterError("Database error, please try again later.");
 			}
 			});
@@ -348,12 +351,12 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 
 
 
-    	// temp fix for going to dashboard //FIXME
+    /*	// temp fix for going to dashboard //FIXME
     (function developLogin() {
 		$scope.userinputLogin.username ="WDMeuter";//"RvdStraeten"; //"brol"; //
 		$scope.userinputLogin.password = "Brol123"; // keeF5gee5
 		$scope.doLogin();
-	})();
+	})();*/
 
 });
 

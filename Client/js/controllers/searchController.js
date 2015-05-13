@@ -72,10 +72,6 @@ webapp.controller('searchCtrl', function searchCtrl($scope, $http, serverService
 
        $scope.advancedQuery.researchDomains = $scope.getSelectedDomains();
 
-       console.log($scope.selectedDomains);
-
-       console.log($scope.advancedQuery);
-
 
         serverService.advancedSearch($scope.advancedQuery)
             .success(function(data) {
