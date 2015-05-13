@@ -13,9 +13,9 @@
 				</div>
 			</div>
 			<div class="animated fadeInDown col s12">
-				<ul class="collection">
+				<!-- for small -->
+				<ul class="collection hide-on-small-only">
 					<div ng:repeat="publication in data.publications">
-						<!-- <div ng:repeat="publication in ui_currentPublications"> -->
 						<li class="collection-item avatar">
 							<i class="mdi-action-account-balance circle" ng-show="publication.type == 'Journal'">
 							</i>
@@ -24,32 +24,50 @@
 
 							<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id);">
 								<div class="row">
-									<div class="col s2">
-										<span class="title truncate">
+									<div class="col s10">
+										<div class="title truncate">
 											{{publication.title}}
-										</span>
-										<!-- 	<div ng-repeat="author in publication.authors"> -->
-										<!-- <p> -->
-										<!-- {{author.firstName}} {{author.lastName}} -->
-										<!-- </p> -->
-										<!-- </div> -->
-										<!-- temp omdat authors nog niet werken -->
+										</div>
 										<br>
 										<p style="color:grey">
 											{{publication.type}}
 										</p>
 									</div>
+									<!-- hide on small -->
+									<div class="hide-on-small-only">
+										<a class="secondary-content">
+											<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
+											<code class="titip-left">
+												<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+												<span class="titip-content">
+													add to favorites
+												</span>
+											</code>
+										</a>
+									</div>
 									
-									<a class="secondary-content">
-										<span class="new badge" ng-hide="publication.isnew"></span> <!-- implement new functionality -->
-										<code class="titip-left">
-											<i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
-											<span class="titip-content">
-												add to favorites
-											</span>
-										</code>
-									</a>
-									
+								</div>
+							</div>
+						</li>
+					</div>
+				</ul>
+
+				
+				<ul class="collection hide-on-med-and-up">
+					<div ng:repeat="publication in data.publications">
+						<li class="collection-item">
+
+							<div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id);">
+								<div class="row">
+									<div class="col s12">
+										<div class="title truncate">
+											{{publication.title}}
+										</div>
+										<br>
+										<div class="center">
+										•
+										</div>
+									</div>
 								</div>
 							</div>
 						</li>
@@ -95,7 +113,7 @@
 		</h6>
 
 		<div ng:repeat="lib in data.userLibrariesNames">
-			<div class="col s4">
+			<div class="col s12 m6 l4">
 				<div class="card-panel skribl-primary-color" >
 
 					<div ng-click="publications.getUserPublications(lib)">
@@ -133,7 +151,7 @@
 		</h6>
 
 		<div class="row">
-			<div class="input-field col s6">
+			<div class="input-field col s12 m6">
 				<i class="mdi-content-text-format prefix"></i>
 				<input id="newlib-title" type="text" class="validate" ng-model="data.addLibName" required>
 				<label for="newlib-title">new library name</label>
