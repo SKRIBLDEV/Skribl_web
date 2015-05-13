@@ -8,7 +8,7 @@
  * @param  {object} $anchorSmoothScroll  custom service for smooth scrolling functionality
 
  */
-angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $state, appData, anchorSmoothScroll, managePublications, routerHelperService,deviceDetector) {
+angular.module('skriblApp').controller('homeController', function($scope, $http, $location, $state, appData, anchorSmoothScroll, managePublications, routerHelperService,deviceDetector, researchDomainService) {
     // only letters, numbers and underscores
 	$scope.RegEx_username = /^\w+$/; 
 
@@ -22,7 +22,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	//excludes numbers and all the special (non-letter) characters commonly found on keyboards
 	$scope.RegEx_generalName = /^[a-zA-Z\xC0-\uFFFF '-]+[a-zA-Z\xC0-\uFFFF'-]$/; 
     
-    
 	//Used to control if user has already logged-in.
 	appData.currentUser = null;
 
@@ -31,6 +30,9 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	$scope.showLogin = false;
 	$scope.showRegister = false;
 	$scope.dummyInputs = {};
+
+	$scope.researchDomainService = researchDomainService; 
+	$scope.getSelectedDomains = researchDomainService.getSelectedDomains;
 
 	 $scope.notMobile = function(){
 	 	return deviceDetector.isDesktop();
@@ -88,16 +90,27 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 	};
 
 
-	$scope.userinput = {}; //init
+	$scope.userinput = { //init
+		firstName :  "hannah",
+		lastName : "pinson",
+		username : "hpinson99",
+		email: 'hp@vub.ac.be',
+		password : 'Brol123',
+		institution : "vub",
+		faculty : 'vub',
+		department : 'vub',
+		researchGroup : 'vub', 
+		researchDomains : {major:'testRegisterMajor', minor: 'testRegisterMinor'}
+	}; 
+
+	function notifyRegisterError(message){
+			toast(message, 4000) // 4000 is the duration of the toast
+			document.getElementById("register_error_general").innerHTML = message;
+	}
 
     //regex control for all input fields to register
     $scope.regexControl = function(){
         
-        function notifyRegisterError(message){
-			 toast(message, 4000) // 4000 is the duration of the toast
-			document.getElementById("register_error_general").innerHTML = message;
-		}
-
 
 		function notifyMultipleInvalid(messageArray){
 			for(var i = 0; i < messageArray.length; i++){
@@ -163,15 +176,15 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			document.getElementById("register_error_department").innerHTML = generalNotValid;
 		}
 		else 
-			document.getElementById("register_error_faculty").innerHTML = "";
+			document.getElementById("register_error_department").innerHTML = "";
 
-		if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
+		/*if((!($scope.RegEx_generalName.test($scope.userinput.researchDomains))) || ($scope.userinput.researchDomains == undefined)){
 			//Error when trying to register with "bad" research domains.
 			registerErrors.push("Research domains are not valid.");
 			document.getElementById("register_error_researchDomain").innerHTML = generalNotValid;
 		}
 		else 
-			document.getElementById("register_error_researchDomain").innerHTML = "";
+			document.getElementById("register_error_researchDomain").innerHTML = "";*/
 
 		if((!($scope.RegEx_generalName.test($scope.userinput.researchGroup))) || ($scope.userinput.researchGroup == undefined)){
 			//Error when trying to register with a "bad" research group.
@@ -190,7 +203,6 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 			document.getElementById("register_error_password").innerHTML = "";
 
 		if (registerErrors.length !== 0){
-			console.log("toast!");
 			notifyMultipleInvalid(registerErrors);
 			return false;
 		}
@@ -223,22 +235,23 @@ angular.module('skriblApp').controller('homeController', function($scope, $http,
 		    var registerRequest = $http.put(to,JSONToSend,config);
 
 		    registerRequest.success(function(data, status, headers, config) {
-				
-				//When register worked,change route to #/login.
-				$scope.enableLogin;
-                toast("successfully registered please log in", 4000) // 4000 is the duration of the toast
-
+			//When register worked,change route to #/login.
+				$scope.enableLogin();
+	            toast("Successfully registered. Please log in", 4000) // 4000 is the duration of the toast
+	            document.getElementById("register_error_general").innerHTML = ""; //remove errors
 			});
 
 			registerRequest.error(function(data, status, headers, config) {
 
-				if((status === 501) && (data === "Error: username taken!"))
+				if((status !== 200) && (data === "SERVER ERROR: Error: username taken!"))
 				{
-					//Error when trying to register with a username that is already token.
-					notifyRegisterError("Username is already used please try an other.");
+					//Error when trying to register with a username that is already taken.
+					notifyRegisterError("Username is already in use. Please try another one.");
 				}
 					//Error when trying to register --> database error
-				else{	notifyRegisterError("Database error, please try again later.");
+				else{
+					console.log(data);
+					notifyRegisterError("Database error, please try again later.");
 			}
 			});
 		}
