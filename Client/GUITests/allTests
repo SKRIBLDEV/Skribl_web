@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="registerTest">registerTest</a></td></tr>
+<tr><td><a href="LoginAndDeleteUserTest">LoginAndDeleteUserTest</a></td></tr>
+<tr><td><a href="loginTest">loginTest</a></td></tr>
+<tr><td><a href="changeLibraryTest">changeLibraryTest</a></td></tr>
+<tr><td><a href="addTestLibTest">addTestLibTest</a></td></tr>
+<tr><td><a href="uploadFileTest">uploadFileTest</a></td></tr>
+<tr><td><a href="addToFavoritesTest">addToFavoritesTest</a></td></tr>
+<tr><td><a href="deleteTestLibTest">deleteTestLibTest</a></td></tr>
+<tr><td><a href="searchTest">searchTest</a></td></tr>
+<tr><td><a href="showNetworkTest">showNetworkTest</a></td></tr>
+<tr><td><a href="advancedSearchTest">advancedSearchTest</a></td></tr>
+<tr><td><a href="addPublicationViaSearchTest">addPublicationViaSearchTest</a></td></tr>
+<tr><td><a href="logoutTest">logoutTest</a></td></tr>
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://wilma.vub.ac.be/~se4_1415" />
+<title>uploadFileTest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">uploadFileTest</td></tr>
+</thead><tbody>
+<tr>
+	<td>click</td>
+	<td>//li[2]/a/code/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=upload_title</td>
+	<td>Efficient Java RMI for Parallel Programming</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=test1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=label</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input[type=&quot;file&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=input[type=&quot;file&quot;]</td>
+	<td>/home/doug/Desktop/Efficient Java RMI for Parallel Programming.pdf</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=send</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[2]/div/div/h5</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=nkeyword</td>
+	<td>rmi</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//edit-meta-data/div[2]/div/div/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=i.mdi-content-add-circle.large</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[2]/a/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@id='author'])[7]</td>
+	<td>w</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@id='author'])[8]</td>
+	<td>d</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[3]/div[3]/a/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=li.selectable-black &gt; p.ng-binding</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[3]/div[3]/a[2]/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[3]/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[2]/a/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[5]/div/div/div[3]/div[3]/a[3]/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=div.row &gt; div.selectable-white &gt; i.mdi-content-add-circle.large</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[6]/a/h6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Data Communication and Networks</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=i.mdi-navigation-close.large</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//a[2]/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//span[2]/div[3]/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[2]/span/i</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
