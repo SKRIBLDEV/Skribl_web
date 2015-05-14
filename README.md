@@ -3,30 +3,19 @@
 Skribl_web
 ==========
 
-> SKRIBL is something new. Its something that will deal with academical writings, be it papers, journals, or anything remotely related. Furthermore it will be some kind of professional social network. We think.
-
-> But hey, we just started, cut us some slack! Lets see how far we can push this thing.
+> SKRIBL is a reference manager and a basic scientific social network. It was developed as a sofware engineering project by team SE4_1415, consisting of Noah, Douglas, Pieter, Ivo and Hannah, computer science students at Vrije Universiteit Brussel.  
 
 ### Code Quality
 
 > Current Score by CodeClimate:  [![CodeClimate](https://codeclimate.com/github/SKRIBLDEV/Skribl_web/badges/gpa.svg)](https://codeclimate.com/github/SKRIBLDEV/Skribl_web)
 
-### Code organisation
-
-- /public contains the index.html file
-- files in /static are directly accesible by url (images, client-side js, css, ...)
-- main.js is the main executable for the server
-- /server has all the other code for the server, including its routes/modules, ...
-
-> TODO: add package.json for dependencies, metadata, ...
 
 ## Install
 
 ### MacOSX / Unix
 - Fire up terminal
-- Navigate to the directory of Skribl_web (make sure you can see "index.html" when pressing | ls; |)
+- Navigate to the Client directory (make sure you can see "index.html" when pressing | ls; |)
 - type | python -m SimpleHTTPServer; |
 - open up your favorite browser and navigate to "http://localhost:8000/"
 
-### Windows
-Don't know, don't wanna know. At this point you can probably just run the index.html
+
