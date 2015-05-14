@@ -1,0 +1,11 @@
+
+<!-- appendable list of input fields with standard one input field visible -->
+    <ul>
+      <label class="mdi-content-add blue-text text-darken-2" ng-click="addItem()"></label>
+      <input placeholder={{newPlaceholder}} class="text-field" type="text" ng-model=datasource[0] > 
+      <li ng-repeat="item in appended track by $index">
+        <input placeholder={{newPlaceholder}} class="text-field" type="text" ng-model=datasource[$index+1] >
+      </li>
+    </ul>
+
+

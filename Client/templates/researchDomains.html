@@ -1,0 +1,77 @@
+
+<!-- start library card -->
+<!--<div class="container">
+	<div class="col s8">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title grey-text text-darken-4">
+					<a> library </a>
+					<i class="mdi-navigation-more-vert right"></i>
+				</span>
+			</div>-->
+			<span class="grey-text text-darken-4">
+				<div class="row container">
+					<div class="animated fadeInDown ">
+						
+						<div ng:repeat="domain in researchDomainService.domains">
+							<a ng-click="researchDomainService.toggleMajor(domain.major.ID)" >
+								<h6>
+									{{domain.major.name}}
+								</h6>
+								
+							</a>
+
+							<div ng-show="domain.expanded">
+								<ul class="collection animated fadeInDown">
+									<div ng:repeat="minor in domain.minor track by $index">
+										<div ng-click="researchDomainService.toggleMinor(domain.major.ID, $index)">
+											<li class="collection-item"> 
+												<!--<a>
+													<i class="mdi-social-school circle left"></i>
+												</a>-->
+												<a ng-hide="minor.selected">
+													{{minor.name}}
+												</a>
+												<a ng-show="minor.selected" style="text-decoration:underline">
+													{{minor.name}}
+												</a>
+											</li>
+										</div>
+									</div>
+								</div>
+								<div class="center" ng-show="domain.expanded">
+									<i class="mdi-hardware-keyboard-arrow-up" ng-click="researchDomainService.toggleMajor(domain.major.ID)"></i>
+								</div>
+							</ul>
+						</div>
+					</div>
+
+					<!-- SELECTED -->
+
+					<div ng-show="getSelectedDomains().length>0">
+							<br><br>
+					</div>
+
+					<h6 ng-show="getSelectedDomains().length>0">
+							SELECTED
+						</h6>
+
+						<h6 ng-show="getSelectedDomains().length==0">
+							<!-- NOTHING SELECTED -->
+						</h6>
+						
+						<ul class="collection" ng-show="getSelectedDomains().length>0">
+							<div ng:repeat="entry in getSelectedDomains()">
+								<a ng-click="researchDomainService.removeFromSelected(entry)">
+									<li class="collection-item"> 
+										<!--<i class="mdi-social-school circle left"></i>-->
+										{{entry.major}}::{{entry.minor}}
+									</li>
+								</a>
+							</div>
+						</ul>
+				</div>
+			</span>
+		<!--</div>
+	</div>
+</div>-->

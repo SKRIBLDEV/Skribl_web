@@ -1,0 +1,138 @@
+<div class="card" ng-show="getMetadata().title">
+    <div class="card-content">
+        <span class="card-title grey-text text-darken-4">
+            <div class="col s10">
+                <div class="truncate">
+                    {{getMetadata().title}}
+                </div>
+            </div>
+            
+            <i class="mdi-content-clear right" ng-click="clearMetadata()"></i>
+        </span>
+            
+
+        <div class="animated fadeInDown col s12">
+            <div class="section">
+
+                <div class="row center" ng-show="showSpinner">
+                    <div ng-hide="getMetadata().title">
+
+                        <spinner></spinner>
+                    </div>
+                </div>
+
+                <div class="animated fadeInDown">
+                
+
+                    <ul class="collection">
+                        <li class="collection-item" ng-show="getMetadata().title"> 
+                            <i class="mdi-social-school circle"></i>
+                            <span class="title">Full Title</span>
+                            <p>{{getMetadata().title}}</p>
+                        </li>
+                        <li class="collection-item" ng-show="getMetadata().year">
+                            <i class="mdi-image-timelapse circle"></i>
+                            <span class="title">Year</span>
+                            <p>{{getMetadata().year}}</p>
+                        </li>
+                        <li class="collection-item" ng-show="getMetadata().authors">
+                            <i class="mdi-social-people circle"></i>
+                            <span class="title">Authors</span>
+                            <div ng-repeat="author in getMetadata().authors">
+                                <p>{{author.firstName}} {{author.lastName}}</p>
+                            </div>
+
+                        </li>
+                        <li class="collection-item" ng-show="getMetadata().type">
+                            <i class="mdi-image-style circle"></i>
+                            <span class="title">Type</span>
+                            <p>{{getMetadata().type}}</p>
+                        </li>
+                        <!--- proceeding -->
+                        <div ng-show = "getMetadata().type=='proceeding'">
+                            <li class="collection-item" ng-show="getMetadata().Booktitle">
+                                <i class="mdi-action-bookmark circle"></i>
+                                <span class="title">Booktitle</span>
+                                <p>{{getMetadata().Booktitle}}</p>
+                            </li>
+                            <li class="collection-item" ng-show="getMetadata().organisation">
+                                <i class="mdi-action-assignment-ind circle"></i>
+                                <span class="title">Organisation</span>
+                                <p>{{getMetadata().organisation}}</p>
+                            </li>
+                        </div>
+                        <!-- journal -->
+                        <div ng-show = "getMetadata().type=='journal'">
+                            <li class="collection-item" ng-show="getMetadata().journal">
+                                <i class="mdi-action-bookmark circle"></i>
+                                <span class="title">Journal</span>
+                                <p>{{getMetadata().journal}}</p>
+                            </li>
+                            <li class="collection-item" ng-show="getMetadata().publisher">
+                                <i class="mdi-action-assignment-ind circle"></i>
+                                <span class="title">Publisher</span>
+                                <p>{{getMetadata().publisher}}</p>
+                            </li>
+                        </div>
+                        <li class="collection-item" ng-show="getMetadata().abstract">
+                            <i class="mdi-image-style circle"></i>
+                            <span class="title">Abstract</span>
+                            <p>{{getMetadata().abstract}}</p>
+                        </li>
+                        <li class="collection-item" ng-show ="getMetadata().external"> 
+                            <!-- should only be visible for external results -->
+                            <i class="mdi-image-style circle"></i>
+                            <span class="title">url</span>
+                            <p> <a target="_blank" href="{{getMetadata().download}}"> External Link </a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row container">
+        <div class="activator col s12 waves-effect waves-light btn-large ">
+            <h5 class="activator center-align" style="color:white">Additional</h5>
+        </div>
+    </div>
+    <!-- end content -->
+    
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4" >
+            ADDITIONAL OPTIONS
+            <i class="mdi-navigation-close right"></i>
+        </span>
+
+        <br><br>
+
+        <div class="row center s10 offset-s1">
+            <code class="titip-bottom" style="width:100%">
+            <div class="waves-effect waves-light btn" style="color:white; width:100%" href="{{getMetadata().download}}"> 
+                    <i class="mdi-file-file-download left"></i>
+                    <div style="font-family: 'Roboto';">
+                        Download publication
+                    </div>
+                </div>
+                <span class="titip-content">
+                    Download the pdf to your device
+                </span>
+            </code>
+        </div>
+
+         <div class="row center s10 offset-s1">
+            <code class="titip-bottom" style="width:100%">
+            <div class="waves-effect waves-light btn" style="color:white; width:100%" ng-click=" gotoElement('publiviewer'); publications.showPublicationViewer=true;"> 
+                    <i class="mdi-file-file-download left"></i>
+                    <div style="font-family: 'Roboto';">
+                        Edit meta data
+                    </div>
+                </div>
+                <span class="titip-content">
+                    Edit the current meta data in a separate window
+                </span>
+            </code>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,8 @@
+module.exports = [
+{firstName:'Ragnhild', lastName:'Van Der Straeten', username:'RvdStraeten', password:'Brol123', email:'rvdr@vub.ac.be', language:'ENG', institution: 'Vrije Universiteit Brussel', faculty: 'Faculty of Science and Bio-engineering Sciences', department: 'Computer Science', researchGroup: 'Software Languages Lab', researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}]},
+{firstName:'Jens', lastName:'Nicolay', username:'JNicolay', password:'Brol123', email:'jn@vub.ac.be', language:'ENG', institution: 'Vrije Universiteit Brussel', faculty: 'Faculty of Science and Bio-engineering Sciences', department: 'Computer Science', researchGroup: 'Software Languages Lab', researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}]},
+{firstName:'Wolfgang', lastName:'De Meuter', username:'WDMeuter', password:'Brol123', email:'wdm@vub.ac.be', language:'ENG', institution: 'Vrije Universiteit Brussel', faculty: 'Faculty of Science and Bio-engineering Sciences', department: 'Computer Science', researchGroup: 'Software Languages Lab', researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}]},
+{firstName:'Hannah', lastName:'Pinson', username:'HPinson', password:'Brol123', email:'hp@vub.ac.be', language:'ENG', institution: 'Vrije Universiteit Brussel', faculty: 'Faculty of Science and Bio-engineering Sciences', department: 'Computer Science', researchGroup: 'Software Languages Lab', researchDomains: [{ major:'Computer and Information Science', minor: 'Artificial Intelligence'}, {major: 'Physics', minor: 'Biomedical Physics'}]}
+]
+
+

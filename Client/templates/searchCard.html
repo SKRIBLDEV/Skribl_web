@@ -1,0 +1,156 @@
+<!-- Search card -->
+<div class="card">
+    <div class="card-content">
+
+        <span class="card-title grey-text text-darken-4">
+         <a> Search</a>
+     </span>
+
+     <div class="animated fadeInDown col s12">
+        <div class="section">
+
+            <!-- basic search -->
+            <div class="animated fadeInDown" ng-show="basicSearchView">
+                <input class="input-field" type="text" ng-model="searchTerms" placeholder="search terms (press enter to search)" on-enter="basicSearch(searchTerms)" >
+                <a class="btn" ng-click="basicSearch(searchTerms)"> Search</a>
+                <a class="mdi-navigation-chevron-right" ng-click="switchToAdvancedSearch()">advanced search?  </a>
+            </div>
+
+            <!--- advanced search -->
+            <div class="animated fadeInDown" ng-show="!basicSearchView">
+                <a class="mdi-navigation-chevron-left" ng-click="switchToBasicSearch()">basic search?  </a>
+
+                <br></br>
+                        
+                <!-- general -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showGeneral=true" >
+                        <a> General </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showGeneral">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                                 <input placeholder="title" class="text-field" type="text" ng-model=advancedQuery.title >
+                                <input placeholder="year" class="text-field" type="number" ng-model=advancedQuery.year >
+                                <input placeholder="journal" class="text-field" type="text" ng-model=advancedQuery.journal>
+                                <input placeholder="book title" class="text-field" type="text" ng-model=advancedQuery.booktitle>
+                                <div appendable-listing datasource="advancedQuery.keywords" new-placeholder="arrayPlaceholders[1]"></div>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showGeneral=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+
+                 <!-- authors -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showAuthors=true" >
+                        <a> Authors </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showAuthors">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <div appendable-listing-author datasource="advancedQuery.authors" new-placeholder="arrayPlaceholders[0]"></div>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showAuthors=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+                <!-- research domains -->
+                <div class="card z-depth-2">
+                    <div class="card-content">
+                    <span class="grey-text text-darken-4" ng-click="search_showResearchDomains=true" >
+                        <a> Research Domains </a>
+                        <i class="mdi-navigation-more-vert right"></i>
+                    </span>
+                    </div>
+                    <span class="grey-text text-darken-4" ng-show="search_showResearchDomains">
+                        <div class="animated fadeInDown col s12">
+                            <div class="section">
+                            <research-domain> </research-domain>
+                            </div>
+                            <div class="center">
+                                <i class="mdi-hardware-keyboard-arrow-up" ng-click="search_showResearchDomains=false"></i>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+
+
+                 <a class="btn" ng-click="advancedSearch()"> Search</a>
+
+            </div>
+
+            <!-- general waiting -->
+            <div class="row center">
+                <div ng-show="searching">
+                    <h5> Searching for publications... </h5>
+                    <spinner></spinner>
+                </div>
+            </div>
+
+            <!-- results -->
+            <div class="section" ng-show="showResults">
+                <!-- internal results -->
+                <span class="title grey-text text-darken-4">
+                 <a> Results from Skribl </a>
+             </span>
+             <ul class="collection">
+                <!-- <li class="collection-item avatar"> -->
+                <div ng-repeat="publication in internalResults">
+                    <li class="collection-item selectable-black" ng-click="setMetadata(publication.id)" >
+                        <i class="mdi-social-school"></i>
+                        <a class="secondary-content">
+                            <code class="titip-left">
+                                <i class="mdi-action-grade" ng-click="addPublication(publication.id)">
+                                </i>
+                                <span class="titip-content">
+                                    add to favorites
+                                </span>
+                            </code>
+                        </a>
+                        <span class="title">&nbsp;{{publication.title}}
+                        </span>
+                    </li>
+                        <!--<
+                    </div>
+                    <!-- </li>-->
+                </ul>
+
+                <!--- external results -->
+                <div ng-show = "showExternalResults">
+                    <span class="title grey-text text-darken-4">
+                     <a> Results from Google Scholar </a>
+                 </span>
+                 <ul class="collection">
+                    <!-- <li class="collection-item avatar"> -->
+                    <div ng-repeat="publication in externalResults">
+                        <li class="collection-item selectable-black" ng-click="setExternalMetadata(publication)" >
+                            <i class="mdi-social-school"></i>
+                            <span class="title">{{publication.title}}</span>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+</div>
+
+
+
+<!-- end search card

@@ -1,0 +1,46 @@
+<div ng-controller="dashController">
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;" ng-show="notMobile()">
+		<a class="btn-floating btn-large skribl-alert-color waves-effect waves-light">
+			<i class="large mdi-editor-mode-edit"></i>
+		</a>
+		<ul>
+			<li>
+				<a class="btn-floating skribl-primary-color darken-1">
+					<code class="titip-left">
+						<i class="large mdi-social-share waves-effect waves-light" ng-click="userService.toggleNetwork()" ui-sref="dashboard.network"></i> <!-- enableinteractivegraph here -->
+						<span class="titip-content">
+							Enable interactive graph
+						</span>
+					</code>
+				</a>
+			</li>
+			<li>
+				<a class="btn-floating skribl-primary-color darken-1">
+					<code class="titip-left">
+						<i class="large mdi-editor-publish waves-effect waves-light" ng-click="publications.upload_activate()" ui-sref="dashboard.library"></i>
+						<span class="titip-content">
+							Upload a new publication
+						</span>
+					</code>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<!-- end fixed action button -->
+
+	<div class="row center" ng-hide="notMobile()">
+		<a class="btn-floating skribl-primary-color darken-1">
+
+			<i class="mdi-social-share waves-effect waves-light" ng-click="userService.toggleNetwork()" ui-sref="dashboard.network"></i> 
+		</a>
+
+		<a class="btn-floating skribl-primary-color darken-1">
+
+			<i class="mdi-editor-publish waves-effect waves-light" ng-click="publications.upload_activate()" ui-sref="dashboard.library"></i>
+
+		</a>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,19 @@
+<!-- recommender card -->
+<div class="card" ng-show="getMetadata().title">
+  <div class="card-content">
+
+    <div class="row">
+      <div class="card-title grey-text text-darken-4">
+        <div class="col s6">
+         Do you like this publication? 
+       </div>
+       <a class="col s2" ng-click="likeRecommendation(true)">
+         <i class="mdi-navigation-check circle animated tada"></i>
+       </a>
+       <a class="col s2" ng-click="likeRecommendation(false)">
+         <i class="mdi-navigation-close circle animated tada"></i>
+       </a>
+     </div>
+   </div>
+ </div>
+

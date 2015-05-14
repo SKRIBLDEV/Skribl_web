@@ -1,0 +1,20 @@
+
+    <div class = "col s6">
+      <ul>
+        <label class="mdi-content-add blue-text text-darken-2" ng-click="addItem()"></label>
+        <input placeholder="author first name" class="text-field" type="text" ng-model=datasource[0].firstName > 
+        <li ng-repeat="item in appended track by $index">
+          <input placeholder="author first name" class="text-field" type="text" ng-model=datasource[$index+1].firstName >
+        </li>
+      </ul>
+    </div>
+    <div class = "col s6">
+      <ul>
+        <label class="mdi-content-add blue-text text-darken-2" ng-click="addItem()"></label>
+        <input placeholder="author last name" class="text-field" type="text" ng-model=datasource[0].lastName > 
+        <li ng-repeat="item in appended track by $index">
+          <input placeholder="author last name" class="text-field" type="text" ng-model=datasource[$index+1].lastName >
+        </li>
+      </ul>
+    </div>
+ 

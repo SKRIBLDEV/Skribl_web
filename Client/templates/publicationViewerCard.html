@@ -1,0 +1,38 @@
+<div id="publiviewer"></div>
+<div ng-show="publications.publicationViewerEnabled()">
+	<div class="card z-depth-4">
+		<div class="card-content" style="background:#EEEEEE">
+			<span class="card-title grey-text text-darken-4">
+				<i class="mdi-content-content-paste">&nbsp; EDIT METADATA</i>
+				<i class="mdi-content-clear right" ng-click="publications.disablePublicationViewer()"></i>
+			</span>
+			<!-- start $NAME card -->
+			<div class="card">
+				<div class="card-content">
+					<span class="card-title grey-text text-darken-4" ng-click="ui_toggleDisplayPublication()">
+						<a> {{data.currentMetaData.title}} </a>
+						<i class="mdi-navigation-more-vert right"></i>
+					</span>
+				</div>
+				<span class="grey-text text-darken-4">
+					<div class="animated fadeInDown col s12">
+						<div class="section">
+							
+
+							
+							<div class  "row"></div>
+							
+							<edit-meta-data></edit-meta-data>
+						</div>
+						
+					</div>
+				</span>
+
+			</div>
+			<!-- stop inner card -->
+			<!-- start displayPDF card -->
+			
+			<!-- stop basic card -->
+		</div>
+	</div>
+

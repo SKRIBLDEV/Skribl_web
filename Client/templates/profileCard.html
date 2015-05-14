@@ -1,0 +1,92 @@
+
+<div class="card" ng-controller="profileController">
+    <div class="card-content" ng-show="shouldShow()">
+        <span class="card-title grey-text text-darken-4">
+         <a ng-click="toggleContent()"> 
+             Author Profile 
+         </a>
+     </span>
+     <br><br><br>
+     <div ng-hide="hideContent">
+         <div class="row">
+             <div class="col s12 m6 l2">
+                <img src="img/avatar.png" alt="" class="circle imgopac" style="width:100%; max-width:200px">
+            </div>
+
+            <div class="col s10 container">
+                <h6 ng-show="profile.firstName">
+                    {{profile.firstName}}
+                    {{profile.lastName}}
+                    &nbsp;
+                </h6>
+
+                <div ng-show="profile.username">
+                    {{profile.username}}
+                </div>
+
+                <div style="text-decoration:underline" ng-click="changeNetwork(profile)">
+                (display network)
+                </div>
+
+                <br>
+                
+            </div>
+        </div>
+
+        <br>
+
+        
+        <div class="row">
+            <div class="row" ng-show="profile.publications.length <= 0">
+                    <div class="col waves-effect waves-light btn-large" ng-click="loadPublications()">
+                        <div class="center-align" style="color:white">
+                            <i class="mdi-action-search"></i>
+                            Search for publications
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="row">
+         <ul class="collection hide-on-small-only">
+            <div ng:repeat="publication in profile.publications">
+                <li class="collection-item avatar">
+                    <i class="mdi-action-account-balance circle">
+                    </i>
+                    <i class="mdi-action-description circle" ng-show="publication.type == 'Proceeding'">
+                    </i>
+
+                    <div class="selectable-black" ng-click="publications.loadPublicationInViewer(publication.id);">
+                        <div class="row">
+                            <div class="col s10">
+                                <div class="title truncate">
+                                    {{publication.title}}
+                                </div>
+                                <br>
+                                <p style="color:grey">
+                                    {{publication.type}}
+                                </p>
+                            </div>
+                            <!-- hide on small -->
+                            <div class="hide-on-small-only">
+                                <a class="secondary-content">
+                                    <span class="new badge" ng-hide="publication.isnew">
+                                    </span> 
+                                    <code class="titip-left">
+                                        <i class="mdi-action-grade" ng-click="publications.addPublications('Favorites', publication.id)"></i>&nbsp;
+                                        <span class="titip-content">
+                                            add to favorites
+                                        </span>
+                                    </code>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </div>
+        </ul>
+    </div>
+</div>
+
+</div>
+</div>

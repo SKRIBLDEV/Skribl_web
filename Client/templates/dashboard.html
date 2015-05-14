@@ -1,0 +1,50 @@
+
+<!-- start overall container -->
+<div class="section animated pulse row">
+    <div class="col l4 m12 s12">
+        <!-- start user card -->
+        <user-card></user-card>
+        <!-- stop user card -->
+    </div>
+
+
+    <!-- inject the views belonging to the nested states -->
+    <div class="col l8 m12 s12"     ui-view>            </div>
+    <div class="col l8 m12 s12"     ui-view="default">  </div>
+    <div class="col l8 m12 s12"     ui-view="lpt1">     </div>
+    <div class="col l4 m6 s12"      ui-view="spt1">     </div>
+    <div class="col l4 m6 s12"      ui-view="spt2">     </div>
+    <div class="col l8 m12 s12"     ui-view="lpb1">     </div>
+</div>
+
+<!-- stop overall container -->
+<div id="id_viewer"></div>
+
+<fixed-menu></fixed-menu>
+
+<!-- ____ [FOOTER] ____________________-->
+<!--...... TABLET Dekstop MOBILE .......-->
+<div class="section row footer" ng-show="appData.currentUser">
+  <div class="col l2 offset-l5 m4 offset-m4 s6 offset-s3 center">
+      <code class="titip-top">
+        <img class="skribl-footer-logo " src="img/logo-cutout.png" ng-click="router.goAbout()"/>
+        <span class="titip-content">
+            Click to go to "about Skribl"
+        </span>
+    </code>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,284 @@
+@import "materialize";
+
+$default-padding: 20px;
+$minimal-padding: 6px;
+$large-padding: 50px;
+$extra-large-padding: 130px;
+$minimal-dynamic-width: 300px;
+$maximum-dynamic-width: 2560px;
+$minimal-dynamic-height: 300px;
+$maximum-dynamic-height: 1920px;
+
+@mixin safe-dynamic-constraints {
+  min-height: $minimal-dynamic-height;
+  max-height: $maximum-dynamic-height;
+  min-width: $minimal-dynamic-width;
+  max-width: $maximum-dynamic-width;
+}
+
+// general
+body {
+  background-color: $primary-color;
+}
+
+
+.imgopac {
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
+
+//text
+.white-text-color {
+  color: white;
+  a {
+    text-decoration:underline;
+  }
+}
+
+@-webkit-keyframes spacerspacer {
+    0%   { 
+          letter-spacing: 2px;
+    }
+    100% { 
+          letter-spacing: 20px;
+    }
+}
+
+.Intro {
+    letter-spacing: 20px;
+    -webkit-animation: spacerspacer 5s 1 ease-in-out;;
+}
+
+@-webkit-keyframes footer-animation {
+    0%   { 
+       width:80%;
+      -webkit-transform: rotate(0deg);
+    }
+  
+    50% {
+      width:100%;
+      -webkit-transform: rotate(10deg);
+    }
+  
+    98% {
+      -webkit-transform: rotate(360deg);
+    }
+  
+    100% { 
+       width:80%;
+       -webkit-transform: rotate(0deg);
+    }
+}
+
+.skribl-footer-logo {
+  width:80%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-filter: drop-shadow(3px 3px 3px #222);
+  filter:         drop-shadow(3px 3px 3px #222); 
+}
+.skribl-footer-logo:hover {
+  -webkit-animation: footer-animation 4s 1;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+  filter:         drop-shadow(2px 2px 2px #222); 
+}
+
+.skribl-footer-logo:active {
+  -webkit-filter: drop-shadow(0px 0px 0px #222);
+  filter:         drop-shadow(0px 0px 0px #222);
+}
+
+
+
+//text
+.selectable-black {
+  color: black;
+  @include transition(color .3s ease);
+  &:hover { color: lighten($primary-color, 5%); }
+}
+
+.selectable-white {
+  color: white;
+  @include transition(color .3s ease);
+  &:hover { color: lighten($primary-color, 15%); }
+}
+
+.selectable-skribl {
+  color: $primary-color;
+  @include transition(color .3s ease);
+  &:hover { color: lighten($primary-color, 15%); }
+}
+
+
+a {
+  color: $primary-color-dark;
+  margin-right: $card-padding;
+  @include transition(color .3s ease);
+  text-transform: uppercase;
+
+  &:hover { color: lighten($primary-color, 30%); }
+}
+
+.primary-text-color {
+  color: $primary-color;
+}
+
+.dark-text-color {
+  color: darken($primary-color, 20%);;
+}
+
+.alert-color {
+  color: $error-color;
+}
+
+p {
+  line-height: 2rem;
+}
+
+
+// navigation
+.navImage {
+  padding-top : $minimal-padding;
+  padding-down: $minimal-padding;
+  padding-left: $minimal-padding;
+  max-width: 160px;
+}
+
+.nav-wrapper {
+  background-color: white;
+  padding-left: $default-padding;
+}
+
+nav ul a,
+nav .brand-logo {
+  color: #444;
+}
+
+//imagery
+.autosizeImage {
+  width: auto;
+  height: auto; 
+  max-width: 300px;
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+
+//aux
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+// blocks
+@mixin addTopDownPadding($radius) {
+  padding-top: $radius;
+  padding-bottom: $radius;
+}
+
+.small-spacer {
+  @include addTopDownPadding($default-padding);
+}
+
+
+.white-block{
+  background-color: white;
+}
+
+.large-header-block {
+  padding-top: $large-padding;
+  padding-bottom: $large-padding;
+}
+
+// dropdown
+// adapted from http://cssdeck.com/labs/another-simple-css3-dropdown-menu
+dropUl {
+  color: yellow;
+  text-align: left;
+  display: inline;
+  margin: 0;
+  padding: 15px 4px 17px 0;
+  list-style: none;
+  // -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  // -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  // box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+dropUl dropLi {
+  color: white;
+  display: inline-block;
+  margin-right: -4px;
+  position: relative;
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+dropUL dropLi:hover {
+  background: $primary-color-dark;
+   @include transition(background .8s ease);
+  color: white;
+}
+
+.skribl-background{
+  background-color: $primary-color;
+}
+
+dropUL dropLi dropUL {
+  background: red;
+  background-color: red;
+  padding: 0;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 150px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+dropUl dropLi dropUl dropLi { 
+  background: $primary-color-dark;
+  display: block; 
+  color: white;
+  text-shadow: 0 -1px 0 #000;
+}
+
+dropUl dropLi dropUl dropLi:hover { 
+  background: $primary-color-dark; 
+  @include transition(background .8s ease);
+}
+
+dropUl dropLi:hover dropUl {
+  @include transition(background .8s ease);
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+
+
